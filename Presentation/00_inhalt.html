@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>C++ For (Link-Page)</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!-- when changing the stylesheet file please see also remark below -->
+    <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+name: blank
+styling: styling.css
+styling-by: Martin Weitzel
+
+.stylehint[
+Styled with [{{styling}}]({{styling}}) by {{styling-by}}
+]
+
+???
+Falls Sie das Stylesheet zu dieser Datei ändern, tragen Sie dies bitte oben
+entsprechend ein, damit sich der Vermerk auf der Titeseite ändert - danke!
+
+---
+layout: true
+name: plain
+copyright: (CC) BY-SA
+branding:  [Dipl.-Ing. Martin Weitzel](http://tbfe.de)
+customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://microconsult.de)
+
+{{header}}
+
+.pagefooter[
+{{copyright}}: {{branding}} {{customer}} .microconsult-logo[]
+]
+
+---
+layout: true
+name: linkinfo
+copyright: (CC) BY-SA
+branding:  [Dipl.-Ing. Martin Weitzel](http://tbfe.de)
+customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://microconsult.de)
+
+{{header}}
+
+.infographic[
+[![Info-Grafik](InfoGraphics/{{graphic}}.png)](InfoGraphics/{{graphic}}.png
+                "Click to open - add [CTRL+] SHIFT for new [tabbed] window")
+]
+
+.pagefooter[
+{{copyright}}: {{branding}} {{customer}} .microconsult-logo[]
+]
+
+---
+layout: true
+name: withinfo
+copyright: (CC) BY-SA
+branding:  [Dipl.-Ing. Martin Weitzel](http://tbfe.de)
+customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://microconsult.de)
+
+{{header}}
+
+.infolink.right[
+[Click here for Info-Graphic  
+{{graphic}}](../../../InfoGraphics/PNG/{{graphic}}.png "add [CTRL+] SHIFT for own [tabbed] window")  
+{{section}}
+]
+
+.pagefooter[
+{{copyright}}: {{branding}} {{customer}} .microconsult-logo[]
+]
+
+.pagefooter[
+{{copyright}}: {{branding}} {{customer}} .microconsult-logo[]
+]
+
+---
+template: blank
+name: frontmatter
+
+.title[
+	C++-FOR
+]
+
+.subtitle[
+	Fortgeschrittene Verwendung von C++ gemäß  
+	ISO/ANSI-Standard C++98, C++03 und C++11
+]
+.author.pull-left[
+	Durchführung:  
+	Dipl.-Ing. Martin Weitzel  
+	Technische Beratung für EDV  
+	http://tbfe.de  
+]
+.client.pull-right[
+	Im Auftrag von:  
+	MicroConsult  
+	Training & Consulting GmbH  
+	http://www.microconsult.com
+]
+
+---
+template: plain
+header: ## Unterlagen im Internet
+
+  [Creative Commons]: http://de.creativecommons.org/was-ist-cc
+
+
+Es gilt für alle Verbreitungsformen eine [Creative Commons]-Lizenz.
+
+.I[[
+**(CC) BY-SA**:  
+Namensnennung und Weitergabe unter gleichen Bedingungen
+](http://creativecommons.org/licenses/by-sa/3.0/de/)]
+
+Sie erhalten die Möglichkeit zum Download unter: http://tbfe.de/archiv
+
+.W[
+Das verfügbar gemachte Material wurde mit angemessener Sorgfalt erstellt und geprüft.
+Haftungsansprüche bei dennoch enthaltenen Fehlern sind ausgeschlossen.
+]
+
+Hinweise auf Fehler, Unvollständigkeiten oder generelle Anregungen und Verbesserungsvorschläge werden natürlich gerne
+entgegengenommen.
+
+---
+template: plain
+header: ### Präsentationen
+
+Die Präsentationen wurden mit [`remark`](http://remarkjs.com) erstellt.
+
+#### Ansicht
+
+Benutzen Sie einen hinlänglich aktuellen Browser Ihrer Wahl.
+
+* [JavaScript] muss eingeschaltet sein
+* [Modernes CSS] sollte unterstützt werden._[]
+* Cookies werden **nicht** verwendet
+
+
+.F[:
+Das Erscheinungsbild dieser Präsentation wird wesentlich durch ein CSS-Style-Sheet
+gesteuert. Falls Sie über die notwendigen [CSS-Kenntnisse] verfügen, können Sie die
+Datei *styling.css* gerne gemäß Ihrem Geschmack anpassen.
+Verwenden Sie bei umfangreichen Änderungen eine Datei mit anderem Namen und passen
+Sie in der HTML-Datei lediglich den Namen des inkludierten Style-Sheets an.
+Genau genommen liegt bei jeder Änderung allerdings bereits ein abgeleitetes Werk
+vor und Sie sollten Ihre Modifikationen ebenfalls unter der Lizenz (CC) BY-SA verfügbar
+machen.
+Ferner sollten Sie auf Ihren Beitrag hinweisen, z.B. indem Sie das Attribut `styling-by:`
+in der Titelseiten-Template dieser Präsentation entsprechend anpassen.
+]
+
+  [JavaScript]:        http://de.wikipedia.org/wiki/JavaScript
+  [Modernes CSS]:      http://www.w3.org/Style/CSS
+  [CSS-Kenntnisse]:    http://www.w3schools.com/css
+
+---
+template: plain
+header: #### Ausdruck
+
+Falls Sie diesen Wunsch schon im Vorfeld äußern, erhalten Sie einen Ausdruck zu
+Beginn der Schulung.
+
+.N[
+Auf die endgültige Version inklusive der eventuell im Kurse vorgenommenen
+aktuellen Ergänzungen erhalten Sie Zugriff per Download.
+]
+
+Mit dem *Google Chromium* Browser können Sie auch selbst ein Dokument im PDF-Format erstellen.
+
+* Verwenden Sie dazu *Print To File*.[] und wenn nötig eine
+* Nachverarbeitung mit einem PDF-Tool Ihrer Wahl.
+
+.F[
+Zurzeit sind Ausdrucke auf die Normalansicht (**nicht**: Präsentations-Modus) beschränkt.
+Diese Einschränkung wird eventuell in einer [künftigen Version](https://github.com/gnab/remark)
+von `remark.js` aufgehoben.
+]
+
+
+---
+template: plain
+header: #### Anmerkungen
+
+Der fachliche Inhalt der HTML-Dateien verwendet das [Markdown-Format].
+
+.N[
+Sie können die HTML-Datei lokal abspeichern und eigene Anmerkungen mit einem
+beliebigen Text-Editor hinzufügen.._[]
+]
+
+Bei Betrachtung im Browser wechseln Sie zum Ansehen dieser Anmerkungen mit `p` in den Präsentationsmodus.
+
+.F[:
+Künftige Updates der Präsentation und Ihre individuellen Anmerkungen können Sie bei Bedarf mit jedem
+beliebigen [Diff-Tool] für Textdateien zusammenführen.
+]
+
+  [Markdown-Format]: http://de.wikipedia.org/wiki/Markdown
+  [Diff-Tool]:       http://de.wikipedia.org/wiki/Diff
+
+???
+Die Struktur das Markdown-Abschnitts in den HTML-Dateien ist wie folgt:
+```
+		(einige Zeilen HTML-Vorspann)
+		<textarea>
+		Inhalt erste Präsentations-Seite
+		--- (Seitentrenner = drei Minuszeichen)
+		Inhalt zweite Präsentations-Seite
+		--- (Seitentrenner = drei Minuszeichen)
+		...
+		... (usw.)
+		...
+		--- (Seitentrenner = drei Minuszeichen)
+		Inhalt letzte Präsentations-Seite
+		&lt;/textarea>
+		(einige Zeilen HTML-Nachspann)
+```
+Trennen Sie Ihre Anmerkungen vom Inhalt der Präsentations-Seiten mit einer Zeile aus drei Fragezeichen:
+
+```
+		--- (Seitentrenner = drei Minuszeichen)
+		...
+		mit Anmerkungen versehene Präsentations-Seite
+		...
+		???  (Anmerkungstrenner = drei Fragezeichen)
+		...
+		eingefügte Anmerkungen
+		...
+		--- (Seitentrenner = drei Minuszeichen)
+```
+
+Sie sehen die Anmerkungen nur im Präsentation-Modus, den Sie `p` ein- und ausschalten.
+
+---
+
+template: linkinfo
+graphic: TestBrowserNavigation
+header: ### Infografiken
+
+--------------------------------------
+
+* [Ansicht._[]	](#view_infographics)
+
+--------------------------------------
+
+* [Druck	](#print_infographics)
+
+--------------------------------------
+
+* [PDF-s	](#print_infographics)
+
+--------------------------------------
+
+.F[
+Die nebenstehende Info-Grafik ist ein Beispiel für ähnliche Grafiken, die Sie in den
+Kapiteln dieser Schulungsunterlage finden. Sie können die obige Grafik nun Anklicken
+um eine große Version zu erhalten, mit der Sie die Navigation im Browser testen können.
+]
+
+
+---
+
+template: withinfo
+graphic: TestBrowserNavigation
+section:
+name: view_infographics
+header: #### Ansicht
+
+Verwenden Sie einen hinlänglich modernen Browser.
+
+Getestet wurden:
+
+* [Mozilla Firefox] Version 26 (getestet)
+* [Google Chromium] Version 32 (getestet)
+
+Bislang noch nicht getestet wurden:._[]
+
+* Microsoft IE
+* Opera
+* Eclipse (integrierter Browser)
+
+.F[:
+An Ihren Erfahrungen mit einem dieser - oder auch einem hier nicht genannten - Browser
+und anderen Dateibetrachtern für Grafiken wären wir ggf. interessiert.
+]
+
+  [Mozilla Firefox]: http://www.mozilla.org/de/
+  [Google Chromium]: http://www.google.com/intl/de/chrome/browser/
+
+---
+template: plain
+name: print_infographics
+header: #### Ausdruck
+
+Ausdrucke der Info-Grafiken im Format DIN-A3 erhielten Sie mit den Kursunterlagen oder
+der Referent verteilt Sie gemäß dem in der Schulung behandelten Stoff.
+
+Ebenso stehen Ihnen die Info-Grafiken zum Download als PDF-Datei zur Verfügung.
+
+#### Alternativ-Formate
+
+Die Infografiken sind generell auch als [PDF-Dokument](http://tbfe.de/archiv) verfügbar.
+
+.N[
+Für daraus abgeleitete Werke besteht die Möglichkeit vom Autor eine Datei im Format von
+*LibreOffice Draw* zu erhalten.
+]
+
+Bitte sprechen dazu den Dozenten an bzw. kontaktieren Sie den Autor.._[]
+
+.F[:
+Abgeleitete Werke können Sie mit Ihrem eigenen Namen kennzeichnen, sofern ein Verweis auf
+das Original erhalten bleibt.
+Es wird dabei in der Regel erwartet, dass die abgeleiteten Werke unter den selben
+Schutz - [(CC) BY-SA] - gestellt werden wie die Original-Graphik.
+In begründeten Ausnahmefällen können mit dem Autor der Orignal-Graphik Ausnahmen
+vereinbart werden.
+]
+
+  [Abgeleitete Werke]: http://de.wikipedia.org/wiki/Werk_%28Urheberrecht%29#Weitere_Anforderungen
+  [(CC) BY-SA]: http://creativecommons.org/licenses/by-sa/3.0/de/
+
+---
+template: plain
+class: agenda
+
+## Agenda
+
+Themenplanung._[] Montag bis Freitag (Ende mit Mittagspause)
+
+------------------------------------------------------------------------------
+
+* [ Montag(1): C++-Basics - Wiederholung und Vertiefung	](01_montag1.html)
+* [ Montag(2): Hardwarenahe Betrachtung von C++		](02_montag2.html)
+
+------------------------------------------------------------------------------
+
+* [ Dienstag(1): Klassische Objektorientierung		](03_dienstag1.html)
+* [ Dienstag(2): STL Container (+ Iteratoren)		](04_dienstag2.html)
+
+------------------------------------------------------------------------------
+
+* [Mittwoch(1): STL (Iteratoren +) Algorithmen		](05_mittwoch1.html)
+* [Mittwoch(2): Programmieren mit Templates		](06_mittwoch2.html)
+
+------------------------------------------------------------------------------
+
+* [Donnerstag(1): "Open Close"-Principle		](07_donnerstag1.html)
+* [Donnerstag(2): Exceptions				](08_donnerstag2.html)
+
+------------------------------------------------------------------------------
+
+* [Freitag: Ressource-Management			](09_freitag1.html)
+
+.F[:
+Weitere Inhalte nach Absprache können nach Absprache aufgenommen werden.
+]
+
+
+
+    </textarea>
+    <script src="remark.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({ highlightLanguage: 'cpp', highlightStyle: 'docco' });
+    </script>
+  </body>
+</html>

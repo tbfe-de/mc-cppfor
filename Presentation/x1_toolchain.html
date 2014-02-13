@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>C++ For -- Montag Teil 2</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+name: withinfo
+
+.info.right[
+See Info-Graphic  
+[{{graphic}}](../../../InfoGraphics/PNG/{{graphic}}.png)  
+{{section}}
+]
+
+---
+
+layout: false
+class: center, middle
+
+# C++FOR
+Fortgeschrittene Verwendung von C++ gemäß C++98, C++03 und C++11 Standards
+
+Technische Beratung für EDV  
+Dipl.-Ing. Martin Weitzel  
+http://tbfe.de
+
+Im Auftrag von:  
+MicroConsult GmbH, München  
+http://www.microconsult.com
+
+---
+
+name: agenda
+
+Anhang: Toolchain
+
+.notice[
+Vorläufige Stoffsammlung!
+]
+
+---
+
+name: object_modules
+
+#### Objektmodule und Übersetzungseinheiten
+
+Bei vielen Compilern besteht in dieser Hinsicht eine 1:1 Korrespondenz.
+
+* Zum einen gibt es die *Source-File* der Übersetzungseinheiten:
+  * typische Suffixe.fn[1] `.c`, `.cc`, .`cpp` oder `.cxx` (= schräg gestellte Pluszeichen);
+  * **nicht** `.h` - diese werden per `#include` in mehr als nur einer Übersetzungseinheit verwendet.
+
+* Pro Übersetzungseiheit wird **genau ein** *Object-File* erzeugt:
+  * typischer Suffix `.o` bei Unix/Linux;
+  * bzw. `.obj` bei DOS/Windows.
+
+.footnote[
+Der bei Unix früher noch gebräuchliche Suffix `.C` (Großbuchstabe) für C++-Quelltexte
+ist heute nur noch selten in Gebrauch. Grund für dessen Verschwinden dürfte sein, dass
+- nicht nur - ältere File-Server nicht zwischen Klein- und Großschreibung unterscheiden
+und damit z.B. der für eine Steuerung des Build-Prozesses über `Makefile`-s wichtige
+Unterschied zwischen C- und C++-Quelltexten verloren geht.
+]
+
+---
+
+name: static_linking
+
+#### Statisches Linken
+
+Hierbei erstellt der Linker aus [Objektmodulen](#object_modules) ein eigenständiges
+[ausführbares Programm](#executable).
+
+In dieses gehen ein:
+
+* Sämtliche explizit benannte Objektmodule verwendet.
+* Als notwendig erachtete Objektmodule aus statischen Bibliotheken.
+
+Im zweiten Fall basieren die Entscheidungen des Linkers, welche Objektmodule
+zu verwenden sind, auf deren **statischen Abhängigkeiten**.
+
+.warning[
+Bei ungeschickt strukturierten Übersetzungseinheiten kann dies in erheblichem Umfang niemals
+ausgeführten Code in ein Programm einschleppen.
+]
+
+---
+
+name: dynamic_linking
+
+#### Dynamisches Linken
+
+Hierbei fasst der Linker [Objektmodule](#object_modules) zusammen, indem er lediglich
+deren gegenseitige Abhängigkeiten auflöst.
+
+Endprodukt ist jeweils eine Datei, die eines der folgenden zum Inhalt hat:
+
+* ein [ausführbares Programm ](#executable) 
+* eine [Shared Library](#sharedlib)
+
+Im Gegensatz zum [statischen Linken](#static_linking) ist ein ggf. erstelltes
+ausführbares Programm hier **nicht** eigenständig sondern weist Abhängigkeiten
+zu mindestens einer Shared Library auf.
+
+---
+
+name: sharedlib
+
+#### Shared Libraries
+
+Dies ist die erste Art von Ausgabe(datei), welche der Linker erzeugen kann.
+
+Sie entspricht einer Sammlung von Objekt-Modulen, die bei Bedarf als Einheit in
+den Hauptspeicher geladen werden kann, enthält aber keine Main-Funktion und
+kein [Runtime-Startup-Modul](#runtime_startup) enthalten.
+
+Der Suffix dieser Art Datei ist typischerweise:
+
+* unter Unix/Linux `.so` 
+* unter Windows `.dll`
+
+Das Betriebssystem wird beim Start eines ausführbaren Programms, das sich aus dem
+[dynamischen Linken](#dynamic_linking) ergab, die Verbindung zu den dabei
+beteiligten Shared Libraries herstellen.
+
+.warning[
+Ein typischer Fehler im Zusammenhang mit Shared Libraries sind unterschiedliche Einstellungen
+des Suchpfades beim dynamischen Linken des ausführbaren Programms und dessen späterer Ausführung.
+]
+
+---
+
+name: executable
+
+#### Ausführbare Programme
+
+Dies ist die zweite Art von Ausgabe(datei), welche der Linker erzeugen kann.
+Enthalten ist das [Objekt-Modul](#object_module) mit der [Main-Funktion](main_function)
+sowie das [Runtime-Startup-Modul](#runtime_startup).
+
+Der Suffix dieser Art von Datei ist typischerweise:
+
+* Unter DOS/Windows `.exe`
+* Unter Unix/Linux ist der Suffix prinzipiell beliebig
+  * Oft wird überhaupt kein Suffix verwendet.
+  * Wenn doch, dann ist eine (schwache) Konvention, dafür `.bin` zu verwenden.
+
+
+---
+
+name: main_function
+
+#### Main-Funktion (allgemein)
+
+In C und C++ erfolgt beim Start des Programms die Ausführung der Funktion `main`.
+
+Sie muss einer der beiden folgenden Formen definiert sein:
+```
+int main() {
+	// ...
+}
+```
+Oder:
+```
+int main(int argc, char *argv[]) {
+	// ...
+}
+```
+Die Argumentnamen sind im letzteren Fall nebensächlich, üblich sind aber die obigen
+oder die kürzere Form `ac` und `av`. Durch die Äquivalenz von Zeiger- und Arraysyntax
+bei Funktionsargumenten kann für das zweite Argument auch `char **argv` stehen.
+
+---
+
+name: main_c
+
+##### Main-Funktion in C
+
+Von einem C-Compiler wird die [Main-Funktion](#main_function) tatsächlich wie jede andere Funktion
+kompiliert.
+Die enthaltene `return`-Anweisung mit Wert bestimmt den Rückgabewert, den das
+Betriebssystem (oder allgemein: der Aufrufer, wenn ein Prozess einen anderen
+startet) zu sehen bekommt.
+
+.warning[
+Es ist insofern ein Fehler, keine `return`-Anweisung zu verwenden, da ein solcher
+vom Aufrufer erwartet werden könnte, tatsächlich aber ein nicht vorhersehbarer Wert
+geliefert wird.
+]
+
+---
+
+name: main_cpp
+
+##### Main-Funktion in C++
+
+Von einem C++-Compiler wird die [Main-Funktion](#main_function) geringfügig anders
+als die sonstigen Funktionen kompiliert:
+
+* Erreicht die Ausführung dieser Funktion das Ende ohne auf eine `return`-Anweisung
+zu stoßen, setzt der Compiler die Anweisung `return 0` ein.
+* Hierdurch ist sichergestellt, dass ein C++-Programms seinem Aufrufer in jedem
+Fall einen definierten Rückgabewert liefert.
+
+.notice[
+Darüberhinaus läuft in C++ auch Programm-Code vor und nach Ausführung von `main`,
+nämlich:.fn[1]
+
+* Davor die Konstruktoren von globalen Variablen inklusive derer von `static`
+  Member Daten.
+* Danach die Destruktoren von allen initialisierten Objekten im globalen Datenraum.
+
+.footnote[
+1: Der "davor" und "danach" ausgeführte Code ist tatsächlich nur beinahe symmetrisch.
+Die Ausnahme sind Konstruktoren und Destruktoren der **innerhalb** von Funktions-Blöcken
+definierten von `static` Variablen. Erstere werden beim erstmaligen Erreichen der
+betreffenden Anweisung ausgeführt, letztere nach Ende von `main`.
+]
+
+---
+
+name: runtime_startup
+
+#### Runtime-Startup-Modul
+
+Diese ist aus Sicht des Linkers ein weiteres Objekt-Modul, jedoch mit einer besonderen
+Eigenschaft:
+
+* Beim Start des Programms wird der Program-Counter auf eine Start-Adresse in diesem Modul
+eingestellt.
+* Von hier aus erfolgt der Start der Main-Funktion.
+* Davor und danach können weitere Aufgaben anfallen, wie etwa das Öffnen und Schließen
+ der Standard-Dateikanäle
+
+.notice[
+Das Runtime-Startup-Modul kann in der Regel nicht alleine mit Mitteln von C oder C++
+geschrieben werden sondern erfordert den Einsatz von Assembler-Befehlen.
+]
+
+    </textarea>
+    <script src="remark.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({ highlightLanguage: 'cpp', highlightStyle: 'docco' });
+    </script>
+  </body>
+</html>
+
+
