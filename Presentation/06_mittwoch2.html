@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>C++ For -- Montag Teil 1</title>
+    <title>C++ For -- Mittwoch Teil 2</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
-    <!-- when changing the stylesheet file please see also remark below -->
+    <!-- when changing the stylesheet, please also change EACH 'styling-by:' -->
   </head>
   <body>
 <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
@@ -138,189 +138,226 @@ template: blank
 
   [C++ FOR]: 00_inhalt.html
 
-# [C++ FOR] (Montagvormittag)
+# [C++ FOR] (Mittwochnachmittag)
 
----------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-1. [Neue Features von C++11				](#cp11_whatsnew)
-1. [Wiederholung: Verwendung von Standard-Strings	](#string_basics)
-1. [Wiederholung: Verwendung von I/O-Streams		](#iostream_basics)
-1. [Grundlegendes zur Programmierung von Templates	](#template_basics)
-1. [Übung						](#exercise_mon1)
+1. [Templates selbst schreiben		](#writing_templates)
+1. [Optimierung von Templates		](#optimising_templates)
+1. [Templates als Compilezeit-Funktionen](#compiletime_functions)
+1. [Übung				](#exercise_wed2)
 
----------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 Kürzere Pausen werden jeweils nach Bedarf eingelegt.
 
-Die Besprechung der Musterlösung(en) erfolgt im direkten Anschluss an die
-Mittagspause.
-
----
-template: linkinfo
-graphic: StringBasics
-name: string_basics
-header: ## Verwendung von Standard-Strings
-
-----------------------------------------------------------------
-
-* [Klassen (Übersicht)			](#stdstring_classes)
-* [Kompatibilität zu C			](#stdstring_cstr)
-* [Effizienz üblicher Implementierungen	](#stdstring_efficiency)
-* [Optionales "Copy On Write"		](#stdstring_cow)
-
-----------------------------------------------------------------
-
-* [Grundlegende Operationen		](#stdstring_basicops)
-* [Weitere Operationen im Überblick	](#stdstring_moreops)
-* [Umwandlung von/in arithmetische Werte](#stdstring_numconv)
-
-----------------------------------------------------------------
-
----
-template: withinfo
-graphic: StringBasics
-section: Classes
-name: stdstring_classes
-header: ### Klassen (Übersicht)
-
-Nachzuschlagen in:
-
-* http://www.cplusplus.com/string/
-* http://en.cppreference.com/w/string/
-
-
----
-template: withinfo
-graphic: StringBasics
-section: C-Compatibility
-name: stdstring_cstr
-header: ### Kompatibilität zu C
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: Efficiency
-name: stdstring_efficiency
-
-header: ### Effizienz
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: May or May not Have COW-Implementation
-name: stdstring_cow
-
-header: ### Effifienz
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: Basic Operations
-name: stdstring_basicops
-
-header: ### Grundlegende Operationen
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: Advanced Operations
-name: stdstring_moreops
-
-header: ### Weitere Operationen im Überblick
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: Numeric Conversions
-name: stdstring_numconv
-
-header: ### Umwandlung von/in arithmetische Werte
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: plain
-name: stdstring_num2str
-
-header: #### Arithmetischen Werte in Standard-Strings umwandeln
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: plain
-name: stdstring_str2num
-
-header: #### Standard-String in arithmetischen Werte umwandeln
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: linkinfo
-graphic: IOStreamBasics
-name: string_basics
-header: ## Verwendung von IO-Streams
-
------------------------------------------------------
-
-* [Design des Front-Ends	](#stdstring_classes)
-* [Design des Back-Ends		](#stdstring_classes)
-
------------------------------------------------------
-
-* [Stream Zustands-Bits		](#stdstring_numconv)
-
------------------------------------------------------
+Die Besprechung der Musterlösung(en) erfolgt zu Beginn des folgenden Vormittags.
 
 ---
 template: linkinfo
 graphic: TemplateBasics
-name: string_basics
-header: ## Grundlegendes zu Templates
+name: writing_templates
+header: ## Temp
 
-------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 * [Template-Klassen	](#template_classes)
 
+-------------------------------------------------------------------------------
+
+* [Template-Funktionen	](#template_functions)
+
+--------------------------------------------------------------------------------
+
+---
+template: linkinfo
+graphic: ReducingCodeBloat
+name: optimising_templates
+header: ## Optimierung von Templates
+
 ------------------------------------------------------------------------
 
-* [Template-Functions	](#template_functions)
+* [Ursache für "Code-Bloat"		](#reason_for_codebloat)
+
+------------------------------------------------------------------------
+
+* [Über einen Zwischenschritt ...	](#intermediate_step)
+* [... zur optimierten Template		](#random_access_iterators)
 
 ------------------------------------------------------------------------
 
 ---
-
 template: plain
-name: exercise_mon1
+name: compiletime_functions
+header: ## Templates als Compilezeit-Funktionen
+
+Eine weitere Sicht auf Templates ist es, sie als zur Compilezeit
+ausgeführte Funtionen zu verstehen.
+
+Der wesentliche Schlüssel dazu ist, das folgende zu verstehen:
+
+* Jeglicher "Input" muss aus Datentypen bestehen.._[]
+* Jeglicher "Output" wird nur aus Datentypen sein.
+
+.I[
+Oder anders ausgedrückt:  
+Templates sind (auch) Typtransformationen zur Compilezeit.
+]
+
+.F[:
+Mit einem kleinen, später noch erläuterten Kunstgriff fallen darunter auch
+alle zur Compilezeit-Konstanten sowie die daraus berechenbaren Werte.
+]
+
+---
+template: plain
+header: ### Wiederholung und Verzweigung
+
+Da sich zur Compilezeit keine Schleifen mit `while` und keine Verzweigungen
+mit `if` programmieren lassen._[], muss man zu den entsprechenden Alternativen
+aus [Funktionalen Programmiersprachen][FP] greifen:
+
+* Jegliche Wiederholung muss per Rekursion und
+* jegliche Fallunterscheidung durch Spezialisierung erfolgen.
+
+Ein bisschen muss man das aber vielleicht trainieren ...._[]
+
+.F[
+... was ganz gut mit einer Einführung in eine "echte" FP-Sprache wie
+beispielsweise [Haskell] geht.
+]
+
+  [FP]:      http://en.wikipedia.org/wiki/Functional_programming
+  [Haskell]: http://tryhaskell.org/ "hier ein interaktives Tutorial"
+
+---
+template: plain
+header: ### Fakultäts-Funktion als Beispiel
+
+#### Der übliche Ansatz ...
+
+Die allseits bekannte Funktion zur Fakultätsberechnung kann man in C++ mit
+einer Schleife so programmieren
+programmieren:
+```
+unsigned long long fakul(unsigned long long n) {
+	auto result = 1uLL;
+	while (n > 0)
+		result *= n;
+	return result;
+}
+```
+Oder auch zur - Laufzeit rekursiv - so:
+```
+unsigned long long fakul(unsigned long long n) {
+	return n ? n*fakul(n-1) : 0;
+}
+```
+
+---
+template: plain
+header: ### Fakultäts-Funktion als Beispiel (2)
+
+#### ... und der im "Haskell-Stil"
+
+```
+unsigned long long fakul(unsigned long long n) {
+	return n*fakul(n-1);
+}
+unsigned long long fakul(0uLL) {
+	return 1;
+}
+```
+Natürlich ist das obige **kein gültiges C++** ... aber doch irgendwie
+verständlich, oder nicht?
+
+.I[
+Der Abbruch der in der allgemeinen Funktion eigentlich endlosen Rekursion erfolgt durch
+Spezialisierung von `fakul` für den Argumentwert `0` (als `unsigned long long`).
+]
+
+---
+template: plain
+header: ### Fakultäts-Berechnung zur Compilezeit
+
+Das folgende aber **ist** gültiges C++ ...
+```
+template<unsigned long long n>
+struct fakul {
+	static const unsigned long long result = fakul<n-1>::result;
+};
+template<>
+struct fakul<0uLL> {
+	static const unsigned long long result = 1;
+};
+```
+... und doch auch irgendwie "verständlich", oder?
+
+Der "Aufruf" in einem kleinen Testprogramm könnte dann so aussehen:
+```
+#include <iostream>
+int main() {
+	std::cout << fakul<5>::result << std::endl;
+}
+```
+
+---
+template: plain
+header: ### Weitere Typ-Transformationen in Beispielen
+
+#### Eine Zeigerstufe hinzufügen
+```
+template<typename T>
+struct add_pointer {
+	typedef T* result;
+}
+```
+
+#### Eine Zeigerstufe wegnehmen
+```
+template<typename T>
+struct remove_pointer;
+template<typename T>
+struct remove_pointer<T*> {
+	typedef T result;
+}
+```
+#### Alle Zeigerstufen wegnehmen
+
+(Denken Sie doch einfach mal selbst kurz nach!)
+
+???
+Die Lösung lautet - natürlich - so:
+```
+template<typename T>
+struct remove_all_pointers {
+	typedef T result;
+}
+template<typename T>
+struct remove_pointer<T*> {
+	typedef remove_all_pointers<T> result;
+}
+```
+
+---
+template: plain
+header: ### Type-Traits Library
+
+Mit C++11 wurden die davor unter Boost entwickelten [Type-Traits] zum Standard.
+
+Mehr dazu finden Sie hier:
+
+* http://www.cplusplus.com/reference/type_traits/
+* http://en.cppreference.com/w/cpp/types/
+
+---
+template: plain
+name: exercise_tue2
 header: ## Übung
 
-Ziel ist die Parametrisierung einer einfachen Klasse in einem Datentyp
-und der Größe eines Arrays.
+Ziel der Aufgabe:
+
+STL-Container und Algorithmen verwenden.
 
 .N[
 Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie des

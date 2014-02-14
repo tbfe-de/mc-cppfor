@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>C++ For -- Montag Teil 1</title>
+    <title>C++ For -- Mittwoch Teil 1</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
-    <!-- when changing the stylesheet file please see also remark below -->
+    <!-- when changing the stylesheet, please also change EACH 'styling-by:' -->
   </head>
   <body>
 <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
@@ -138,17 +138,16 @@ template: blank
 
   [C++ FOR]: 00_inhalt.html
 
-# [C++ FOR] (Montagvormittag)
+# [C++ FOR] (Mittwochvormittag)
 
----------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-1. [Neue Features von C++11				](#cp11_whatsnew)
-1. [Wiederholung: Verwendung von Standard-Strings	](#string_basics)
-1. [Wiederholung: Verwendung von I/O-Streams		](#iostream_basics)
-1. [Grundlegendes zur Programmierung von Templates	](#template_basics)
-1. [Übung						](#exercise_mon1)
+1. [Assoziative Container	](#associative_containers)
+1. [Iterator-Kategorien		](#iterator_categories)
+1. [Iterator-Konventionen	](#iterator_usages)
+1. [Übung			](#exercise_wed1)
 
----------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 Kürzere Pausen werden jeweils nach Bedarf eingelegt.
 
@@ -157,170 +156,93 @@ Mittagspause.
 
 ---
 template: linkinfo
-graphic: StringBasics
-name: string_basics
-header: ## Verwendung von Standard-Strings
+graphic: STL-AssociativeContainers
+name: associative_containers
+header: ## Assoziative Container der STL
 
-----------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-* [Klassen (Übersicht)			](#stdstring_classes)
-* [Kompatibilität zu C			](#stdstring_cstr)
-* [Effizienz üblicher Implementierungen	](#stdstring_efficiency)
-* [Optionales "Copy On Write"		](#stdstring_cow)
+* [Kombination der Varianten	](#associative_combinations)
 
-----------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-* [Grundlegende Operationen		](#stdstring_basicops)
-* [Weitere Operationen im Überblick	](#stdstring_moreops)
-* [Umwandlung von/in arithmetische Werte](#stdstring_numconv)
+* [Speicherverfahren:  
+   Red-Black-Tree._[]		](#associative_rb_tree)
+* [Speicherverfahren:  
+   Hashing			](#associative_hashing)
 
-----------------------------------------------------------------
+--------------------------------------------------------------------------------
 
----
-template: withinfo
-graphic: StringBasics
-section: Classes
-name: stdstring_classes
-header: ### Klassen (Übersicht)
-
-Nachzuschlagen in:
-
-* http://www.cplusplus.com/string/
-* http://en.cppreference.com/w/string/
-
-
----
-template: withinfo
-graphic: StringBasics
-section: C-Compatibility
-name: stdstring_cstr
-header: ### Kompatibilität zu C
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: Efficiency
-name: stdstring_efficiency
-
-header: ### Effizienz
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: May or May not Have COW-Implementation
-name: stdstring_cow
-
-header: ### Effifienz
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: Basic Operations
-name: stdstring_basicops
-
-header: ### Grundlegende Operationen
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: Advanced Operations
-name: stdstring_moreops
-
-header: ### Weitere Operationen im Überblick
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: Numeric Conversions
-name: stdstring_numconv
-
-header: ### Umwandlung von/in arithmetische Werte
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: plain
-name: stdstring_num2str
-
-header: #### Arithmetischen Werte in Standard-Strings umwandeln
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: plain
-name: stdstring_str2num
-
-header: #### Standard-String in arithmetischen Werte umwandeln
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+.F[:
+Eine stets balancierte Variante des Binärbaums.
 ]
 
 ---
 template: linkinfo
-graphic: IOStreamBasics
-name: string_basics
-header: ## Verwendung von IO-Streams
+graphic: STL-IteratorCategories
+name: iterator_categories
+header: ## Iteratoren-Kategorien
 
------------------------------------------------------
+------------------------------------------------------------------------
 
-* [Design des Front-Ends	](#stdstring_classes)
-* [Design des Back-Ends		](#stdstring_classes)
+* [Unidirektional-Iteratoren		](#unidirectional_iterators)
 
------------------------------------------------------
+------------------------------------------------------------------------
 
-* [Stream Zustands-Bits		](#stdstring_numconv)
+* [Bidirektional-Iteratoren		](#bidirectional_iterators)
 
------------------------------------------------------
+------------------------------------------------------------------------
+
+* [Iteratoren mit wahlfreiem Zugriff	](#random_access_iterators)
+
+------------------------------------------------------------------------
 
 ---
 template: linkinfo
-graphic: TemplateBasics
-name: string_basics
-header: ## Grundlegendes zu Templates
+graphic: STL-IteratorUsages
+name: iterator_usages
+header: ## Iterator-Konventionen
 
-------------------------------------------------------------------------
+----------------------------------------------------------------------------
 
-* [Template-Klassen	](#template_classes)
+* [Nicht-modifizierende Iteratoren ...		](#const_iterators)
+* [... vs. modifzierende			](#modifying_iterators)
 
-------------------------------------------------------------------------
+----------------------------------------------------------------------------
 
-* [Template-Functions	](#template_functions)
+* [Vorwärts laufende Iteratoren ...		](#fwd_iterators)
+* [... vs. rückwärts laufende			](#reverse_iterators)
 
-------------------------------------------------------------------------
+----------------------------------------------------------------------------
+
+* [Iterator-Position in leeren Containern	](#empty_container_position)
+
+----------------------------------------------------------------------------
+
+* [Index-basierter Zugriff			](#index_based_access)
+
+----------------------------------------------------------------------------
 
 ---
-
 template: plain
-name: exercise_mon1
+name: stl_algorithms
+header: ## STL-Algorithmen
+
+Sie erhalten den besten Überblick indem Sie eine Online-Referenz besuchen.
+
+Dafür eignen sich:
+
+* http://www.cplusplus.com/reference/algorithm/
+* http://en.cppreference.com/w/cpp/algorithm/
+
+---
+template: plain
+name: exercise_tue2
 header: ## Übung
 
-Ziel ist die Parametrisierung einer einfachen Klasse in einem Datentyp
-und der Größe eines Arrays.
+Ziel der Aufgabe:
+
+STL-Container und Algorithmen verwenden.
 
 .N[
 Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie des
