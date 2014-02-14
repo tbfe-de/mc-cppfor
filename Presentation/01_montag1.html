@@ -136,7 +136,7 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
 layout: false
 template: blank
 
-  [C++ FOR]: 00_inhalt.html
+  [C++ FOR]: 00_inhalt.html#agenda
 
 # [C++ FOR] (Montagvormittag)
 
@@ -156,25 +156,34 @@ Die Besprechung der Musterlösung(en) erfolgt im direkten Anschluss an die
 Mittagspause.
 
 ---
+template: blank
+
+
+.N[
+Dieses Kapitel ist zum größeren Teil noch nicht in elektronischer Form
+verfügbar - bitte schlagen Sie ggf. Ihre gedruckte Kursunterlage auf!
+]
+
+---
 template: linkinfo
 graphic: StringBasics
 name: string_basics
 header: ## Verwendung von Standard-Strings
 
-----------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 * [Klassen (Übersicht)			](#stdstring_classes)
 * [Kompatibilität zu C			](#stdstring_cstr)
 * [Effizienz üblicher Implementierungen	](#stdstring_efficiency)
 * [Optionales "Copy On Write"		](#stdstring_cow)
 
-----------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 * [Grundlegende Operationen		](#stdstring_basicops)
 * [Weitere Operationen im Überblick	](#stdstring_moreops)
 * [Umwandlung von/in arithmetische Werte](#stdstring_numconv)
 
-----------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 ---
 template: withinfo
@@ -283,19 +292,52 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: linkinfo
 graphic: IOStreamBasics
-name: string_basics
+name: iostream_basics
 header: ## Verwendung von IO-Streams
 
------------------------------------------------------
+-------------------------------------------------------------------------------
 
-* [Design des Front-Ends	](#stdstring_classes)
-* [Design des Back-Ends		](#stdstring_classes)
+* [Front-End und ... 	](#iostream_frontend)
+* [... Back-End 	](#iostream_backend)
 
------------------------------------------------------
+-------------------------------------------------------------------------------
 
-* [Stream Zustands-Bits		](#stdstring_numconv)
+* [Zustands-Bits 	](#iostream_statebits)
 
------------------------------------------------------
+-------------------------------------------------------------------------------
+
+---
+template: withinfo
+graphic: IOStreamBasics
+section: I/O-System Front-End
+name: iostream_frontend
+header: ### Back-End der I/O-Streams
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: IOStreamBasics
+section: I/O-Streams Back-End
+name: iostream_backend
+header: ### Front-End der I/O-Streams
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: IOStreamBasics
+section: I/O-Streams State-Bits
+name: iostream_statebits
+header: ### Zustands-Bits der I/O-Streams
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
 
 ---
 template: linkinfo
@@ -303,15 +345,37 @@ graphic: TemplateBasics
 name: string_basics
 header: ## Grundlegendes zu Templates
 
-------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-* [Template-Klassen	](#template_classes)
+* [Template-Klasse	](#template_class)
 
-------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-* [Template-Functions	](#template_functions)
+* [Template-Funktion	](#template_function)
 
-------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+---
+template: withinfo
+graphic: TemplateBasics
+section: Template Class
+name: template_class
+header: ### Template-Klassen
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: TemplateBasics
+section: Template Function
+name: template_functions
+header: ### Template-Funktion
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
 
 ---
 
@@ -323,8 +387,8 @@ Ziel ist die Parametrisierung einer einfachen Klasse in einem Datentyp
 und der Größe eines Arrays.
 
 .N[
-Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie des
-vorbereiteten Eclipse-Projekts erläutert.
+Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie der
+vorbereiteten Eclipse-Projekte erläutert.
 ]
 
 </textarea>

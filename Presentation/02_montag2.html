@@ -136,7 +136,7 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
 layout: false
 template: blank
 
-  [C++ FOR]: 00_inhalt.html
+  [C++ FOR]: 00_inhalt.html#agenda
 
 # [C++ FOR] (Montagnachmittag)
 
@@ -371,7 +371,7 @@ Dieser ergibt sich aus:
 .F[
 Dabei spielt es keine Rolle, ob diese `static` sind oder nicht - in beiden Fällen handelt
 es sich um Speicherplatz im globalen Datenbereich. Der Unterschied ist lediglich, dass
-globalen `static` Variablen mit **gleichem Namen** aus **unterschiedlichen* Objektmodulen**
+globalen `static` Variablen mit *gleichem Namen* aus *unterschiedlichen* Objektmodulen*
 jeweils individueller Speicherplatz zugeordnet wird.
 ]
 
@@ -541,7 +541,7 @@ versehen werden,
 Anfangswerten unvorhersehbar._[] sind.
 
 Ergänzend muss dazu angemerkt werden, dass innerhalb eines Blocks mit `static`
-definierte Variable von der Lebensdauer her **nicht** an die Ausführung eines
+definierte Variable von der Lebensdauer her *nicht* an die Ausführung eines
 Blocks oder einer Funktion gebunden sind und daher bei den globalen Variablen
 abgelegt werden.
 
@@ -827,6 +827,7 @@ Der allgemeine Grund für Padding in Strukturen sind Alignment-Anforderungen der
   Ausrichtung auf ene bestimmte Adresse-Grenze, Beispielsweise könnte es notwendig sein, dass
   * 32-Bit Ganzzahlen an einer durch 4 teilbaren Adresse und
   * 64-Bit Ganzzahlen an einer durch 8 teilbaren Adresse stehen.
+
 * Da Strukturen prinzipiell auch als Arrays angelegt werden können, muss ferner die Struktur
   insgesamt gemäß den strengstens Aligmment-Anforderungen der in ihr enthaltenen Elemente
   ausgerichtet sein.
@@ -927,9 +928,9 @@ werden soll. Der konnte diesen Hinweis zu ignorieren.
 Mittlerweile hat sich die Situation umgekehrt:
 
 .N[
-Zumindest auf den höheren Optimierungsstufen
-entscheiden Compiler von sich aus, ob sie statt eines Unterprogramm-Aufrufs den Code einer
-Funktion direkt an der Aufrufstelle, auch wenn die betreffende Funktion nicht entsprechend
+Zumindest im Fall höherer Optimierungsstufen entscheiden viele Compiler mittlerweile von
+sich aus, ob sie statt eines Unterprogramm-Aufrufs den Code einer Funktion direkt an der
+Aufrufstelle *auch dann* einsetzen, wenn die betreffende Funktion *nicht* mit `inline`
 markiert ist.
 ]
 
@@ -951,9 +952,9 @@ gegen Programmgröße:
 .N[
 Es gibt allerdings eine wichtige Ausnahme:
 
-Sehr kleine und einfache Inline-Funktionen - insbesondere typische *Getter* und *Setter* - 
-machen die nicht nur die Programmausführung **schneller** sondern auch den Code insgesamt
-**kleiner**!
+Für sehr einfache Inline-Funktionen - insbesondere typische *Getter* und *Setter* - 
+machen Inline-Funktionen nicht nur die Programmausführung *schneller* sondern auch den Code
+insgesamt *kleiner*!
 ]
 
 .F[
@@ -1011,7 +1012,7 @@ section: Public versus Private Base Classes
 name: public_bases
 header: ### Öffentliche Basisklassen
 
-Gemäß der objektorientierten Sichtweise entspricht dies der **Vererbung**.
+Gemäß der objektorientierten Sichtweise entspricht dies der *Vererbung*.
 
 Aus Sicht auf die Member-Daten handelt es sich um eine reine Verschachtelung:
 
@@ -1039,11 +1040,14 @@ So gesehen sind private Basisklassen in C++ lediglich eine Alternative zur typis
 
 * Zusätzlich hat bei einer privaten Basisklassen aber die abgeleitete Klasse die Möglichkeit,
   geerbte Methoden zu überschreiben.
+
 * Daher kann das *Template Methode Pattern* des GoF-Buchs in C++ auch mit einer geringerer Kopplung
   zwischen Basisklasse und abgeleiteter Klassen umgesetzt werden.
 
-Das Speicher-Layout ist zwar dasselbe wie bei Vererbung, es gilt aber **nicht** das LSP, d.h. ein
+.N[
+Das Speicher-Layout ist zwar dasselbe wie bei Vererbung, es gilt aber *nicht* das LSP, d.h. ein
 `Derived`-Objekt wird nicht stillschweigend ein `Base`-Objekt substituieren.
+]
 
 ---
 template: withinfo
@@ -1316,7 +1320,9 @@ kann damit den Datenteil ganz "offiziell" enthalten:
 	class Lifo<ElemType>::Node {
 		Node *next;
 		ElemType data;
-		Node(Node const* n, const ElementType& d) : next(n), data(d) {}
+		Node(Node const* n, const ElementType& d)
+			: next(n), data(d)
+		{}
 		friend class Lifo<ElemType>;
 	};
 ```
@@ -1377,10 +1383,10 @@ Ob ein ähnlicher Destruktor auch für die andere Implementierung sinnvoll wäre
 ist, hängt von eingehenden Analysen des Codes ab._[], wie der Container tatsächlich benutzt wird.
 
 .F[
-Ohne eine solche Analyse wird die Sache leicht zum Grund für Memory-Leaks (wenn es **keinen** solchen
-Destruktor gibt aber eigentlich einen geben müsste) oder vorzeitig freigegebenem Speicherplatz für
-noch benutzte Datenelemente (wenn es einen solchen Destruktor gibt aber eigentlich **keinen** geben
-dürfte).
+Ohne eine solche Analyse wird die Sache leicht zum Grund für Memory-Leaks - nämlich wenn es
+*keinen* solchen Destruktor gibt aber eigentlich einen geben müsste; oder es kommt zu vorzeitig
+freigegebenem Speicherplatz für noch benutzte Datenelemente - wenn es einen solchen Destruktor
+gibt aber eigentlich *keinen* geben dürfte).
 ]
 
 ---
@@ -1592,17 +1598,14 @@ header: ## Typbasierte Verzweigungen
 
 ----------------------------------------------------------------------------
 
-* [Typgesteuerter Kontrollfluss			](#typeswitched_controlflow)
+* [Typgesteuerter Kontrollfluss		](#typeswitched_controlflow)
 
 ----------------------------------------------------------------------------
 
-* [Alternative mit virtuellen Funktionen	](#polymorphic_approach)
+* [Alternative mit  
+   virtuellen Funktionen		](#polymorphic_approach)
 
 ----------------------------------------------------------------------------
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
 
 ---
 template: withinfo
@@ -1635,12 +1638,15 @@ Ziel ist der Ersatz des typgesteuerten Kontrollflusses durch virtuelle Funktione
 in einem Beispiel.
 
 .N[
-Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie des
-vorbereiteten Eclipse-Projekts erläutert.
+Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie der
+vorbereiteten Eclipse-Projekte erläutert.
 ]
 
+</textarea>
+<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 <!-- ::::::::::::::::::::: )-: ereh TNETNOCLAER fo dne :::::::::::::::::::: -->
-    </textarea>
+<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+<!-- ::::::::::::::::::::: )-: ereh TNETNOCLAER fo dne :::::::::::::::::::: -->
     <script src="remark.min.js" type="text/javascript">
     </script>
     <script type="text/javascript">

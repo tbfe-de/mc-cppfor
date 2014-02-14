@@ -136,7 +136,7 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
 layout: false
 template: blank
 
-  [C++ FOR]: 00_inhalt.html
+  [C++ FOR]: 00_inhalt.html#agenda#agenda
 
 # [C++ FOR] (Dienstagvormittag)
 
@@ -163,8 +163,10 @@ header: ## Beziehungen zwischen Klassen
 
 ---------------------------------------------------------------------
 
-* [Klassen und Objekte			](#classes_vs_objects)
-* [Klassen-Templates			](#class_templates)
+* [Klasse (minimal)			](#class_minimal)
+* [Klasse (detailiert)			](#class_detailed)
+* [Instanziiertes Objekt		](#class_instantiated)
+* [Parametrisierte Klasse		](#class_template)
 
 ----------------------------------------------------------------------
 
@@ -174,16 +176,160 @@ header: ## Beziehungen zwischen Klassen
 
 ----------------------------------------------------------------------
 
-* [Vererbung				](#inheritance)
-* [Interfaces				](#interfaces)
-* [Abstrakte Basisklassen		](#abstract_base)
+* [(Mehrfach-)](#multi_based) [Vererbung](#inheritance)
+* [Interface				](#interfaces)
+* [Abstrakte Basisklasse		](#abstract_base)
 
 ----------------------------------------------------------------------
 
 * ["Rautenförmige" und ...		](#diamond_shaped_inheritance)
-* [... allgemeine mehrstufige Vererbung	](#multi_level_inheritance)
+* [... allgemein mehrstufige
+   Vererbungs-Hierarchien		](#broader_deeper_inheritance)
 
 ----------------------------------------------------------------------
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Some Class
+name: class_minimal
+header: ### Klasse (minimal)
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Class With Some Details
+name: class_detailed
+header: ### Klasse (detailiert)
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Instantiated Objects
+name: class_instantiated
+header: ### Instanziiertes Objekt
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Template Class
+name: class_template
+header: ### Parametrisierte Klasse
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Association
+name: association
+header: ### Assoziation
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Composition
+name: composition
+header: ### Komposition
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Aggregation
+name: aggregation
+header: ### Aggregation
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Inheritance
+name: inheritance
+header: ### Vererbung
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Multiple Inheritance
+name: multiple_bases
+header: ### Mehrfachvererbung
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Interfaces
+name: interfaces
+header: ### Interface (Schnittstelle)
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Abstract Base
+name: abstract_base
+header: ### Abstrakte Basisklasse
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: "Diamond Shaped" Inheritance Graph
+name: diamond_shaped_inheritance
+header: ### "Rautenförmige" Vererbungsstruktur
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Broad(er) and Deep(er) Inheritance Graph
+name: broader_deeper_inheritance
+header: Mehrstufige Vererbung allgemein gesehen
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
 
 ---
 template: linkinfo
@@ -198,9 +344,42 @@ header: ## Mehrfachvererbung und virtuelle Basisklassen
 
 ----------------------------------------------------------------------
 
-* [Überlappende Basisklassen		](#overlapping_bsaes)
+* [Überlappende Basisklassen		](#overlapping_bases)
 
 ----------------------------------------------------------------------
+
+---
+template: withinfo
+graphic: MultipleInheritance
+section: Multiple Inheritance
+name: mi_principle
+header: ### Prinzip der Mehrfachvererbung
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: MultipleInheritance
+section: Virtual Base Class
+name: virtual_bases
+header: ### Virtuelle Basisklassen
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: MultipleInheritance
+section: Overlapping Common Base Class
+name: overlapping_bases
+header: ### Überlappende Basisklassen
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
 
 ---
 template: linkinfo
@@ -210,45 +389,181 @@ header: ## Rautenförmige Ableitungshierarchien
 
 ------------------------------------------------------------------------
 
-* [UML-Darstellung "overlapping" ...	](#overlapping_uml)
-* [... versus "disjoint"		](#disjoint_uml)
+* [UML-Darstellung «overlapping» ...		](#overlapping_uml)
+* [... versus «disjoint»			](#disjoint_uml)
 
 ------------------------------------------------------------------------
 
-* [Implementierung "overlapping" ...	](#overlapping_implementation)
-* [... versus "disjoint"		](#disjoint_implementation)
+* [Abbildung auf Speicher «overlapping» ...	](#overlapping_memory)
+* [... versus «disjoint»			](#disjoint_memory)
 
 ------------------------------------------------------------------------
 
-* [Konstruktor / Destruktor "overlapping" ...	](#overlapping_ctordtor)
-* [... versus "disjoint"			](#disjoint_ctordtor)
+* [Konstruktor / Destruktor «overlapping» ...	](#overlapping_ctordtor)
+* [... versus «disjoint»			](#disjoint_ctordtor)
 
 ------------------------------------------------------------------------
+
+---
+template: withinfo
+graphic: DiamondShapedInheritance
+section: UML Class Graph («overlapping»)
+name: overlapping_uml
+header: ### UML-Darstellung «overlapping»
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: DiamondShapedInheritance
+section: UML Class Graph («disjoint»)
+name: disjoint_uml
+header: ### UML-Darstellung «disjoint»
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: DiamondShapedInheritance
+section: Class to Memory Mapping («overlapping»)
+name: overlapping_implementation
+header: ### Abbildung auf Speicher «overlapping»
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: DiamondShapedInheritance
+section: Class to Memory Mapping («overlapping»)
+name: disjoint_implementation
+header: ### Abbildung auf Speicher «disjoint»
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: DiamondShapedInheritance
+section: Creation and Destruction «overlapping»
+name: overlapping_ctordtor
+header: ### Konstruktor / Destruktor «overlapping» ...
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: DiamondShapedInheritance
+section: Creation and Destruction «disjoint»
+name: disjoint_ctordtor
+header: ### Konstruktor / Destruktor «disjoint» ...
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
 
 ---
 template: linkinfo
 graphic: Example-ClassDesign
 name: example_relations
-header: ## Klassenbeziehungen anhand eines Beispiels
+header: ## Beispiele zu Klassenbeziehungen
 
-------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-* [Nutzung existierender Komponenten	](#with_existing_component)
+* [Eine anpassbare Komponente ...		](#an_adaptable_component)
+* [... und deren Nutzung 			](#using_existing_component)
 
-------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-* [Mehrfachvererbung			](#with_mi)
+* [Rautenförmige (Mehrfach-) Vererbung		](#with_multiple_inheritance)
 
-------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-* [Interfaces				](#with_interface)
+* [Drei Interfaces				](#with_three_interface)
 
-------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-* [Inkrementale Erweiterbarkeit		](#with_extensibilty)
-* [Die "perfekte" Lösung?		](#with_elaboration)
+* [Flexible Erweiterbarkeit durch "Mix-Ins"	](#with_extensibilty)
 
-------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+* [Orientiert am GoF "Observer" Muster		](#with_elaboration)
+
+-------------------------------------------------------------------------------
+
+---
+template: withinfo
+graphic: Example-ClassDesign
+section: Reusable Component
+name: with_existing_component
+header: ### Eine (anpassbare) Komponente
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: Example-ClassDesign
+section: Reusable Adapted Component
+name: with_existing_component
+header: ### Nutzung der (angepassten) Komponente
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: Example-ClassDesign
+section: Diamond-Shapend Inheritance
+name: with_multiple_inheritance
+header: ### Rautenförmige (Mehrfach-) Vererbung
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: Example-ClassDesign
+section: Three Interfaces
+name: with_three_interface
+header: ### Drei Interfaces
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: Example-ClassDesign
+section: Improved Reuse with Mixin Classes
+name: with_extensibilty
+header: ### Inkrementale Erweiterbarkeit durch Mix-Ins
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: Example-ClassDesign
+section: Close to GoF "Observer" Pattern
+name: with_elaboration
+header: ### Orientiert am GoF "Observer" Muster
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
 
 ---
 template: plain
@@ -261,8 +576,8 @@ Analyse und Bewertungen diverser Varianten eines Beispiels, in dem eine Reihe
 unterschiedlicher Klassenbeziehungen verwendet werden.
 
 .N[
-Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie des
-vorbereiteten Eclipse-Projekts erläutert.
+Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie der
+vorbereiteten Eclipse-Projekte erläutert.
 ]
 
 </textarea>

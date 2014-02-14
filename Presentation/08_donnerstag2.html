@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>C++ For -- Dienstag Teil 2</title>
+    <title>C++ For -- Donnerstag Teil 2</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
     <!-- when changing the stylesheet, please also change EACH 'styling-by:' -->
@@ -138,14 +138,13 @@ template: blank
 
   [C++ FOR]: 00_inhalt.html#agenda
 
-# [C++ FOR] (Dienstagnachmittag)
+# [C++ FOR] (Donnerstagnachmittag)
 
 -------------------------------------------------------------------------------
 
-1. [Sequenzielle Container	](#sequence_containers)
-1. [Grundlegendes zu Iteratoren	](#iterator_basics)
-1. [Details zu Iteratoren	](#iterator_details)
-1. [Übung			](#exercise_tue2)
+1. [Grundlegendes zu Exceptions			](#exception_basics)
+1. [Richtlinien für den Exception-Einsatz	](#exception_details)
+1. [Übung					](#exercise_thu2)
 
 -------------------------------------------------------------------------------
 
@@ -155,35 +154,37 @@ Die Besprechung der Musterlösung(en) erfolgt zu Beginn des folgenden Vormittags
 
 ---
 template: linkinfo
-graphic: STL-SequenceContainers
-name: sequence_containers
-header: ## Sequenzielle Container der STL
+graphic: ExceptionBasics
+name: exception_basics
+header: ## Grundlegendes zu Exceptions
 
 -------------------------------------------------------------------------------
 
-* [Zusammenhängender Speicher		](#stl_vector)
+* [Hierarchien von Exception-Klassen		](#exception_hierarchies)
 
 -------------------------------------------------------------------------------
 
-* [Doppelt verkettete Listen ...	](#stl_deque)
-* [... und einfach verkettete._[]	](#stl_forward_list)
+* [Kontrollfluss mit und ohne Exception		](#exception_flowcontrol)
 
 -------------------------------------------------------------------------------
 
-* [Deque				](#stl_deque)
+* [Exception Klassen als "Label" verstanden	](#exception_as_label)
+* [Exception Gruppieren				](#exception_grouping)
+* [Aktivieren eines Behandlungs-Blocks		](#exception_try_block)
 
 -------------------------------------------------------------------------------
 
-.F[
-Kein Bestandteil von C++98 sondern erst mit C++11 verfügbar.
-]
+* [Unvollständig behandelte Exceptions	](#exception_rethrow)
+* [Fangen aller Exceptions		](#exception_catchall)
+
+-------------------------------------------------------------------------------
 
 ---
 template: withinfo
-graphic: STL-SequenceContainers
-section: TBD
-name: stl_vector
-header: ### Zusammenhängender Speicher
+graphic: ExceptionBasics
+section: Exception Class Hierarchies
+name: exception_hierarchies
+header: ### Hierarchien von Exception-Klassen
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -191,10 +192,10 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: withinfo
-graphic: STL-SequenceContainers
-section: TBD
-name: stl_deque
-header: ### Doppelt verkettete Listen
+graphic: ExceptionBasics
+section: Execution Path taken for Exception
+name: exception_flowcontrol
+header: ### Kontrollfluss mit und ohne Exception
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -202,10 +203,10 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: withinfo
-graphic: STL-SequenceContainers
-section: TBD
-name: stl_forward_list
-header: ### Einfach verkettete Listen
+graphic: ExceptionBasics
+section: Exception Classes Viewn as Labels
+name: exception_as_label
+header: ### Exception Klassen als "Label" verstanden
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -213,10 +214,43 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: withinfo
-graphic: STL-SequenceContainers
-section: TBD
-name: stl_deque
-header: ### Deque
+graphic: ExceptionBasics
+section: Grouping Exceptions
+name: exception_grouping
+header: ### Gruppieren ähnlicher Exceptions
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: ExceptionBasics
+section: Enabling Handler Blocks
+name: exception_try_block
+header: ### Aktivieren der Ausnahmebehandlung
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: ExceptionBasics
+section: Re-throw Exceptions
+name: exception_rethrow
+header: ### Unvollständig behandelte Exceptions
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: ExceptionBasics
+section: Catch Any Exception
+name: exception_catchall
+header: ### Fangen aller Exceptions
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -224,40 +258,36 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: linkinfo
-graphic: STL-ContainerIterators
-name: iterator_basics
-header: ## Grundlegendes zu Iteratoren
+graphic: ExceptionDetails
+name: openclose_example
+header: ## Richtlinien für den Exception-Einsatz
 
 -------------------------------------------------------------------------------
 
-* [Prinzip des Iterators ...	](#iterator_principle)
-* [... auf Elemente oder ...	](#pointing_to_iterator)
-* [... dazwischen zeigend	](#pointing_in_between_iterator)
+* [(Keine) isolierte Klassenhierarchie	](#disconnected_class_hierarchy)
 
 -------------------------------------------------------------------------------
 
-* [Vorwärts-Iteratoren ...	](#fwd_iterator_principle)
-* [... auf Elemente oder ...	](#pointing_to_fwd_iterator)
-* [... dazwischen zeigend	](#pointing_in_between_fwd_iterator)
+* [(Falsche) Behandlungsblock-Abfolge	](#wrong_catch_order)
 
 -------------------------------------------------------------------------------
 
-* [Rückwärts-Iteratoren ...	](#reverse_iterator_principle)
-* [... auf Elemente oder ...	](#pointing_to_reverse_iterator)
-* [... dazwischen zeigend	](#pointing_in_between_reverse_iterator)
+* [Optimale Weiterleitung		](#correct_rethrow)
+  * [(Rückschnitt auf Basisklasse)	](#avoidable_copy_slicing)
+  * [(Sub-optimale Weiterleitung)	](#problematic_rethrow)
 
 -------------------------------------------------------------------------------
 
-* [Beschränkung auf Teilbereiche](#container_subranges)
+* [Exceptions in Destruktoren vermeiden	](#dtor_exception_nogo)
 
 -------------------------------------------------------------------------------
 
 ---
 template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: iterator_principle
-header: ### Prinzip des Iterators
+graphic: ExceptionDetails
+section: (No) Disconnected Class Hierarchy
+name: disconnected_class_hierarchy
+header: ### (Keine) isolierte Klassenhierarchie
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -265,10 +295,10 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: pointing_to_iterator
-header: #### Iterator *auf* Elemente zeigend
+graphic: ExceptionDetails
+section: (Bad) Order of Handlers
+name: wrong_catch_order
+header: ### (Falsche) Behandlungsblock-Abfolge
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -276,10 +306,10 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: pointing_in_between_iterator
-header: #### Iterator *zwischen* Elemente zeigend
+graphic: ExceptionDetails
+section: Optimal Re-Throwing
+name: correct_rethrow
+header: ### Optimale Weiterleitung
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -287,10 +317,10 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: fwd_iterator_principle
-header: ### Prinzip des Vorwärts-Iterators
+graphic: ExceptionDetails
+section: Sclicing Exception Object
+name: avoidable_copy_slicing
+header: ### (Vermeidbarer) Rückschnitt auf Basisklasse
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -298,10 +328,10 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: pointing_to_fwd_iterator
-header: #### Vorwärts-Iterator *auf* Elemente zeigend
+graphic: ExceptionDetails
+section: Sub-optimal Re-throwing
+name: problematic_rethrow
+header: ### Sub-optimale Weiterleitung
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -309,150 +339,10 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: pointing_in_between_fwd_iterator
-header: #### Vorwärts-Iterator *auf* Elemente zeigend
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: reverse_iterator_principle
-header: ### Prinzip des Rückwärts-Iterators
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: pointing_to_reverse_iterator
-header: #### Rückwärts-Iterator *auf* Elemente zeigend
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: pointing_in_between_reverse_iterator
-header: #### Rückwärts-Iterator *zwischen* Elemente zeigend
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: container_subranges
-header: ### Beschränkung auf Teilbereiche
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: linkinfo
-graphic: STL-IteratorDetails
-name: iterator_details
-header: ## Iteratoren im Detail
-
--------------------------------------------------------------------------------
-
-* [Nicht-modifizierende Iteratoren ...		](#const_iterators)
-* [... vs. modifzierende			](#modifying_iterators)
-
--------------------------------------------------------------------------------
-
-* [Vorwärts laufende Iteratoren ...		](#fwd_iterators)
-* [... vs. rückwärts laufende			](#reverse_iterators)
-
--------------------------------------------------------------------------------
-
-* [Iterator-Position in leeren Containern	](#empty_container_position)
-
--------------------------------------------------------------------------------
-
-* [Index-basierter Zugriff			](#index_based_access)
-
--------------------------------------------------------------------------------
-
----
-template: withinfo
-graphic: STL-IteratorDetails
-section: TBD
-name: const_iterators
-header: ### Nicht-modifizierende Iteratoren
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-IteratorDetails
-section: TBD
-name: modifying_iterators
-header: ### Modifzierende Iteratoren._[]			 
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
-.F[
-Zutreffender wäre: *potenziell* modifizierende Iteratoren.
-]
-
----
-template: withinfo
-graphic: STL-IteratorDetails
-section: TBD
-name: fwd_iterators
-header: ### Vorwärts laufende Iteratoren
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-IteratorDetails
-section: TBD
-name: reverse_iterators
-header: ### Rückwärts laufende Iteratoren
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-IteratorDetails
-section: TBD
-name: empty_container_position
-header: ### Iterator-Position in leeren Containern
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-IteratorDetails
-section: TBD
-name: index_based_access
-header: ### Index-basierter Zugriff
+graphic: ExceptionDetails
+section: (No) Throwing from Destructoes
+name: dtor_exception_nogo
+header: ### (Keine) Exceptions aus Destruktoren werfen
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -460,22 +350,22 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: plain
-name: exercise_tue2
+name: exercise_thu2
 header: ## Übung
 
 Ziel der Aufgabe:
 
-Eine kleine Serie von STL-Beispielen soll
-
-* zunächst analysiert und
-* dann in einigen Details modifiziert
-
-werden. Dabei besteht auch die Gelegenheit, in C++11 neu hinzugekommene
-Sprachmechanismen zu verwenden.
+Erweiterung einer Klasse mit einer Fehlerbehandlung unter Nutzung von Exceptions.._[]
 
 .N[
 Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie der
 vorbereiteten Eclipse-Projekte erläutert.
+]
+
+.F[:
+Diese Aufgabe bietet über die Anwendung von Exceptions hinausgehend auch noch
+die Möglichkeit, entweder mit Hilfe virtueller Member-Funktionen oder mit Hilfe
+von Templates eine besonders flexible Lösung zu schaffen.
 ]
 
 </textarea>
@@ -489,5 +379,3 @@ vorbereiteten Eclipse-Projekte erläutert.
     </script>
   </body>
 </html>
-
-

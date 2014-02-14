@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>C++ For -- Dienstag Teil 2</title>
+    <title>C++ For -- Freitag</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
     <!-- when changing the stylesheet, please also change EACH 'styling-by:' -->
@@ -138,52 +138,120 @@ template: blank
 
   [C++ FOR]: 00_inhalt.html#agenda
 
-# [C++ FOR] (Dienstagnachmittag)
+# [C++ FOR] (Freitagvormittag)
 
 -------------------------------------------------------------------------------
 
-1. [Sequenzielle Container	](#sequence_containers)
-1. [Grundlegendes zu Iteratoren	](#iterator_basics)
-1. [Details zu Iteratoren	](#iterator_details)
-1. [Übung			](#exercise_tue2)
+1. [Ressourcen ohne und mit RAII verwalten	](#resource_management)
+1. [Smart-Pointer 				](#smart_pointers)
+1. [Übung					](#exercise_fri1)
 
 -------------------------------------------------------------------------------
 
 Kürzere Pausen werden jeweils nach Bedarf eingelegt.
 
-Die Besprechung der Musterlösung(en) erfolgt zu Beginn des folgenden Vormittags.
+.N[
+Die Besprechung der Musterlösung(en) erfolgt nach direkt nach der Übung, da
+am letzten Kurstag der Nachmittag entfällt.
+]
 
 ---
 template: linkinfo
-graphic: STL-SequenceContainers
-name: sequence_containers
-header: ## Sequenzielle Container der STL
+graphic: ResourceManagement
+name: resource_management
+header: ## Ressourcen ohne und mit RAII
 
 -------------------------------------------------------------------------------
 
-* [Zusammenhängender Speicher		](#stl_vector)
+* [Klassische APIs				](#classic_resource_api)
 
 -------------------------------------------------------------------------------
 
-* [Doppelt verkettete Listen ...	](#stl_deque)
-* [... und einfach verkettete._[]	](#stl_forward_list)
+* [Mit RAII verwaltete Ressourcen ...		](#raii_style)
+* [... für Ausführung einer Anweisungsfolge ...	](#raii_codeblock)
+* [... oder Lebensdauer eines Objekts belegen	](#raii_lifetime)
 
 -------------------------------------------------------------------------------
 
-* [Deque				](#stl_deque)
+---
+template: withinfo
+graphic: ResourceManagement
+section: Classic Resource Management APIs
+name: classic_resource_api
+header: ### Klassische APIs
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: ResourceManagement
+section: Wrapped Resource
+name: raii_style
+header: ### Mit RAII verwaltete Ressourcen
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: ResourceManagement
+section: Acquire Resource for Code Segment
+name: raii_codeblock
+header: ### RAII-Resource für Anweisungsfolge belegen
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: ResourceManagement
+section: Acquire Resource for Object Lifetime
+name: raii_lifetime
+header: ### RAII-Resource für Objekt-Lebensspanne belegen
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: linkinfo
+graphic: SmartPointers
+name: smart_pointers
+header: ## Smart-Pointer
 
 -------------------------------------------------------------------------------
+
+* [Smart-Pointer von C++11._[] im Vergleich	](#unique_vs_shared)
+
+-------------------------------------------------------------------------------
+
+* [Prinzip der Referenzzählung			](#refcount_principle)
+
+-------------------------------------------------------------------------------
+
+* [Problem zyklischer Referenzierung mit ...		](#refcount_problem)
+* [... "nur beobachtenden" Zeiger als Ausweg und ...	](#weak_ptr_solution)
+* [... "verlorene" Resourcen				](#weak_ptr_dangling)
+
+-------------------------------------------------------------------------------
+
+* [Varianten der Implementierung		](#implementation_choices)
 
 .F[
-Kein Bestandteil von C++98 sondern erst mit C++11 verfügbar.
+Berücksichtigt sind hier nur die Smart-Pointer von C++11, da mit diesem Standard
+zugleiche der mit C++98 eingeführte `std::auto_ptr` abgekündigt wurde.
 ]
 
 ---
 template: withinfo
-graphic: STL-SequenceContainers
-section: TBD
-name: stl_vector
-header: ### Zusammenhängender Speicher
+graphic: SmartPointers
+section: Comparing Smart Pointers
+name: unique_vs_shared
+header: ### Smart-Pointer von C++11._[] im Vergleich
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -191,10 +259,10 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: withinfo
-graphic: STL-SequenceContainers
-section: TBD
-name: stl_deque
-header: ### Doppelt verkettete Listen
+graphic: SmartPointers
+section: Reference Counting Principle
+name: refcount_principle
+header: ### Prinzip der Referenzzählung
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -202,10 +270,10 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: withinfo
-graphic: STL-SequenceContainers
-section: TBD
-name: stl_forward_list
-header: ### Einfach verkettete Listen
+graphic: SmartPointers
+section: Problem of Cyclic References
+name: refcount_problem
+header: ### Problem zyklischer Referenzierung
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -213,51 +281,10 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: withinfo
-graphic: STL-SequenceContainers
-section: TBD
-name: stl_deque
-header: ### Deque
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: linkinfo
-graphic: STL-ContainerIterators
-name: iterator_basics
-header: ## Grundlegendes zu Iteratoren
-
--------------------------------------------------------------------------------
-
-* [Prinzip des Iterators ...	](#iterator_principle)
-* [... auf Elemente oder ...	](#pointing_to_iterator)
-* [... dazwischen zeigend	](#pointing_in_between_iterator)
-
--------------------------------------------------------------------------------
-
-* [Vorwärts-Iteratoren ...	](#fwd_iterator_principle)
-* [... auf Elemente oder ...	](#pointing_to_fwd_iterator)
-* [... dazwischen zeigend	](#pointing_in_between_fwd_iterator)
-
--------------------------------------------------------------------------------
-
-* [Rückwärts-Iteratoren ...	](#reverse_iterator_principle)
-* [... auf Elemente oder ...	](#pointing_to_reverse_iterator)
-* [... dazwischen zeigend	](#pointing_in_between_reverse_iterator)
-
--------------------------------------------------------------------------------
-
-* [Beschränkung auf Teilbereiche](#container_subranges)
-
--------------------------------------------------------------------------------
-
----
-template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: iterator_principle
-header: ### Prinzip des Iterators
+graphic: SmartPointers
+section: Breaking Cycles Using Weak Pointers
+name: weak_ptr_solution
+header: ### Lediglich "beobachtende" Zeiger als Ausweg
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -265,10 +292,10 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: pointing_to_iterator
-header: #### Iterator *auf* Elemente zeigend
+graphic: SmartPointers
+section: Dangling Weak Pointer
+name: weak_ptr_dangling
+header: ### "Verlorene" Resourcen
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -276,183 +303,10 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: pointing_in_between_iterator
-header: #### Iterator *zwischen* Elemente zeigend
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: fwd_iterator_principle
-header: ### Prinzip des Vorwärts-Iterators
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: pointing_to_fwd_iterator
-header: #### Vorwärts-Iterator *auf* Elemente zeigend
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: pointing_in_between_fwd_iterator
-header: #### Vorwärts-Iterator *auf* Elemente zeigend
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: reverse_iterator_principle
-header: ### Prinzip des Rückwärts-Iterators
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: pointing_to_reverse_iterator
-header: #### Rückwärts-Iterator *auf* Elemente zeigend
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: pointing_in_between_reverse_iterator
-header: #### Rückwärts-Iterator *zwischen* Elemente zeigend
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
-name: container_subranges
-header: ### Beschränkung auf Teilbereiche
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: linkinfo
-graphic: STL-IteratorDetails
-name: iterator_details
-header: ## Iteratoren im Detail
-
--------------------------------------------------------------------------------
-
-* [Nicht-modifizierende Iteratoren ...		](#const_iterators)
-* [... vs. modifzierende			](#modifying_iterators)
-
--------------------------------------------------------------------------------
-
-* [Vorwärts laufende Iteratoren ...		](#fwd_iterators)
-* [... vs. rückwärts laufende			](#reverse_iterators)
-
--------------------------------------------------------------------------------
-
-* [Iterator-Position in leeren Containern	](#empty_container_position)
-
--------------------------------------------------------------------------------
-
-* [Index-basierter Zugriff			](#index_based_access)
-
--------------------------------------------------------------------------------
-
----
-template: withinfo
-graphic: STL-IteratorDetails
-section: TBD
-name: const_iterators
-header: ### Nicht-modifizierende Iteratoren
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-IteratorDetails
-section: TBD
-name: modifying_iterators
-header: ### Modifzierende Iteratoren._[]			 
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
-.F[
-Zutreffender wäre: *potenziell* modifizierende Iteratoren.
-]
-
----
-template: withinfo
-graphic: STL-IteratorDetails
-section: TBD
-name: fwd_iterators
-header: ### Vorwärts laufende Iteratoren
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-IteratorDetails
-section: TBD
-name: reverse_iterators
-header: ### Rückwärts laufende Iteratoren
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-IteratorDetails
-section: TBD
-name: empty_container_position
-header: ### Iterator-Position in leeren Containern
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-IteratorDetails
-section: TBD
-name: index_based_access
-header: ### Index-basierter Zugriff
+graphic: SmartPointers
+section: Implementation Choices
+name: implementing_shared_ptr
+header: ### Varianten der Implementierung
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -460,18 +314,12 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 
 ---
 template: plain
-name: exercise_tue2
+name: exercise_thu2
 header: ## Übung
 
 Ziel der Aufgabe:
 
-Eine kleine Serie von STL-Beispielen soll
-
-* zunächst analysiert und
-* dann in einigen Details modifiziert
-
-werden. Dabei besteht auch die Gelegenheit, in C++11 neu hinzugekommene
-Sprachmechanismen zu verwenden.
+Entwicklung eines Ressource-Wrappers im RAII-Stil zum C `FILE`-API.
 
 .N[
 Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie der
@@ -489,5 +337,3 @@ vorbereiteten Eclipse-Projekte erläutert.
     </script>
   </body>
 </html>
-
-
