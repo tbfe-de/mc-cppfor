@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>C++ For -- Mittwoch Teil 1</title>
+    <title>C++-For (5) - Mittwoch Teil 1</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
     <!-- when changing the stylesheet, please also change EACH 'styling-by:' -->
@@ -180,7 +180,7 @@ Eine stets balancierte Variante des Binärbaums.
 ---
 template: withinfo
 graphic: STL-AssociativeContainers
-section: TBD
+section: Combinations of Associative Containers
 name: associative_combinations
 header: ### Kombination der Varianten
 
@@ -191,7 +191,7 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-AssociativeContainers
-section: TBD
+section: RB-Tree-based Storage
 name: associative_combinations
 header: ### Speicherverfahren Red-Black-Tree
 
@@ -202,7 +202,7 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-AssociativeContainers
-section: TBD
+section: Hash-based Storage
 name: associative_combinations
 header: ### Speicherverfahren Hashing
 
@@ -233,7 +233,7 @@ header: ## Iteratoren-Kategorien
 ---
 template: withinfo
 graphic: STL-IteratorCategories
-section: TBD
+section: Unidirectional Iterators
 name: unidirectional_iterators
 header: ### Unidirektional-Iteratoren
 
@@ -244,7 +244,7 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-IteratorCategories
-section: TBD
+section: Bidirectional Iterators
 name: bidirectional_iterators
 header: ### Bidirektional-Iteratoren
 
@@ -255,7 +255,7 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-IteratorCategories
-section: TBD
+section: Random Access Iterators
 name: random_access_iterators
 header: ### Iteratoren mit wahlfreiem Zugriff
 
@@ -271,30 +271,33 @@ header: ## Iterator-Konventionen
 
 ----------------------------------------------------------------------------
 
-* [Nicht-modifizierende Iteratoren ...		](#const_iterators)
-* [... vs. modifzierende			](#modifying_iterators)
+* [Iteratoren verbinden ...	](#iterators_as_glue)
+* [... Container mit ...	](#container_axis)
+* [ ... Algorithmen		](#algorithm_axis)
 
 ----------------------------------------------------------------------------
 
-* [Vorwärts laufende Iteratoren ...		](#fwd_iterators)
-* [... vs. rückwärts laufende			](#reverse_iterators)
+* [Input-Iteratoren		](#input_iterators)
+* [Output-Iteratoren		](#output_iterators)
 
 ----------------------------------------------------------------------------
 
-* [Iterator-Position in leeren Containern	](#empty_container_position)
+* [Erfolgreiche und ...		](#success_from_searching)
+* [... gescheiterte Suche	](#failure_from_searching)
 
 ----------------------------------------------------------------------------
 
-* [Index-basierter Zugriff			](#index_based_access)
+* [Füllstands- und ...		](#state_from_filling)
+* [... Löschenanzeige		](#removing_logically_only)
 
 ----------------------------------------------------------------------------
 
 ---
 template: withinfo
 graphic: STL-IteratorUsages
-section: TBD
-name: const_iterators
-header: ### Nicht-modifizierende Iteratoren
+section: Iterators as "Glue"
+name: iterators_as_glue
+header: ### Iteratoren als verbindendes Element
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -303,9 +306,9 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-IteratorUsages
-section: TBD
-name: modifying_iterators
-header: ### Modifzierende Iteratoren
+section: Container Dimension
+name: container_axis
+header: ### Container-Achse
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -314,9 +317,9 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-IteratorUsages
-section: TBD
-name: fwd_iterators
-header: ### Vorwärts laufende Iteratoren
+section: Algorithm-Dimension
+name: algorithm_axis
+header: ### Algorithmen-Achse
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -325,9 +328,9 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-IteratorUsages
-section: TBD
-name: reverse_iterators
-header: ### Rückwärts laufende Iteratoren
+section: Input Iterators
+name: input_iterators
+header: ### Input-Iterator-Kategorie
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -336,9 +339,9 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-IteratorUsages
-section: TBD
-name: empty_container_position
-header: ### Iterator-Position in leeren Containern
+section: Output Iterators
+name: output_iterators
+header: ### Output-Iterator-Kategorie
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -347,25 +350,46 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-IteratorUsages
-section: TBD
-name: index_based_access
-header: ### Index-basierter Zugriff
+section: Return Success from Search
+name: success_from_searching
+header: ### Erfolgreiche Suche
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ]
 
 ---
-template: plain
-name: stl_algorithms
-header: ## STL-Algorithmen
+template: withinfo
+graphic: STL-IteratorUsages
+section: Return Failure from Search
+name: failure_from_searching
+header: ### Fehlgeschlagene Suche
 
-Sie erhalten den besten Überblick indem Sie eine Online-Referenz besuchen.
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
 
-Dafür eignen sich:
+---
+template: withinfo
+graphic: STL-IteratorUsages
+section: Return State from Filling
+name: state_from_filling
+header: ### Zustandsanzeige nach Füllen
 
-* http://www.cplusplus.com/reference/algorithm/
-* http://en.cppreference.com/w/cpp/algorithm/
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: STL-IteratorUsages
+name: removing_logically_only
+section: Return "New End" when "Removing" Elements
+header: ### Löschanzeige durch neues (logisches) Ende
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
 
 ---
 template: plain

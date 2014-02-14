@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>C++ For -- Dienstag Teil 2</title>
+    <title>C++-For (4) - Dienstag Teil 2</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
     <!-- when changing the stylesheet, please also change EACH 'styling-by:' -->
@@ -165,12 +165,12 @@ header: ## Sequenzielle Container der STL
 
 -------------------------------------------------------------------------------
 
-* [Doppelt verkettete Listen ...	](#stl_deque)
-* [... und einfach verkettete._[]	](#stl_forward_list)
+* [Doppelt verkettete Liste und ...	](#stl_list)
+* [... einfach verkettete._[]		](#stl_forward_list)
 
 -------------------------------------------------------------------------------
 
-* [Deque				](#stl_deque)
+* [Double-Ended Queue (Deque)		](#stl_deque)
 
 -------------------------------------------------------------------------------
 
@@ -181,7 +181,7 @@ Kein Bestandteil von C++98 sondern erst mit C++11 verfügbar.
 ---
 template: withinfo
 graphic: STL-SequenceContainers
-section: TBD
+section: Contiguous Storage Space
 name: stl_vector
 header: ### Zusammenhängender Speicher
 
@@ -192,8 +192,8 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-SequenceContainers
-section: TBD
-name: stl_deque
+section: Double Linked List
+name: stl_list
 header: ### Doppelt verkettete Listen
 
 .N[
@@ -203,7 +203,7 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-SequenceContainers
-section: TBD
+section: Singly Linked List
 name: stl_forward_list
 header: ### Einfach verkettete Listen
 
@@ -214,7 +214,7 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-SequenceContainers
-section: TBD
+section: Double-Ended Queue
 name: stl_deque
 header: ### Deque
 
@@ -230,32 +230,31 @@ header: ## Grundlegendes zu Iteratoren
 
 -------------------------------------------------------------------------------
 
-* [Prinzip des Iterators ...	](#iterator_principle)
-* [... auf Elemente oder ...	](#pointing_to_iterator)
-* [... dazwischen zeigend	](#pointing_in_between_iterator)
+* [Prinzip des Iterators ...		](#iterator_principle)
+* [... auf Elemente oder ...		](#pointing_to_iterator)
+* [... dazwischen zeigend		](#pointing_between_iterator)
 
 -------------------------------------------------------------------------------
 
-* [Vorwärts-Iteratoren ...	](#fwd_iterator_principle)
-* [... auf Elemente oder ...	](#pointing_to_fwd_iterator)
-* [... dazwischen zeigend	](#pointing_in_between_fwd_iterator)
+* [Vorwärts-Iterator auf ...		](#pointing_to_fwd_iterator)
+* [... oder zwischen Elemente zeigend	](#pointing_between_fwd_iterator)
 
 -------------------------------------------------------------------------------
 
-* [Rückwärts-Iteratoren ...	](#reverse_iterator_principle)
-* [... auf Elemente oder ...	](#pointing_to_reverse_iterator)
-* [... dazwischen zeigend	](#pointing_in_between_reverse_iterator)
+* [Rückwärts-Iterator auf ...		](#pointing_to_reverse_iterator)
+* [... oder zwischen Elemente zeigend	](#pointing_between_reverse_iterator)
 
 -------------------------------------------------------------------------------
 
-* [Beschränkung auf Teilbereiche](#container_subranges)
+* [Gesamter Container ... 		](#container_complete)
+* [... und Beschränkung auf Teilbereich	](#container_subrange)
 
 -------------------------------------------------------------------------------
 
 ---
 template: withinfo
 graphic: STL-ContainerIterators
-section: TBD
+section: Essentials
 name: iterator_principle
 header: ### Prinzip des Iterators
 
@@ -266,7 +265,7 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-ContainerIterators
-section: TBD
+section: Essentials (top left)
 name: pointing_to_iterator
 header: #### Iterator *auf* Elemente zeigend
 
@@ -277,8 +276,8 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-ContainerIterators
-section: TBD
-name: pointing_in_between_iterator
+section: Essentials (top right)
+name: pointing_between_iterator
 header: #### Iterator *zwischen* Elemente zeigend
 
 .N[
@@ -288,20 +287,9 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-ContainerIterators
-section: TBD
-name: fwd_iterator_principle
-header: ### Prinzip des Vorwärts-Iterators
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
+section: Forward Iterator (left)
 name: pointing_to_fwd_iterator
-header: #### Vorwärts-Iterator *auf* Elemente zeigend
+header: ### Vorwärts-Iterator *auf* Elemente zeigend
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -310,9 +298,9 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-ContainerIterators
-section: TBD
-name: pointing_in_between_fwd_iterator
-header: #### Vorwärts-Iterator *auf* Elemente zeigend
+section: Forward Iterator (right)
+name: pointing_between_fwd_iterator
+header: ### Vorwärts-Iterator *zwischen* Elemente zeigend
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -321,20 +309,9 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-ContainerIterators
-section: TBD
-name: reverse_iterator_principle
-header: ### Prinzip des Rückwärts-Iterators
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: STL-ContainerIterators
-section: TBD
+section: Reverse Iterator (left)
 name: pointing_to_reverse_iterator
-header: #### Rückwärts-Iterator *auf* Elemente zeigend
+header: ### Rückwärts-Iterator *auf* Elemente zeigend
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -343,9 +320,9 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-ContainerIterators
-section: TBD
-name: pointing_in_between_reverse_iterator
-header: #### Rückwärts-Iterator *zwischen* Elemente zeigend
+section: Reverse Iterator (right)
+name: pointing_between_reverse_iterator
+header: ### Rückwärts-Iterator *zwischen* Elemente zeigend
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -354,9 +331,20 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-ContainerIterators
-section: TBD
-name: container_subranges
-header: ### Beschränkung auf Teilbereiche
+section: Full Container Processing
+name: container_complete
+header: ### *Alle* Elemente im Container
+
+.N[
+Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+]
+
+---
+template: withinfo
+graphic: STL-ContainerIterators
+section: Partial Container Processing
+name: container_subrange
+header: ### *Teilbereich* eines Containers
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -370,30 +358,30 @@ header: ## Iteratoren im Detail
 
 -------------------------------------------------------------------------------
 
-* [Nicht-modifizierende Iteratoren ...		](#const_iterators)
-* [... vs. modifzierende			](#modifying_iterators)
+* [Iterator nur für lesenden vs. ...	](#readonly_iterator)
+* [... modifzierenden Zugriff		](#readwrite_iterator)
 
 -------------------------------------------------------------------------------
 
-* [Vorwärts laufende Iteratoren ...		](#fwd_iterators)
-* [... vs. rückwärts laufende			](#reverse_iterators)
+* [Vorwärts laufender vs. ...		](#fwd_iterator)
+* [... rückwärts laufender Iterator	](#reverse_iterator)
 
 -------------------------------------------------------------------------------
 
-* [Iterator-Position in leeren Containern	](#empty_container_position)
+* [Iterator-Position im leeren Container](#empty_container_position)
 
 -------------------------------------------------------------------------------
 
-* [Index-basierter Zugriff			](#index_based_access)
+* [Index-basierter Zugriff		](#index_based_access)
 
 -------------------------------------------------------------------------------
 
 ---
 template: withinfo
 graphic: STL-IteratorDetails
-section: TBD
-name: const_iterators
-header: ### Nicht-modifizierende Iteratoren
+section: Read-only Iterators
+name: readonly_iterator
+header: ### Iteratoren für nur lesenden Zugriff
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -402,24 +390,24 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-IteratorDetails
-section: TBD
-name: modifying_iterators
-header: ### Modifzierende Iteratoren._[]			 
+section: Non-Modifiable STL-Container
+name: readwrite_iterator
+header: ### Iterator für modifzierenden Zugriff._[]
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ]
 
 .F[
-Zutreffender wäre: *potenziell* modifizierende Iteratoren.
+Zutreffender wäre: *potenziell* modifizierenden Zugriff.
 ]
 
 ---
 template: withinfo
 graphic: STL-IteratorDetails
-section: TBD
-name: fwd_iterators
-header: ### Vorwärts laufende Iteratoren
+section: Forward Iterator
+name: fwd_iterator
+header: ### Vorwärts laufender Iterator
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -428,9 +416,10 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-IteratorDetails
-section: TBD
-name: reverse_iterators
-header: ### Rückwärts laufende Iteratoren
+section: Reverse Iterator
+
+name: reverse_iterator
+header: ### Rückwärts laufender Iterator
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -439,9 +428,9 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-IteratorDetails
-section: TBD
+section: Iterator Position in Empty Container
 name: empty_container_position
-header: ### Iterator-Position in leeren Containern
+header: ### Iterator-Position im leeren Container
 
 .N[
 Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
@@ -450,7 +439,7 @@ Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
 ---
 template: withinfo
 graphic: STL-IteratorDetails
-section: TBD
+section: Accessing Elements via Index
 name: index_based_access
 header: ### Index-basierter Zugriff
 
