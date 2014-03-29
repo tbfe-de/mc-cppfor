@@ -265,10 +265,24 @@ div.remark-notes {
 .I:before {
 	content: "";
 	display: block;
-	background: url("../PNG/important-M.png") no-repeat;
-	width: 24mm;
-	height: 24mm;
 	float: left;
+	width: 24mm;
+}
+@media screen { /* This is a workaround ... */
+	.I:before {
+		background: url("../PNG/important-M.png") no-repeat;
+		height: 24mm;
+	}
+}
+@media print { /* ... as the above does not work in PDFs */
+	.I:before {
+		content: "(i)";
+		font-size: 40pt;
+		font-family: 'Serif';
+		font-weight: bold;
+		color: yellow;
+		text-align: center;
+	}
 }
 
 /* ---- WARINING ---------------------- much like before but more emphasized */
@@ -282,14 +296,35 @@ div.remark-notes {
 	background: red;
 	color: white;
 }
+@media print { /* For a more uniform appperance */
+	.W {
+		background: white;
+		color: black;
+	}
+}
 .W:before {
 	content: "";
 	display: block;
-	background: url("../PNG/warning-M.png") no-repeat;
 	width: 24mm;
-	height: 24mm;
 	float: left;
 }
+@media screen { /* This is a workaround ... */
+	.W:before {
+		height: 24mm;
+		background: url("../PNG/warning-M.png") no-repeat;
+	}
+}
+@media print { /* ... as the above does not work in PDFs */
+	.W:before {
+		content: "[!]";
+		font-size: 40pt;
+		font-family: 'Serif';
+		font-weight: bold;
+		color: red;
+		text-align: center;
+	}
+}
+
 
 /* ---- FOOTNOTE ------------------------ special area at the bottom of page */
 .F {
@@ -342,16 +377,19 @@ div.infolink {
         left: 40px;
 	right: 85px;
 }
-.pagefooter:before {
-	content: "";
-	display: block;
-	background: url("../PNG/logo-MW-12x12.png") no-repeat;
-        position: absolute;
-	bottom: -4.7em;
-	left: -3px;
-	width: 36mm;
-	height: 24mm;
-	float: left;
+
+@media screen {
+	.pagefooter:before {
+		content: "";
+		display: block;
+		background: url("../PNG/logo-MW-12x12.png") no-repeat;
+		position: absolute;
+		bottom: -4.7em;
+		left: -3px;
+		width: 36mm;
+		height: 24mm;
+		float: left;
+	}
 }
 
 .pagefooter a:link {
@@ -453,6 +491,31 @@ div.linkpage span.X {
 	height: 10mm;
 	width: 50mm;
 	background: url("../PNG/logo-MC-50x6.png") no-repeat;
+}
+
+/*
+  -----------------------------------------------------------------------------
+  Special Page Setup for Printouts
+  -----------------------------------------------------------------------------
+*/
+@media print {
+	.remark-container {
+		overflow: visible;
+		background-color: #fff;
+	}
+	.remark-slide-container {
+		display: block;
+		position: relative;
+	}
+	.remark-slide-scaler {
+		-moz-box-shadow: none;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+	}
+}
+@page {
+	size: A4;
+	margin: 0;
 }
 
 /*

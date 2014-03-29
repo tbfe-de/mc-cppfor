@@ -1556,9 +1556,10 @@ header: ## Typ-Bestimmung zur Laufzeit
 
 ---
 template: plain
-header: ### Voraussetzungen
+header: ### RTTI-Voraussetzungen
 
-Mit C++98 wurde die Laufzeit-Typinformation (RTTI) zum verbinlichen Sprachfeature.
+Mit C++98 wurde die explizite  Laufzeit-Typinformation (RTTI) zum verbinlichen
+Sprachfeature.
 
 * Die Information der Klassenzugehörigkeit muss dafür im Objekt selbst untergebracht sein.
 * Nicht jedes Objekt braucht diese Information und sollte unnötigen Overhead vermeiden können.
@@ -1568,16 +1569,109 @@ Klassen müssen mindestens eine virtuelle Member Funktion haben, damit für ihre
 RTTI verfügbar ist.
 ]
 
+Implizit war eine Laufzeit-Typidentifikation immer schon Bestandteil von C++, indem
+die Ausführung virtueller Member-Funktionen vom Laufzeityp abhängt.
+
 ---
 template: withinfo
 graphic: RuntimeTypeIdentification
 section: Details of Late Binding
 name: dynamic_poymorphism
-header: ### Umsetzung von Dynamischem Polymorphismus
+header: ### Dynamischer Polymorphismus
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Hierbei handelt es sich um eine implizite Form der Laufzeit-Typindentifikation.
+Eine andere übliche Bezeichnung ist "spätes" oder "dynamisches" Binden (late binding).
+
+Im Unterachied zum statischen Polymorphismus entscheidet dabei der Laufzeittyp über
+die Auswahl einer aufzurufenden Member-Funktion.
+
+Voraussetzung dazu ist:
+* Der Aufruf erfolgt über eine Objekt-Referenz oder einen Objekt-Zeiger. Dieser
+  legt dabei den Compilezeit-Typ fest, gemäß dem entschieden wird, **welche**
+  Funktionen überhauot aufgerufen werden können.
+* Die aufgerufene Member-Funktion wurde in der betreffenden Klasse als `virtual`
+  deklariert._[]
+
+.F[:
+Da eine geerbte virtuelle Member-Funktion in der abgeleiteten Klasse virtuell
+bliebt, auch wenn sie dort nicht explizit so markiert ist, ist die `virtual`
+Deklaration in einer Basisklasse ausreichend.
 ]
+
+---
+template: plain
+header: #### Zweck des dynamischen Polymorphismus
+
+Dabei geht es darum, den Laufzeittyp eines Objekts zu ermitteln um auf dieser Basis zu entscheiden, welche Version einer ggf. überschriebenen virtuellen Member-Funktion aufzurufen ist.
+
+---
+template: plain
+header: #### Implementierung des dynamischen Polymorphismus
+
+.I[
+Die dazu in praktisch allen C++-Implementierungen übliche Vorgehensweise beruht auf
+dem Einsprungs in ein Unterprogramm über eine Tabelle von Zeigern.
+]
+
+Hierzu führt jedes Objekt, dass einer Klasse mit **mindestens einer**
+virtuellenen Member-Funktion angehört, **genau einen** zusätzlichen Zeiger mit,
+welcher auf eine Tabelle mit den Adressen *aller* ihrer virtuellen Member-Funktionen
+zeigt.
+
+Da diese Tabelle wiederum **klassenspezifisch** ist, und muss sie in einem
+Gesamtprogramm nur **einmal pro Klasse** vorhanden sein.._[]
+
+.F[:
+Dies gilt zumindest prinzipiell und hängt in der Praxis davon ab, dass bei einer
+modulweise getrennten Kompilierung der Linker ggf. vorsorglich pro Objekt-Modul
+angelegte Exemplare dieser Tabelle bis auf eines elminiert.
+]
+
+---
+template: plain
+header: ### Explizites RTTI
+
+Hierfür stehen zwei Mechanismen zur Verfügung:
+
+* `dynamic_cast` und
+* `typeid`
+
+Ersterer prüft den Typ im Sinne des LSP. das heißt eine abgeleitete Klasse wird
+auch an Stelle der gewünschten akzeptiert, letzterer prüft exakt.
+
+---
+template: plain
+header: #### RTTI mit dynamischem Cast
+
+Es gibt zwei Formen, mit denen z.B. geprüft werden kann, ob der z.B. ein Laufzeit-Typ die von `Base` abgeleitete Klasse `Derived` - oder noch tiefer abgeleitet - ist.
+
+##### `dynamic_cast` auf Zeigerbasis
+```
+Base *p;
+…
+Derived *dp = dynamic_cast<Derived*>(p);
+```
+Hier wird `dp` ein `nullptr` sein, wenn die Prüfung negativ ausgeht und muss somit
+entsprechend geprüft werden.
+
+---
+template: plain
+header: #### RTTI mit dynamischem Cast (2)
+
+##### `dynamic_cast` auf Referenzbasis
+```
+Base &r;
+…
+Derived &dr = dynamic_cast<Derived&>(d);
+```
+Hier wird eine Exception geworfen, wenn die Prüfung negativ ausgeht.
+
+Dadurch kann die obige Form auch leicht als Bestandteil eines größeren Ausdrucks
+verwendet werden, etwa um eine member-Funktion aufzurufen, die erst von der
+abgeleiteten Klasse hinzegfügt wurde:
+```
+… dynamic_cast<Derived &>(r).anotherMF( … ) …
+```
 
 ---
 template: withinfo

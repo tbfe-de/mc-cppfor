@@ -195,9 +195,113 @@ section: Some Class
 name: class_minimal
 header: ### Klasse (minimal)
 
+Die minmale Darstellung einer Klasse in der [UML] besteht aus einem Rechteck,
+in welchem der Klassenname steht.
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Klassen und Beziehungen zwischen Klassen sind die wichtigsten Bestandeteile einer
+*Objekt-Orientierten-Modellierung*.
 ]
+
+Häufig wird eine solche etwa
+
+* beginnen mit einem High-Level-Design ([HLD])
+* das u.U. eine Reihe von Verfeinerungsschritten durchläuft
+* ...
+* und schließlich enden mit einer Lösungs-Implementierung.._[]
+
+.F[:
+Auch im Kern sehr formale Prozesse wie etwa [RUP] beinhalten dabei die
+Möglichkeit eines "Tailoring", indem nur diejenigen Artefakte tatsächlich
+erstellt werden, von denen man sich einen konkreten Nutzen verspricht.
+]
+
+  [RUP]: http://en.wikipedia.org/wiki/IBM_Rational_Unified_Process
+
+---
+template: plain
+header: Objektorientierte Vorgehensweise
+
+Die übliche Abfolge der Schritte ist
+
+* zunächst eine Objektorientierte (Problem-) Analyse (OOA) vorzunehmen,
+* der ein mehr oder weniger detailliertes Objekt-Orientiertes (Lösungs-) Design (OOD) folgt.
+
+Die beiden Begriffe *OOA* und *OOD* werden mitunter auch zusammengefasst zu [OOAD]
+(Objektorientierte Analyse und Design).
+
+  [UML]:  http://de.wikipedia.org/wiki/Unified_Modeling_Language
+  [HLD]:  http://www.the-software-experts.de/e_dta-sw-design-high-level.htm
+  [OOM]:  http://www.techopedia.com/definition/28584/object-oriented-modeling-oom
+  [OOAD]: http://de.wikipedia.org/wiki/Objektorientierte_Analyse_und_Design
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Instantiated Objects
+name: class_instantiated
+header: #### Klassen vs. Objekte
+
+Hierfür dient in der UML im wesentlichen die selbe Symbolik - der Unterschied besteht
+lediglich darin, dass
+* bei Objekten der Name unterstrichen ist und
+* der Klassenname auch entfallen kann._[]
+
+##### Klassen
+Dies kommen einem **Bauplan** gleich und enthalten in der UML-Darstellung alles, was
+die Objekten gemeinsam haben, die gemäß diesem Bauplan erstellt werden.
+
+##### Objekte
+Diese sind *instanzierte Klassen* und drücken in der UML-Darstellung damit die
+**Unterschiede** aus, welche trotz des gemeinsamen Bauplans bestehen.
+
+.F[:
+Die tatsächlichen Regeln der grafischen Darstellung sind komplizierter und erlauben
+prinzipiell, dass ein dem Namen des Objekts ein Doppelpunkt und dann der Klassenname
+folgt, wobei beide Namen optional sind und weggelassen werden können (beispielsweise
+wenn sie sich aus dem Kontext ergeben), womit die minimale Beschrftung eines Objekts
+aus einem unterstrichenen Doppelpunkt besteht.
+]
+
+---
+template: plain
+header: #### Klassen und Objekte in C++
+
+Als kompilierte Sprache gibt es in C++ einen weiteren, charakteristischen Unterschied
+zwischen Klassen und Objekten:
+
+.I[
+Klassen sind hier **statisch** in dem Sinne, dass sie
+* vollständig zur Compilezeit beschrieben werden, während
+* Objekte sich typischerweise zur Laufzeit verändern.
+]
+
+---
+template: plain
+header: #### C++-Klassen als Compilezeit-Konstrukt
+
+Die vollständige Festlegung einer Klasse zur Compilezeit ist ein wesentlicher Unterschied
+zu deutlich dynamischeren OOP-Sprachen, wie
+etwa
+
+* [Smalltalk] oder
+* [Python]
+
+wo **nicht zwingend** Member-Daten und -Funktionen auch noch zur Laufzeit
+hinzugefügt oder entfernt werden können.._[]
+
+.F[:
+[Java] und [C#][C Sharp] sind in dieser Hinsicht wiederum eher ähnlich zu C++,
+besitzen allerdings mehr standardisierte Möglichkeiten zur Introspektion und
+können mit Hilfe kleiner Kunstgriffe den Eindruck eines zur Laufzeit dynamisches
+Verhalten bieten.
+]
+
+  [Smalltalk]: http://www.smalltalk.org/smalltalk/whatissmalltalk.html
+  [Python]:    http://www.python.org/
+  [Java]:      https://www.java.com/en/download/whatis_java.jsp
+  [C Sharp]:   http://www.techopedia.com/definition/26272/c-sharp
+
 
 ---
 template: withinfo
@@ -206,19 +310,81 @@ section: Class With Some Details
 name: class_detailed
 header: ### Klasse (detailiert)
 
+In stärkerer Detaillierung beschrieben kann einer Klasse im UML-Diagramm folgendes
+hinzugefügt werden:
+
+* Ein Abschnitt mit Attributen
+* Ein Abschnitt mit Methoden
+
+Beides wird innerhalb des Klassensymbols durch eine waagrechte Linie getrennt und
+beides ist optional.
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Pragmatiker weisen gerne darauf hin, dass die UML **keineswegs** die Nutzung aller
+ihrer notationellen Möglichkeiten vorschreibt sondern der Detaillierungsgrad eines
+Klassendiagramm stets an dessen Zweck bzw. dem Zielpublikum ausgerichtet sein sollte!
 ]
 
 ---
-template: withinfo
-graphic: UML-ClassesAndRelations
-section: Instantiated Objects
-name: class_instantiated
-header: ### Instanziiertes Objekt
+template: plain
+header: #### Attribute
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Diese enthalten *Datenwerte* und sind im UML-Diagramm daran zu erkennen, dass ihnen
+**keine** runden Klammern folgen. Ein nachgestellter Datentyp ist dabei optional.
+
+.I[
+In C++ ist hierfür auch die Bezeichnung *Member-Daten* üblich.
+]
+
+---
+template: plain
+header: #### Methoden
+
+Diese enthalten *ausführbare Abläufe* und sind im UML-Diagramm daran zu erkennen, dass
+ihnen **runde Klammern folgen**, evtl. auch leere.
+
+.I[
+In C++ ist hierfür auch die Bezeichnung *Member-Funktionen* üblich.
+]
+
+Innerhalb der Klammern können optional zu übergebende Parameter benannt werden, inklusive
+deren Typ (durch Doppelpunkt getrennt), und den Klammern folgen kann (ebenfalls durch
+einen Doppelpunkt getrennt) der Rückgabetyp.
+
+---
+template: plain
+header: #### Zugriffsrechte
+
+Ein weiteres, in der detaillierten Darstellung von UML-Klassen mögliches Notationselement
+bezieht sich auf die Zugriffsrechte und kann sowohl Member-Daten wie auch Member-Funktionen
+optional vorangestellt werden:
+
+* `+` (öffentlich) - jeder, der Zugriff zu einem Objekt dieser Klasse hat, kann auf das 
+Attributs zugreifen oder die Methode ausführen;
+* `#` (geschützt) - erreichbar nur für abgeleitete Klassen;
+* `-` (privat) - erreichbar nur in den eigenen Member.
+
+---
+template: plain
+header: #### Klassenattribute und -methode
+
+In der detaillierten Darstellung einer UML-Klasse unterstrichene Bezeichner stellen
+sog. Klassen-Member dar und entsprechen in der C++-Programmierung den Zusatz `static`.
+
+##### Klassenattribute
+Diese sind **nicht** pro Objekt sondern pro Klasse gespeichert._[]
+
+##### Klassenmethoden
+Diese können ausschließlich auf Klassenattribute zugreifen. Sie bieten in C++ zum
+einen eine kleine Effinzienzverbesserung, da bei ihrem Aufruf keine Objektadresse 
+übergeben werden muss, und sind zum anderen auch ohne Bezug auf ein bestimmtes
+Objekt unter Voranstellen des Klassenamens gefolgt vom Scope-Operator (`::`)
+aufrufbar.
+
+.F[
+Eine typische Anwendung wäre z.B. eine fortlaufende Nummerierung aller jemals erzeugten
+Objekte einer bestimmten Klasse, wobei das Klassenattribut die nächste zu vergebende
+Nummer enthalten könnte.
 ]
 
 ---
@@ -228,9 +394,15 @@ section: Template Class
 name: class_template
 header: ### Parametrisierte Klasse
 
+Hierbei handelt es sich um die UML-Sichtweise auf das, was in C++ mit dem Mechanismus
+der Templates verfügbar ist und auch die Bezeichnung *generische Programmierung* trägt.
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Ursprünglich verdankt diese ihre Entstehung dem Wunsch, Datentypen und
+Compilezeit-Konstanten wie etwa die Anzahl der Elemente in einem Array
+parametrisieren zu können.
 ]
+
 
 ---
 template: withinfo
@@ -239,8 +411,57 @@ section: Association
 name: association
 header: ### Assoziation
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Eine Assoziation ist die unspezifischste aller Beziehungen, die zwischen zwei
+Klassen bestehen können und besagt mehr oder weniger nur, dass diese beiden
+Klassen eine bestimmte Aufgabe **gemeinsam** erledigen.
+
+Die tatsächliche Beziehung kann stärker sein und auch eine der anderen
+Beziehungsformen annehmen, insbesondere die der
+
+* [Aggregation](#aggregation) oder
+* [Komposition](#composition).
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Association
+name: undirected_association
+header: #### Ungerichtete Assoziation in C++
+
+Streng genommen bedeutet die allgemeine Assoziation in C++, dass die beiden
+Klassen gegenseitig aufeinander verweisen, was z.B. in Form zweier Pointer
+geschehen könnte.
+
+.I[
+Programmiertechnisch lässt sich nur einer dieser beiden Pointer durch eine Referenz
+ersetzen, denn bei zwei Referenzen ist die (wechselseitige) Initialisierung nicht
+realisierbar.
+]
+
+---
+template: withinfo
+graphic: UML-ClassesAndRelations
+section: Association
+name: directed_association
+header: #### Gerichtete Assoziation
+
+Durch hinzufügen eines Pfeils an der Assoziationslinie lässt sich zum Ausdruck
+bringen, welche Klasse die andere erreichen kann und welche nur erreichbar ist.
+
+.I[
+Für die programmiertechnischen Umsetzung kommt damit klar zum Ausdruck, welche
+Klasse in der Lage sein muss, die jweils andere - z.B. per Zeiger oder Referenz
+- zu erreichen.._[]
+]
+
+Ein (bereits existierendes) Objekt erreichbare Klasse kann dann beispielsweise
+im Konstruktor bei der Erzeugung eines Objekts der anderen Klasse als Argument
+übergeben und zur Initialisierung eines entsprechenden (Daten-) Members verwendet
+werden.
+
+.F[:
+Die direkte Einbettung der erreichbaren Klasse als Member-Datum entspräche der
+jedoch der [Komposition](#composition).
 ]
 
 ---
@@ -250,8 +471,13 @@ section: Composition
 name: composition
 header: ### Komposition
 
+Die Komposition ist eine stärkere aber häufig auftretende Form der Aggregation,
+bei der das Teil in seiner Lebenszeit an die Gesamtheit gebunden ist.
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+In der UML-Darstellung wird an die (Assoziations-) Linie zwischen den beiden
+beteiligten Klassen auf der Seite der Gesamtheit eine *ausgefüllte* Raute
+hinzugefügt.
 ]
 
 ---
@@ -261,8 +487,25 @@ section: Aggregation
 name: aggregation
 header: ### Aggregation
 
+Die Komposition ist eine geringfügig stärkere Form der Assoziation, indem
+sie 
+
+* die Klasse auf einer Seite zur *Gesamtheit* (Aggregat)
+* die Klasse auf anderen zu *deren Teil* erklärt.
+
+Allerdings können Gesamtheit und Teil unabhängig voneiander existieren.
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+In der UML-Darstellung wird an die (Assoziations-) Linie zwischen den beiden
+beteiligten Klassen auf der Seite der Gesamtheit eine *nicht-ausgefüllte* Raute
+hinzugefügt..[]
+]
+
+.F[:
+Aus pragmatischer Sicht ist darauf hnizuweisen, dass Aggregation und Assoziation häufig
+eng beieinander liegen und mitunter sogar "Ansichtssache" sind, womit sich ein längeres
+Nachdenken oder gar eine kontroverse Diskussion darüber, welche Art der Beziehung denn
+nun per UML darzustellen ist, nicht lohnt.
 ]
 
 ---
@@ -272,9 +515,27 @@ section: Inheritance
 name: inheritance
 header: ### Vererbung
 
+Hierbei geht es um die Beziehung zwischen einem
+
+* allgemeinen Konzept und
+* dessen Spezialisierung.
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+In der UML-Darstellung wird an die (Assoziations-) Linie zwischen den beiden
+beteiligten Klassen auf der Seite der Basisklasse ein nicht ausgefülltes Dreieck
+hinzugefügt..[]
 ]
+
+Das Speicher-Layout und auch die Lebenszeit-Kopplung entsprechen zwar dem der Komposition,
+als wichtige besonderheit gilt jedoch das [LSP].
+
+.I[
+Das Liskovsche Substitutions-Prinzip ist sehr eng mit dem Gedanken der Objektorientierung
+verknüft und besagt, dass ein Objekt einer abgeleiteten Klasse (Spezialisierung) stets
+ein passender Stellvertreter für ein Objekt seiner Basisklasse sein kann.
+]
+
+  [LSP]: http://de.wikipedia.org/wiki/Liskovsches_Substitutionsprinzip
 
 ---
 template: withinfo
@@ -283,20 +544,63 @@ section: Multiple Inheritance
 name: multiple_bases
 header: ### Mehrfachvererbung
 
+Diese liegt vor, wenn eine Klasse zwei Basisklassen hat, also zwei allgemeine Konzepte
+spezialisiert.
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+In der Geschichte der Objektorientierung gab es zahlreiche Diskussionen über Sinn und
+Zweck der Mehrfachvererbung und in der Tat verzichtet eine Reihe von OOP-Sprachen mit
+großer Verbreitung - etwa Java - völlig darauf.._[]
+]
+
+.F[:
+Was Java allerdings unterstützt sind Klassen, die mehrere [Interfaces](#interface)
+implementieren.
 ]
 
 ---
 template: withinfo
 graphic: UML-ClassesAndRelations
-section: Interfaces
-name: interfaces
+section: Interface
+name: interface
 header: ### Interface (Schnittstelle)
 
+Bei einem Interface geht es prinzipiell um eine Art Vertrag zwischen zwei Klassen:
+
+* Es gibt einerseits eine (oder mehrere) Klasse(n), die ein bestimmtes Interface implementieren und
+* für (in der Regel mehrere) andere Klassen ist damit klar, wie das "Angebot" an Member-Funktionen aussieht.
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+In der UML-Notation steht über dem Namen eines Interfaces das [Stereotype] «interface».
 ]
+
+  [Stereotype]: http://en.wikipedia.org/wiki/Stereotype_(UML)
+
+---
+template: plain
+header: #### Anwendung von Interfaces
+
+Generell reduzieren Interfaces die Kopplung, d.h. den Grad zu dem verschiedene
+Klassen Details voneinander kennen (müssen).
+
+Zudem bieten sie Flexibilität zur Laufzeit, indem von mehreren verfügbaren Implemetierungen
+die für eine Situation passende gewählt werden kann.
+
+Interfaces haben wor allem auch durch die [objektorientierten Entwurfsmustern][OO-DP],
+die auch zentrales Thema des [GoF-Buch][GoF] sind, eine große Bekanntheit erlangten.
+
+  [DP]:         http://en.wikipedia.org/wiki/Software_design_pattern
+  [GoF]:        http://en.wikipedia.org/wiki/Design_Patterns_(book)
+
+---
+template: plain
+header: #### Interfaces vs. Klassen
+
+Technisch gesehen sind Interfaces in C++ in einer bestimmten Form eingeschränkte
+Klassen:
+
+* Sie besitzen **keine Member-Daten** und
+* **ausschließlich rein virtuellen Member-Funktionen**.
 
 ---
 template: withinfo
@@ -305,8 +609,19 @@ section: Abstract Base
 name: abstract_base
 header: ### Abstrakte Basisklasse
 
+Die Bezeichnung "abstrakt" wird für Klassen verwendet, die **mindestens eine rein
+virtuelle Member-Funktion** haben.
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+In der UML-Darstellung wird der Name einer abstrakten Klasse kursiv geschrieben.
+]
+
+Abstrakte Klassen können nur als Basisklassen verwendet werden. Die abgeleitete
+Klasse wird dann typischerweise die rein virtuellen Member-Funktionen implementieren.
+
+.W[
+Der Versuch, Objekte einer abstrakten Klasse zu erzeugen scheitert in C++ mit einem
+Kompilierfehler.
 ]
 
 ---
@@ -316,8 +631,20 @@ section: "Diamond Shaped" Inheritance Graph
 name: diamond_shaped_inheritance
 header: ### "Rautenförmige" Vererbungsstruktur
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Eine solche entsteht, wenn sich bei Mehrfachvererbung auf der mittleren Ebene
+Klassen befinden, die wiederum eine gemeinsame Basisklasse besitzen.
+
+Es ist bezüglich der gemeinsamen Basisklasse dann in der UML-Darstellung eine
+Unterscheidung zwischen zwei Fällen erforderlichs, welche jeweils die
+Daten-Member der (gemeinsamen) Basisklasse betreffen:
+
+* «overlapping» - die Daten-Member sind nur einmal vorhanden
+* «disjoint» - die Daten-Member sind doppelt vorhanden
+
+.W[
+Im zweiten Fall ist in Bezug auf die ganz oben stehende Basisklasse von der ganz unten
+stehenden Klasse aus gesehen das LSP außer Kraft gesetzt, da keine Eindeutigkeit mehr
+gegeben ist.
 ]
 
 ---
@@ -327,8 +654,15 @@ section: Broad(er) and Deep(er) Inheritance Graph
 name: broader_deeper_inheritance
 header: Mehrstufige Vererbung allgemein gesehen
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Im allgemeinen gehen Vererbungs-Hierarchien auch
+* *mehr in die Breite*, d.h. eine Basisklasse wird oft viele (direkt) abgeleitete
+Klassen haben, sowie
+* *mehr in die Tiefe*, d.h. es gibt mehrere Stufen (also sieht man die direkt abgeleiteten
+Klassen als "Kinder", wird es also auch "Enkel", "Ur-Enkel" usw. geben.
+
+.I[
+Ausgenommen rautenförmigen Hierarchien mit gemeinsamen «disjoint» Basisklassen gilt das LSP
+automatisch über alle Stufen einer in die Tiefe gehenden Vererbungshierarchie.
 ]
 
 ---
@@ -355,8 +689,13 @@ section: Multiple Inheritance
 name: mi_principle
 header: ### Prinzip der Mehrfachvererbung
 
+Bei der Mehrfachvererbung kann im Speicherlayout nur noch eine der Basisklassen
+eine gemeinsame Anfangsadresse mit der abgeleiteten Klasse haben.
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Dies stellt keine große technische Herausforderung dar sondern bedeutet lediglich
+eine minimale Komplikation bei der Umsetzung des LSP, wo im Fall der Weiterreichung
+der abgeeitete Klasse ggf. ein Offset zum `this`-Zeiger hinzugerechnet werden muss.
 ]
 
 ---
@@ -366,8 +705,15 @@ section: Virtual Base Class
 name: virtual_bases
 header: ### Virtuelle Basisklassen
 
+Virtuelle Basisklassen bilden in C++ den Hintergrund der Lösung dessen, was die UML
+bei rautenförmigen Vererbungshierarchien im Fall von «overlapping»»-Klassen an der
+Spitze verlangt.
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Den Overhead für diese Lösung haben die Klassen auf der mittleren Ebene zu tragen,
+indem sie nicht nur den Datenteil ihrer (virtuellen) Basisklasse enthalten sondern
+einen zusätzlichen Zeiger, über den **alle Bezugnahmen auf den Basisklassenteil**
+erfolgen.
 ]
 
 ---
@@ -377,9 +723,16 @@ section: Overlapping Common Base Class
 name: overlapping_bases
 header: ### Überlappende Basisklassen
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Im konkreten Fall einer rautenförmigen Hierarchie wird nun
+
+* die Daten-Member der Basisklasse nur ein einziges Mal in der "Most Derived Class"
+vorhanden sein, und
+* die Zeiger in den Klassen der mittleren Ebene werden **beide** genau auf diesen
+Daten-Member verweisen.
+
+Da alle Bezugnahmen darauf - wie gerade beschrieben - über diese Zeiger laufen, werden
+die Klassen der mittleren Ebene also mit **ein und demselben** Basisklassen-Objekt
+arbeiten.
 
 ---
 template: linkinfo
@@ -411,9 +764,13 @@ section: UML Class Graph («overlapping»)
 name: overlapping_uml
 header: ### UML-Darstellung «overlapping»
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Die zusammengefasste Darstellung des Falls «overlaping» in Bezug auf
+
+* die UML-Darstellung,
+* das Speicherlayouts und
+* die Typumwandlungen im Rahmen des LSP
+
+erlaubt den drekten Vergleich zum Fall «disjoint».
 
 ---
 template: withinfo
@@ -422,9 +779,13 @@ section: UML Class Graph («disjoint»)
 name: disjoint_uml
 header: ### UML-Darstellung «disjoint»
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Die zusammengefasste Darstellung des Falls «disjoint» in Bezug auf
+
+* die UML-Darstellung,
+* das Speicherlayouts und
+* die Typumwandlungen im Rahmen des LSP
+
+erlaubt den drekten Vergleich zum Fall «overlapping».
 
 ---
 template: withinfo
@@ -433,9 +794,13 @@ section: Class to Memory Mapping («overlapping»)
 name: overlapping_implementation
 header: ### Abbildung auf Speicher «overlapping»
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Die zusammengefasste Darstellung des Falls «overlapping» in Bezug auf
+
+* den Quelltext,
+* den konstruktor sowie
+* den Destruktor-Ablauf
+
+erlaubt den drekten Vergleich zum Fall «disjoint».
 
 ---
 template: withinfo
@@ -444,31 +809,13 @@ section: Class to Memory Mapping («overlapping»)
 name: disjoint_implementation
 header: ### Abbildung auf Speicher «disjoint»
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Die zusammengefasste Darstellung des Falls «disjoint» in Bezug auf
 
----
-template: withinfo
-graphic: DiamondShapedInheritance
-section: Creation and Destruction «overlapping»
-name: overlapping_ctordtor
-header: ### Konstruktor / Destruktor «overlapping» ...
+* den Quelltext,
+* den konstruktor sowie
+* den Destruktor-Ablauf
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
-
----
-template: withinfo
-graphic: DiamondShapedInheritance
-section: Creation and Destruction «disjoint»
-name: disjoint_ctordtor
-header: ### Konstruktor / Destruktor «disjoint» ...
-
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+erlaubt den drekten Vergleich zum Fall «overlapping».
 
 ---
 template: linkinfo
@@ -506,9 +853,10 @@ section: Reusable Component
 name: with_existing_component
 header: ### Eine (anpassbare) Komponente
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Anpassbare Komponenten entstehen normalerweise entweder
+
+* durch Planung, wenn zukünftige Variabilität (korrekt) vorhergesehen wurde, oder
+* durch Erfahrung, zu einer bereits bestehende Funktionalität eine (im ersten Entwurf) noch nicht eingeplante) neue Variante benötigt wird.
 
 ---
 template: withinfo
@@ -517,9 +865,8 @@ section: Reusable Adapted Component
 name: with_existing_component
 header: ### Nutzung der (angepassten) Komponente
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Die Nutzung einer (angepassten) Komponente reduziert den Aufwand an immer wieder
+neu zu schreibendem Code.
 
 ---
 template: withinfo
@@ -528,9 +875,9 @@ section: Diamond-Shapend Inheritance
 name: with_multiple_inheritance
 header: ### Rautenförmige (Mehrfach-) Vererbung
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Über den "Preis", der für die dann oft notwendigen , virtuellen Basisklassen zu zahlen
+ist, lassen sich ggf. flexible Kombinationsmöglichkeiten mit einem guten Grad an
+Wiederverwendung erreichen.
 
 ---
 template: withinfo
@@ -539,9 +886,8 @@ section: Three Interfaces
 name: with_three_interface
 header: ### Drei Interfaces
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Die Nutzung von Interfaces kann die Komplexität der Gesamt-Architektur aus der
+"Sicht einzelner Klienten" etwas vereinfachen.
 
 ---
 template: withinfo
@@ -550,9 +896,8 @@ section: Improved Reuse with Mixin Classes
 name: with_extensibilty
 header: ### Inkrementale Erweiterbarkeit durch Mix-Ins
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Über Mixin-Klassen lässt sich ggf. flexible Kombinierbarkeit schaffen auch ohne
+das virtuelle Basisklassen notwendig werden.
 
 ---
 template: withinfo
@@ -561,9 +906,10 @@ section: Close to GoF "Observer" Pattern
 name: with_elaboration
 header: ### Orientiert am GoF "Observer" Muster
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Das "Flaggschiff" unter allen hier verglichenen Entwürfen.
+
+Es vereint hohe Flexibilität und geringe Kopplung ... erfordert allerdings auch
+etwas tiefere Beschäftigung damit, um es endgültig zu verstehen.
 
 ---
 template: plain

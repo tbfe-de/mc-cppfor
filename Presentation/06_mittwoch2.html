@@ -176,8 +176,14 @@ section: Template Classes
 name: template_classes
 header: ### Template-Klassen
 
+Template-Klassen sind im Hinblick auf Datentypen und/oder andere
+Compilezeit-Konstanten parametrisierte Klassen.
+
+Man spricht in diesem Zusammenhang auch von generischen Klassen.
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Bei der Verwendung von Template-Klassen sind die entsprechenden Typ- und
+Wertargumente stets anzugeben.
 ]
 
 ---
@@ -187,8 +193,17 @@ section: Template Functions
 name: template_functions
 header: ### Template-Funktionen
 
+Template-Funktionen sind in der Regel im Hinblick auf Datentypen._[] 
+parametrisierte Funktionen
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Bei der Verwendung von Template-Funktionen ergeben sich die tatsächlich zu
+verwendenden Typen oft direkt oder indirekt aus den Tyoen der Aufrufargumente.
+]
+
+.F[:
+Die Parametrisierung im Hinblick auf Compilezeit-Konstanten ist bei
+Funktionen ebenfalls möglich, tritt in der Praxis aber sehr selten auf.
 ]
 
 ---
@@ -204,7 +219,7 @@ header: ## Optimierung von Templates
 ------------------------------------------------------------------------
 
 * [Über einen Zwischenschritt ...	](#intermediate_step)
-* [... zur optimierten Template		](#random_access_iterators)
+* [... zur optimierten Template		](#optimised_template)
 
 ------------------------------------------------------------------------
 
@@ -215,9 +230,13 @@ section: Resons for Code Bloat
 name: reason_for_codebloat
 header: ### Ursache für "Code-Bloat"
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Ein wesentlicher Grund für "unnötig erzeugten" Maschinencode ergibt
+sich oft aus der ungeschickten Strukturierung von Templates, bei denen
+eine unsystematische Vermischung existiert zwischen:
+
+* Teilen, welche tatsächlich von den Instanziierungsparametern abhängigen
+  Maschinencode erzeugen;
+* anderen Teilen, welche immer ein und denselben Maschinencode hinauslaufen.
 
 ---
 template: withinfo
@@ -226,20 +245,26 @@ section: Intermediate Step
 name: intermediate_step
 header: ### Vorbereitender Zwischenschritt
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Die Vorbereitung für die Reduzierung von Code-Bloat besteht darin,
+
+* möglichst große, zusammenhängende Abschnitte Abschnitte im Quelltext einer
+  Template-Klasse oder -Funktion zu schaffen, die tatsächlich von
+  den Instanziierungs- (Typ) -argumenten abhängigen und
+* andere möglichst große Abschnitte, die immer immer auf ein und denselben
+  Maschinencode hinauslaufen.
 
 ---
 template: withinfo
 graphic: ReducingCodeBloat
 section: Optimised Template
-name: random_access_iterators
+name: optimised_template
 header: ### Optimierten Template
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Alle Teile einer Template, die immer den selben Maschinencode erzeugt werden,
+können anschließend ausgelagert werden, nämlich bei einer
+
+* Template-Klasse in eine eine **Nicht-Template** Basisklasse, und
+* Template-Funktion in **Nicht-Template** Hilfsfunktionen.
 
 ---
 template: plain
@@ -255,7 +280,7 @@ Der wesentliche Schlüssel dazu ist, das folgende zu verstehen:
 * Jeglicher "Output" wird nur aus Datentypen sein.
 
 .I[
-Oder anders ausgedrückt:  
+Anders ausgedrückt:  
 Templates sind (auch) Typtransformationen zur Compilezeit.
 ]
 
