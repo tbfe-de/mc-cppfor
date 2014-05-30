@@ -1,0 +1,153 @@
+    Bei den meisten der nachfolgenden Aufgaben geht es darum, dass Sie sich
+    vorhandenen Quelltext ANSEHEN und VERSTEHEN sollen. Oftmals ist dabei der
+    Vergleich von zwei Versionen gefordert, es empfiehlt sich die Verwendung
+    eines für diesen Zweck geeigneten Tools ("Side-by-Side-Diff").
+    
+    Hinweis für Eclipse-Nutzer:
+    * Markieren Sie für einen Side-by-Side-Vergleich zunächst die erste
+      der beiden zu vergleichenden Dateien im C/C++-Projects View.
+    * Halten Sie CTRL-Taste gedrückt und Markieren sie die zweiten Datei
+      Auch die erste Datei sllte weiterhin markiert sein.
+    * Wählen Sie dann im Kontext-Menü (das sie mit der rechten Maustaste zur
+      Anzeige bringen): "Compare -> With Each Other".
+
+    Um Ihr Verständnis zu testen, gibt es in jedem Schritt einige Fragen.
+
+    Nur selten müssen Sie selbst etwas programmieren - wenn ja, sind es stets
+    nur Kleinigkeiten, die Sie an den einzelnen Beispielen verändern sollen z.B.
+    um im Rahmen der von Ihnen gegebenen Antworten Ihre Erwartungen mit dem
+    realen Verhalten zu vergleichen.
+    
+    Hinweis für Eclipse-Nutzer: In jeder *.cpp-Dateien dieses Projekts gibt es
+    ein main-Programm (mit automatisierten Tests). Davon darf stets nur EINES
+    kompiliert werden. Sie müssen also sicherstellen, dass in den Properties
+    bei ALLEN AUSSER EINEM der Beispiele die Check-Box 'Exclude from Build'
+    markiert ist! 
+    
+(1) Schauen Sie sich die Funktion 'reverseWords' in der Datei 
+    - reversewords_array.cpp
+    an und beantworten Sie dann die folgenden Fragen:
+    Welches ist die maximale Anzahl von Worten, die verarbeitet werden können?
+    Was passiert, wenn diese Grenze überschritten wird?
+    Testen Sie Ihre Vorhersage indem Sie die Obergrenze reduzieren, z.B. auf
+    vier Worte, dann aber sechs oder sieben Worte eingeben..
+   
+(2) Vergleichen Sie die Funktion 'reverseWords' in den Dateien
+   - reversewords_array.cpp und
+   - reversewords_vector.cpp
+   und finden Sie eine Möglichkeit, den Aufruf wordlist.resize(MAX) zu vermeiden.
+   
+(3) Vergleichen Sie die Funktion 'reverseWords' in den Dateien 
+    - reversewords_vector.cpp und
+    - reversewords_pushback.cpp
+    und beantworten Sie dann die folgenden Fragen:
+    (a) In welchem der Beispiele gibt es keine fest kodierte Obergrenze
+        für die Anzahl der Worte, und wie wurde dies erreicht?
+    (b) Worin unterscheidet sich der Zugriff auf ein std::vector-Element
+        mit operator[] und mit at()?
+   
+(4) Vergleichen Sie die Funktion 'reverseWords' in den Dateien
+    - reversewords_pushback.cpp und
+    - reversewords_iterator.cpp
+    und beantworten Sie dann die folgenden Fragen:
+    (a) Wie schätzen Sie den Performance-Unterschied zwischen dem Zugriff per
+        Iterator und Index ein?
+    (b) Was passiert bei den beiden Zugriffsarten, wenn Sie versehentlich über
+        das Ende hinaus gehen?
+
+(5) Vergleichen Sie die Funktion 'reverseWords' in den Dateien
+    - reversewords_iterator.cpp und
+    - reversewords_pushfront.cpp
+    und beantworten Sie dann die folgenden Fragen:
+    Warum ist es hier zwingend, den std::vector durch eine std::list zu ersetzen?
+    Warum ist es hier zwingend, mit einem Iterator (statt eines Index) die Elemente
+    zu durchlaufen?
+    (Nehmen Sie entsprechende Änderungen vor und kontrollieren Sie Ihre Vorhersage
+    anhand der Fehlermeldungen beim Kompilieren.)
+
+(6) Schauen Sie sich die Funktion 'reverseWords' in der Datei
+   - reversewords_listfor.cpp
+   und beantworten Sie dann die folgenden Fragen:
+   Welches hier verwendete C++11-Features wird bei älteren Compilern zu einem
+   Syntax-Fehler führen?
+   Wie könnte man die Funktion 'reverseWords' in den Datein
+   - reversewords_iterator.cpp und
+   - reversewords_pushfront.cpp
+   durch das C++11-Feature "auto" etwas vereinfachen?
+   (Nehmen Sie entsprechende Änderungen vor und kompilieren Sie diese testweise.)
+   
+-- Zusatzaufgaben für besonders Schnelle:
+
+(7) Schauen Sie sich die Funktion 'uniqueWords' in der Datei
+    - uniquewords_set.cpp
+    an und beantworten Sie dann die folgenden Fragen:
+    Warum erscheinen in der Ausgabe die Worte in Sortierreihenfolge?
+    Warum erscheinen in der Ausgabe doppelt eingegebene Worte nur einmal?
+    Was wird sich ändern, wenn man das std::set durch ein std::multiset ersetzt?
+    Was wird sich ändern, wenn man es durch ein std::unordered_set ersetzt?
+    (Nehmen Sie entsprechende Änderungen vor und testen Sie Ihre Erwartungen.)
+
+(8) Vergleichen Sie die Funktion 'uniqueWords' in den Dateien
+    - uniquewords_set.cpp und
+    - uniquewords_algorithm.cpp
+    und beantworten Sie dann die folgenden Fragen:
+    Wie schaffen es die beiden Funktionen auf offensichtlich ganz verschiedenen
+    Weise dasselbe zu tun?
+    Welche der beiden Funktionen schätzen Sie als performanter ein und welche
+    verbraucht mehr Speicher?
+    (Hinweis: Die Antwort auf die obigen(n) Frage(n) hängt evtl. auch von den
+    Eingabedaten ab - berücksichtigen Sie dies in Ihrer Einschätzung!)
+    Was wird passieren, wenn man in uniquewords_algorithm den Sortier-Schritt
+    weglässt?
+    Was wird passieren, wenn man in uniquewords_algorithm die Ausgabe bis
+    wordlist.end() laufen lässt?
+
+(9) Vergleichen Sie die Funktion 'uniqueWords' in den Dateien 
+    - uniquewords_algorithm.cpp und
+    - uniquewords_lambda.cpp
+    und beantworten Sie dann die folgenden Fragen:
+    Wo verwenden diese beiden Funktionen C++11-Features?
+    In welcher der beiden Funktionen würde die Umstellung auf C++98 nur eine
+    relativ kleine Änderung erfordern?
+
+(10) Schauen Sie sich die Funktion 'wordCount' in der Datei
+     - wordcount_map.cpp
+     an und beantworten Sie dann die folgenden Fragen:
+     Von welcher Garantie, die eine std::map für Grundtypen gibt, hängt das
+     korrekte Verhalten ab?
+     Wo sind Anpassungen nötig, um den Typ der Zählvariable von 'int' auf
+     'unsigned long' zu wechseln?
+     Mit welcher Veränderung wäre es - in Bezug auf die obige Frage - nur noch
+     EINE anzupassende Stelle?
+     (Hinweis: Es gibt hier zwei Lösungen, eine funktioniert nur mit C++11, die
+     andere auch mit C++98.)
+
+(11) Vergleichen Sie die Funktion 'wordCount' in den Dateien
+     - wordcount_map.cpp und
+     - wordcount_listfor.cpp
+     und beantworten Sie dann die folgenden Fragen:
+     In welcher der beiden Funktionen würde die Umstellung auf C++98 nur eine
+     kleine Änderung erfordern?
+     Könnte man in der Ausgabeschleife der Version in wordcount_listfor.cpp das
+     'const' auch weglassen und was genau verliert/gewinnt man ggf. durch diese
+     Änderung?
+     Welches wäre die zur letzten Frage äquivalente Änderung in der Version in
+     wordcount_map.cpp?
+
+(12) Schauen Sie sich die Funktion 'wordPos' in den Dateien
+     - wordpos_std98.cpp und
+     - wordpos_std11.cpp
+     an und erläutern Sie, wie diese jeweils mit Hilfe einer std::multimap zu
+     einer Eingabe der Art
+       ist das der satz der dreimal der enthaelt oder ist der satz das nicht
+     die folgende Ausgabe erzeugen:
+       das: 2 13
+       der: 3 5 7 11
+       dreimal: 6
+       enthaelt: 8
+       ist: 1 10
+       nicht: 14
+       satz: 4 12
+     Für Super-Schnelle oder Teilnehmer/innen mit STL-Vorkenntnissen:
+     Schreiben Sie die "umgekehrte" Funktion 'posWord', die als EINGABE die obige
+     Ausgabe entgegennimmt und dann als AUSGABE die obige Eingabe produziert.

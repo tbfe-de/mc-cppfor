@@ -1,0 +1,59 @@
+﻿(1) Schreiben Sie eine Resource-Wrapper Klasse "FileRes" für den Typ FILE aus der
+    C-Standard-Bibliothek.
+    
+    Zunächst sollen die folgenden Methoden vorhanden sein:
+    - Ein Konstruktor mit einem Argument vom Typ std::string, das den Dateinamen
+      angibt, und einem optionalen weiteren Argument vom Typ std::string, das den
+      Öffnungsmodus angibt.
+    - Ein Destruktor, der die Datei wieder schließt.
+    - Eine Typ-Umwandlung in einen FILE-Pointer (FILE*), damit ein Objekt dieser
+      Klasse direkt an alle Funktionen gegeben werden kann, die Argument vom Typ
+      FILE* oder const FILE* erwarten.
+      
+(2) Erweitern Sie den Resource-Wrapper dahingehend, dass er auch geschlossene
+    Dateien repräsentieren kann.
+    
+    Sehen Sie folgende Member-Funktionen zusätzlich vor:
+    - Default-Konstruktor liefert Instanz des Resource-Wrappers liefern, welcher
+      einer NICHT geöffneten Datei entspricht;
+    - FileRes::open(const std::string& name, const std::string& mode = "r"),
+      öffnet die Datei "name" im Modus "mode" (wie fopen); sofern der Wrapper
+      eine bereits geöffnete Datei repräsentiert, soll diese zunächst geschlossen
+      werden;
+    - int close() - schließt die Datei und liefert das Ergebnis an Aufrufer zurück
+      (wie fclose);
+    - std::string name() const - gibt den beim Öffnen verwendeten Namen zurück
+      (oder bei geschlossener Datei eine leere Zeichenkette);
+      std::string mode()) const - gibt den beim Öffnen verwendeten Modus zurück
+      (oder bei geschlossener Datei eine leere Zeichenkette);
+
+    Frage: Reicht obiges bereits aus, um eine Instanz Resource-Warappers in einem
+    Kontext zu verwenden, der ein "bool" erfordert, und auf diese Weise genau dann
+    "true" zu erhalten, wenn er einer geöffneten Datei entspricht?
+
+--- Weitere Ausbaumöglichkeiten, je nach verfügbarer Zeit.
+
+(3) Erweitern Sie die Resource-Wrapper Klasse um eine von std::runtime_error
+    abgeleitete Klasse FileRes::NotOpen, die Ausnahmesituationen anzeigt.
+    
+    Die Ausnahme in den folgenden Fällen geworfen werden, wenn
+    - der Konstruktor mit Argument(en) die Datei nicht öffnen kann;
+    - die open-Methode die Datei nicht öffnen kann;
+    - die Typ-Umwandlung in einen FILE-Pointer für eine FileRes stattfindet,
+      die eine (momentan) NICHT geöffnete Datei repräsentiert.
+
+(4) Nehmen Sie des weiteren die folgende Modifikationen vor:
+
+    - FileRes::name() und FileRes::mode(), sollen Namen und Modus der zuletzt
+      geöffneten Datei liefern, auch wenn das Öffnen nicht funktionierte oder
+      diese Datei inzwischen wieder geschlossen wurden.
+    - FileRes::errno() soll ggf. die Fehlernummer liefern, wenn das letzte
+      Öffnen der Datei nicht möglich war, sonst 0.
+    - FileRes::open() ohne Argumente soll die zuletzt geöffnete Datei erneut
+      im letzten Öffnungsmodus öffnen; wenn die Datei bereits geöffnet ist,
+      soll sie geschlossen und neu geöffnet werden; sofern noch nie eine Datei
+      geöffnet war, soll die Ausnahme FileRes::NotOpen geworfen werden.
+    - FileRes::remove(const std::string) soll die Datei löschen; wenn die Datei
+      geöffnet ist, soll sie zuvor geschlossen werden; sofern noch nie eine
+      Datei geöffnet war, soll überhaupt nichts geschehen.
+

@@ -1,0 +1,110 @@
+﻿Vorbemerkung:
+
+    Diese Aufgabe verwendet als Ausgangsmaterial die Klasse "WordPositioner",
+    den Sie gemäß den nachfolgenden Ausbaustufen Schritt für Schritt erweitern
+    sollen. Es handelt sich dabei um eine alternative Implementierung der Lösung
+    einer früheren Aufgabe, in der als INPUT eine Reihe von Wörtern und deren
+    Position erwartet wurde und die als OUTPUT die Folge dieser Wörter erzeugt.
+    
+    Diese Lösung wurde hier in eine eigene Klasse "WordPositioner" verpackt. Für
+    die Ein- und Ausgabe sind deren Funktionen "read" und "write" verantwortlich.
+    
+    Um automatisiert testen zu können, werden Exceptions abgefangen und wie folgt
+    in Text umgewandelt:
+
+        try {
+                WordPositioner wp;
+                wp.read(cin);
+                std::ostringstream out;
+                wp.write(out);
+                cout << out.str();
+        }
+        catch (const exception &ex) {
+                out << "CAUGHT: " << ex.what() << endl;
+        }
+ 
+    Ein solches Programmfragment ist bereits in allen Vorgabe-Dateien enthalten.
+
+(1) Ergänzen Sie die den Quelltext um ein sinnvolles Exception-Handling.
+
+    Es sollen beim LESEN (= in der Funktion "read") folgende Fehler erkannt werden:
+    - Ungültiger Zeilenaufbau der Eingabe (z.B. wenn eine Wortposition keine Zahl
+      ist oder die Liste der Wortpositionen ganz fehlt).
+    - Wortposition 0 oder negativ.
+    - Ein bereits bekanntes Wort oder eine bereits verwendete Wortposition
+      erscheint erneut.
+      
+    In diesen Fällen sollen drei verschiedene Exceptions, die jedoch von einer
+    gemeinsamen Basisklasse "Wordpositioner::Error" abgeleitet sein sollen (also
+    eine in der Klasse "WordPositioner" geschachtelt definierte Klasse). Diese
+    Basisklasse soll wiederum von der Standardklasse "std::runtime_error"
+    abgeleitet sein.
+    
+    Das meiste hiervon ist in der Vorgabe-Datei schon vorhanden, an den mit
+    TO-BE-DONE markierten Stellen müssen Sie den Code aber noch ergänzen.
+    
+(2) Ergänzen Sie eine Fehlererkennung beim SCHREIBEN (= in der Funktion "write").
+    Hier soll ein Exception geworfen werden, wenn eine Positionsnummer fehlt.
+    
+    Hinweis: wie bisher soll dazu eine eigene Klasse definiert werden, welche
+    wiederum von Wordpositioner::Error abgeleitet ist. Anders als im Schritt 1
+    fehlt hier aber deren Definition, während das Werfen schon einkodiert ist.
+    
+    Hinweis: Den exakten "what"-Text entnehmen Sie bitte dem entsprechenden
+    IODrive-Testfall.
+
+(3) Machen Sie das Exception-Handling "konfigurierbar". Das heißt die Klasse
+    "WordPositioner" soll nur noch eine Basisklasse sein und beim Auftreten der
+    oben beschriebenen Fehler virtuelle Methoden aufrufen.
+
+    Zwei abgeleiteten Klassen sollen diese Methoden unterschiedlich implementieren:
+    - ThrowingWordPositioner wirft Exceptions (= wie die bisherige Klasse);
+    - NonThrowingWordPositioner ignoriert alle Probleme (= leere Methoden).
+    
+    Hinweis: Um bequem und dennoch flexibel automatisiert testen zu können, wurde
+    die in dafür vorgesehene Funktion wie folgt als Template definiert:
+    
+        template<class Selected_WordPositioner>
+        void aufg3_demo(istream &in, ostream &out) {
+                Selected_WordPositioner wp;
+                try {
+                        wp.read(in);
+                        std::ostringstream os;
+                        wp.write(os);
+                        out << os.str();
+                }
+                catch (typename Selected_WordPositioner::Error &err) {
+                        out << "CAUGHT: " << err.what() << std::endl;
+                }
+        }
+        
+    In den vorbereiteten Tests wird dann einfach
+        aufg3_demo<ThrowingWordPositioner>
+    oder
+        aufg3_demo<NonThrowingWordPositioner>
+    verwendet.
+    
+    Hinweis: Um Ihnen ein "frühes Erfolgserlebnis" zu schaffen, sind die meisten
+    vorbereiteten Tests anfangs deaktiviert.  Sobald Sie "all tests passed" bekommen"
+    aktivieren Sie bitte weitere Tests, bis schließlich alle Tests erfolgreich
+    durchlaufen werden.
+    
+    Tipp: In diesem Aufgabenteil ist sehr viel Code systematisch hinzuzufügen,
+    so dass es sich an einigen Stellen lohnen könnte, zum Erzeugen der immer
+    wieder (fast) gleichen Teile geeignet parametrisierte Präproressor-Makros
+    zu definieren.
+
+--  Zusatzaufgabe für besonders Schnelle
+
+(4) Überdenken Sie die Parametrisierung, die Sie für Ihre im Fehlerfall geworfenen
+    Exceptions (und die Methoden, die diese werfen) gewählt haben. Ändern Sie diese
+    ggf. so, dass mit einer (dritten) abgeleiteten Klasse folgende Anforderung
+    erfüllbar ist:
+    - Fehlt bei der Ausgabe eine Positionsnummer, soll an dieser Stelle
+      "?word-N?" ausgegeben werden, wobei N die (fehlende) laufende Nummer
+      des Wortes ist.
+
+(5) Analog zu (3) bzw. (4) aber stellen Sie die Konfigurierbarkeit nicht über
+    virtuelle Methoden her (die in abgeleiteten Klassen überladen werden) sondern
+    durch "Policies" (also entsprechende Hilfs-Klassen), die an zur Instanziierung
+    der Klasse WordPositioner als Template-Argument übergeben werden.

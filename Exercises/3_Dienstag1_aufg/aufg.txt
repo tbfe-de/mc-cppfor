@@ -1,0 +1,64 @@
+﻿Aufgabe Dienstagvormittag:
+
+1. In der vorbereiteten Datei aufg1.cpp finden Sie ein Beispiel, in dem insgesamt vier
+   Klassen in einer "rautenförmigen Vererbungsbeziehungen" stehen.
+   
+a) Zeichnen Sie zunächst ein Klassendiagramm und vergessen Sie dabei nicht, die
+   Verbindung zur obersten Basisklasse gemäß der UML mit <<overlapping>> oder
+   <<disjoint>> zu beschriften (je nach dem, was Sie für angemessen ansehen.
+
+b) Warum erscheint bei unveränderter Kompilierung dieses Beispiels in der vierten
+   Zeile der Ausgabe am Anfang ein zufälliger Wert? (Bei der Programmausführung sieht
+   dieser evtl. anders aus als im Kursordner, er wird aber recht sicher nicht "4.4"
+   sein, wie Sie es vielleicht erwarten.)
+c) Was passiert, wenn Sie in diesem - ansonsten unveränderten - Quelltext den Default-
+   Konstruktor der Klasse "Value" komplett entfernen?
+d) Was ist zu verändern, damit in der Ausgabe am Beginn der vierten Zeile korrekt
+   der Wert "4.4" erscheint?
+   Hinweis: Die Datei "aufg1_solved.cpp" in diesem Projekt enthält die Lösung.
+
+2. Wie kann eine in Element-Typ und -Anzahl parametrisierte Klasse RingBuffer 
+   (zu finden in der Datei aufg2.cpp) als "konfigurierbares Teil" hilfreich
+   sein, um wiederum eine Klasse Value zu implementieren, welche die folgenden
+   Möglichkeiten bietet:
+   
+   setValue(double) speichert einen Wert vom Typ double
+   getValue() liefert diesen Wert zurück
+   getHistoricValue(int n) liefert bis zu 5 "historische" Werte, wobei "n"
+   wie folgt interpretiert wird:
+   n == 0 --> selbes Ergebnis wie getValue()
+   n == 1 --> der VOR dem letzten setValue() gültige Wert
+   n == 2 --> der ZWEI setValues() zuvor gültige Wert
+   ... usw. ...
+   n == 5 --> der FÜNF setValues() zuvor gültige Wert
+   
+   Vergleichen Sie zu diesem Zweck die folgenden Varianten in einer
+   UML-Darstellung
+   - Value verweist per Zeiger auf ein RingBuffer-Objekt
+   - Value enthält ein RingBuffer-Objekt (lebenszeit-gekoppelt)
+   - Value hat ein RingBuffer-Objekt als private Basisklasse
+   - Value hat ein RingBuffer-Objekt als öffentliche Basisklasse
+   
+   Unter welchen Umständen hat welche Variante jeweils Vor- und Nachteile gegenüber
+   den anderen. (Hinweis: zu dieser Frage gibt es keine eindeutig richtigen und falschen
+   Antworten, sie bezweckt lediglich, dass Sie sich selbst nochmal die wesentlichen
+   Unterschiede klarmachen.
+   
+-- Zusatzaufgabe für besonders Schnelle
+
+3. Implementieren Sie ausgehend von der Value-Klasse zwei weitere Klassen, welche
+   jeweils eine bestimmte Zusatzfunktionalitäten bieten:
+   - Klasse Value zur Ermittlung des Durchschnitts
+   - Klasse Extrema zur Ermittlung von Minimum und Maximum
+   Überlegen Sie nicht nur, wie diesen beiden Klassen aussehen könnten und welche
+   "Schnittstelle" (womit nicht zwingend ein Interface im Sinne der OOP gemeint ist)
+   die Klasse Value ihnen zur Verfügung stellen müsste. Ließe sich diese Schnittstelle
+   ggf. auch so festlegen, dass die Klassen Value und Extrema unverändert bleiben
+   können und alein die Klasse Value bestimmt, ob sich Durchschnitt und Extrema nur
+   auf die historischen Werte oder auf ALLE jemals vorhandenen Werte bezieht?
+   
+4. Implementieren Sie - evtl. ausgehend von den verschiedenen, in der Info-Grafik
+   "Example - Class Relations" gezeigten Varianten eine Design, mit dessen Hilfe´auch
+   flexible Kombinationen möglich sind, sich also mit dem vorhandenen "Ausgangsmaterial"
+   auch leicht eine Klasse erstellen lässt, die neben aktuellen und historischen Werten
+   SOWOHL Durchschnitt als auch Extrema ermittelt.
