@@ -176,9 +176,35 @@ section: OC Principle
 name: oc_principle
 header: ### "Open Close"-Prinzip
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Gemäß diesem Prinzip sollte jede Software-Architektur einen gesunden Ausgleich zwischen zwei
+gegeneinander stehenden Zielen gewährleisten:
+
+* Software sollte *offen für Veränderungen* sein, beispielsweise
+
+  * Anpassung an künftig geänderten Bedarf
+  * Absehbar anstehende Erweiterungen
+  * Verwendung in ähnlich gelagerten Fällen
+
+* Software sollte aber auch *robust* sein in dem Sinne, dass
+
+  * Änderungen nicht versehentlich oder in einer ansonsten unbeabsichtigten Weise erfolgen;
+  * zumindest sollten unbeabsichtigte Änderungen leicht zu identifizieren sein,
+  * ebenso solche, die zielgerichtet im Rahmen der Offenheit erfolgten aber aus irgend
+    einem Grund unvollständig blieben.
+
+---
+template: plain
+header: #### Mechanismen zur Strukturierung (1)
+
+##### Klassen
+
+##### Unterprogramme
+
+##### Bibliotheken
+
+##### Frameworks
+
+##### Geplante Erweiterbarkeit
 
 ---
 template: withinfo
@@ -187,9 +213,46 @@ section: DRY Principle
 name: dry_principle
 header: ### "Don't Repeat Yourself"
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Eine wichtige Erkenntnis kann bei der erfolgreichen Arbeitsteilung zwischen
+"Mensch und Maschine" sollte folgende sein:
+
+Menschen
+
+* besitzen oft ein hohes Maß an Kreativität,
+* sind aber in aler Regel schlecht darin, Dinge präzise zu wiederholen,
+  * sei es in immer wieder ein- und derselben Weise,
+  * sei es mit systematischen Variationen.
+
+Computer
+
+* besitzen kaum echte Kreativität,._[]
+* sind aber extrem gut darin, Dinge präzise zu wiederholen:
+  * Insbesondere ermüden sie nicht, auch bei sich ständig wiederholten und
+  * dabei allenfalls leicht variierenden Tätigkeiten.
+
+.F[:
+Es ist dabei weniger entscheidend, dass per Computer vielleicht gelegentlich
+"überraschende Ergebnisse" erzielt werden können - etwa in der Art, dass ein
+Computer ein Musikstück komponieren könnte, dass es vielleicht sogar in die
+Hitparade schafft. Interessanter ist die Frage nach einem Programm, mit dessen
+Hilfe ein Computer im Dialog mit einem menschlichen Partner von diesem nicht
+innerhalb weniger Minuten als Maschine erkannt würde, wie es im Fall der
+[Turing-Tests] letzten Endes doch immer wieder schnell der Fall ist.
 ]
+
+  [Turing-Tests]: http://de.wikipedia.org/wiki/Turing-Test
+
+---
+template: plain
+header: #### Mechanismen zur Wiederverwendung
+
+##### Klassen
+
+##### Unterprogramme
+
+##### Bibliotheken
+
+##### Frameworks
 
 ---
 template: linkinfo

@@ -180,8 +180,53 @@ section: Classic Resource Management APIs
 name: classic_resource_api
 header: ### Klassische APIs
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Klassisches Ressource-Management beruht auf zwei getrennten Operationen
+
+* Belegen der Ressource (Acquire, Allocate, Open, …)
+* Freigeben der Ressource (Release, Free, Close, …)
+
+Bei beiden Operationen besteht das Problem, dass sie vergessen werden könnten, bei
+der zweiten zusätzlich das Problem, dass sie zu früh stattfinden könnte.._[]
+
+.F[
+Zum falschen Zeitpunkt ausgeführte Operationen sind in aller Regel einer (zu) komplexen
+Programmlogik anzulasten. Die vorwiegend genutzten und gut getesteten Ausführungspfade
+sind dann ohne Probleme, diese treten nur relativ selteneren Konstellationen mit oft
+unklarer Vorgeschichte auf.
+]
+
+---
+template: plain
+header: #### Um welche Ressourcen geht es?
+
+Grundsätzlich werden unter dem Begriff hier alle "knappen Betriebsmittel" verstanden,
+über die ein Programm nicht während seiner gesamten Ausfhrungszeit verfügen kann.
+
+Die folgende Liste ist nur beispielhaft zu sehen und keineswegs erschöpfend:
+
+* Hauptspeicher 
+* Mutexe
+* Dateien 
+* Prozesse
+* Datenbank-Verbindungen
+* …
+
+---
+template: plain
+header: #### Wie werden Ressourcen repräsentiert?
+
+In C/C++ gibt es zwei besonders häufig verwendete Abstraktionen, die eine Ressource
+repräsentieren:
+
+* *Zeiger* - eine Speicheradresse, an der wesentliche Informationen zur Ressource stehen
+  oftmals repräsentiert durch eine Struktur, deren Inhalt im Detail aber nicht von
+  Interesse ist.
+* *Handles* - in der Regel eine Ganzzahl, die einer Service-Schnittstelle zu übergeben
+  ist und dieser gegenüber die Ressource repräsentiert.._[]
+
+.F[
+Mitunter - aber nicht grundsätzlich - sind Handles Indizes, mit welchen Einträge einer
+hinter der Service-Schnittstelle angesiedelten Tabelle ausgewählt werden.
 ]
 
 ---
@@ -191,9 +236,21 @@ section: Wrapped Resource
 name: raii_style
 header: ### Mit RAII verwaltete Ressourcen
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Bei [RAII] handelt es sich um die Ablürzung der von Bjarne Stroustrup empfohlenen Technik,
+klassische Ressourcen zu verpacken:
+
+.N.center[
+Ressource Acquisition Is Initialisation
 ]
+
+In der Regel ist dazu eine kleine Hilfsklasse erforderlich, welche
+
+* die Ressource-Anforderung im Konstruktor und
+* die Ressource-Freigabe im Destruktor
+
+vornimmt.
+
+  [RAII]: http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization
 
 ---
 template: withinfo
@@ -202,10 +259,23 @@ section: Acquire Resource for Code Segment
 name: raii_codeblock
 header: ### RAII-Resource für Anweisungsfolge belegen
 
+Da in C++ überall neue (geschachtelte) Blöcke beginnen können, lässt sich die
+Anweisungssequenz während der die Ressource belegt ist, nach Belieben festlegen.
+
+* Eine Variable vom Typ des Resource-Wrappers wird an der Stelle eines Code-Blocks
+  (als Stack-Objekt) angelegt, ab dem die Ressource benötigt wird.
+* Der Destruktor des Resource-Wrappers wird automatisch ausgeführt, wenn der
+  betreffende Code-Block verlassen wird.
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Durch die automatische Ausführung des Destruktors wird die Ressource in jedem Fall
+zuverlässig freigegeben.
 ]
 
+Insbesondere spielt es keine Rolle, wie und warum der Kontrollfluss den betreffenden
+Code-Block verlässt - also egal ob nach Ausführung der letzen Anweisung im Block,
+`return`, `break`, `continue` oder `throw` (letzteres auch in aufgerufener Funktion).
+  
 ---
 template: withinfo
 graphic: ResourceManagement
@@ -213,9 +283,124 @@ section: Acquire Resource for Object Lifetime
 name: raii_lifetime
 header: ### RAII-Resource für Objekt-Lebensspanne belegen
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Objekte die (per Komposition) als Teil anderer Objekte existieren, werden werden
+
+* während der Erzeugung des umfassenden Objekts automatisch mit angelegt und
+* während dessen Zerstörung automatisch mit zerstört.
+
+Damit kann ein Resource-Wrapper die Belegungsdauer einer Resource auch zuverlässig mit
+der Lebensspanne eines bestimmten (anderen) Objekts verknüpfen.
+
+---
+template: plain
+header: #### Explizite Anforderung mehrerer Ressourcen ohne RAII
+
+Fordert eine Klasse in ihrem Konstruktor mehr als eine Ressource explizit an -
+** ohne Verwendung von RAII** -, besteht nur bei einer besonders sorgfältigen
+Vorgehensweise Sicherheit vor Resource-Leaks.
+
+##### Beispiel-Code für Klasse - kein RAII
+
+Angenommen eine Klasse `Choice` benötigt zwei Sorten von Ressourcen:
+* ein `Window` (optional, also Multiplizität 0..1)
+* eine mehr oder weniger große Zahl von `MenuItem`-s (Multiplizität (1..*)
+
+```
+	class Choice {
+		…
+		Window *w;
+		MenuItem *m;
+	public:
+		Choice( … );
+		~Choice();
+		…
+	};
+```
+
+---
+template: plain
+header: #### Explizite Anforderung mehrerer Ressourcen ohne RAII (2)
+
+##### Beispiel-Code Konstruktor für Klasse - kein RAII
+
+Zunächst werden beide Zeiger sicher initialisiert, dann die Ressourcen angefordert:
+```
+	Choice::Choice( … )
+		: w(nullptr), m(nullptr) {
+		try {
+			w = new Window( … );
+			m = new MenuItem[…];
+		} 
+		catch( … ) {
+			delete w;
+			delete[] m;
+			throw;
+		}
+	};
+```
+
+---
+template: plain
+header: #### Explizite Anforderung mehrerer Ressourcen ohne RAII (3)
+
+##### Beispiel-Code Destruktor für Klasse - kein RAII
+
+Nach erfolgreichem Durchlaufen des Konstruktors wird der Destruktor aktiviert.
+Dieser muss dann so aussehen:
+```
+	Choice::~Choice() {
+		delete w;
+		delete[] m;
+	}
+```
+.W[
+Genau diese beiden Anweisungen waren schon einmal nötig - im `catch`-Block
+des Konstruktors.
+Es liegt eine unschöne Duplizierung von Code vor (= Verletzung des DRY-Principles).
 ]
+
+---
+template: plain
+header: #### Anforderung mehrerer Ressourcen mit RAII
+
+Hierbei wandert die Operation zur Freigabe in den Wrapper der betreffenden Ressource:
+```
+	class WindowRes {
+		Window *res;
+	public:
+		WindowRes( … ) : res(new Window( … )) {}
+		~WindowRes()  { … ; delete res; … }
+		operator Window*() const { return res; }
+	};
+```
+
+```
+	class MenuItemRes {
+		MenuItem *res;
+	public:
+		MenuItemRes( … ) : res(new[…] MenuItem( … )) {}
+		~MenuItemRes() { … ; delete[] res; … }
+		MenuItem &operator[](int i) const { return res[i]; }
+	};
+```
+
+---
+template: plain
+header: #### Anforderung mehrerer Ressourcen mit RAII (2)
+
+##### Beispiel-Code Vereinfachung Choice-Klasse - mit RAI
+
+```
+	class Choice {
+		…
+		WindowRes wr;
+		MenuItemResr mr;
+	public:
+		Choice( … ) : WindowRes( … ), MenuItemRes( … ) {}
+		// (eigener) Destruktor entfaellt
+		…
+	};
+```
 
 ---
 template: linkinfo
@@ -251,21 +436,50 @@ template: withinfo
 graphic: SmartPointers
 section: Comparing Smart Pointers
 name: unique_vs_shared
-header: ### Smart-Pointer von C++11._[] im Vergleich
+header: ### Smart-Pointer von C++11 im Vergleich
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Die von C++11 bereitgestellten *Smart-Pointer* repräsentieren die beiden wichtigsten
+Beziehungen, die ein Objekt zu auf dem Heap angelegten Speicherbereich haben kann:
+
+* Exklusive Eigentümerschaft
+* Geteilte Eigentümerschaft
 
 ---
-template: withinfo
-graphic: SmartPointers
-section: Reference Counting Principle
-name: refcount_principle
-header: ### Prinzip der Referenzzählung
+template: plain
+header: `std::unique_ptr`
+
+Die Verwendung dieser Art von Smart-Pointer hilft dabei, die exklusive Eigentümerschaft
+zu garantieren:
+
+* Sie verfügt über einen *Move-Konstruktor*,
+* aber über **keinen** *Copy-Konstruktor*!
+* Sie verfügt über ein *Move-Assignment*,
+* aber über **kein** Copy-Assignment.
+
+---
+template: plain
+header: `std::shared_ptr`
+
+Die Verwendung dieser Art von Smart-Pointer hilft dabei, die geteilte Eigentümerschaft
+zu garantieren:
+
+* Ihre Objekte enhalten jeweils *zwei* Zeiger:._[]
+  * einer zeigt auf das refernzierte Objekt,
+  * der andere auf einen Referenzzähler
+
+In Default-Konstruktor, Copy- und Move-Konstruktor, Copy- und Move-Assignment sowie
+Destruktor der `std::shared_ptr`-Klasse werden die Referenzzähler gemäß der Anzahl der
+Referenzierer eines Objekts verwaltet.
 
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Fällt der Stand des Referenzzählers von 1 auf 0, wird der Destruktur des referenzierten
+Objekts ausgeführt.
+]
+
+.F[:
+Dies gilt für die typische Implementierung - in der alternativen Implementierung ist
+nur ein Zeiger erforderlich, zum Zugriff muss aber eine zusätzliche Dereferenzierung
+erfolgen.
 ]
 
 ---
@@ -275,8 +489,23 @@ section: Problem of Cyclic References
 name: refcount_problem
 header: ### Problem zyklischer Referenzierung
 
+Mitunter kann es notwendig werden, dass
+
+* dass ein Objekt, auf das per `std::shared_ptr` verwiesen wird,
+* selbst wiederum einen `std::shared_ptr` enthält, welcher auf
+  Objekte der eigenen Art zeigen kann.._[]
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Dies vorausgesetzt, kann es zyklische Ketten von Referenzen geben, womit irgendwann ein
+isolierter, unerreichbar gewordenen Verbund von Objekten im Speicher verbleiben könnte,
+welche aller über `std::shared_ptr` miteinander verbunden aber von außen unerreichbar
+sind.
+]
+
+.F[
+Es müssen nicht zwingend Objekte der eigenen Art sein, auch in der Konstellation
+"A zeigt auf B und B auf A" oder "A zeigt auf B, B zeigt auf C und C zeigt auf A"
+usw. kann das Problem auftreten.
 ]
 
 ---
@@ -286,9 +515,15 @@ section: Breaking Cycles Using Weak Pointers
 name: weak_ptr_solution
 header: ### Lediglich "beobachtende" Zeiger als Ausweg
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Mittels `std::weak_ptr` lassen sich zyklische Referenzen vermeiden.
+
+Dabei ist hinsichtlich aller Referenzierer zu prüfen, ob es sich
+
+* um (echte) Ressource-Eigentümer handelt
+* oder lediglich um Resource-Beobachter?
+
+Letzteren kann die Resource "entzogen" werden, wenn es keine (echten)
+Ressource-Eigentümer mehr gibt.
 
 ---
 template: withinfo
@@ -297,9 +532,22 @@ section: Dangling Weak Pointer
 name: weak_ptr_dangling
 header: ### "Verlorene" Resourcen
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Da die `std::weak_ptr` lediglich Beobachter sind,  unterstützen sie keinen
+direkten Zugriff zur referenzierten Ressource mit `*` oder `->`).
+
+Vielmehr muss durch Aufruf der Member-Funktion `lock` des `std::weak_ptr`
+zunächst ein `std::shared_ptr` geholt werden._[] und ähnlich wie beim
+`dynamic_cast` werden die zwei häufigsten Verwendungen gezielt unterstützt:
+
+Erste Vorgehensweise
+
+* Rückgabe eines Zeigers und nachfolgend erforderlicher Test,
+* wenn `nullptr` wurde das beobachtete Objekt in Ermanglung echter Referenzierer
+* bereits weggeräumt.
+
+Bei der zweiten Vorgehensweise würde man entweder eine gültige Referenz erhalten
+(die sofort und ohne weitere Prüfungen nutzbar ist) oder es wird eine Exception
+geworfen (wenn das beobachtete Objekt zwischenzeitlich verschwunden ist).
 
 ---
 template: withinfo
@@ -308,9 +556,9 @@ section: Implementation Choices
 name: implementing_shared_ptr
 header: ### Varianten der Implementierung
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+In der alternativen Implementierung zeigen die Objekte der Klasse `std::shared_ptr`
+auf ein Helfer-Objekt, das den Referenzzähler sowie einen Zeiger auf das eigentlich
+referenzierte Objekt enthält.
 
 ---
 template: plain
