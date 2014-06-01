@@ -184,7 +184,7 @@ section: Combinations of Associative Containers
 name: associative_combinations
 header: ### Kombination der Varianten
 
-Die verfügbaren assoziative Container unterscheiden sich in folgenden Aspekten:
+Die verfügbaren assoziativen Container unterscheiden sich in folgenden Aspekten:
 
 * Zur Abspeicherung verwendete Datenstruktur:
   * Red-Black-Tree (Binärbaum) vs. Hashing (neu in C++11)
@@ -211,9 +211,9 @@ Hierbei handelt es sich um eine permanent balancierte._[] Variante des
 Binärbaums.
 
 Die folgende Tabelle zeigt den Zusammenhang zwischen der Tiefe eines balancierten
-Binärbaums und der Anzahl der Einträge, die enthalten sind, wobei die Tiefe der
-Anzahl der Vergleiche, die (maximal) nötig sind, um in bei entsprechend vielen
-Einträgen einen bestimmten Schlüssel zu finden.
+Binärbaums und der Anzahl enthaltener Einträge. Die Tiefe bestimmt dabei die
+(maximal) nötige Anzahl der Vergleiche, mit der ein gegebener Schlüssel gefunden
+werden kann.
 
 | Tiefe | und minimale .. maximale Zahl der Einträge              |
 | :---- | :------------------------------------------------------ |
@@ -229,8 +229,8 @@ Einträgen einen bestimmten Schlüssel zu finden.
 
 .F[:
 Eine Binärbaum ist balanciert, wenn allen Zweige eine möglichst gleichmäßige
-gleichmäßige Tiefe haben. Ein unbalancierter Binärbaum entspricht im Extremfall
-einer einfach verketteten Liste.
+Tiefe haben. Ein unbalancierter Binärbaum entspricht im Extremfall einer
+einfach verketteten Liste.
 ]
 ---
 template: withinfo
@@ -239,9 +239,9 @@ section: Hash-based Storage
 name: associative_combinations
 header: ### Speicherverfahren Hashing
 
-Unter dem Begriff "Hashing" wird (auch) ein Abspeicherungsverfahren verstanden,
-welches - unter der Voraussetzung einer gut streuenden Hash-Funktion - Suchzeiten
-der Größenordnung O(1) erlaubt.
+Unter dem Begriff *Hashing* wird (u.a.) ein Abspeicherungsverfahren verstanden,
+welches - eine gut streuende Hash-Funktion vorausgesetzt - Suchzeiten in der
+Größenordnung O(1) erlaubt.
 
 .N[
 Die [Big O Notation] wird in der Informatik häufig verwendet, um die Obergrenze
@@ -274,19 +274,19 @@ ein ganzzahliger Wert berechnet.
 2. Die Formel zu dieser Berechnung ist so ausgelegt, dass der Wert in einem
 vorgegebenen Bereich streut.
 3. Dieser Wert dient nun als Index, welcher die Position zur Abspeicherung
-als Index innerhalb eines Arrays festlegt, dessen Gesamtgröße wiederum dem
-Streubereich der Hash-Funktion entspricht.
+innerhalb eines Arrays festlegt, dessen Gesamtgröße wiederum dem Streubereich
+der Hash-Funktion entspricht.
 
 Anhängig von der Anzahl der Datenwerte und der Größe des Streubereichs kann
-es weder theoretisch noch praktisch eine eindeutige Abbildung des Schlüssels
-auf den Streubereich geben.
+es meist weder theoretisch noch praktisch eine eindeutige Abbildung des
+Schlüssels auf den Streubereich geben.
 
   [Hashing]: http://en.wikipedia.org/wiki/Hash_function
 
 .F[:
-Bei den verschiedenen Varianten des `set` gibt es keinen dem Schlüssel
-zuegeordneten Datenwert. Alternativ könnte man dort den Wert auch als
-Schlüssel ansehen.
+Bei den verschiedenen Varianten des `set` gibt es eigentlich keinen dem
+Schlüssel zugeordneten Datenwert. Man kann aber einfach den Wert als Schlüssel
+ansehen.
 ]
 ---
 template: plain
@@ -297,35 +297,41 @@ Bildet die Hash-Funktion verschiedene Schlüssel auf ein und denselben Index
 ab, spricht man von einem Überläufer.
 ]
 
-Gut streuende Hashfunktionen liefern zwar bei einer bi zu 80..90%-igen Belegung
-des zur Verfügung stehenden Index-Raumes nur selten Überläufer, dennoch kann
-dieser Fall prinzipiell immer auftreten.
+Gut streuende Hashfunktionen liefern bis zu einer ca. 80%-igen Belegung des zur
+Verfügung stehenden Index-Raumes nur selten Überläufer. Prinzipiell können Überläufer
+aber ab dem zweiten Eintrag immer auftreten.
 
-* Eine Strategie zur Behandlung von Überläufern muss daher Bestandteil jedes
+* Eine Strategie zur Behandlung von Überläufern muss Bestandteil jedes
   hash-basierten Datenspeicherungsverfahrens sein.
-* Übliche Praxis ist, für *jeden* per Hash-Funktion errechneten Index grundsätzlich
-  die Möglichkeit einer verketteten Liste vorzusehen, die den ersten aufgetretenen
-  Wert zusammen mit allen späteren Überläufern aufnimmt.
+
+* Übliche ist, für jeden per Hash-Funktion errechneten Index die Möglichkeit
+  einer verketteten Liste vorzusehen, die den ersten aufgetretenen Wert zusammen
+  mit allen späteren Überläufern aufnimmt.
 
 ---
 template: plain
 header: #### Re-Hashing
 
 Ist der Umfang der Datenmenge unbekannt, muss der Indexraum möglichwerweise zu
-irgend einem Zeitpunkt vergrößert werden, wenn die Performance nicht leiden soll.
+einem späteren Zeitpunkt vergrößert werden, um stets gute Performance zu bieten.
 
 * Eine universell verwendbare Klasse wie `unordered_set` oder `unordered_map`
-  (die jeweiligen `multi`-Varianten an dieser stillschweigend eingeschlossen)
-  kann dies nahezu vollautomatisch tun.
-* Dazu muss die Hash-Funktion angepasst werden, sodass diese künftig in einen
+  (die jeweiligen `multi`-Varianten stillschweigend eingeschlossen) kann dies
+  nahezu vollautomatisch tun.
+
+* Dazu muss die Hash-Funktion angepasst werden, so dass diese künftig in einen
   dem vergrößerten Datenbereich entsprechend Indexbereich streut.
-* **Anschließend müssen alle mit der vorher gültigen Hash-Funktion erzeugten
-  Zuordnungen von Schlüssel zu (Streubereichs-) Index mit der nun gültigen
-  Hash-Funktion noch einmal neu berechnet werden.**._[]
+
+.N[
+Anschließend müssen alle mit der vorher gültigen Hash-Funktion erzeugten
+Zuordnungen von Schlüssel zu (Streubereichs-) Index mit der neuen Hash-Funktion
+neu berechnet werden.._[]
+]
 
 .F[:
-Mit Hilfe spezieller Techniken lässt sich der Aufwand hierfür halbieren, indem
-diese Neuberechnung nur für die Hälfte der Einträge reduziert wird.
+Mit Hilfe spezieller Techniken, welche die Neuberechnung auf die Hälfte der
+vorhandenen Einträge reduziert, lässt sich der Aufwand für das Re-Hashing
+etwas verringern.
 ]
 
 ---
@@ -365,7 +371,8 @@ der betreffenden Klasse und evtl. davon abgeleiteten Klassen stets erhalten.
 ]
 
 Um pure Unidirektional-Iteratoren handelt es sich bei
-* `std::iterator::forward_list`.
+
+* `std::forward_list<T>::iterator`.
 
 ---
 template: withinfo
@@ -379,15 +386,16 @@ Bidirektionale Iteratoren
 Iteratoren, die der Kategorie der Bidirektional-Iteratoren hinzu zu rechnen
 sind, können sich - ihrem Namen entsprechend - zwar in zwei Richtung bewegen,
 nämlich vom Anfang eines Containers zu dessen Ende hin und umgekehrt, können
-dabei aber nicht "springen" (kein `operator+(std::size_t)`).
+dabei aber nicht "springen".
 
-Um Bidirektional-Iteratoren handelt es sich bei
+Um Bidirektional-Iteratoren handelt es sich bei._[]
 
-* `std::list<T>::iterator` und `std::list<T>::const_iterator¸ sowie
-* allen Iteratoren für alle assoziativen Container._[]
+* `std::list<T>::iterator`
+* `std::deque<T>::iterator`
+* sowie den Iteratoren der assoziativen Container.
 
 .F[:
-Die Iteratoren für den "const"- und "reverse"-Fall sind hier stillschweigend
+Die `const_`, `reverse_` und `const_reverse_`-Varianten jeweils stillschweigend
 mit eingeschlossen.
 ]
 
@@ -398,9 +406,25 @@ section: Random Access Iterators
 name: random_access_iterators
 header: ### Iteratoren mit wahlfreiem Zugriff
 
-Iteratoren, die der Kategorie der Random-Access-Iteratoren hinzu zu rechnen
-sind, können - ihrem Namen entsprechend - innerhalb des zugehörigen Containers
-effizient wahlfrei zugreifen.
+Iteratoren, die der Kategorie der Random-Access-Iteratoren angehören, können ihrem
+Namen entsprechend - innerhalb des zugehörigen Containers effizient wahlfrei zugreifen.
+
+Neben der Addition und Subtraktion von Ganzzahlen kann man über die Differenzbildung
+auch die Anzahl der Elemente bestimmen, welche sich zwischen den beiden
+Iteratorpositionen befinden.._[]
+
+.W[
+Wenn Operationen, an denen Iteratoren mit wahlfreiem Zugriff beteiligt sind, eine
+(neue) Iterator-Position außerhalb des Containers liefern, ist das Ergebnis undefiniert
+wenn die Grenzen des Containers dabei überschritten werden. Ebenso muss für ein
+definiertes Ergebnis der Differenzbildung sichergestellt sein, dass die beiden
+beteiligten Iteratoren in den selben Container zeigen.
+]
+
+.F[:
+Die folgenden Ausführungen orientieren sich an der Vorstellung hier deutlich einfacheren
+Vorstellung, dass Iteratoren als zwischen Container-Elemente zeigend verstanden werden.
+]
 
 ---
 template: linkinfo
@@ -490,9 +514,10 @@ section: Input Iterators
 name: input_iterators
 header: ### Input-Iterator-Kategorie
 
-Input-Iteratoren sind ggf. abwechelnd
-* zu dereferenzieren für den *nur lesenden, exklusiven* Zugriff
-* und weiterzuschalten (```operator++( … )```).
+Input-Iteratoren sind ggf. abwechselnd
+
+* zu dereferenzieren für den *nur lesenden* Zugriff
+* und weiterzuschalten (`operator++( … )`).
 
 ---
 template: withinfo
@@ -501,10 +526,10 @@ section: Output Iterators
 name: output_iterators
 header: ### Output-Iterator-Kategorie
 
-Output-Iteratoren sind ggf. abwechelnd
+Output-Iteratoren sind ggf. abwechselnd
 
-* zu derefenenzieren für den schreibenden, exklusiven Zugriff
-* und weiterzuschalten (```operator++( … )```).
+* zu derefenenzieren für den *nur schreibenden Zugriff*
+* und weiterzuschalten (`operator++( … )`).
 
 ---
 template: withinfo
@@ -514,8 +539,8 @@ name: success_from_searching
 header: ### Erfolgreiche Suche
 
 Beim Suchen (und verwandten Container-Operationen) wird der Erfolg damit angezeigt,
-dass der als Rückgabewert gelieferte Iterator insofern **immer gültig** ist, als er
-auf eine Position innerhalb des zur Bearbeitung übergebenen Daten-Bereichs zeigt.
+dass der als Rückgabewert gelieferte Iterator insofern **immer auf eine gültige
+Position** innerhalb des zur Bearbeitung übergebenen Daten-Bereichs zeigt.
 
 ---
 template: withinfo
@@ -525,8 +550,8 @@ name: failure_from_searching
 header: ### Fehlgeschlagene Suche
 
 Beim Suchen wird der Misserfolg damit angezeigt, dass der als Rückgabewert
-gelieferte Iterator insofern **immer gültig** ist, als er auf eine Position
-innerhalb des zur Bearbeitung übergebenen Bereichs zeigt.
+gelieferte Iterator **immer auf die Endposition** des zur Bearbeitung
+übergebenen Bereichs zeigt.
 
 ---
 template: withinfo
@@ -535,8 +560,8 @@ section: Return State from Filling
 name: state_from_filling
 header: ### Zustandsanzeige nach Füllen
 
-Beim Füllen eines Containers ist es üblich, den (neuen) Füllzustand des
-Containers durch den Wert eines Iterators anzuzeigen.
+Beim Füllen eines Containers ist es üblich, **den (neuen) Füllzustand des
+Containers** durch den Wert eines Iterators anzuzeigen.
 
 ---
 template: withinfo
@@ -546,7 +571,7 @@ section: Return "New End" when "Removing" Elements
 header: ### Löschanzeige durch neues (logisches) Ende
 
 Da die Algorithmen für eine große Zahl von Containern funktionieren sollen,
-finden an einigen Stellen einige aus pragmatischen Sicht "merkürdige" (= des
+finden an einigen Stellen einige aus pragmatischen Sicht "merkwürdige" (= des
 Merkens würdige) Entscheidungen statt.
 
 .N[
@@ -592,7 +617,7 @@ sein:
 template: plain
 header: #### Kopieren der Elemente eines `std::set` in einen `std::vector`
 
-Die gerade gezeigte Funktion kan problemlos zwischen zwei unterschiedlichen
+Die gerade gezeigte Funktion kann problemlos zwischen zwei unterschiedlichen
 Containern kopieren:
 ```
 	std::vector<int> v;
@@ -622,13 +647,13 @@ sichere Variante des Kopierens in `v` erreichen, indem man die neuen Elemente st
 `push_back` hinten anfügt:._[]
 ```
 	copy(v1.begin(), v1.end(),
-	        std::back_insert_iterator<std::vector<int>>(v2)
+	     std::back_insert_iterator<std::vector<int>>(v2)
 	);
 ```
 .F[:
-Das Umbrechen längerer Zeilen bei der Argumentbergabe erscheint (nicht nur) hier sinnvoll,
+Das Umbrechen längerer Zeilen bei der Argumentübergabe erscheint (nicht nur) hier sinnvoll,
 um die Argumente nach ihrer Bedeutung zu gruppieren. Die dabei zum Einsatz kommende
-Assymetrie ist dagegen Geschmackssache, und entspricht einem vebreiteten, häufig bei
+Assymetrie ist dagegen Geschmackssache und entspricht einem verbreiteten, häufig bei
 geschweiften (Block-) Klammern angewandten Stil.
 ]
 
@@ -648,7 +673,7 @@ Eine Hilfsfunktion._[] vermeidet diese Redundanz:
 	copy(v1.begin(), v1.end(), std::back_inserter(v2));
 ```
 
-.F[
+.F[:
 Diese Funktion ist zwar Bestandteil der Standardbibliothek, muss also nicht selbst
 geschrieben werden, aber ihre Implementierung ist insofern interessant, als die
 zugrundeliegende Technik in ähnlich gelagerten Fällen zur Vermeidung redundanter
@@ -668,7 +693,7 @@ header: #### Am Anfang oder Ende sequenzieller Container einfügen
 Selbstverständlich funktionert der `std::back_inserter_iterator` auch für die Klassen
 
 * `std::list` und
-* `std::deque
+* `std::deque`
 
 und es existiert auch ein `std::front_insert_iterator`, der mit den Klassen
 
@@ -692,16 +717,17 @@ header: #### In assoziative Container einfügen
 
 Hiermit können z.B. alle Elemente einer Liste wie folgt in ein `std::set`
 übertragen werden, wobei Duplikate natürlich nicht übernommen werden:._[]
+
 ```
 	std::list<MyClass> li;
 	…
 	std::set<MyClass> s;
 	copy(li.begin(), li.end(),
-	        std::insert_iterator<std::set<MyClass>>(s)
+	     std::insert_iterator<std::set<MyClass>>(s)
 	);
 ```
 
-.F[
+.F[:
 Es sei denn, es handelt sich um ein `std::multi_set`.
 ]
 
@@ -709,22 +735,24 @@ Es sei denn, es handelt sich um ein `std::multi_set`.
 template: plain
 header: #### In assoziative Container einfügen (2)
 
-##### Hilfsfunktion: `insert_iterator`
+##### Hilfsfunktion: `inserter`
 
 Auch hier gibt es eine zusätzliche Funktion zur Vermeidung der (eigentlich redundanten)
 Angabe des Container-Typs:
+
 ```
 	std::set<MyClass> s;
 	copy(li.begin(), li.end(),
 	        std::inserter<std::set<MyClass>>(s, s.begin())
 	);
 ```
+
 Etwas ungewöhnlich ist hier das zusätzliche Argument. Dessen Zweck dieses Arguments ist
 es, einen Optimierungshinweis zu geben, den der Insert-Iterator ggf. verwendet, um die
 Suche nach der Einfügeposition abzukürzen. Üblicherweise wird hierfür, wenn kein besser
 Hinweis gegeben werden kann, der Beginn-Iterator des Sets angegeben.
 
-.F[
+.F[:
 Da es sich nur um einen Hinweis handelt, ist die Angabe unkritisch, auch wenn man einen
 falschen Hinweis gibt (oder keinen passenden Hinweise angibt, obwohl einer existiert).
 In diesen Fällen bleibt lediglich eine Optimierungs-Chance ungenutzt ...
@@ -756,7 +784,7 @@ header: #### Stream-Iteratoren (2)
 
 ##### Aus Stream lesen mit `std::istream_iterator`:
 
-Das folgende Beispiel._[]l kopiert Worte von der Standardeingabe bis EOF in eine `std::forward_list`:
+Das folgende Beispiel._[] kopiert Worte von der Standardeingabe bis EOF in eine `std::forward_list`:
 ```
 	std::forward_list<std::string> fli;
 	copy(std::istream_iterator<std::string>(std::cin),
@@ -836,7 +864,7 @@ Beim Kopieren ist auch Kombination unterschiedlicher Container möglich und es e
 	// ... to classic array (widening to double) ...
 	double data[100]; const auto N = sizeof data / sizeof data[0];
 	// ... (protecting against overflow) ...
-	if (v.size() > N) v.resize(N);
+	if (v.size() < N) v.resize(N);
 	// ... (remembering filling state) ...
 	const auto endp = copy(v.begin(), v.end(), data);
 	// ... to set (truncating to integer) ...
@@ -952,18 +980,23 @@ Fall des Algorithmus `std::for_each`, wobei einer Schleife über alle Elemente
 eines Containers übergeben wird, was damit zu tun ist, z.B. ausgeben.
 
 Zunächst ein Funktor, der dies leistet:
+
 ```
 	struct PrintWords {
-		void operator(const std::string &e) {
+		void operator()(const std::string &e) {
 			cout << ": " << s << "\n";
 		}
 	};
 ```
-.N[
-Bei der Verwendung folgen dem Klassennamen des Funktors runde Klammern.
-]
-Dies gilt zumindest dann, wenn wie meist üblich ein (temporäres) Objekt der
-Funktor-Klasse direkt als drittes Argument an `std::for_each` übergeben wird.
+
+---
+template: plain
+header: #### Callback-Beispiel mit Funktor (2)
+
+Bei der Verwendung folgen dem Klassennamen des Funktors runde Klammern, wenn
+- wie meist üblich - ein (temporäres) Objekt der Funktor-Klasse direkt als
+drittes Argument an `std::for_each` übergeben wird.
+
 ```
 	std::for_each(v.begin(), v.end(), PrintWords());
 ```
@@ -999,7 +1032,7 @@ Hierzu ein leicht modifiziertes Beispiel, bei dem der Funktor die Argumente
 durchnummeriert:
 ```
 	struct PrintWordsEnumerated {
-		void operator(const std::string &e) {
+		void operator()(const std::string &e) {
 			std::cout << ++n << ": " << s << "\n";
 		}
 		PrintWordsEnumerated() : n(0) {}
@@ -1016,8 +1049,8 @@ header: #### Parameterübergabe an Funktor
 werden, lassen sich auch Argumente aus der Aufruf-Umgebung weiterreichen:
 ```
 	struct PrintWordsEnumerated {
-		void operator(const std::string &e) {
-			cout << ++n << ": " << s << "\n";
+		void operator()(const std::string &e) {
+			os << ++n << ": " << s << "\n";
 		}
 		PrintWordsEnumerated(std::ostream &os_) : n(0), os(os_) {}
 	private:
@@ -1035,7 +1068,7 @@ header: #### Parameter aus Aufrufumgebung
 
 Die mit der Übergabe von Parametern geschaffene Flexibilität ist spätestens dann wichtig,
 wenn es sich um Informationen handelt, die in der Aufruf-Umgebung ebenfalls in Variablen
-oder - noch typischer - if Aufrufargumenten vorliegen:
+oder - noch typischer - in Aufrufargumenten vorliegen:
 ```
 	void foo(std::ostream &output) {
 		…
@@ -1054,7 +1087,7 @@ header: #### Callback-Beispiel mit Lambda
 
 Die in C++ neu eingeführte Lambdas haben gegenüber Funktoren den Vorteil, dass
 der ausgeführte Code direkt als Parameter des aufgerufenen Algorithmus zu sehen
-ist und nicht an einer mehr oder weniger weit davon entfernten Stelle steht._[]
+ist und nicht an einer mehr oder weniger weit davon entfernten Stelle steht.._[]
 
 ##### Grundlegendes Beispiel mit Lambda
 
@@ -1069,7 +1102,7 @@ und evtl. globale Variable bzw. Objekte zu:
 	);
 ```
 
-.F[
+.F[:
 Mit modernen IDEs, welche die Implementierung einer Funktion oder Klasse als
 Pop-Up zeigt, sobald man kurze Zeit den Mauszeiger darüber ruhen lässt, spielt
 dieser Nachteil aber eine immer geringere Rolle.
@@ -1088,7 +1121,7 @@ Zum Zugriff in den Sichtbarkeitsbereich des umgebenden Blocks muss die
 	…
 		std::for_each(v.begin(), v.end(),
 			      [&output](const std::string &s) {
-				      std::cout << s << '\n';
+				      output << s << '\n';
 			      }
 		);
 ```
@@ -1104,18 +1137,20 @@ header: #### Callback-Beispiel mit Lambda
 Im Gegensatz zu einem Funktor, der problemlos private Daten haben kann, welche
 nur dem überladenen Funktionsaufruf zur Verfügung stehen, sind die Möglichkeiten
 zur Kapselung in einem Lambda etwas eingeschränkter:
+
 ```
 	void foo(std::ostream &output) {
 		…
 		int line_nr = 0;
 		std::for_each(v.begin(), v.end(),
 			      [&line_nr, &output](const std::string &s) {
-				      std::cout << ++line_nr << s << '\n';
+				      output << ++line_nr << s << '\n';
 			      }
 		);
 		…
 	}
 ```
+
 Dies zeichnet auch den allgemeinen ein Weg vor, auf dem ein Lambda auf seine
 Aufrufumgebung nicht nur lesend sondern auch modifizierend einwirken kann.
 
@@ -1129,8 +1164,9 @@ um die Algorithmus-Variante, die mit `_if` endet.
 
 Als Beispiel kann wieder der die Implemenierung eines Algorithmus zum
 Kopieren von einem Container in einen anderen dienen:._[]
+
 ```
-	template<typename T1, typename T2>
+	template<typename T1, typename T2, typename T3>
 	T2 copy_if(T1 from, T1 upto, T2 dest, T3 pred) {
 		while (from != upto) {
 			auto tmp = *from++;
@@ -1140,7 +1176,8 @@ Kopieren von einem Container in einen anderen dienen:._[]
 		return dest;
 	}
 ```
-.F[
+
+.F[:
 Der STL wurde ein solcher Algorithmus erst mit C++11 hinzugefügt. Allerdings erfüllt
 das schon mit C++98 eingeführte `std::remove_copy_if` denselben Zweck, wenn man das
 Prädikat invertiert.
@@ -1166,7 +1203,7 @@ in Frage, sofern diese als Rückgabewert ein `bool` liefern.._[]
 Alle der folgenden Beispiele beziehen sich auf einen Container, der Ganzzahlen
 enthält und zählen darin die Werte, die kleiner als 42 sind.
 
-.F[
+.F[:
 Oder präziser: einen Typ, der ggf. in `bool` umgewandelt wird.
 ]
 
@@ -1189,7 +1226,7 @@ Viele Compiler generieren hier grundsätzlich einen Funktionsaufruf,
 womit diese Variante zur Laufzeit sehr ineffizient sein kann.._[]
 ]
 
-.F[
+.F[:
 Die GNU-Compiler erzeugen seit einigen Jahren zumindest auf den höheren
 Optimierungsstufen aber besseren Code, indem sie bei sichtbarer Funktionsdefinition
 in Fällen wie dem Obigen eine Inline-Umsetzung vornehmen, selbst wenn die Funktion
@@ -1218,7 +1255,7 @@ wird der erzeugte Code sehr schnell (und meist auch kleiner) sein als bei der
 Übergabe eines Prädikats mittels Funktionszeiger.
 ]
 
-.F[
+.F[:
 Hisichtlich des GCC (g++) sei aber daran erinnert, dass bei ausgeschalteter
 Optimierung (`-O0`) grundsätzlich *keine* Funktion als Inline-Funktion
 umgesetzt wird.
@@ -1272,7 +1309,7 @@ Dies ist eine für C++-typische Technik.
 Beispiel: Kopieren aller Elemente, die nicht den Wert 524 haben:
 ```
 	struct NotEq524 {
-		bool operator(int v) const { return v != 524; }
+		bool operator()(int v) const { return v != 524; }
 	};
 	void foo(const std::vector<int> &v) {
 		…
@@ -1300,7 +1337,7 @@ bestimmten Wert ist:
 		const int cmp;
 	public:
 		NotEq(int c) : cmp(c) {}
-		bool operator(int v) const { return v != cmp; }
+		bool operator()(int v) const { return v != cmp; }
 	};
 	void foo(const std::vector &v) {
 		…
@@ -1322,7 +1359,7 @@ header: #### Callback mit allgemeiner verwendbarem Funktor (2)
 Dieser Weg steht (nur) einem Funktor mit Member-Daten offen:
 
 ```
-	void foo(const std::vector &v, int limit) {
+	void foo(const std::vector &v, int hide) {
 		…
 		copy_if(
 			v.begin(), v.end(),
@@ -1332,7 +1369,7 @@ Dieser Weg steht (nur) einem Funktor mit Member-Daten offen:
 		…
 	}
 ```
-.F[
+.F[:
 Dies schließt die Parameter einer Funktion ein, da diese im Wesentlichen den
 lokal sichtbaren Variablen entsprechen, lediglich mit einer (garantierten)
 Initialisierung beim Funktionsaufruf mit vom Aufrufer versorgten Werten.
@@ -1378,17 +1415,17 @@ header: #### Callback mit C++11-Lambda (2)
 template: plain
 header: ### Generische Algorithmen vs. spezifische Member-Funktionen
 
-Insbesondere bei löschenden Algorithmen besteht oft die Gefahr, die Tatsache zu übersehen,
-dass der Container damit nicht tatsächlich verkleinert sondern nur Elemente umkopiert und
-ein neues Ende zurückgegeben wird.
+Bei löschenden Algorithmen wird manchmal vergessen, dass der Container damit nicht
+tatsächlich verkleinert wird. Vielmehr werden nur Elemente umkopiert oder getauscht und
+als Ergebnis wird ein Iterator zurückgegeben, der das neue logische Ende markiert.
 
 .N[
-Ist die Klasse des Containers genau festgelegt, sollte - wenn diese Alernative existiert -
-aufdie Verwendung eines (generischen) Algorithmus verzichtet und eine ggf. vorhandene
-spezifische Member-Funktion vorgezogen werden.
+Ist die Klasse des Containers genau festgelegt, besteht oft die Alternative, statt der
+eines (generischen) Algorithmus und eine spezifische Member-Funktion zu verwenden.
+Sofern diese Alternative besteht, sollte sie vorgezogen werden.
 ]
 
-Mit `std::list<std::string> li;` beispielsweise statt
+Mit `std::list<std::string> li` beispielsweise statt
 ```
 	auto end = std::remove(li.begin(), li.end(), 542);
 	li.erase(end, li.end());

@@ -1,4 +1,35 @@
-(1) Sehen Sie sich die Klasse RingBuffer an und beantworten Sie (zunächst
+(1) Sehen Sie sich an wie im Programm 1_Montag1_aufg1/aufg1.cpp, führen Sie es
+    ggf. auch aus und beantworten Sie auf Basis Ihrer Analyse und den Ergebnissen
+    der Programmausführung die folgenden Fragen:
+
+    - Was erwarten Sie von dem Programm laut seiner Beschreibung im Kommentar?
+    - Was wird jeweils als Prompt ausgegeben?
+    - Wie kann man die laufende Summe auf Null setzen?
+    - Wie werden numerische Eingaben erkannt?
+    - Welche Eingaben sind außer numerischen Eingaben noch möglich?
+    - Was geschieht, wenn eine Eingabe FÜHRENDE Leerzeichen hat?
+      - Im Fall einer numerischen Eingabe?
+      - Bei einer anderen Eingabe?
+    - Was geschieht, wenn die Eingabe ABSCHLIESSENDE Leerzeichen hat?
+      - Im Fall einer numerischen Eingabe?
+      - Bei einer anderen Eingabe?
+    - Mit welchen Hilfsfunktionen der String-Klasse kann man Leerzeichen
+      am Anfang und Ende eines std::string entfernen?
+    - Was geschieht, wenn eine Eingabe von Anfang an nicht numerisch ist?
+    - Warum erkennt das Programm keine nicht-numerischen Teile in einer
+      Eingabe, wenn diese mit einem numerischen Teil beginnt?
+
+    Wenn Sie möchten, können Sie sich anschließend Gedanken über eine Reihe von
+    Verbesserungsmöglichkeiten machen und diese ggf. auch umsetzen, z.B.:
+    - Wie könnte man aus der Benutzereingabe führende und abschließende
+      Leerzeichen entfernen?
+    - Wie könnte nicht-numerische ENDENDE Eingaben als Fehler erkennen?
+    - Wie könnte man sicherstellen, dass ...
+      - ... von der Eingabe nur zwei Nachkommstellen berücksichtigt werden?
+      - ... eine Eingabe HÖCHSTENS zwei Nachkommastellen hat?
+      - ... eine Eingabe GENAU zwei Nachkommastellen hat (ggf. auch Nullen)?
+
+(2) Sehen Sie sich die Klasse RingBuffer an und beantworten Sie (zunächst
     theoretisch) die folgenden Fragen:
     
     * Welche return-Werte liefern die Member-Funktionen empty()
@@ -28,12 +59,15 @@
         rb.put(3.14);
         assert(!rb.empty());
         assert(!rb.full());
+	assert(rb.peek() == ???);
 
         // check get
         double v;
         rb.get(v);
         assert(v == 3.14);
         assert(rb.empty());
+	assert(rb.peek(0) == ???);
+	assert(rb.peek(1) == ???);
         assert(!rb.empty());
         
         // ...
@@ -45,8 +79,8 @@
     unterstrichen, dass aller Erwartungen erfüllt wurden, denn ohne sie würde
     gelten: "No news is good news" - also (nur) solange das Programm KEINE
     Ausgaben erzeugt, ist alles in Ordnung.
-    
-(2) Fügen Sie eine neue Member-Funktion size() hinzu, mit der sich ermitteln
+
+(3) Fügen Sie eine neue Member-Funktion size() hinzu, mit der sich ermitteln
     lässt, wieviele Elemente der RingBuffer momentan enthält und ergänzen Sie
     die Tests entsprechend.
 

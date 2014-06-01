@@ -137,7 +137,7 @@ template: blank
 name: frontmatter
 
 .title[
-	[C++-FOR](#agenda)
+	[C++-FOR](#online_version)
 ]
 
 .subtitle[
@@ -159,6 +159,129 @@ name: frontmatter
 
 ---
 template: plain
+class: agenda
+name: agenda
+header: ## Agenda
+
+Themenplanung._[] Montag bis Freitag (Ende mit Mittagspause)
+
+------------------------------------------------------------------------------
+
+* [ Montag(1): C++-Basics - Wiederholung und Vertiefung	](01_montag1.html)
+* [ Montag(2): Hardwarenahe Betrachtung von C++		](02_montag2.html)
+
+------------------------------------------------------------------------------
+
+* [ Dienstag(1): Klassische Objektorientierung in C++	](03_dienstag1.html)
+* [ Dienstag(2): STL: Container und Iteratoren(1)	](04_dienstag2.html)
+
+------------------------------------------------------------------------------
+
+* [Mittwoch(1): STL: Iteratoren(2) und Algorithmen	](05_mittwoch1.html)
+* [Mittwoch(2): Programmieren mit Templates		](06_mittwoch2.html)
+
+------------------------------------------------------------------------------
+
+* [Donnerstag(1): *DRY-* und *Open Close*-Principle	](07_donnerstag1.html)
+* [Donnerstag(2): Exceptions				](08_donnerstag2.html)
+
+------------------------------------------------------------------------------
+
+* [Freitag: Ressource-Management			](09_freitag1.html)
+
+.F[:
+Weitere Inhalte können nach Absprache aufgenommen werden.
+]
+
+---
+template: plain
+name: online_reference
+header: ## Online-Referenzen
+
+Im Verlauf dieses Kurses werden Sie häufiger C++-Referenz-Dokumentation benötigen,
+insbesondere zur Standard-Library.  Sofern Ihre Programierumgebung diese nicht zur
+Verfügung stellt, finden Sie gute Online-Referenzen bei:
+
+* http://www.cplusplus.com/reference/
+* http://en.cppreference.com/w/cpp/
+
+.I[
+Das dort verfügbare Referenz-Material bezieht sich auf C++ gemäß ISO/ANSI-Standard
+von 1998 ([C++98]) und die 2003 und 2011 vorgenommenen Ergänzungen, die dann jeweils
+als [C++03] und [C++11] gekennzeichnet sind.
+]
+
+Darüber hinaus werden auch die für [C++14] geplanten Erweiterungen angesprochen.
+
+  [C++98]: http://en.wikipedia.org/wiki/C++98#Standardization
+  [C++03]: http://en.wikipedia.org/wiki/C%2B%2B03
+  [C++11]: https://isocpp.org/wiki/faq/cpp11
+  [C++14]: https://isocpp.org/wiki/faq/cpp14
+  
+
+---
+template: plain
+name: external_links
+header: ## Externe Ergänzungen
+
+Die in der Kursunterlage enthaltenen Darstellungen sind in der Regel nicht als
+erschöpfende Behandlungen eines Themas angelegt.
+
+.I[
+Hauptzweck der Kursunterlage ist es, den roten Faden durch den behandelten
+Stoff zu verdeutlichen.
+]
+
+Die Kursunterlage wird insofern durch öffentlich zugängliche Informationsquellen
+ergänzt, auf die bei Bedarf im Text verwiesen wird.
+
+.N[
+Insbesondere wenn Sie nach Ende dieser Schulung Informationen zu einzelnen Themen nochmals
+nachschlagen möchten, kann es sinnvoll sein, dazu (auch) die Online-Version der Kursunterlage
+zu verwenden und ggf. zur Vertiefung in das verlinkte Material zu verzweigen.._[]
+]
+
+.F[:
+Direkt verlinkte Seiten haben im Vergleich zu kopiertem oder lokal aufbereitetem Material
+den Vorzug, dass Sie im Falle von Aktualisierungen stets zur neuesten Version gelangen.
+Sollten einzelne der enthaltenen Links nicht (mehr) funktionieren, wird um einen
+entsprechenden Hinweis gebeten.
+]
+
+---
+template: plain
+name: example_code
+header: ## Beispiel-Code
+
+Eine weitere, wichtige Ergänzungen dieser Kursunterlage sind die Beispielprogramme
+inkl. der Musterlösungen zu den im Verlauf der Schulung von Ihnen zu bearbeitenden
+Aufgaben.
+
+.I[
+Vollständige, kompilierbare C++-Quelltexte befinden sich stets in von dieser
+Kursunterlage getrennten Dateien, womit deren Korrektheit besser sichergestellt
+werden kann.
+]
+
+**Programmier-Beispiele innerhalb dieser Präsentations-Seiten**
+
+* beschränken sich in der Regel auf kurze Code-Fragmente und
+* haben vielen Auslassungen (meist durch Pünktchen angedeutet).._[]
+
+.N[
+Sie sollen typischerweise nur Konzepte zu verdeutlichen oder die
+Aufmerksamkeit auf wesentliche Prinzipien zu lenken.
+]
+
+.F[:
+Hierdurch ist es natürlich nicht mehr möglich, durch eine Kompilierung die absolute
+Korrektheit zu garantieren. Eventuelle Hinweise auf bislang übersehene Fehler sind
+willkommen.
+]
+
+---
+template: plain
+name: online_version
 header: ## Unterlagen im Internet
 
   [Creative Commons]: http://de.creativecommons.org/was-ist-cc
@@ -171,21 +294,21 @@ Es gilt für alle Verbreitungsformen eine [Creative Commons]-Lizenz.
 Namensnennung und Weitergabe unter gleichen Bedingungen
 ](http://creativecommons.org/licenses/by-sa/3.0/de/)]
 
-Sie erhalten die Möglichkeit zum Download unter: http://tbfe.de/archiv
+Sie haben die Möglichkeit zum Download unter: http://tbfe.de/archiv
 
 .W[
 Das verfügbar gemachte Material wurde mit angemessener Sorgfalt erstellt und geprüft.
 Haftungsansprüche bei dennoch enthaltenen Fehlern sind ausgeschlossen.
 ]
 
-Hinweise auf Fehler, Unvollständigkeiten oder generelle Anregungen und Verbesserungsvorschläge werden natürlich gerne
-entgegengenommen.
+Hinweise auf Fehler, Unvollständigkeiten oder generelle Anregungen und
+Verbesserungsvorschläge werden natürlich gerne entgegengenommen.
 
 ---
 template: plain
-header: ### Präsentationen
+header: ### Präsentation
 
-Die Präsentationen wurden mit [`remark`](http://remarkjs.com) erstellt.
+Diese Präsentation wurden mit [`remark`](http://remarkjs.com) erstellt.
 
 #### Ansicht
 
@@ -197,16 +320,15 @@ Benutzen Sie einen hinlänglich aktuellen Browser Ihrer Wahl.
 
 
 .F[:
-Das Erscheinungsbild dieser Präsentation wird wesentlich durch ein CSS-Style-Sheet
-gesteuert. Falls Sie über die notwendigen [CSS-Kenntnisse] verfügen, können Sie die
-Datei *styling.css* gerne gemäß Ihrem Geschmack anpassen.
-Verwenden Sie bei umfangreichen Änderungen eine Datei mit anderem Namen und passen
-Sie in der HTML-Datei lediglich den Namen des inkludierten Style-Sheets an.
-Genau genommen liegt bei jeder Änderung allerdings bereits ein abgeleitetes Werk
-vor und Sie sollten Ihre Modifikationen ebenfalls unter der Lizenz (CC) BY-SA verfügbar
-machen.
-Ferner sollten Sie auf Ihren Beitrag hinweisen, z.B. indem Sie das Attribut `styling-by:`
-in der Titelseiten-Template dieser Präsentation entsprechend anpassen.
+Das Erscheinungsbild wird wesentlich durch ein Style-Sheet gesteuert. Falls Sie
+über die notwendigen [CSS-Kenntnisse] verfügen, können Sie die Datei *styling.css*
+gerne gemäß Ihrem Geschmack anpassen.  Verwenden Sie bei umfangreichen Änderungen
+eine Datei mit anderem Namen und passen Sie in der HTML-Datei lediglich den Namen
+des inkludierten Style-Sheets an.  Genau genommen liegt bei jeder Änderung bereits
+ein abgeleitetes Werk vor und Sie sollten daher Modifikationen ebenfalls unter der
+Lizenz (CC) BY-SA verfügbar machen.  Sie können gerne auf Ihren Beitrag hinweisen,
+indem Sie das Attribut `styling-by:` in der Titelseiten-Template dieser Präsentation
+entsprechend anpassen.
 ]
 
   [JavaScript]:        http://de.wikipedia.org/wiki/JavaScript
@@ -217,8 +339,8 @@ in der Titelseiten-Template dieser Präsentation entsprechend anpassen.
 template: plain
 header: #### Ausdruck
 
-Falls Sie im Vorfeld nicht ausdrücklich darauf verzichten, erhalten Sie einen Ausdrucks
-mit dem aktuellen Stand gleich zu Beginn der Schulung.
+Falls Sie **nicht** bereits im Vorfeld ausdrücklich darauf verzichtet haben, erhalten
+Sie einen Ausdrucks mit dem aktuellen Stand der Kursunterlage zu Beginn der Schulung.
 
 .N[
 Auf die endgültige Version inklusive der eventuell im Kurse vorgenommenen
@@ -236,7 +358,7 @@ PDF-Datei aber auch jederzeit selbst erstellen.
 * Verwenden Sie dazu *Print To File*._[] und wenn nötig eine
 * Nachverarbeitung mit einem PDF-Tool Ihrer Wahl.
 
-.F[
+.F[:
 Zurzeit sind Ausdrucke auf die Normalansicht (**nicht**: Präsentations-Modus) beschränkt.
 Diese Einschränkung wird eventuell in einer [künftigen Version][GitHub-remark]
 von `remark.js` aufgehoben.
@@ -251,15 +373,17 @@ header: #### Anmerkungen
 Der fachliche Inhalt der HTML-Dateien verwendet das [Markdown-Format].
 
 .N[
-Sie können die HTML-Datei lokal abspeichern und eigene Anmerkungen mit einem
+Falls Sie diese Kursunterlage künftig als rein elektronische Dokument verwenden
+wollen, können die HTML-Datei lokal abspeichern und eigene Anmerkungen mit einem
 beliebigen Text-Editor hinzufügen.._[]
 ]
 
-Bei Betrachtung im Browser wechseln Sie zum Ansehen dieser Anmerkungen mit `p` in den Präsentationsmodus.
+Bei Betrachtung im Browser wechseln Sie zum Ansehen Ihrer Anmerkungen mit `p`
+in den Präsentationsmodus.
 
 .F[:
-Künftige Updates der Präsentation und Ihre individuellen Anmerkungen können Sie bei Bedarf mit jedem
-beliebigen [Diff-Tool] für Textdateien zusammenführen.
+Künftige Updates der Präsentation und Ihre individuellen Anmerkungen können Sie
+bei Bedarf mit jedem beliebigen [Diff-Tool] für Textdateien zusammenführen.
 ]
 
   [Markdown-Format]: http://de.wikipedia.org/wiki/Markdown
@@ -318,9 +442,9 @@ header: ### Infografiken
 
 --------------------------------------
 
-.F[
-Die nebenstehende Info-Grafik ist ein Beispiel für ähnliche Grafiken, die Sie in den
-Kapiteln dieser Schulungsunterlage finden. Sie können die obige Grafik nun Anklicken
+.F[:
+Die nebenstehende Info-Grafik ist ein Beispiel für ähnliche Grafiken, die Sie begleitend
+zu den Kapiteln dieser Schulungsunterlage erhalten. Sie können die obige Grafik nun Anklicken
 um eine große Version zu erhalten, mit der Sie die Navigation im Browser testen können.
 ]
 
@@ -353,104 +477,6 @@ und anderen Dateibetrachtern für Grafiken wären wir ggf. interessiert.
 
   [Mozilla Firefox]: http://www.mozilla.org/de/
   [Google Chromium]: http://www.google.com/intl/de/chrome/browser/
-
----
-template: plain
-name: print_infographics
-header: #### Ausdruck
-
-Ausdrucke der Info-Grafiken im Format DIN-A3 erhielten Sie mit den Kursunterlagen oder
-der Referent verteilt Sie gemäß dem in der Schulung behandelten Stoff.
-
-Ebenso stehen Ihnen die Info-Grafiken zum Download als PDF-Datei zur Verfügung.
-
-#### Alternativ-Formate
-
-Die Infografiken sind generell auch als [PDF-Dokument](http://tbfe.de/archiv) verfügbar.
-
-.N[
-Für daraus abgeleitete Werke besteht die Möglichkeit vom Autor eine Datei im Format von
-*LibreOffice Draw* zu erhalten.
-]
-
-Bitte sprechen dazu den Dozenten an bzw. kontaktieren Sie den Autor.._[]
-
-.F[:
-Abgeleitete Werke können Sie mit Ihrem eigenen Namen kennzeichnen, sofern ein Verweis auf
-das Original erhalten bleibt.
-Es wird dabei in der Regel erwartet, dass die abgeleiteten Werke unter den selben
-Schutz - [(CC) BY-SA] - gestellt werden wie die Original-Graphik.
-In begründeten Ausnahmefällen können mit dem Autor der Orignal-Graphik Ausnahmen
-vereinbart werden.
-]
-
-  [Abgeleitete Werke]: http://de.wikipedia.org/wiki/Werk_%28Urheberrecht%29#Weitere_Anforderungen
-  [(CC) BY-SA]: http://creativecommons.org/licenses/by-sa/3.0/de/
-
----
-template: plain
-name: online_reference
-header: ## Online-Referenzen
-
-Da der Zweck dieser Kursunterlage nicht darin verstanden wird, andernorts
-verfügbares Material zu kopieren, werden Sie im Verlaufe des Kurses häufiger
-C++-Referenz-Dokumentation benötigen.
-
-Empfehlenswerte Online-Versionen sind:
-
-* http://www.cplusplus.com/reference/
-* http://en.cppreference.com/w/cpp/ ._[]
-* (... und sicher andere mehr ...)
-
-.N[
-Anders als in der mit Ihrem Compiler gelieferten Dokumentation werden
-Sie bei den obigen Quellen ausschließlich die im Rahmen des ISO/ANSI-Standard
-**portabel** verfügbaren Klassen und Funktionen finden ... was je nach
-Ihrer Zielsetzung ein Vor- oder ein Nachteil sein kann.
-]
-
-.F[:
-Falls Sie sich an den mitunter lustigen Ergebnissen einer automatischen
-Übersetzung erfreuen können, sollten Sie auch mal einen Blick in die
-[deutsche Variante](http://de.cppreference.com/w/cpp/algorithm)
-dieser Seiten werfen :-).
-]
-
----
-template: plain
-class: agenda
-name: agenda
-header: ## Agenda
-
-Themenplanung._[] Montag bis Freitag (Ende mit Mittagspause)
-
-------------------------------------------------------------------------------
-
-* [ Montag(1): C++-Basics - Wiederholung und Vertiefung	](01_montag1.html)
-* [ Montag(2): Hardwarenahe Betrachtung von C++		](02_montag2.html)
-
-------------------------------------------------------------------------------
-
-* [ Dienstag(1): Klassische Objektorientierung		](03_dienstag1.html)
-* [ Dienstag(2): STL Container (+ Iteratoren)		](04_dienstag2.html)
-
-------------------------------------------------------------------------------
-
-* [Mittwoch(1): STL (Iteratoren +) Algorithmen		](05_mittwoch1.html)
-* [Mittwoch(2): Programmieren mit Templates		](06_mittwoch2.html)
-
-------------------------------------------------------------------------------
-
-* [Donnerstag(1): "Open Close"-Principle		](07_donnerstag1.html)
-* [Donnerstag(2): Exceptions				](08_donnerstag2.html)
-
-------------------------------------------------------------------------------
-
-* [Freitag: Ressource-Management			](09_freitag1.html)
-
-.F[:
-Weitere Inhalte können nach Absprache aufgenommen werden.
-]
 
 </textarea>
 <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->

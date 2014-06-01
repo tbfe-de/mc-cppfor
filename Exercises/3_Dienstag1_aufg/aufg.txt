@@ -24,13 +24,15 @@ d) Was ist zu verändern, damit in der Ausgabe am Beginn der vierten Zeile korre
    
    setValue(double) speichert einen Wert vom Typ double
    getValue() liefert diesen Wert zurück
-   getHistoricValue(int n) liefert bis zu 5 "historische" Werte, wobei "n"
-   wie folgt interpretiert wird:
+   getHistoricValue(int n) liefert bis zu 5 "historische" Werte,
+   wobei "n" wie folgt interpretiert wird:
    n == 0 --> selbes Ergebnis wie getValue()
    n == 1 --> der VOR dem letzten setValue() gültige Wert
-   n == 2 --> der ZWEI setValues() zuvor gültige Wert
    ... usw. ...
-   n == 5 --> der FÜNF setValues() zuvor gültige Wert
+   n == 5 --> der FÜNF setValues() zuvor gültige Wert;
+   size() soll die Anzahl der verfügbaren historischen Werte liefern, also 0 wenn
+   noch nie ein Wert abgespeichert wurde und maximal 5;
+   clear() soll die historischen Werte löschen.
    
    Vergleichen Sie zu diesem Zweck die folgenden Varianten in einer
    UML-Darstellung
@@ -42,7 +44,10 @@ d) Was ist zu verändern, damit in der Ausgabe am Beginn der vierten Zeile korre
    Unter welchen Umständen hat welche Variante jeweils Vor- und Nachteile gegenüber
    den anderen. (Hinweis: zu dieser Frage gibt es keine eindeutig richtigen und falschen
    Antworten, sie bezweckt lediglich, dass Sie sich selbst nochmal die wesentlichen
-   Unterschiede klarmachen.
+   Unterschiede klarmachen.)
+
+   Sehen Sie sich anschließend die verschiedenen Musterlösungen in aufg2a_solved,
+   aufg2b_solved, aufg2c_solved und aufg2d_solved an.
    
 -- Zusatzaufgabe für besonders Schnelle
 

@@ -155,9 +155,6 @@ Kürzere Pausen werden jeweils nach Bedarf eingelegt.
 Die Besprechung der Musterlösung(en) erfolgt im direkten Anschluss an die
 Mittagspause.
 
-Eine druckbare Gesamtversion dieser Datei (PDF) steht unter dem selben
-(Link-) Namen mit Suffix `.pdf` statt `.html` zur Verfügung.
-
 ---
 template: linkinfo
 graphic: UML-ClassesAndRelations
@@ -247,6 +244,7 @@ header: #### Klassen vs. Objekte
 
 Hierfür dient in der UML im wesentlichen die selbe Symbolik - der Unterschied besteht
 lediglich darin, dass
+
 * bei Objekten der Name unterstrichen ist und
 * der Klassenname auch entfallen kann._[]
 
@@ -262,8 +260,7 @@ Diese sind *instanzierte Klassen* und drücken in der UML-Darstellung damit die
 Die tatsächlichen Regeln der grafischen Darstellung sind komplizierter und erlauben
 prinzipiell, dass ein dem Namen des Objekts ein Doppelpunkt und dann der Klassenname
 folgt, wobei beide Namen optional sind und weggelassen werden können (beispielsweise
-wenn sie sich aus dem Kontext ergeben), womit die minimale Beschrftung eines Objekts
-aus einem unterstrichenen Doppelpunkt besteht.
+wenn sie sich aus dem Kontext ergeben).
 ]
 
 ---
@@ -501,7 +498,7 @@ Allerdings können Gesamtheit und Teil unabhängig voneiander existieren.
 .N[
 In der UML-Darstellung wird an die (Assoziations-) Linie zwischen den beiden
 beteiligten Klassen auf der Seite der Gesamtheit eine *nicht-ausgefüllte* Raute
-hinzugefügt..[]
+hinzugefügt.._[]
 ]
 
 .F[:
@@ -526,14 +523,14 @@ Hierbei geht es um die Beziehung zwischen einem
 .N[
 In der UML-Darstellung wird an die (Assoziations-) Linie zwischen den beiden
 beteiligten Klassen auf der Seite der Basisklasse ein nicht ausgefülltes Dreieck
-hinzugefügt..[]
+hinzugefügt.._[]
 ]
 
 Das Speicher-Layout und auch die Lebenszeit-Kopplung entsprechen zwar dem der Komposition,
 als wichtige besonderheit gilt jedoch das [LSP].
 
 .I[
-Das Liskovsche Substitutions-Prinzip ist sehr eng mit dem Gedanken der Objektorientierung
+Das Liskovsche Ersetzungs-Prinzip ist eng mit dem Gedanken der Objektorientierung
 verknüft und besagt, dass ein Objekt einer abgeleiteten Klasse (Spezialisierung) stets
 ein passender Stellvertreter für ein Objekt seiner Basisklasse sein kann.
 ]
@@ -592,7 +589,7 @@ die für eine Situation passende gewählt werden kann.
 Interfaces haben wor allem auch durch die [objektorientierten Entwurfsmustern][OO-DP],
 die auch zentrales Thema des [GoF-Buch][GoF] sind, eine große Bekanntheit erlangten.
 
-  [DP]:         http://en.wikipedia.org/wiki/Software_design_pattern
+  [OO-DP]:      http://en.wikipedia.org/wiki/Software_design_pattern
   [GoF]:        http://en.wikipedia.org/wiki/Design_Patterns_(book)
 
 ---
@@ -657,9 +654,11 @@ section: Broad(er) and Deep(er) Inheritance Graph
 name: broader_deeper_inheritance
 header: Mehrstufige Vererbung allgemein gesehen
 
-Im allgemeinen gehen Vererbungs-Hierarchien auch
+Im Allgemeinen gehen Vererbungs-Hierarchien auch
+
 * *mehr in die Breite*, d.h. eine Basisklasse wird oft viele (direkt) abgeleitete
 Klassen haben, sowie
+
 * *mehr in die Tiefe*, d.h. es gibt mehrere Stufen (also sieht man die direkt abgeleiteten
 Klassen als "Kinder", wird es also auch "Enkel", "Ur-Enkel" usw. geben.
 
@@ -730,6 +729,7 @@ Im konkreten Fall einer rautenförmigen Hierarchie wird nun
 
 * die Daten-Member der Basisklasse nur ein einziges Mal in der "Most Derived Class"
 vorhanden sein, und
+
 * die Zeiger in den Klassen der mittleren Ebene werden **beide** genau auf diesen
 Daten-Member verweisen.
 
@@ -767,7 +767,7 @@ section: UML Class Graph («overlapping»)
 name: overlapping_uml
 header: ### UML-Darstellung «overlapping»
 
-Die zusammengefasste Darstellung des Falls «overlaping» in Bezug auf
+Die zusammengefasste Darstellung des Falls «overlapping» in Bezug auf
 
 * die UML-Darstellung,
 * das Speicherlayouts und
@@ -859,7 +859,9 @@ header: ### Eine (anpassbare) Komponente
 Anpassbare Komponenten entstehen normalerweise entweder
 
 * durch Planung, wenn zukünftige Variabilität (korrekt) vorhergesehen wurde, oder
-* durch Erfahrung, zu einer bereits bestehende Funktionalität eine (im ersten Entwurf) noch nicht eingeplante) neue Variante benötigt wird.
+
+* durch Erfahrung, zu einer bereits bestehende Funktionalität eine (im ersten Entwurf)
+  noch nicht eingeplante neue Variante benötigt wird.
 
 ---
 template: withinfo
@@ -878,7 +880,7 @@ section: Diamond-Shapend Inheritance
 name: with_multiple_inheritance
 header: ### Rautenförmige (Mehrfach-) Vererbung
 
-Über den "Preis", der für die dann oft notwendigen , virtuellen Basisklassen zu zahlen
+Über den "Preis", der für die dann oft notwendigen, virtuellen Basisklassen zu zahlen
 ist, lassen sich ggf. flexible Kombinationsmöglichkeiten mit einem guten Grad an
 Wiederverwendung erreichen.
 

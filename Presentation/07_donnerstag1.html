@@ -194,17 +194,40 @@ gegeneinander stehenden Zielen gewährleisten:
 
 ---
 template: plain
-header: #### Mechanismen zur Strukturierung (1)
+header: #### Mechanismen zur Strukturierung
 
 ##### Klassen
 
+Klassen fassen "Daten" und "Verarbeitung" zusammen und sind somit ein
+Mechanismus zur Kapselung, der den Blick auf die abstrakten Operationen
+lenkt, weg von Datenstrukturen und Algorithmen.
+
 ##### Unterprogramme
+
+Unterprogramme teilen Verarbeitungsschritte auf, vom komplexen Gesamtablauf
+bis hinunter zu kleinen, einfach überschau- und testbaren Einheiten.
 
 ##### Bibliotheken
 
+Bilbliotheken sind Sammlungen wiederverwendbarer Komponenten, die für sich
+betrachtet aber kein wesentliches Eigenleben führen sondern erst - quasi
+"von außen" - zum Leben erweckt werden.
+
+---
+template: plain
+header: #### Mechanismen zur Strukturierung (2)
+
 ##### Frameworks
 
-##### Geplante Erweiterbarkeit
+Frameworks folgen den "Hollywood-Principle": *Don't call us, we call you*.
+
+Sie stellen eine oft sehr komplexe Gesamtfunktionlalität zur Verfügung, an denen
+die spezifischen Anpassungen an vorausgeplanten Erweiterungspunkten eingehängt
+werden.
+
+#### Geplante Erweiterbarkeit
+
+Ja, aber auch: "Keep It Small and Simple!"
 
 ---
 template: withinfo
@@ -248,11 +271,21 @@ header: #### Mechanismen zur Wiederverwendung
 
 ##### Klassen
 
+Universell gehaltene Klassen bilden in der Regel die kleinsten, wiederverwendbaren
+Bausteine in einem (konsequent) Objektorientierten Entwurf.
+
 ##### Unterprogramme
 
-##### Bibliotheken
+In einem eher klassichen (prozeduralen) Entwurf dominieren Unterprogramme.
 
-##### Frameworks
+##### Datenstrukturen
+
+Mit Hilfe der C++ Templates lassen sich sehr gut wiederverwendbare Bausteine
+für Datenstrukturen realisieren.._[]
+
+.F[:
+OK ... technisch gesehen sind die STL-Container Klassen ...
+]
 
 ---
 template: linkinfo

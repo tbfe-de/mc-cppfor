@@ -198,7 +198,7 @@ parametrisierte Funktionen
 
 .N[
 Bei der Verwendung von Template-Funktionen ergeben sich die tatsächlich zu
-verwendenden Typen oft direkt oder indirekt aus den Tyoen der Aufrufargumente.
+verwendenden Typen oft direkt oder indirekt aus den Typen der Aufrufargumente.
 ]
 
 .F[:
@@ -236,6 +236,7 @@ eine unsystematische Vermischung existiert zwischen:
 
 * Teilen, welche tatsächlich von den Instanziierungsparametern abhängigen
   Maschinencode erzeugen;
+
 * anderen Teilen, welche immer ein und denselben Maschinencode hinauslaufen.
 
 ---
@@ -250,6 +251,7 @@ Die Vorbereitung für die Reduzierung von Code-Bloat besteht darin,
 * möglichst große, zusammenhängende Abschnitte Abschnitte im Quelltext einer
   Template-Klasse oder -Funktion zu schaffen, die tatsächlich von
   den Instanziierungs- (Typ) -argumenten abhängigen und
+
 * andere möglichst große Abschnitte, die immer immer auf ein und denselben
   Maschinencode hinauslaufen.
 
@@ -264,6 +266,7 @@ Alle Teile einer Template, die immer den selben Maschinencode erzeugt werden,
 können anschließend ausgelagert werden, nämlich bei einer
 
 * Template-Klasse in eine eine **Nicht-Template** Basisklasse, und
+
 * Template-Funktion in **Nicht-Template** Hilfsfunktionen.
 
 ---
@@ -294,15 +297,16 @@ template: plain
 header: ### Wiederholung und Verzweigung
 
 Da sich zur Compilezeit keine Schleifen mit `while` und keine Verzweigungen
-mit `if` programmieren lassen._[], muss man zu den entsprechenden Alternativen
+mit `if` programmieren lassen, muss man zu den entsprechenden Alternativen
 aus [Funktionalen Programmiersprachen][FP] greifen:
 
 * Jegliche Wiederholung muss per Rekursion und
+
 * jegliche Fallunterscheidung durch Spezialisierung erfolgen.
 
 Ein bisschen muss man das aber vielleicht trainieren ...._[]
 
-.F[
+.F[:
 ... was ganz gut mit einer Einführung in eine "echte" FP-Sprache wie
 beispielsweise [Haskell] geht.
 ]
@@ -319,18 +323,21 @@ header: ### Fakultäts-Funktion als Beispiel
 Die allseits bekannte Funktion zur Fakultätsberechnung kann man in C++ mit
 einer Schleife so programmieren
 programmieren:
+
 ```
 unsigned long long fakul(unsigned long long n) {
 	auto result = 1uLL;
 	while (n > 0)
-		result *= n;
+		result *= n--;
 	return result;
 }
 ```
+
 Oder auch zur - Laufzeit rekursiv - so:
 ```
+
 unsigned long long fakul(unsigned long long n) {
-	return n ? n*fakul(n-1) : 0;
+	return n ? n*fakul(n-1) : 1;
 }
 ```
 
@@ -364,7 +371,8 @@ Das folgende aber **ist** gültiges C++ ...
 ```
 template<unsigned long long n>
 struct fakul {
-	static const unsigned long long result = fakul<n-1>::result;
+	static const
+	unsigned long long result = n*fakul<n-1>::result;
 };
 template<>
 struct fakul<0uLL> {
@@ -446,9 +454,9 @@ vorbereiteten Eclipse-Projekte erläutert.
 ]
 
 .F[:
-Die letzten Ausbaustufen liegen etwas "oberhalb" der Zielsetzung dieser Schulung.
-Insofern bietet sich dazu vielleicht eher (bzw. vorerst nur) ein Studium der
-Musterlösungen zu diesen Aufgabenteilen an.
+Die letzten Ausbaustufen liegen etwas oberhalb der Zielsetzung dieser Schulung.
+Insofern bietet sich dazu vielleicht vorerst nur ein Studium der Musterlösungen
+zu diesen Aufgabenteilen an.
 ]
 
 </textarea>

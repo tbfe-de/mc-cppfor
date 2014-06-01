@@ -188,7 +188,7 @@ Klassisches Ressource-Management beruht auf zwei getrennten Operationen
 Bei beiden Operationen besteht das Problem, dass sie vergessen werden könnten, bei
 der zweiten zusätzlich das Problem, dass sie zu früh stattfinden könnte.._[]
 
-.F[
+.F[:
 Zum falschen Zeitpunkt ausgeführte Operationen sind in aller Regel einer (zu) komplexen
 Programmlogik anzulasten. Die vorwiegend genutzten und gut getesteten Ausführungspfade
 sind dann ohne Probleme, diese treten nur relativ selteneren Konstellationen mit oft
@@ -221,10 +221,11 @@ repräsentieren:
 * *Zeiger* - eine Speicheradresse, an der wesentliche Informationen zur Ressource stehen
   oftmals repräsentiert durch eine Struktur, deren Inhalt im Detail aber nicht von
   Interesse ist.
+
 * *Handles* - in der Regel eine Ganzzahl, die einer Service-Schnittstelle zu übergeben
   ist und dieser gegenüber die Ressource repräsentiert.._[]
 
-.F[
+.F[:
 Mitunter - aber nicht grundsätzlich - sind Handles Indizes, mit welchen Einträge einer
 hinter der Service-Schnittstelle angesiedelten Tabelle ausgewählt werden.
 ]
@@ -264,6 +265,7 @@ Anweisungssequenz während der die Ressource belegt ist, nach Belieben festlegen
 
 * Eine Variable vom Typ des Resource-Wrappers wird an der Stelle eines Code-Blocks
   (als Stack-Objekt) angelegt, ab dem die Ressource benötigt wird.
+
 * Der Destruktor des Resource-Wrappers wird automatisch ausgeführt, wenn der
   betreffende Code-Block verlassen wird.
 
@@ -286,6 +288,7 @@ header: ### RAII-Resource für Objekt-Lebensspanne belegen
 Objekte die (per Komposition) als Teil anderer Objekte existieren, werden werden
 
 * während der Erzeugung des umfassenden Objekts automatisch mit angelegt und
+
 * während dessen Zerstörung automatisch mit zerstört.
 
 Damit kann ein Resource-Wrapper die Belegungsdauer einer Resource auch zuverlässig mit
@@ -302,8 +305,9 @@ Vorgehensweise Sicherheit vor Resource-Leaks.
 ##### Beispiel-Code für Klasse - kein RAII
 
 Angenommen eine Klasse `Choice` benötigt zwei Sorten von Ressourcen:
+
 * ein `Window` (optional, also Multiplizität 0..1)
-* eine mehr oder weniger große Zahl von `MenuItem`-s (Multiplizität (1..*)
+* eine mehr oder weniger große Zahl von `MenuItem`-s (Multiplizität 1..*)
 
 ```
 	class Choice {
@@ -370,7 +374,7 @@ Hierbei wandert die Operation zur Freigabe in den Wrapper der betreffenden Resso
 	public:
 		WindowRes( … ) : res(new Window( … )) {}
 		~WindowRes()  { … ; delete res; … }
-		operator Window*() const { return res; }
+		operator Window*() { return res; }
 	};
 ```
 
@@ -380,7 +384,7 @@ Hierbei wandert die Operation zur Freigabe in den Wrapper der betreffenden Resso
 	public:
 		MenuItemRes( … ) : res(new[…] MenuItem( … )) {}
 		~MenuItemRes() { … ; delete[] res; … }
-		MenuItem &operator[](int i) const { return res[i]; }
+		MenuItem &operator[](int i) { return res[i]; }
 	};
 ```
 
@@ -426,9 +430,9 @@ header: ## Smart-Pointer
 
 * [Varianten der Implementierung		](#implementation_choices)
 
-.F[
+.F[:
 Berücksichtigt sind hier nur die Smart-Pointer von C++11, da mit diesem Standard
-zugleiche der mit C++98 eingeführte `std::auto_ptr` abgekündigt wurde.
+zugleich der mit C++98 eingeführte `std::auto_ptr` abgekündigt wurde.
 ]
 
 ---
@@ -461,11 +465,11 @@ template: plain
 header: `std::shared_ptr`
 
 Die Verwendung dieser Art von Smart-Pointer hilft dabei, die geteilte Eigentümerschaft
-zu garantieren:
+zu garantieren. Ihre Objekte enhalten jeweils *zwei* Zeiger:._[]
 
-* Ihre Objekte enhalten jeweils *zwei* Zeiger:._[]
-  * einer zeigt auf das refernzierte Objekt,
-  * der andere auf einen Referenzzähler
+  * Einer zeigt auf das refernzierte Objekt,
+
+  * der andere auf einen Referenzzähler.
 
 In Default-Konstruktor, Copy- und Move-Konstruktor, Copy- und Move-Assignment sowie
 Destruktor der `std::shared_ptr`-Klasse werden die Referenzzähler gemäß der Anzahl der
@@ -477,9 +481,9 @@ Objekts ausgeführt.
 ]
 
 .F[:
-Dies gilt für die typische Implementierung - in der alternativen Implementierung ist
-nur ein Zeiger erforderlich, zum Zugriff muss aber eine zusätzliche Dereferenzierung
-erfolgen.
+Dies gilt für die typische Implementierung - in einer alternativen Implementierung ist
+nur ein Zeiger erforderlich, zum Zugriff muss dann aber eine zusätzliche Dereferenzierung
+erfolgen - also der klassiche Austauch von (weniger) Speicherplatz gegen (mehr) Laufzeit.
 ]
 
 ---
@@ -492,6 +496,7 @@ header: ### Problem zyklischer Referenzierung
 Mitunter kann es notwendig werden, dass
 
 * dass ein Objekt, auf das per `std::shared_ptr` verwiesen wird,
+
 * selbst wiederum einen `std::shared_ptr` enthält, welcher auf
   Objekte der eigenen Art zeigen kann.._[]
 
@@ -502,7 +507,7 @@ welche aller über `std::shared_ptr` miteinander verbunden aber von außen unerr
 sind.
 ]
 
-.F[
+.F[:
 Es müssen nicht zwingend Objekte der eigenen Art sein, auch in der Konstellation
 "A zeigt auf B und B auf A" oder "A zeigt auf B, B zeigt auf C und C zeigt auf A"
 usw. kann das Problem auftreten.
@@ -533,21 +538,24 @@ name: weak_ptr_dangling
 header: ### "Verlorene" Resourcen
 
 Da die `std::weak_ptr` lediglich Beobachter sind,  unterstützen sie keinen
-direkten Zugriff zur referenzierten Ressource mit `*` oder `->`).
+direkten Zugriff zur referenzierten Ressource (mit `*` oder `->`).
 
 Vielmehr muss durch Aufruf der Member-Funktion `lock` des `std::weak_ptr`
-zunächst ein `std::shared_ptr` geholt werden._[] und ähnlich wie beim
+zunächst ein `std::shared_ptr` geholt werden und ähnlich wie beim
 `dynamic_cast` werden die zwei häufigsten Verwendungen gezielt unterstützt:
 
 Erste Vorgehensweise
 
 * Rückgabe eines Zeigers und nachfolgend erforderlicher Test,
-* wenn `nullptr` wurde das beobachtete Objekt in Ermanglung echter Referenzierer
-* bereits weggeräumt.
+* wenn diese ergibt, dass der Zeiger ein `nullptr` ist, wurde das
+  beobachtete Objekt bereits weggeräumt.
 
-Bei der zweiten Vorgehensweise würde man entweder eine gültige Referenz erhalten
-(die sofort und ohne weitere Prüfungen nutzbar ist) oder es wird eine Exception
-geworfen (wenn das beobachtete Objekt zwischenzeitlich verschwunden ist).
+Zweiten Vorgehensweise
+
+* man erhält eine gültige Referenz, die sofort und ohne weitere Prüfungen
+  nutzbar ist,
+* oder es wird eine Exception geworfen, wenn das beobachtete Objekt bereits
+  weggeräumt wurde.
 
 ---
 template: withinfo

@@ -174,7 +174,7 @@ header: ## Sequenzielle Container der STL
 
 -------------------------------------------------------------------------------
 
-.F[
+.F[:
 Kein Bestandteil von C++98 sondern erst mit C++11 verfügbar.
 ]
 
@@ -187,12 +187,13 @@ header: ### Zusammenhängender Speicher
 
 Die grundlegende Datenstruktur ist hier ein Stück zusammenhängender Speicher.
 
-Dieser - typischerweise zuzüglich etwas Reserve - wird auf dem Heap angelegt._[]
+Dieser - typischerweise zuzüglich etwas Reserve - wird auf dem Heap angelegt.
 
-Ein Object der Klasse `std::vector`` besteht in der typischen Implementierung
+Ein Object der Klasse `std::vector` besteht in der typischen Implementierung
 aus drei Zeigern.
 
 Links zur ausführlichen Online-Dokumentation:
+
 * http://www.cplusplus.com/reference/vector/
 * http://en.cppreference.com/w/cpp/container/vector
 
@@ -201,6 +202,7 @@ template: plain
 header: #### Vorteile eines `std::vector`
 
 Effizient unterstützt werden:
+
 * Elemente einfügen und entnehmen *am selben* Ende
 * Wahlfreier Zugriff (mit oder ohne Indexprüfung)
 * Move-Konstruktor und -Assignment
@@ -211,9 +213,7 @@ eines `std:vector` durch wiederholtes Anfügen neuer Elemente eine relativ
 effiziente Operation.
 ]
 
----
-template: plain
-header: #### Einschränkungen eines `std::vector`
+#### Einschränkungen eines `std::vector`
 
 * Kein (effizientes) Einfügen und Entnehmen an verschiedenen Enden
 * Kein Effizientes Einfügen und Entnehmen in der Mitte
@@ -230,25 +230,26 @@ Die grundlegende Datenstruktur sind einzelne Abschnitte im Heap-Speicher
 (typisch einer pro Element), welche untereinander durch Vor- und Rückwärtszeiger
 verbunden sind.
 
-Ein Object der Klasse `std::list`` besteht in der typischen Implementierung
+Ein Object der Klasse `std::list` besteht in der typischen Implementierung
 aus zwei Zeigern (erstes und letztes Element) und einer Ganzzahl
 (Anzahl der Elemente).
 
 Links zur ausführlichen Online-Dokumentation:
+
 * http://www.cplusplus.com/reference/list/
 * http://en.cppreference.com/w/cpp/container/list
 
 ---
 template: plain
-header: #### Vorteile einer `std::list``
+header: #### Vorteile einer `std::list`
 
 Effizient unterstützt werden:
+
 * Elemente einfügen und entnehmen *auch an unterschiedlichen* Enden
 * Einfügen und entnehmen von Elementen in der Mitte.
 * Move-Konstruktor und -Assignment
----
-template: plain
-header: #### Einschränkungen einer `std::list``
+
+#### Einschränkungen einer `std::list`
 
 * Kein wahlfreier Zugriff
 * Aufwändige Weitergabe als Wert (bzw. Wertkopie)
@@ -269,19 +270,21 @@ Ein im Rahmen von C++11 hinzugefügter, auf minimalen Overhead "getrimmter"
 Container mit der grundlegenden Datenstruktur einer einfach verketteten Liste,
 deren Elemente wiederum auf dem Heap angelegt werden.
 
-Ein Object der Klasse `std::forward_list`` besteht in der typischen Implementierung
+Ein Object der Klasse `std::forward_list` besteht in der typischen Implementierung
 aus gemau einem Zeiger - **die Anzahl der Elemente wird nicht gezählt** (anders als bei
 der `std::list`).
 
 Links zur ausführlichen Online-Dokumentation:
+
 * http://www.cplusplus.com/reference/forward_list/
-* http://en.cppreference.com/w/cpp/container/forward_listector
+* http://en.cppreference.com/w/cpp/container/forward_list
 
 ---
 template: plain
 header: #### Vorteile einer `std::forward_list`
 
 Effizient unterstützt werden:
+
 * Elemente einfügen und entnehmen *am selben* Ende
 * Move-Konstruktor und -Assignment
 
@@ -289,12 +292,10 @@ Effizient unterstützt werden:
 Sofern die gewünschte Position durch einen Iterator bereits bestimmt wurde, ist
 auch das Einfügen und Entnehmen in der Mitte performant, besitzt allerdings eine
 - im Vergleich mit den anderen sequenziellen Containern - ungewöhnliche Semantik,
-die am Namen der betreffenden Operation deutlich wird: `insert_after`._[]
+die am Namen der betreffenden Operation deutlich wird: `insert_after`.
 ]
 
----
-template: plain
-header: #### Einschränkungen einer `std::forward_list`
+#### Einschränkungen einer `std::forward_list`
 
 * Kein wahlfreier Zugriff
 * Kein (effizientes) Einfügen und Entnehmen an verschiedenen Enden
@@ -312,8 +313,8 @@ Hierbei handelt es sich quasi um einen "in Abschnitte zerstückelten `std::vecto
 welcher grob zusammengefasst sich wie folgt von `std::vector` unterscheidet:
 
 * Keine Garantie, dass **alle** Elemente in zusammenhängendem Speicher aufeinander
-folgen._[]
-* Elemente können an **beiden** Enden eingefügt und entnommen werden._[]
+folgen.._[]
+* Elemente können an **beiden** Enden eingefügt und entnommen werden.
 * Wahlfreier Zugriff ist möglich nur geringfügig weniger performant.
 
 Anders als der `std::vector` ist die `std::deque` damit auch eine gute Basis für eine
@@ -376,7 +377,7 @@ name: pointing_to_iterator
 header: #### Iterator *auf* Elemente zeigend
 
 Man kann Iteratoren grafisch als *auf Elemente zeigend* veranschaulichen, bekommt
-dann ellerdings ein Erklärungsproblem mit der Iterator-Endposition und auch der
+dann allerdings ein Erklärungsproblem mit der Iterator-Endposition und auch der
 Erklärung, wohin der Iterator im Falle eines leeren Containers zeigt.
 
 .N[
@@ -414,8 +415,9 @@ header: ### Vorwärts-Iterator *auf* Elemente zeigend
 Bei Dereferenzierung liefern Vorwärts-Iteratoren eine Refererenz auf dasjenige Element
 im Container, auf das sie gerade zeigen.
 
-Mit `++` bewegen sich Vorwärts-Iteratoren *vom Container-Anfang zu dessen Ende*.._[]
-Dort ist ein - technisch gesehen schon außerhalb des Containers liegendes - Element
+* Mit `++` bewegen sich Vorwärts-Iteratoren *vom Container-Anfang zu dessen Ende*.._[]
+
+* Dort ist ein - technisch gesehen schon außerhalb des Containers liegendes - Element
 anzunehmen, auf das ein Vorwärts-Iterator in seiner letzten gültigen Position
 jenseits der Container-Endes noch zeigen kann.
 
@@ -439,8 +441,9 @@ header: ### Vorwärts-Iterator *zwischen* Elemente zeigend
 Bei Dereferenzierung liefern Vorwärts-Iteratoren eine Refererenz auf dasjenige Element
 im Container, über das sie mit der nächsten `++`-Operation weitergeschaltet würden.
 
-Mit `++` bewegen sich Vorwärts-Iteratoren vom Container-Anfang zu dessen Ende.._[]
-In ihrer Endposition zeigen sie hinter das letzte Element im Container.
+* Mit `++` bewegen sich Vorwärts-Iteratoren vom Container-Anfang zu dessen Ende.._[]
+
+* In ihrer Endposition zeigen sie hinter das letzte Element im Container.
 
 .W[
 Einen Vorwärts-Iterator in dieser (End-) Position *weiterzubewegen* oder zu
@@ -462,8 +465,9 @@ header: ### Rückwärts-Iterator *auf* Elemente zeigend
 Bei Dereferenzierung liefern Rückwärts-Iteratoren eine Referenz auch dasjenige
 Element des Containers, auf das sie gerade zeigen.
 
-Mit `++` bewegen sich Rückwärts-Iteratoren *vom Container-Ende zu dessen Anfang*.._[]
-Dort ist ein - technisch gesehen schon außerhalb des Containers liegendes - Element
+* Mit `++` bewegen sich Rückwärts-Iteratoren *vom Container-Ende zu dessen Anfang*.._[]
+
+* Dort ist ein - technisch gesehen schon außerhalb des Containers liegendes - Element
 anzunehmen, **auf** das ein Rückwärts-Iterator in seiner letzten gültigen Position
 **jenseits des Container-Anfangs**  noch zeigen kann.  
 
@@ -471,13 +475,6 @@ anzunehmen, **auf** das ein Rückwärts-Iterator in seiner letzten gültigen Pos
 Einen Rückwärts-Iterator in dieser (End-) Position zu *dereferenzieren* oder
 weiterzubewegen, liefert undefiniertes Verhalten.
 ]
-
-.F[:
-Sofern es sich um Iteratoren aus der Kategorie der Bidirektional-Iteratoren handelt,
-bewegen sie sich bei `--` dann natürlich Richtung Container-Ende.
-]
-
-Rückwärts-Iteratoren bewegen sich mit `++` vom Container-Ende zu dessen Anfang.._[]
 
 .F[:
 Sofern es sich um Iteratoren aus der Kategorie der Bidirektional-Iteratoren handelt,
@@ -495,8 +492,9 @@ Bei Dereferenzierung liefern Rückwärts-Iteratoren eine Refererenz auf dasjenig
 Element im Container, über das sie mit der nächsten `++`-Operation weitergeschaltet
 würden.
 
-Mit `++` bewegen sich Vorwärts-Iteratoren vom Container-Ende zu dessen Anfang.._[]
-In ihrer Schluss-Position zeigen sie vor das erste Element im Container.
+* Mit `++` bewegen sich Rückwärts-Iteratoren vom Container-Ende zu dessen Anfang.._[]
+
+* In ihrer Schluss-Position zeigen sie vor das erste Element im Container.
 
 .W[
 Einen Rückwärts-Iterator in dieser (Schluss-) Position *weiterzubewegen* oder zu
@@ -516,12 +514,12 @@ name: container_complete
 header: ### *Alle* Elemente im Container
 
 Um über alle Elemente in einem Container zu iterieren, wird typischerweise
-folgende Konstruktion verwendet (hier hezeight am Beispiel einer `std::list`):
+folgende Konstruktion verwendet (hier demonstriert am Beispiel einer `std::list`):
 ```
 	std::list<int> li;
 	…
 	for (auto it = li.begin(); it != li.end(); ++it)
-		…
+		… *it …
 ```
 Mit C++98 statt `auto` der exakte Iterator-Typ angegeben werden, wozu sich der
 Übersichtlichkeit und Wartungsfreundlichkeit halber eine Typdefinition für den
@@ -557,7 +555,7 @@ hier gezeigt am Beispiel eines `std::vector<std::string>`:._[]
 		…
 ```
 
-.F[
+.F[:
 Die Korrektheit des Beispiel beruht wesentlich auf der Tatsache, dass die Iteratoren
 eines `std::vector` zur Kategorie der Random-Access-Iteratoren gehören. Andernfalls
 wäre die Addition einer Ganzzahl ein Compile-Fehler.
@@ -697,12 +695,7 @@ Die einzige Vereinfachung in C+11 ist die Verwendung von `auto` für den Typ des
 Iterators.
 .I[
 Eine spezielle, rückwärts laufende Form der bereichsbasierten Schleife
-ist in C++11 nicht verfügbar.._[]
-]
-
-.F[:
-Mit Hilfe von Templates ließe sich jedoch ein Adapter schreiben, mit dem die
-folgende Syntax möglich wird: `for (auto &v : my::reverse_adapter(c)) …`   
+ist in C++11 nicht verfügbar.
 ]
 
 ---

@@ -115,8 +115,9 @@ sed -e	's/^[ \t]*//'	\
 
 	# terminate last group
 	test -n "$group" && echo
-)
 
-# generate collected postscript
-echo "collecting into $InfoGraphics_ALL"
-gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$InfoGraphics_ALL $all_pdf
+	# generate collected postscript
+	echo "collecting into $InfoGraphics_ALL"
+	gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=$InfoGraphics_ALL $all_pdf
+
+)
