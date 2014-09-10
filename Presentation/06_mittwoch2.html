@@ -145,6 +145,7 @@ template: blank
 1. [Templates selbst schreiben		](#writing_templates)
 1. [Optimierung von Templates		](#optimising_templates)
 1. [Templates als Compilezeit-Funktionen](#compiletime_functions)
+1. [Advance Preprocessor Usage]		](#advanced_cpp_usage)
 1. [Übung				](#exercise_wed2)
 
 -------------------------------------------------------------------------------
@@ -157,7 +158,7 @@ Die Besprechung der Musterlösung(en) erfolgt zu Beginn des folgenden Vormittags
 template: linkinfo
 graphic: TemplateBasics
 name: writing_templates
-header: ## Temp
+header: ## Templates selbst schreiben
 
 -------------------------------------------------------------------------------
 
@@ -202,8 +203,8 @@ verwendenden Typen oft direkt oder indirekt aus den Typen der Aufrufargumente.
 ]
 
 .F[:
-Die Parametrisierung im Hinblick auf Compilezeit-Konstanten ist bei
-Funktionen ebenfalls möglich, tritt in der Praxis aber sehr selten auf.
+Die Parametrisierung im Hinblick auf Compilezeit-Konstanten ist bei Funktionen
+ebenfalls möglich, tritt in der Praxis aber sehr selten auf.
 ]
 
 ---
@@ -230,14 +231,15 @@ section: Resons for Code Bloat
 name: reason_for_codebloat
 header: ### Ursache für "Code-Bloat"
 
-Ein wesentlicher Grund für "unnötig erzeugten" Maschinencode ergibt
-sich oft aus der ungeschickten Strukturierung von Templates, bei denen
-eine unsystematische Vermischung existiert zwischen:
+"Unnötig erzeugter" Maschinencode ergibt sich oft aus einer ungeschickten
+Strukturierung von Templates, bei denen erhebliche Vermischung existiert
+zwischen:
 
-* Teilen, welche tatsächlich von den Instanziierungsparametern abhängigen
-  Maschinencode erzeugen;
+* Abschnitten, welche tatsächlich von den Instanziierungsparametern abhängigen
+  Maschinencode erzeugen, und
 
-* anderen Teilen, welche immer ein und denselben Maschinencode hinauslaufen.
+* anderen Abschnitten, welche immer auf ein und denselben Maschinencode
+  hinauslaufen.
 
 ---
 template: withinfo
@@ -248,11 +250,11 @@ header: ### Vorbereitender Zwischenschritt
 
 Die Vorbereitung für die Reduzierung von Code-Bloat besteht darin,
 
-* möglichst große, zusammenhängende Abschnitte Abschnitte im Quelltext einer
-  Template-Klasse oder -Funktion zu schaffen, die tatsächlich von
-  den Instanziierungs- (Typ) -argumenten abhängigen und
+* möglichst große, zusammenhängende Abschnitte in einer Template-Klasse oder
+  Template-Funktion zu schaffen, die **tatsächlich** von den Instanziierungs-
+  (Typ und Wert) -argumenten abhängigen, und
 
-* andere möglichst große Abschnitte, die immer immer auf ein und denselben
+* andere möglichst große Abschnitte, die immer auf ein und denselben
   Maschinencode hinauslaufen.
 
 ---
@@ -262,43 +264,48 @@ section: Optimised Template
 name: optimised_template
 header: ### Optimierten Template
 
-Alle Teile einer Template, die immer den selben Maschinencode erzeugt werden,
-können anschließend ausgelagert werden, nämlich bei einer
+Abschnitte einer Template, die immer den selben Maschinencode hinauslaufen,
+können anschließend ausgelagert werden, und zwar:
 
-* Template-Klasse in eine eine **Nicht-Template** Basisklasse, und
+* für eine Template-Klasse in eine eine **Nicht-Template** Basisklasse, und
 
-* Template-Funktion in **Nicht-Template** Hilfsfunktionen.
+* für eine Template-Funktion in **Nicht-Template** Hilfsfunktionen.
 
 ---
 template: plain
 name: compiletime_functions
 header: ## Templates als Compilezeit-Funktionen
 
-Eine weitere Sicht auf Templates ist es, sie als zur Compilezeit
-ausgeführte Funtionen zu verstehen.
+Eine weitere Sicht auf Templates ist es, sie als zur Compilezeit ausgeführte
+Funtionen zu verstehen.
 
 Der wesentliche Schlüssel dazu ist, das folgende zu verstehen:
 
 * Jeglicher "Input" muss aus Datentypen bestehen.._[]
-* Jeglicher "Output" wird nur aus Datentypen sein.
+
+* Jeglicher "Output" betshet aus Datentypen.
 
 .I[
-Anders ausgedrückt:  
-Templates sind (auch) Typtransformationen zur Compilezeit.
+Anders ausgedrückt:
+
+Templates sind (auch) Typ-Transformationen zur Compilezeit.
 ]
 
 .F[:
-Mit einem kleinen, später noch erläuterten Kunstgriff fallen darunter auch
-alle zur Compilezeit-Konstanten sowie die daraus berechenbaren Werte.
+Mit einem kleinen Kunstgriff fallen darunter auch sämtliche zur Compilezeit
+Konstanten Werte von Grundtypen, sowie daraus berechenbaren Werte.
 ]
 
 ---
 template: plain
 header: ### Wiederholung und Verzweigung
 
+[FP]:      http://en.wikipedia.org/wiki/Functional_programming
+[Haskell]: http://tryhaskell.org/ "hier ein interaktives Tutorial"
+
 Da sich zur Compilezeit keine Schleifen mit `while` und keine Verzweigungen
 mit `if` programmieren lassen, muss man zu den entsprechenden Alternativen
-aus [Funktionalen Programmiersprachen][FP] greifen:
+aus *Funktionalen Programmierung* ([FP]) greifen:
 
 * Jegliche Wiederholung muss per Rekursion und
 
@@ -311,9 +318,6 @@ Ein bisschen muss man das aber vielleicht trainieren ...._[]
 beispielsweise [Haskell] geht.
 ]
 
-  [FP]:      http://en.wikipedia.org/wiki/Functional_programming
-  [Haskell]: http://tryhaskell.org/ "hier ein interaktives Tutorial"
-
 ---
 template: plain
 header: ### Fakultäts-Funktion als Beispiel
@@ -321,23 +325,20 @@ header: ### Fakultäts-Funktion als Beispiel
 #### Der übliche Ansatz ...
 
 Die allseits bekannte Funktion zur Fakultätsberechnung kann man in C++ mit
-einer Schleife so programmieren
-programmieren:
-
+einer Schleife so programmieren:
 ```
 unsigned long long fakul(unsigned long long n) {
-	auto result = 1uLL;
-	while (n > 0)
-		result *= n--;
-	return result;
+    auto result = 1uLL;
+    while (n > 0)
+        result *= n--;
+    return result;
 }
 ```
 
-Oder auch zur - Laufzeit rekursiv - so:
+Oder auch - zur Laufzeit rekursiv - so:
 ```
-
 unsigned long long fakul(unsigned long long n) {
-	return n ? n*fakul(n-1) : 1;
+    return (n == 0) ? 1 : n*fakul(n-1);
 }
 ```
 
@@ -349,18 +350,19 @@ header: ### Fakultäts-Funktion als Beispiel (2)
 
 ```
 unsigned long long fakul(unsigned long long n) {
-	return n*fakul(n-1);
+    return n*fakul(n-1);
 }
 unsigned long long fakul(0uLL) {
-	return 1;
+    return 1;
 }
 ```
 Natürlich ist das obige **kein gültiges C++** ... aber doch irgendwie
 verständlich, oder nicht?
 
 .I[
-Der Abbruch der in der allgemeinen Funktion eigentlich endlosen Rekursion erfolgt durch
-Spezialisierung von `fakul` für den Argumentwert `0` (als `unsigned long long`).
+Der Abbruch der in der allgemeinen Funktion eigentlich endlosen Rekursion
+erfolgt durch Spezialisierung von `fakul` für den Argumentwert `0uLL`
+(0 im Typ `unsigned long long`).
 ]
 
 ---
@@ -371,12 +373,12 @@ Das folgende aber **ist** gültiges C++ ...
 ```
 template<unsigned long long n>
 struct fakul {
-	static const
-	unsigned long long result = n*fakul<n-1>::result;
+    static const
+    unsigned long long result = n*fakul<n-1>::result;
 };
 template<>
 struct fakul<0uLL> {
-	static const unsigned long long result = 1;
+    static const unsigned long long result = 1;
 };
 ```
 ... und doch auch irgendwie "verständlich", oder?
@@ -385,7 +387,7 @@ Der "Aufruf" in einem kleinen Testprogramm könnte dann so aussehen:
 ```
 #include <iostream>
 int main() {
-	std::cout << fakul<5>::result << std::endl;
+    std::cout << fakul<5>::result << std::endl;
 }
 ```
 
@@ -397,7 +399,7 @@ header: ### Weitere Typ-Transformationen in Beispielen
 ```
 template<typename T>
 struct add_pointer {
-	typedef T* result;
+    typedef T* result;
 }
 ```
 
@@ -407,7 +409,7 @@ template<typename T>
 struct remove_pointer;
 template<typename T>
 struct remove_pointer<T*> {
-	typedef T result;
+    typedef T result;
 }
 ```
 #### Alle Zeigerstufen wegnehmen
@@ -419,11 +421,11 @@ Die Lösung lautet - natürlich - so:
 ```
 template<typename T>
 struct remove_all_pointers {
-	typedef T result;
+    typedef T result;
 }
 template<typename T>
 struct remove_pointer<T*> {
-	typedef remove_all_pointers<T> result;
+    typedef remove_all_pointers<T> result;
 }
 ```
 
@@ -431,7 +433,9 @@ struct remove_pointer<T*> {
 template: plain
 header: ### Type-Traits Library
 
-Mit C++11 wurden die davor unter Boost entwickelten [Type-Traits] zum Standard.
+[Type Traits]: http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/boost_typetraits/background.html
+
+Mit C++11 wurden die zuvor unter Boost entwickelten [Type-Traits] zum Standard.
 
 Mehr dazu finden Sie hier:
 
@@ -458,6 +462,31 @@ Die letzten Ausbaustufen liegen etwas oberhalb der Zielsetzung dieser Schulung.
 Insofern bietet sich dazu vielleicht vorerst nur ein Studium der Musterlösungen
 zu diesen Aufgabenteilen an.
 ]
+
+---
+template: plain
+name: advanced_cpp_usage
+header: ## Advanced Preprocessor Usage
+
+---
+template: plain
+name: cpp_stringizing_args
+header: ### Stringizing
+
+---
+template: plain
+name: cpp_token_pasting
+header: ### Token Pasting
+
+---
+template: plain
+name: cpp_code_generation
+header: ### Generating Systematic Code
+
+---
+template: plain
+name: cpp_coding_style
+header: ### A Small Preprocessor Style Guide
 
 </textarea>
 <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
