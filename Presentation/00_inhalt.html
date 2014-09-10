@@ -142,7 +142,7 @@ name: frontmatter
 
 .subtitle[
 	Fortgeschrittene Verwendung von C++ gemäß  
-	ISO/ANSI-Standard C++98, C++03 und C++11
+	ISO/ANSI-Standards C++98, C++03, C++11, C++14
 ]
 .author.pull-left[
 	Durchführung:  
@@ -196,96 +196,169 @@ Weitere Inhalte können nach Absprache aufgenommen werden.
 ---
 template: plain
 name: online_reference
-header: ## Online-Referenzen
+header: ## Zur Kursunterlage
 
-Im Verlauf dieses Kurses werden Sie häufiger C++-Referenz-Dokumentation benötigen,
-insbesondere zur Standard-Library.  Sofern Ihre Programierumgebung diese nicht zur
-Verfügung stellt, finden Sie gute Online-Referenzen bei:
+Auf den folgenden Seiten finden Sie einige allgemeine Informationen zu dieser
+Kursunterlage, betreffend:._[]
+
+* [Online-Referenzen			](#online_references)
+* [Aktuelle C++-Implementierungen	](#actual_implementations)
+* [Zweck der Schulungsunterlagen	](#training_document)
+* [Beispiel Code			](#code_examples)
+* [Externe Ergänzungen			](#external_links)
+* [Kursunterlage im Internet		](#online_version)
+* [HTML-Präsentation			](#html_presentation)
+* [Info-Grafiken			](#info_graphics)
+* [Übersetzung in anderen Sprachen	](#other_languages)
+* [Private Annnotations			](#private_annotations)
+
+.F[:
+In der Online-Version enthält die Liste anklickbare Links. Hier wie in allen
+folgenden Verwendungen sind diese nur sehr dezent hervorgehoben, damit sie nicht
+zu sehr vom allgemeinen Lesefluss ablenken. Erst bei Überstreichen mit dem
+Mauszeiger geben sie sich deutlicher zu erkennen.
+]
+
+---
+template: plain
+name: online_references
+header: ### Online-Referenzen
+
+[C++98]: http://en.wikipedia.org/wiki/C++98#Standardization
+[C++03]: http://en.wikipedia.org/wiki/C%2B%2B03
+[C++11]: https://isocpp.org/wiki/faq/cpp11
+[C++14]: https://isocpp.org/wiki/faq/cpp14
+  
+Während dieses Kurses werden Sie häufiger Zugriff auf die aktuelle
+C++-Referenz-Dokumentation benötigen. Sofern Ihre Programierumgebung diese nicht
+oder nicht in ausreichendem Umfang zur Verfügung stellt, finden Sie sehr gute
+Online-Referenzen im Internet:
 
 * http://www.cplusplus.com/reference/
 * http://en.cppreference.com/w/cpp/
 
 .I[
-Das dort verfügbare Referenz-Material bezieht sich auf C++ gemäß ISO/ANSI-Standard
-von 1998 ([C++98]) und die 2003 und 2011 vorgenommenen Ergänzungen, die dann jeweils
-als [C++03] und [C++11] gekennzeichnet sind.
+Das dort verfügbare Material bezieht sich auf C++ gemäß ISO/ANSI-Standard von
+1998 ([C++98]), die 2003 und 2011 vorgenommenen Ergänzungen (gekennzeichnet mit
+[C++03] und [C++11]) sowie den neuesten ISO-Standard [C++14].
 ]
 
-Darüber hinaus werden auch die für [C++14] geplanten Erweiterungen angesprochen.
+Bitte bedenken Sie bei der Verwendung von externem Referenzmaterial, dass die
+integrierte Online-Hilfe von Entwicklungsumgebungen mitunter nicht sauber trennt
+zwischen
 
-  [C++98]: http://en.wikipedia.org/wiki/C++98#Standardization
-  [C++03]: http://en.wikipedia.org/wiki/C%2B%2B03
-  [C++11]: https://isocpp.org/wiki/faq/cpp11
-  [C++14]: https://isocpp.org/wiki/faq/cpp14
-  
+* dem Sprach- und Bibliotheksumfang von C++ gemäß ISO-Standard
+
+* und hersteller- bzw. implementierungsspezifischen Erweiterungen.
+
+---
+template: plain
+name: actual_implementations
+header: ### Aktuelle C++-Implementierungen
+
+In den meisten aktuellen Compilern ist mittlerweile C++11._[] nahezu vollständig
+umgesetzt. Dieser Standard wird momentan als "Richtwert" für den Kursinhalt
+betrachtet, d.h.
+
+* auf Teile von C++98 und C++03, die inzwischen als **veraltet** gelten und
+  nicht mehr benutzt werden sollen, wird ggf. entsprechend hingewiesen,
+
+* während die mit C++14 zu erwartenden Veränderungen ggf. als **künftige**
+  Erweiterungen Erwähnung finden.
+
+.F[:
+Der exakte Name dieser ISO-Norm ist: ISO/ICE-14882:2011(E). Das offizielle
+Dokument kann beim ISO-Institut käuflich erworben werden; dessen Copyright
+verbietet es jedoch, das Dokument den Kursteilnehmern als eigene Kopie zur
+Verfügung zu stellen.
+]
+
+
+---
+template: plain
+name: training_document
+header: ### Zweck der Schulungsunterlage
+
+Aufgrund des Umfangs des aktuellen ISO-Standards für C++ - das PDF-Dokument zu
+ISO/IEC 14882:2011(E) umfasst über 1300 Seiten(!) - können die nachfolgenden
+Darstellungen selbst bei erheblicher thematischer Begrenzung nicht als
+erschöpfende Behandlungen des jeweiligen Themas angelegt werden.
+
+.I[
+**Hauptzweck der Kursunterlage ist es vielmehr:**
+
+* typische Anwendungsbeispiele zu zeigen,._[]
+* dabei vor häufigen Fehlern zu warnen,
+* insgesamt den roten Faden durch den behandelten Stoff zu liefern,
+* sowie die zugrundeliegenden gedanklichen Modelle und Zusammenhänge zu
+  verdeutlichen - beides oft als [Info-Grafiken](#info_graphics).
+]
+
+Darüber hinaus sind zu den dargestellten Themen **Fragen jeglicher Art jederzeit
+willkommen** - auch und gerade wenn diese über den Inhalt der jeweils behandelten
+Präsentationseiten hinausgehen!
+
+.F[:
+Bitte beachten Sie zum Punkt Anwendungsbeispiele unbedingt auch die Folgeseite!
+]
+
+---
+template: plain
+name: code_examples
+header: ### Beispiel-Code
+
+Anwendungsbeispiele gibt es
+
+* zum einen als Code-Fragmente direkt in den Seiten dieser Präsentation,
+
+* zum anderen in kompilierbarer Form, thematisch sortiert in entsprechenden
+  Unterverzeichnissen.
+
+.N[
+Bitte sehen Sie **beide** Formen als Bestandteil der Schulungsunterlagen an -
+insbesondere was die Bewertung der Schulungsunterlagen in den Feedback-Bögen
+am Ende des Kurses betrifft, auch wenn darin die kompilierbaren Beispiele
+**nicht** als Ausdruck auf Papier._[] enthalten sind.
+]
+
+.F[:
+Sollten Sie Papier-Ausdrucke wünschen, erläutert Ihnen der Dozent gerne, wie Sie
+diese - auf Einzelfälle bezogen - über den Kursraum-Drucker selbst anfertigen
+können. Für einen **Gesamtausdruck** wenden Sie sich ggf. **möglichst am ersten
+oder zweiten Tag** ebenfalls an den Dozenten, damit das Ausdrucken auf einem
+zentralen Hochleistungsgerät erfolgen kann.
+]
 
 ---
 template: plain
 name: external_links
-header: ## Externe Ergänzungen
+header: ### Externe Ergänzungen
 
-Die in der Kursunterlage enthaltenen Darstellungen sind in der Regel nicht als
-erschöpfende Behandlungen eines Themas angelegt.
-
-.I[
-Hauptzweck der Kursunterlage ist es, den roten Faden durch den behandelten
-Stoff zu verdeutlichen.
-]
-
-Die Kursunterlage wird insofern durch öffentlich zugängliche Informationsquellen
-ergänzt, auf die bei Bedarf im Text verwiesen wird.
-
-.N[
-Insbesondere wenn Sie nach Ende dieser Schulung Informationen zu einzelnen Themen nochmals
-nachschlagen möchten, kann es sinnvoll sein, dazu (auch) die Online-Version der Kursunterlage
-zu verwenden und ggf. zur Vertiefung in das verlinkte Material zu verzweigen.._[]
-]
-
-.F[:
-Direkt verlinkte Seiten haben im Vergleich zu kopiertem oder lokal aufbereitetem Material
-den Vorzug, dass Sie im Falle von Aktualisierungen stets zur neuesten Version gelangen.
-Sollten einzelne der enthaltenen Links nicht (mehr) funktionieren, wird um einen
-entsprechenden Hinweis gebeten.
-]
-
----
-template: plain
-name: example_code
-header: ## Beispiel-Code
-
-Eine weitere, wichtige Ergänzungen dieser Kursunterlage sind die Beispielprogramme
-inkl. der Musterlösungen zu den im Verlauf der Schulung von Ihnen zu bearbeitenden
-Aufgaben.
+Insoweit diese Schulungsunterlagen durch Internet-Links ergänzt wird, sind zur
+Vereinfachung der Nachverfolgung diese in der Online-Version anklickbar gemacht.
 
 .I[
-Vollständige, kompilierbare C++-Quelltexte befinden sich stets in von dieser
-Kursunterlage getrennten Dateien, womit deren Korrektheit besser sichergestellt
-werden kann.
+Alle Teilnehmerinnen und Teilnehmer erhalten während des Kurses Zugriff auf eine
+lokale Kopie der Online-Version, deren Nutzung hiermit ausdrücklich empfohlen
+wird.
 ]
 
-**Programmier-Beispiele innerhalb dieser Präsentations-Seiten**
+Sie können die elektronische Form der Unterlagen gerne
 
-* beschränken sich in der Regel auf kurze Code-Fragmente und
-* haben vielen Auslassungen (meist durch Pünktchen angedeutet).._[]
+* auf Ihren USB-Stick kopieren und nach dem Kurs weiter benutzen,
 
-.N[
-Sie sollen typischerweise nur Konzepte zu verdeutlichen oder die
-Aufmerksamkeit auf wesentliche Prinzipien zu lenken.
-]
+* sowie künftig ggf. aktualisierte Versionen aus dem Internet beziehen.
 
-.F[:
-Hierdurch ist es natürlich nicht mehr möglich, durch eine Kompilierung die absolute
-Korrektheit zu garantieren. Eventuelle Hinweise auf bislang übersehene Fehler sind
-willkommen.
+.N.center[
+Bitte beachten Sie dazu aber die [Weitergabe-Lizenz](#online_version).
 ]
 
 ---
 template: plain
 name: online_version
-header: ## Unterlagen im Internet
+header: ### Kursunterlage im Internet
 
-  [Creative Commons]: http://de.creativecommons.org/was-ist-cc
-
+[Creative Commons]: http://de.creativecommons.org/was-ist-cc
 
 Es gilt für alle Verbreitungsformen eine [Creative Commons]-Lizenz.
 
@@ -297,8 +370,8 @@ Namensnennung und Weitergabe unter gleichen Bedingungen
 Sie haben die Möglichkeit zum Download unter: http://tbfe.de/archiv
 
 .W[
-Das verfügbar gemachte Material wurde mit angemessener Sorgfalt erstellt und geprüft.
-Haftungsansprüche bei dennoch enthaltenen Fehlern sind ausgeschlossen.
+Das verfügbar gemachte Material wurde mit angemessener Sorgfalt erstellt und
+geprüft. Haftungsansprüche bei dennoch enthaltenen Fehlern sind ausgeschlossen.
 ]
 
 Hinweise auf Fehler, Unvollständigkeiten oder generelle Anregungen und
@@ -306,11 +379,16 @@ Verbesserungsvorschläge werden natürlich gerne entgegengenommen.
 
 ---
 template: plain
-header: ### Präsentation
+name: html_presentation
+header: ### HTML-Präsentation
 
 Diese Präsentation wurden mit [`remark`](http://remarkjs.com) erstellt.
 
 #### Ansicht
+
+[JavaScript]:        http://de.wikipedia.org/wiki/JavaScript
+[Modernes CSS]:      http://www.w3.org/Style/CSS
+[CSS-Kenntnisse]:    http://www.w3schools.com/css
 
 Benutzen Sie einen hinlänglich aktuellen Browser Ihrer Wahl.
 
@@ -321,110 +399,43 @@ Benutzen Sie einen hinlänglich aktuellen Browser Ihrer Wahl.
 
 .F[:
 Das Erscheinungsbild wird wesentlich durch ein Style-Sheet gesteuert. Falls Sie
-über die notwendigen [CSS-Kenntnisse] verfügen, können Sie die Datei *styling.css*
-gerne gemäß Ihrem Geschmack anpassen.  Verwenden Sie bei umfangreichen Änderungen
-eine Datei mit anderem Namen und passen Sie in der HTML-Datei lediglich den Namen
-des inkludierten Style-Sheets an.  Genau genommen liegt bei jeder Änderung bereits
-ein abgeleitetes Werk vor und Sie sollten daher Modifikationen ebenfalls unter der
-Lizenz (CC) BY-SA verfügbar machen.  Sie können gerne auf Ihren Beitrag hinweisen,
-indem Sie das Attribut `styling-by:` in der Titelseiten-Template dieser Präsentation
-entsprechend anpassen.
+über die notwendigen [CSS-Kenntnisse] verfügen, können Sie die Datei
+[styling.css](http:CSS/styling.css) gemäß Ihrem Geschmack anpassen.
 ]
-
-  [JavaScript]:        http://de.wikipedia.org/wiki/JavaScript
-  [Modernes CSS]:      http://www.w3.org/Style/CSS
-  [CSS-Kenntnisse]:    http://www.w3schools.com/css
 
 ---
 template: plain
 header: #### Ausdruck
 
-Falls Sie **nicht** bereits im Vorfeld ausdrücklich darauf verzichtet haben, erhalten
-Sie einen Ausdrucks mit dem aktuellen Stand der Kursunterlage zu Beginn der Schulung.
-
 .N[
-Auf die endgültige Version inklusive der eventuell im Kurse vorgenommenen
-aktuellen Ergänzungen erhalten Sie Zugriff per Download. Diese Update-Garantie
-schließt zugleich alle künftigen (CC) BY-SA lizensierten Versionen.
+Die jeweils aktuellste Version dieser Unterlage erhalten Sie in HTML-Form.
+Darüberhinaus werden gelegentlich PDF-Versionen erstellt, die Sie direkt
+ausdrucken können.
 ]
 
-Druckbare PDF-Dateien haben stets den selben Namensstamm wie die entsprechende
-HTML-Datei, nur einen anderen Suffix; zu der Datei, die Sie gerade lesen, gehört
-z.B. druckbare Version [`00_inhalt.pdf`](00_inhalt.pdf). 
+Die PDF-Dateien haben stets den selben Namensstamm wie die entsprechende
+HTML-Datei, aber einen anderen Suffix:
+
+* zu der Datei, die Sie gerade lesen (falls Sie dies im Browser tun)
+
+* gehört z.B. druckbare Version [`00_inhalt.pdf`](00_inhalt.pdf). 
 
 Mit einer aktuellen Version des *Google Chrome* Browsers können Sie eine solche
-PDF-Datei aber auch jederzeit selbst erstellen.
+PDF-Datei auch jederzeit selbst erstellen:
 
 * Verwenden Sie dazu *Print To File*._[] und wenn nötig eine
-* Nachverarbeitung mit einem PDF-Tool Ihrer Wahl.
+
+* Nachverarbeitung mit einem PDF-Tool Ihrer Wahl, etwa um Seiten zu verkleinern
+  und zusammenzufassen.
 
 .F[:
-Zurzeit sind Ausdrucke auf die Normalansicht (**nicht**: Präsentations-Modus) beschränkt.
-Diese Einschränkung wird eventuell in einer [künftigen Version][GitHub-remark]
-von `remark.js` aufgehoben.
+Zurzeit sind Ausdrucke auf die Normalansicht (**nicht**: Präsentations-Modus)
+beschränkt.
 ]
-
-  [GitHub-remark]: https://github.com/gnab/remark "remark.js auf GitHub"
 
 ---
-template: plain
-header: #### Anmerkungen
-
-Der fachliche Inhalt der HTML-Dateien verwendet das [Markdown-Format].
-
-.N[
-Falls Sie diese Kursunterlage künftig als rein elektronische Dokument verwenden
-wollen, können die HTML-Datei lokal abspeichern und eigene Anmerkungen mit einem
-beliebigen Text-Editor hinzufügen.._[]
-]
-
-Bei Betrachtung im Browser wechseln Sie zum Ansehen Ihrer Anmerkungen mit `p`
-in den Präsentationsmodus.
-
-.F[:
-Künftige Updates der Präsentation und Ihre individuellen Anmerkungen können Sie
-bei Bedarf mit jedem beliebigen [Diff-Tool] für Textdateien zusammenführen.
-]
-
-  [Markdown-Format]: http://de.wikipedia.org/wiki/Markdown
-  [Diff-Tool]:       http://de.wikipedia.org/wiki/Diff
-
-???
-Die Struktur das Markdown-Abschnitts in den HTML-Dateien ist wie folgt:
-```
-		(einige Zeilen HTML-Vorspann)
-		<textarea>
-		Inhalt erste Präsentations-Seite
-		--- (Seitentrenner = drei Minuszeichen)
-		Inhalt zweite Präsentations-Seite
-		--- (Seitentrenner = drei Minuszeichen)
-		...
-		... (usw.)
-		...
-		--- (Seitentrenner = drei Minuszeichen)
-		Inhalt letzte Präsentations-Seite
-		&lt;/textarea>
-		(einige Zeilen HTML-Nachspann)
-```
-Trennen Sie Ihre Anmerkungen vom Inhalt der Präsentations-Seiten mit einer Zeile aus drei Fragezeichen:
-
-```
-		--- (Seitentrenner = drei Minuszeichen)
-		...
-		mit Anmerkungen versehene Präsentations-Seite
-		...
-		???  (Anmerkungstrenner = drei Fragezeichen)
-		...
-		eingefügte Anmerkungen
-		...
-		--- (Seitentrenner = drei Minuszeichen)
-```
-
-Sie sehen die Anmerkungen nur im Präsentation-Modus, den Sie `p` ein- und ausschalten.
-
----
-
 template: linkinfo
+name: info_graphics
 graphic: TestBrowserNavigation
 header: ### Infografiken
 
@@ -442,20 +453,29 @@ header: ### Infografiken
 
 --------------------------------------
 
+Die nebenstehende Info-Grafik ist ein Beispiel für ähnliche Grafiken, die Sie
+begleitend zu den Kapiteln dieser Schulungsunterlage erhalten.
+
 .F[:
-Die nebenstehende Info-Grafik ist ein Beispiel für ähnliche Grafiken, die Sie begleitend
-zu den Kapiteln dieser Schulungsunterlage erhalten. Sie können die obige Grafik nun Anklicken
-um eine große Version zu erhalten, mit der Sie die Navigation im Browser testen können.
+Sie können derartige Grafiken stets Anklicken, um eine große Version zu
+erhalten. Die hier gezeigte Grafik hat natürlich keine fachliche Bedeutung
+sondern ist nur dazu gedacht, dass Sie damit die "Navigation" im Browser
+einüben können. (Bei entsprechend starkem Zoom sollten Sie in der zentralen
+Sprechblase ein Zitat erkennen, das manchen "Oldtimern" möglicherweise noch
+aus einer Fernseh-Show der späten 60er bekannt ist [...] und in der zeitweilig
+bereits ein - über Akustikkoppler mit den Telefonhörer verbundenes - Modem zum
+Einsatz kam.)
 ]
 
+[...]: http://de.wikipedia.org/wiki/Der_goldene_Schu%C3%9F
 
 ---
-
-template: withinfo
-graphic: TestBrowserNavigation
-section:
+template:plain
 name: view_infographics
-header: #### Ansicht
+header: #### Ansicht von Infografiken
+
+[Mozilla Firefox]: http://www.mozilla.org/de/
+[Google Chromium]: http://www.google.com/intl/de/chrome/browser/
 
 Verwenden Sie einen hinlänglich modernen Browser.
 
@@ -470,13 +490,170 @@ Bislang noch nicht getestet wurden:._[]
 * Opera
 * Eclipse (integrierter Browser)
 
-.F[:
-An Ihren Erfahrungen mit einem dieser - oder auch einem hier nicht genannten - Browser
-und anderen Dateibetrachtern für Grafiken wären wir ggf. interessiert.
+.N[
+Ihre Praxis-Erfahrungen insbesondere mit hier nicht genannten Browsern und
+anderen Dateibetrachtern für Grafiken wären für uns von Interesse.
 ]
 
-  [Mozilla Firefox]: http://www.mozilla.org/de/
-  [Google Chromium]: http://www.google.com/intl/de/chrome/browser/
+---
+template: plain
+graphic: TestBrowserNavigation
+name: print_infographics
+header: #### Ausdruck von Info-Grafiken
+
+[OO/LO-Draw]: http://www.libreoffice.org/discover/draw/ (OpenOffice/LibreOffice Drawing Component)
+[abgeleitete Werke]: http://www.ifross.org/category/tags/abgeleitetes-werk
+
+Zum Ausdruck der Info-Grafiken können Sie
+
+* entweder die auch zur Ansicht verlinkte PNG-Datei verwenden,
+
+* oder die gleichnamige PDF-Datei,
+
+je nachdem, womit Sie die besseren Ergebnisse erzielen.
+
+#### Sonstige Verwendung der Infografiken
+
+Sofern Sie eine oder mehrere der Infografiken gerne als Basis für eigene
+[abgeleitete Werke] verwenden würden, wenden Sie sich bitte an den in der
+Fußzeile der Grafik genannten Verfasser.
+
+* Sie können ggf. eine mittels [OO/LO-Draw] bearbeitbare Version erhalten.
+
+* Für diese wird in der Regel wiederum das [(CC) BY-SA](#onlinde_version)
+  Copyright gefordert werden.
+
+---
+template: plain
+name: other_languages
+header: ### Übersetzung in andere Sprachen
+
+Moderne Browser bieten heute oft "auf Knopfdruck" eine Online-Übersetzung.
+Deren Qualität ist mittlerweile schon erstaunlich brauchbar.._[] Somit sollten
+Sie diesen Service bei Bedarf nutzen.
+
+.F[:
+Dies gilt zumindest für relativ nahe verwandte Sprachfamilien, wie etwa die
+römisch-germanischen.
+]
+
+Sie können den Online-Übersetzungs-Service gleich jetzt ausprobieren, z.B.
+
+* mit dieser Seite von Deutsch -> Englisch, oder
+
+* mit der nächsten Seite Englisch -> Deutsch.
+
+Einzelne Kapitel dieser Unterlage werden nach und nach vom Autor ins Englische
+übersetzt und dann nur noch in dieser Sprache verfügbar sein, da eine parallele
+Aktualisierung von mehrsprachigen Unterlagen sehr aufwändig ist.
+
+.N[
+Die Vermischung zweier Sprachen im selben Kapitel wird jedoch auf Ausnahmen
+beschränkt bleiben - wie etwa in diesem Kapitel die folgende Seite.
+]
+
+---
+template: plain
+name: private_annotations
+header: ### Private Annotations
+
+The core content of this HTML file is witten in readable [markdown format].._[]
+
+.F[:
+With minor extensions, if you happen to know markdown already.
+]
+
+You have the option to handle this document by purely electronic means,
+*including private annotations* you may want to add.
+
+1. Save the HTML files of the presentation locally.
+
+2. Add annotations with a text editor of your choice.
+
+When viewing the document in a browser you may chose to view your annotations by
+changing to *presenter's mode* with the `p` key.
+
+* **You may try it out right now - back to normal is also with `p`.**
+
+.I[
+Future versions of this presentation **may or may not** use the notes section for
+their own purposes - but in any case it should be possible to merge your private
+annotations with a [diff-tool].
+]
+
+  [markdown format]: http://de.wikipedia.org/wiki/Markdown
+  [diff-tool]:       http://de.wikipedia.org/wiki/Diff
+
+???
+The content structure of the HTML file is as follows:
+````````````````````````````````````````````````````
+        (some lines of HTML leader)
+        <textarea>
+        …
+        … first presentation page …
+        …
+        ---
+        … second presentation page …
+        ---
+        …
+        … (etc.)
+        …
+        ---
+        …
+        … last presentation page …
+        …
+        &lt;/textarea>
+        (some lines of HTML trailer)
+````````````````````````````````````````````````````
+
+Lines consisting of **exactly three minus signs** (nothing else!) are page
+separators.
+
+Annotations are shown in *Presenter's View* only and must be separated from
+the slide content with a line consisting of **exactly three question marks**.
+```
+        …
+        ---
+        …
+        … presentation slide content …
+        …
+        ???
+        …
+        … annotations added by you …
+        …
+        ---
+        …
+```
+
+BTW: The easiest way to include small code examples, what might be a typical
+use case for private annotations, is to just indent them by four spaces -
+surrounding code fragments with lines of three or more backticks, a markdown
+extension known as [Fenced Code Blocks], is the other option.
+
+    #include <iostream>
+    int main() {
+        std::cout << "hello, world\n";
+    }
+
+[Fenced Code Blocks]: https://help.github.com/articles/github-flavored-markdown#fenced-code-blocks
+
+As we are at it go: when you have this page loaded in a text editor, with the line
+above - **not displayed** when you view this in the browser - and the paragraph
+before the code example you have a nice way how to embedde links without making
+the text flow unreadable or inconvenient to edit.
+
+<!-- The reference in square brackets needs to be unique only within a single slide
+     and the line connecting the reference with the external link may be placed
+     anywhere in the page ... and HTML comments are another way to annotate,
+     not even visible in the Presenter's View.
+-->
+
+LAST HINT: When loaded in a text editor you will find this final page close to the
+end (or can locate it easily by searching for LAST HINT); if you start from here
+instead from the top it may be be easier to discover the document structure, as at
+the beginning there are first a number of layout template pages not visible in the
+browser.
+
 
 </textarea>
 <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
