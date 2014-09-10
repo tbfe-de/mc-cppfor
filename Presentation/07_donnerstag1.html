@@ -199,19 +199,19 @@ header: #### Mechanismen zur Strukturierung
 ##### Klassen
 
 Klassen fassen "Daten" und "Verarbeitung" zusammen und sind somit ein
-Mechanismus zur Kapselung, der den Blick auf die abstrakten Operationen
-lenkt, weg von Datenstrukturen und Algorithmen.
+Mechanismus zur Kapselung, der den Blick auf die abstrakten Operationen lenkt,
+weg von Datenstrukturen und Algorithmen.
 
 ##### Unterprogramme
 
-Unterprogramme teilen Verarbeitungsschritte auf, vom komplexen Gesamtablauf
-bis hinunter zu kleinen, einfach überschau- und testbaren Einheiten.
+Unterprogramme teilen Verarbeitungsschritte auf, vom komplexen Gesamtablauf bis
+hinunter zu kleinen, einfach überschau- und testbaren Einheiten.
 
 ##### Bibliotheken
 
 Bilbliotheken sind Sammlungen wiederverwendbarer Komponenten, die für sich
-betrachtet aber kein wesentliches Eigenleben führen sondern erst - quasi
-"von außen" - zum Leben erweckt werden.
+betrachtet kein "Eigenleben" führen sondern erst "von außen" zum Leben erweckt
+werden.
 
 ---
 template: plain
@@ -221,13 +221,23 @@ header: #### Mechanismen zur Strukturierung (2)
 
 Frameworks folgen den "Hollywood-Principle": *Don't call us, we call you*.
 
-Sie stellen eine oft sehr komplexe Gesamtfunktionlalität zur Verfügung, an denen
-die spezifischen Anpassungen an vorausgeplanten Erweiterungspunkten eingehängt
-werden.
+Sie stellen eine oft eine sehr komplexe Gesamtfunktionalität zur Verfügung, und
+enthalten "Erweiterungspunkte" an denen spezifische Anpassungen "eingehängt"
+werden können.
 
-#### Geplante Erweiterbarkeit
+##### Geplante Erweiterbarkeit
 
-Ja, aber auch: "Keep It Small and Simple!"
+**JA**, aber auch: *"Keep It Small and Simple!"*
+
+Beginnen Sie stets mit der einfachsten Variante
+
+* einer Klasse,
+* eines Algorithmus,
+* einer Applkation,
+* eines Programmsystems, ...
+
+welche Ihr Problem löst, und erweitern Sie diese inkrementell bei neu
+erkanntem Bedarf.
 
 ---
 template: withinfo
@@ -236,17 +246,19 @@ section: DRY Principle
 name: dry_principle
 header: ### "Don't Repeat Yourself"
 
-Eine wichtige Erkenntnis kann bei der erfolgreichen Arbeitsteilung zwischen
-"Mensch und Maschine" sollte folgende sein:
+[Turing-Tests]: http://de.wikipedia.org/wiki/Turing-Test
 
-Menschen
+Eine wichtige Erkenntnis zur erfolgreichen Arbeitsteilung zwischen *"Mensch und
+Maschine"* ist:
+
+**Menschen**
 
 * besitzen oft ein hohes Maß an Kreativität,
 * sind aber in aler Regel schlecht darin, Dinge präzise zu wiederholen,
   * sei es in immer wieder ein- und derselben Weise,
   * sei es mit systematischen Variationen.
 
-Computer
+**Computer**
 
 * besitzen kaum echte Kreativität,._[]
 * sind aber extrem gut darin, Dinge präzise zu wiederholen:
@@ -256,14 +268,12 @@ Computer
 .F[:
 Es ist dabei weniger entscheidend, dass per Computer vielleicht gelegentlich
 "überraschende Ergebnisse" erzielt werden können - etwa in der Art, dass ein
-Computer ein Musikstück komponieren könnte, dass es vielleicht sogar in die
+Computer ein Musikstück komponieren könnte, das es vielleicht sogar in die
 Hitparade schafft. Interessanter ist die Frage nach einem Programm, mit dessen
 Hilfe ein Computer im Dialog mit einem menschlichen Partner von diesem nicht
 innerhalb weniger Minuten als Maschine erkannt würde, wie es im Fall der
-[Turing-Tests] letzten Endes doch immer wieder schnell der Fall ist.
+[Turing-Tests] letzten Endes doch immer wieder geschieht.
 ]
-
-  [Turing-Tests]: http://de.wikipedia.org/wiki/Turing-Test
 
 ---
 template: plain
@@ -271,20 +281,21 @@ header: #### Mechanismen zur Wiederverwendung
 
 ##### Klassen
 
-Universell gehaltene Klassen bilden in der Regel die kleinsten, wiederverwendbaren
-Bausteine in einem (konsequent) Objektorientierten Entwurf.
+Universell gehaltene Klassen bilden in der Regel die kleinsten,
+wiederverwendbaren Bausteine in einem (konsequent) Objektorientierten Entwurf.
 
 ##### Unterprogramme
 
-In einem eher klassichen (prozeduralen) Entwurf dominieren Unterprogramme.
+In einem eher klassichen (prozeduralen) Entwurf dominieren Unterprogramme,
+evtl. ergänzt durch einfache Datenstrukturen.
 
 ##### Datenstrukturen
 
-Mit Hilfe der C++ Templates lassen sich sehr gut wiederverwendbare Bausteine
-für Datenstrukturen realisieren.._[]
+Mit Hilfe der C++ Templates lassen sich sehr gut wiederverwendbare Bausteine für
+Datenstrukturen realisieren.._[]
 
 .F[:
-OK ... technisch gesehen sind die STL-Container Klassen ...
+OK ... technisch gesehen sind die STL-Container natürlich Klassen ...
 ]
 
 ---
@@ -310,8 +321,27 @@ section: Virtual Member Functions
 name: oc_with_polymorphism
 header: ### Basierend auf virtuellen Member-Funktionen
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+[GoF Template Methode Pattern]: http://en.wikipedia.org/wiki/Template_method_pattern
+
+Bei der klassichen Realisierung des [GoF Template Methode Pattern]s
+
+* sind virtuelle Member-Funktionen einer Basisklasse die
+
+  * vorausgeplanten "Erweiterungspunkte",
+
+* an denen spezifische abgeleitete Klassen
+
+  * die jeweils unterschiedlich geforderte Funktionalität "einhängen".
+
+.I[
+Im Sinne des [Open-Close-Principles](#oc_principle) ist die Basisklasse der
+abgeschlossene Teil.._[]
+]
+
+.F[:
+More exactly: Some member function of the base class that contains the "template
+methode". (But please do **not** confuse this with the meaning the term template
+otherwise has in C++ - two quite different pairs of shoes!)
 ]
 
 ---
@@ -321,8 +351,19 @@ section: C++ Template Mechanism
 name: oc_with_cpp_templates
 header: ### Basierend auf C++-Templates
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Bei der Realisierung mit Templates ist die
+
+* abgeleitete Klasse der geschlossene Teil,
+
+  * mit "Erweiterungspunkten" in einer typ-parametrisierten Basisklasse,
+
+* über welche die jeweils geforderte Funktionalität
+
+  * durch die zur Instanziierung verwendeten Klassen "eingehängt" wird.
+
+.I[
+Ein deutlicher Vorteil dieser Variante ist, dass von ungenutzten
+Erweiterungspunkten keine leeren Unterprogramm-Einsprünge übrig bleiben.
 ]
 
 ---
