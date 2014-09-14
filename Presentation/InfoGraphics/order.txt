@@ -12,6 +12,7 @@ TestBrowserNavigation
 
 :::::::::::::::::::::::::::: Monday 1
 StringBasics
+RegularExpressions
 IOStreamBasics
 ParametrizedTypesAndSizes
 
