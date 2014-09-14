@@ -1,64 +1,10 @@
 /*
  ===============================================================
- RingBuffer as Adaptable Component.
+ Test RingBuffer as Adaptable Component.
  ===============================================================
 */
+#include "RingBuffer.h"
 #include <cassert>
-#include <cstddef>
-
-template<typename T, std::size_t N>
-class RingBuffer {
-	double data[N+1];
-protected:
-	std::size_t iput;
-	std::size_t iget;
-	static std::size_t wrap(std::size_t idx) {
-		return idx % (N+1);
-	}
-public:
-	RingBuffer()
-		: iput(0), iget(0)
-	{}
-	bool empty() const {
-		return (iput == iget);
-	}
-	bool full() const {
-		return (wrap(iput+1) == iget);
-	}
-	std::size_t size() const {
-		return (iput >= iget)
-			? iput - iget
-			: iput + (N+1) - iget;
-	}
-	void put(const T &);
-	void get(T &);
-	T peek(std::size_t) const;
-};
-
-template<typename T, std::size_t N>
-void RingBuffer<T, N>::put(const T &e) {
-	if (full())
-		iget = wrap(iget+1);
-	assert(!full());
-	data[iput] = e;
-	iput = wrap(iput+1);
-}
-
-template<typename T, std::size_t N>
-void RingBuffer<T, N>::get(T &e) {
-	assert(!empty());
-	e = data[iget];
-	iget = wrap(iget+1);
-}
-
-template<typename T, std::size_t N>
-T RingBuffer<T, N>::peek(std::size_t offset = 0) const {
-	assert(size() > offset);
-	const std::size_t idx = (iput >= (offset+1))
-				? iput - (offset+1)
-				: iput + (N+1) - (offset+1);
-	return data[wrap(idx)];
-}
 
 /*
  * NOTE: In the following the Standard C Macro "assert" is used as
@@ -75,20 +21,97 @@ int main() {
 	assert(!rb.full());
 	assert(rb.size() == 0);
 
+	rb.put(1.1);
+	assert(!rb.empty());
+	assert(!rb.full());
+	assert(rb.peek(0) == 1.1);
+	assert(rb.size() == 1);
+
+	rb.clear();
+	assert(rb.empty());
+	assert(!rb.full());
+	assert(rb.size() == 0);
+
+	rb.put(2.2);
+	assert(!rb.empty());
+	assert(!rb.full());
+	assert(rb.peek(0) == 2.2);
+	assert(rb.size() == 1);
+	double v = 0.0;
+	rb.get(v);
+	assert(v == 2.2);
+	assert(rb.empty());
+	assert(!rb.full());
+	assert(rb.size() == 0);
+
 	rb.put(3.3);
 	assert(!rb.empty());
 	assert(!rb.full());
+	assert(rb.peek(0) == 3.3);
 	assert(rb.size() == 1);
 
 	rb.put(4.4);
 	assert(!rb.empty());
 	assert(!rb.full());
+	assert(rb.peek(0) == 3.3);
+	assert(rb.peek(1) == 4.4);
 	assert(rb.size() == 2);
 
 	rb.put(5.5);
 	assert(!rb.empty());
-	assert(rb.full());
+	assert(!rb.full());
+	assert(rb.peek(0) == 3.3);
+	assert(rb.peek(1) == 4.4);
+	assert(rb.peek(2) == 5.5);
 	assert(rb.size() == 3);
+
+	rb.put(6.6);
+	assert(!rb.empty());
+	assert(rb.full());
+	assert(rb.peek(0) == 3.3);
+	assert(rb.peek(1) == 4.4);
+	assert(rb.peek(2) == 5.5);
+	assert(rb.peek(3) == 6.6);
+	assert(rb.size() == 4);
+
+	rb.put(7.7);
+	assert(!rb.empty());
+	assert(rb.full());
+	assert(rb.peek(0) == 4.4);
+	assert(rb.peek(1) == 5.5);
+	assert(rb.peek(2) == 6.6);
+	assert(rb.peek(3) == 7.7);
+	assert(rb.size() == 4);
+
+	rb.get(v);
+	assert(v = 4.4);
+	assert(!rb.empty());
+	assert(!rb.full());
+	assert(rb.peek(0) == 5.5);
+	assert(rb.peek(1) == 6.6);
+	assert(rb.peek(2) == 7.7);
+	assert(rb.size() == 3);
+
+	rb.get(v);
+	assert(v = 5.5);
+	assert(!rb.empty());
+	assert(!rb.full());
+	assert(rb.peek(0) == 6.6);
+	assert(rb.peek(1) == 7.7);
+	assert(rb.size() == 2);
+
+	rb.get(v);
+	assert(v = 6.6);
+	assert(!rb.empty());
+	assert(!rb.full());
+	assert(rb.peek(0) == 7.7);
+	assert(rb.size() == 1);
+
+	rb.get(v);
+	assert(v = 7.7);
+	assert(rb.empty());
+	assert(!rb.full());
+	assert(rb.size() == 0);
 
 	std::cout << "ALL TESTS PASSED" << std::endl;
 }

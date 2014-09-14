@@ -131,7 +131,7 @@ p {
 /* ---------------------------------------------------------------- HEADINGS */
 h1, h2, h3 {
 	font-weight: 400;
-	margin-bottom: 0.8em;
+	margin-bottom: 0.5em;
 }
 h1 {
 	font-size: 2.5em;
@@ -139,12 +139,18 @@ h1 {
 }
 h2 {
 	font-size: 2em;
+	margin-bottom: 0.3em;
 }
 h3 {
-	font-size: 1.3em;
+	font-size: 1.5em;
+}
+h2 code.cpp.remark-code,
+h3 code.cpp.remark-code {
+	font-size: 90%;
 }
 h4 {
-	font-size: 1.0em;
+	font-size: 1.2em;
+	margin-bottom: 0;
 }
 
 /* ------------------------------------------------------------------- LINKS */
@@ -171,11 +177,18 @@ a, a > code {
 	color: blue;
 	text-decoration: none;
 }
-code {
+.remark-code {
 	-moz-border-radius: 5px;
 	-web-border-radius: 5px;
-	background: #e7e8e2;
-	border-radius: 5px;
+	background: #f8f8ff;
+	font-family: monospace;
+	font-size: 18px;
+}
+.F .remark-code {
+	font-size: 12px;
+}
+.remark-notes-area .remark-code {
+	font-size: 80%;
 }
 /*
   -----------------------------------------------------------------------------
@@ -187,8 +200,11 @@ div.remark-slide-number {
 	padding-bottom: 4px;
 	font-size: 90%
 }
-div.remark-notes {
-	font-size: 70%
+div.remark-notes-area {
+	font-size: 12px
+}
+div.remark-slide-notes {
+	font-size: 12px
 }
 
 /*
@@ -204,7 +220,7 @@ div.remark-notes {
 #slide-frontmatter .title {
 	padding-top: 1em;
 	padding-bottom: 0.3em;
-	font-size: 500%;
+	font-size: 300%;
 	color: #000099;
 	background: white;
 	border: solid 12px;
@@ -243,6 +259,13 @@ div.remark-notes {
 	content: "*";
 }
 
+/* ---- TABLE -------------------------------- add border lines around cells */
+table {
+    border-collapse: collapse;
+}
+table td, table th {
+        border: 2px solid blue;
+}
 /* ---- NOTICE ------------ make block standing a little bit over usual text */
 .N {
 	-moz-box-shadow: 10px 10px 5px #888;
@@ -295,6 +318,9 @@ div.remark-notes {
 	border: solid medium darkgrey;
 	background: red;
 	color: white;
+}
+.W code.cpp.remark-code {
+	color: black;
 }
 @media print { /* For a more uniform appperance */
 	.W {
@@ -356,6 +382,15 @@ div.infographic {
 
 /* ---- INFOLINK -------------------- special area to link to a info-graphic */
 div.infolink {
+	font-size: 0.5em;
+	color: gray;
+	position: absolute;
+	top: 2em;
+	right: 2em;
+}
+
+/* ---- DOCULINK --------------------- special area to link to documentation */
+div.refersto {
 	font-size: 0.5em;
 	color: gray;
 	position: absolute;
@@ -512,9 +547,15 @@ div.linkpage span.X {
 		-webkit-box-shadow: none;
 		box-shadow: none;
 	}
+	.remark-container.remark-presenter-mode .remark-slide-notes {
+		width: 708px;
+	}
+	@page {
+		size: 21cm 29.7cm;
+	}
 }
+
 @page {
-	size: A4;
 	margin: 0;
 }
 

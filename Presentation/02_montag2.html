@@ -88,7 +88,7 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
 
 .infographic[
 [![Info-Grafik](InfoGraphics/{{graphic}}.png)](InfoGraphics/{{graphic}}.png
-                "Click to open - add [CTRL+] SHIFT for new [tabbed] window")
+                "Click to open – add [CTRL+] SHIFT for new [tabbed] window")
 ]
 
 .pagefooter[
@@ -184,7 +184,7 @@ section: Essentials
 name: essentials
 header: ### CPU und Speicher
 
-Allgemein betrachtet sind dies Kernkomponenten jedes Computers.
+Allgemein betrachtet sind dies die Kernkomponenten jedes Computers.
 
 * Vom kleinsten Controller in der Waschmaschine ...
 * ... über klassische Mobiltelefone ...
@@ -193,10 +193,7 @@ Allgemein betrachtet sind dies Kernkomponenten jedes Computers.
 * ... File- und Applikations-Servern ...
 * ... bis zum größten Main-Frame.
 
-(OK, die größeren haben mehr als eine CPU ziemlich viel Speicher ... ._[])
-
-.F[
-... wenn auch vielleicht nicht immer ganz so viel wie die NSA :-)]
+(OK, die größeren haben mehr als eine CPU ziemlich viel Speicher ...)
 
 ---
 template: withinfo
@@ -207,15 +204,15 @@ header: #### CPU-Aufbau (1)
 
 ##### Program Counter und Stack Pointer
 
-Der innere Aufbau der CPU ist für das Verständnis der hier behandelten Themen weniger wichtig - bis auf
-zwei Bestandteile:
+Der innere Aufbau der CPU ist für das Verständnis der hier behandelten Themen
+weniger wichtig – bis auf zwei Bestandteile:
 
-* Program Counter - oder deutsch: Programm(schritt)zähler
+* Program Counter – oder deutsch: Programm(schritt)zähler
   * oft abgekürzt zu PC, manchmal auch IP (für Instruction Pointer)
   * enthält die Adresse des als nächsten auszuführenden Progammschritts
   * wird beim Auslesen des nächsten Befehls automatisch weitergesetzt
 
-* Stack Pointer - oder deutsch: Stapelzeiger (wenig gebräuchlich)
+* Stack Pointer – oder deutsch: Stapelzeiger (wenig gebräuchlich)
   * oft abgekürzt zu SP
   * gibt die *Grenzadresse* des Stack-Bereichs an
 
@@ -225,33 +222,38 @@ header: #### CPU-Aufbau (2)
 
 ##### Ausdehnung des Stack-Bereichs
 
-Da der SP nur die *Grenzadresse* angibt, könnte man meinen, es sei lediglich eine Definitionssache,
-ob der Stack darüber beginnt oder darunter.
+Da der SP nur die *Grenzadresse* angibt, könnte man meinen, es sei lediglich
+eine Definitionssache, ob der Stack *darüber* beginnt oder *darunter*.
 
-Tatsächlich hängt die Ausdehung des aber davon ab, wohin sich der Stack-Pointer bei Maschinenbefehlen wie
+Tatsächlich hängt die Ausdehung des Stack aber davon ab, wohin sich der
+Stack-Pointer bei Maschinenbefehlen wie
 
-* `push` (Daten: Register => Speicher) bzw.
+* `push` (Daten: Register => Speicher) bzw. `pop` und
 * `jsr` (Unterprogramm-Einsprung._[])
 
-bewegt - wenn zu *kleineren* Adressen hin, gehören ab dem SP alle *größeren* Adressen zum Stack.
+bewegt – wenn zu *kleineren* Adressen hin, gehören ab dem SP alle *größeren*
+Adressen zum Stack.
 
-.F[
-Der betreffende Maschinenbefehl muss nicht zwingend `jsr` heißen, dies ist lediglich ein üblicher Name
-und steht für "`j`ump to `s`ub`r`outine. Abhängig von der Assemblersprache sind auch andere Namen üblich,
-z.B. "jump and link", wobei das letzte Wort ausdrücken soll, dass anders als bei einem bloßen Sprung eine
-Verbindung zur Absprungstelle angelegt wird, damit später dorthin zurückgekehrt werden kann.
+.F[:
+Der betreffende Maschinenbefehl muss nicht zwingend `jsr` heißen, dies ist
+lediglich ein üblicher Name und steht für "`j`ump to `s`ub`r`outine". Abhängig
+von der Assemblersprache sind auch andere Namen üblich, z.B. "branch and link",
+wobei das letzte Wort ausdrücken soll, dass anders als bei einem bloßen Sprung
+eine Verbindung zur Absprungstelle angelegt wird, damit später dorthin
+zurückgekehrt werden kann.
 ]
 
 ---
 template: plain
 header: #### CPU-Aufbau (Details)
 
-Die folgenden Seiten stellen noch weitere Details zum Aufbau einer typischen CPU dar.
+Die folgenden Seiten stellen noch weitere Details zum Aufbau einer typischen CPU
+dar.
 
-Sie sind für das Verständnis der Ausführungen in diesem Kapitel weniger wichtig und
-können auch [übersprungen werden](#stackdata).
+Sie sind für das Verständnis der Ausführungen in diesem Kapitel weniger wichtig
+und können auch [übersprungen werden](#stackdata).
 
-Im einzelnen geht es noch um:
+Im einzelnen geht es um:
 
 * [ALU](#alu)
 * [Register](#alu)
@@ -272,16 +274,20 @@ Herkunft:
 * oft ausschließlich aus [Registern](#register)
 * evtl. auch direkt aus dem Speicher
 
-(Ob die ALU nur mit Registern oder auch direkt mit dem Speicher zusammenarbeiten kann,
-hängt von der CPU-Architektur ab.)
+(Ob die ALU nur mit Registern oder auch direkt mit dem Speicher zusammenarbeiten
+kann, hängt von der CPU-Architektur ab.)
 
 Ergebnis:
 
 * meist in einem bestimmten Register oder
 * in einem Satz ausgewählter Register
    
-Das Register, welches zur Ergebnisablage mit der ALU verschaltet werden kann,
-wird oft auch Akkumulator genannt.
+Das Register._[], welches zur Ergebnisablage mit der ALU verschaltet werden kann,
+wird oft Akkumulator oder kurz Akku genannt.
+
+.F[:
+Oder auch mehrere davon.
+]
 
 ---
 template: plain
@@ -290,7 +296,8 @@ header: #### CPU-Aufbau (Details 3)
 
 ##### (Weitere) Register
   
-Je nach CPU-Architektur gibt es eine mehr oder weniger große Zahl universell verwendbarer Register.
+Je nach CPU-Architektur gibt es eine mehr oder weniger große Zahl universell
+verwendbarer Register.
 
 Darüber hinaus gibt es auch solche mit Sonder- oder Spezialfunktionen:
 
@@ -299,12 +306,12 @@ Darüber hinaus gibt es auch solche mit Sonder- oder Spezialfunktionen:
 * Flags zur Maskierung von Interrupts
 * Stack-Limits._[]
 
-.F[
-Hierbei handelt es sich um harte Grenzen, innerhalb derer sich der SP bewegen darf.
-Sofern der Stack diesen Bereich verlässt, wird ein (Software-) Interrupt ausgelöst.
-Dies kann sehr nützlich sein, um zu verhindern, dass durch einen unerwartet gewachsenen
-Stack andere Datenbereiche überschrieben werden - insbesondere der Bereich dynamisch
-verwalteter und globaler Daten.
+.F[:
+Hierbei handelt es sich um harte Grenzen, innerhalb derer sich der SP bewegen
+darf. Bei Verlassen dieses Bereich wird ein (Software-) Interrupt ausgelöst.
+Dies kann sehr nützlich sein, um zu verhindern, dass durch einen unerwartet
+gewachsenen Stack andere Datenbereiche überschrieben werden – insbesondere der
+Bereich dynamisch verwalteter und globaler Daten.
 ]
 
 ---
@@ -318,12 +325,12 @@ Die verbleibenden Teile._[] einer typischen CPU sind im wesentlichen:
 * (um-) schaltbare Datenpfade und
 * die zugehörige Steuerungslogik
 
-Letztere verbinden erstere so miteinander, wie es zur Ausführung des jeweils
-zu verarbeitenden Maschinenbefehls erforderlich ist.
+Letztere schalten erstere so um, dass Register, ALU und Speicher so miteinander,
+verbunden sind, wie es zur Ausführung des jeweiligen Maschinenbefehls erfordert.
 
-.F[
-Vom Umfang her können diese durchaus einen wesentlichen oder sogar den größten
-Teil einer typischen CPU ausmachen.
+.F[:
+Vom Umfang her können die Datenpfade und die zugehörige Steuerungslogik durchaus
+einen wesentlichen oder sogar den größten Teil einer typischen CPU ausmachen.
 ]
 
 ---
@@ -337,7 +344,7 @@ Der Stackbereich im Datenspeicher ist generell wichtig für Unterprogramme.
 
 Dort wird abgelegt:
 
-* Aufrufparemeter
+* Aufrufparameter
 * Lokale Variablen
 * Verwaltungsinformation
 
@@ -359,20 +366,21 @@ header: #### Globale Daten
 
 Diese stehen an festen Adressen, die zuvor vom Linker vergeben wurden.
 
-Für alle Objekt-Module, aus denen das endgültige Programm besteht, ermittelt der Linker den
-Bedarf an globalem Speicher.
+Für alle Objekt-Module, aus denen das endgültige Programm besteht, ermittelt der
+Linker den Bedarf an globalem Speicher.
 
 Dieser ergibt sich aus:
 
-* globale Variable (außerhalb aller Blöcke._[])
+* globalen Variable (außerhalb aller Blöcke._[])
 * block-lokale `static` Variablen
 * `static` Member Variablen
 
-.F[
-Dabei spielt es keine Rolle, ob diese `static` sind oder nicht - in beiden Fällen handelt
-es sich um Speicherplatz im globalen Datenbereich. Der Unterschied ist lediglich, dass
-globalen `static` Variablen mit *gleichem Namen* aus *unterschiedlichen* Objektmodulen*
-jeweils individueller Speicherplatz zugeordnet wird.
+.F[:
+Bei globalen Variablen spielt es keine Rolle, ob diese `static` sind oder nicht,
+da es sich in beiden Fällen um Speicherplatz im globalen Datenbereich handelt.
+Der Unterschied ist lediglich, dass globalen `static` Variablen mit **gleichem**
+Namen in unterschiedlichen Objektmodulen auch jeweils **unterschiedlicher**
+Speicherplatz zugeordnet werden muss.
 ]
 
 ---
@@ -400,19 +408,19 @@ section: Stack Frame
 name: stackframes
 header: ### Stack-Frames
 
-Unter einem Stack-Frame versteht man denjenigen Abschnitt auf dem Stack, der einem (aktiven)
-Unterprogramm zuzuordnen ist.
+Unter einem Stack-Frame versteht man denjenigen Abschnitt auf dem Stack, der
+einem aktiven Unterprogramm zuzuordnen ist.
 
-Die Stackframes ergeben sich direkt aus den Maschinenbefehlen beim
+Die Stackframes ergeben sich direkt aus den Maschinenbefehlen bei
 
 * [Aufruf](#stack_call) und
-* [Rückehr](#stack_return) aus
+* [Rückehr](#stack_return)
 
-Unterprogrammen. Grundsätzlich sind dabei die folgenden Probleme zu lösen:
+von Unterprogrammen. Grundsätzlich sind dabei folgende Probleme zu lösen:
 
 * Übergabe von Argumenten
 * Speicherplatz für lokale Variable
-* Entgegenahme eines Returnwerts
+* Entgegennahme eines Returnwerts
 * Rückkehr an die Aufrufstelle
 
 ---
@@ -422,13 +430,19 @@ header: #### Detailablauf beim Unterprogramm-Aufruf
 
 Hier ist zu unterscheiden zwischen
 
-* dem Code, der noch vom [Aufrufer des Unterprogramms](#caller_code) (Caller) ausgeführt wird
-* dem eigentlichen [Unterprogrammsprung](#jsr_code) und
-* dem Code, der im [aufgerufenen Unterprogramm](#callee_code) (Callee) ausgeführt wird.
+* dem Code, der noch vom [Aufrufer des Unterprogramms](#caller_code) (Caller)
+  ausgeführt wird,
+* dem eigentlichen [Unterprogramm-**Ein**sprung](#jsr_code) und
+* demjenigen Code, der im [aufgerufenen Unterprogramm](#callee_code) (Callee)
+  ausgeführt wird.
 
 .N[
-Hier bestehen grundsätzlich viele Freiheiten für den Compiler solange sichergestellt ist, dass
-*Caller* und *Callee* zusammenpassen (Einhaltung der [Calling Conventions](#calling_conventions)).
+Hier bestehen grundsätzlich viele Freiheiten für den Compiler, aber nur
+solange sichergestellt ist, dass *Caller* und *Callee* zusammenpassen._[]
+]
+.F[:
+Hierum geht es prinzipiell wenn die Einhaltung bestimmter
+[Calling Conventions](#calling_conventions) gefordert wird.
 ]
 
 ---
@@ -442,13 +456,14 @@ Noch an der Aufrufstelle wird i.d.R. Code zum Ablauf kommen,
 
 * die Werte aller Aufrufargumente ermittelt, was
   * im Fall von Variablen einen Speicherzugriff oder
-  * im Fall von Ausdrücken eine Berechnung erfordern kann
+  * im Fall von Ausdrücken eine Berechnung erfordern kann,
 
-* und diese dann zur Verwendung durch das aufgerufene Unterprgramm
+* und diese Werte dann zur Verwendung durch das aufgerufene Unterprogramm
   * auf den Stack legt bzw.
   * in bestimmten Registern hinterlässt.
 
-In welcher Form Stack und Register hier genau benutzt werden, regeln die Calling Convetions.
+* In welcher Form Stack und Register dabei genau benutzt werden, regeln die
+  Calling Conventions.
 
 ---
 template: plain
@@ -457,18 +472,20 @@ header: #### Detailablauf beim Unterprogramm-Aufruf (3)
 
 ##### Maschinenbefehl zum Unterprogrammsprung
 
-Im Rahmen des Unterprogramm-Einsprungs auf den Stack gelegt werden:
+Im Rahmen des Unterprogramm-Einsprungs wird mindestens der Program-Counter
+auf den Stack gelegt:
 
-* Mindestens der Program-Counter
-  * Dies ist erforderlich, da Unterprogramme von mehr als einer Stelle aus aufgerufen werden
-    können.
-  * insofern benötigen sie eine Information, wohin am Ende zurückzukehren ist.
-  * Der Program-Counter wurde beim Holen des `jsr`-Befehls bereits weitergeschaltet.
-  * Der auf dem Stack gesicherte Wert zeigt somit auf den Befehl direkt dahinter.
+* Dies ist erforderlich, da Unterprogramme von mehr als einer Stelle aus
+  aufgerufen werden können.
 
-.N[
-Schließlich wird die Startadresse des Unterprogramms in den Program-Counter übertragen.
-]
+* Insofern benötigen sie eine Information, wohin am Ende zurückzukehren ist.
+
+* Der Program-Counter wurde schon beim Holen des `jsr`-Befehls weitergeschaltet.
+
+* Der auf dem Stack gesicherte Wert zeigt somit auf den Befehl direkt dahinter.
+
+Zum Abschluss wird die Startadresse des Unterprogramms in den Program-Counter
+übertragen.
 
 ---
 template: plain
@@ -477,30 +494,41 @@ header: #### Detailablauf beim Unterprogramm-Aufruf (4)
 
 ##### Aufrufkonventionen (Calling Conventions)
 
-Hierbei handelt es sich um eine Reihe von Festlegungen, die letzten Endes sicherstellen
-sollen, dass die Kommunikation zwischen Aufrufer und aufgerufenem Unterprogramm funktioniert.
+Hierbei handelt es sich um eine Reihe von Festlegungen, die letzten Endes
+sicherstellen sollen, dass die Kommunikation zwischen Aufrufer und aufgerufenem
+Unterprogramm funktioniert.
 
-Unter anderem muss Einigkeit über die gesicherten Register bestehen und welche Register
-ggf. die Werte von Aufrufargumenten enthalten.
+Unter anderem muss Einigkeit über die gesicherten Register bestehen und welche
+Register ggf. die Werte von Aufrufargumenten enthalten.
 
-* Da das Sichern von Registern beim Unterprogrammsprung Zeit kostet, sollten es einerseits
-  nicht unnötig viele sein.
-* Auf der anderen Seite sind Register wertvoller Speicherplatz für temporäre Werte.
+* Da das Sichern von Registern beim Unterprogrammsprung Zeit kostet, sollten es
+  einerseits nicht unnötig viele sein.
+
+* Auf der anderen Seite sind Register wertvoller Speicherplatz für temporäre
+  Werte.
+
 * Oft befindet sich unter den gesicherten Registern auch der Stack-Pointer,._[]
   obwohl das theoretisch nicht zwingend ist.
 
-.F[
-Mit den auf dem Stack selbst gesicherten Stack-Pointern besteht eine Rückwärtsverkettung
-zur Main-Funktion (und von dort weiter ins Runtime-Startup-Modul), die sich zur Laufzeit
-dynamisch verfolgen lässt, und mit deren Hilfe beim "post-mortem"-Debugging anhand des
-Speicherabzugs die zum Zeit eines Programmabsturzes aktiven Funktionen rekonstruiert
-werden können.
+---
+template: plain
+name: calling_conventions
+header: #### Detailablauf beim Unterprogramm-Aufruf (5)
+
+Mit einem auf dem Stack selbst gesicherten Stack-Pointer – so wie er unmittelbar
+vor dem Unterprogramm-Einsprung gültg war, besteht eine
+
+* leicht zu verfolgende Rückwärtsverkettung
+
+zur Main-Funktion (und von dort weiter ins Runtime-Startup-Modul), mit deren
+Hilfe beim "post-mortem"-Debugging anhand des Speicherabzugs die zum Zeit eines
+Programmabsturzes aktiven Funktionen rekonstruiert werden können.
 ]
 
 ---
 template: plain
 name: callee_code
-header: #### Detailablauf beim Unterprogramm-Aufruf (5)
+header: #### Detailablauf beim Unterprogramm-Aufruf (6)
 
 ##### Platz für lokale Variable schaffen
 
@@ -510,44 +538,44 @@ Im aufgerufenen Unterprogramm wird
 * wozu ein einfaches Verschieben des Stack-Pointers ausreicht.
 
 .N[
-Anschließend werden lokale Daten vom Unterprogramm mit einem Offset zum
-Stack-Pointer adressiert.
+Lokale Daten eines Unterprogramms werden (ggf. initialisiert und) mit einem
+Offset zum Stack-Pointer adressiert.
 ]
 
 Die Berechnung der effektiven Adresse erfolgt durch einen speziell für
-diese Aufgabe in der CPU vorhandenen._[] Addierer.
+diese Aufgabe in der CPU vorhandenen Addierer.._[]
 
 * Dies gilt sowohl die die vom Aufrufer übergebenen Argumente
 * wie auch für die im Unterprogramm lokal vorhandene Variable.
 
-.F[
+.F[:
 Da diese Technik zur Realisierung lokaler Variablen eine lange Tradition hat,
-wird die Adressierung relativ Stack-Pointer ausnahmslos von allen modernen CPUs
-in effizienter Form unterstützt.
+wird die Adressierung relativ zum Stack-Pointer ausnahmslos von allen modernen
+CPUs in effizienter Form unterstützt.
 ]
 
 ---
 template: plain
 name: local_data
-header: #### Detailablauf beim Unterprogramm-Aufruf (6)
+header: #### Detailablauf beim Unterprogramm-Aufruf (7)
 
 ##### Aufrufargumente und lokale Variable
 
-Der Unterschied zwischen beiden besteht bei genauer Betrachtung nur in der Tatsache
+Der Unterschied zwischen beiden besteht bei genauer Betrachtung nur in der
+Tatsache
 
-* dass Aufrufargumente noch vom [aufrufenden Code](#caller_code) mit Intialwerten
-versehen werden,
+* dass Aufrufargumente noch vom [**aufrufenden** Code](#caller_code) mit
+  Initialwerten versehen werden,
 * während lokale Variable, die nicht explizit initialisiert wurden, in ihren
-Anfangswerten unvorhersehbar._[] sind.
+  Anfangswerten unvorhersehbar sind.._[]
 
-Ergänzend muss dazu angemerkt werden, dass innerhalb eines Blocks mit `static`
-definierte Variable von der Lebensdauer her *nicht* an die Ausführung eines
-Blocks oder einer Funktion gebunden sind und daher bei den globalen Variablen
-abgelegt werden.
+Innerhalb eines Blocks mit `static` definierte Variable sind von der Lebensdauer
+her *nicht* an die Ausführung eines Blocks oder einer Funktion gebunden und
+werden daher bei den globalen Variablen abgelegt.
 
-.F[
-Genauer gesagt ergeben sich die Anfangswert von nicht explizit initialisierten
-Variablen aus der vorherigen Nutzung des Stackbereichs, in dem sie angelegt wurden.
+.F[:
+Genauer gesagt ergeben sich die Anfangswerte von nicht explizit initialisierten
+Variablen aus der vorherigen Nutzung des Stackbereichs, in dem sie liegen.
 ]
 
 ---
@@ -555,20 +583,22 @@ template: plain
 name: stack_return
 header: #### Details bei der Unterprogramm-Rückkehr
 
-Beim Verlassen des Unterprogramms werden die Aktionen rückgängig gemacht, die
-beim Aufruf stattfanden.
+Beim Verlassen eines Unterprogramms werden diejenigen Aktionen rückgängig
+gemacht, die beim Aufruf stattfanden:
 
-* Zunächst muss der (Rückgabewert)[#return_value] bereitgestellt werden (sofern das
-  Unterprogramm einen solchen liefert).
+* Zunächst muss der [Rückgabewert](#return_value) bereitgestellt werden (sofern
+  das Unterprogramm einen solchen liefert).
 * Anschließend wird der für die lokalen Variablen reservierte Stack freigegeben.
 * Schließlich erfolgt der [Rücksprung](#code_rts) an die Aufrufstelle.
-* Dort muss noch der für die Parameterübergabe benutzte Stack freigegeben werden.
+* Dort muss der für die Parameterübergabe benutzte Stack freigegeben werden.
 
+.N[
 Moderne CPU-Architekturen können diese Schritte teilweise zusammenfassen.
-Wichtige Voraussetzung dafür ist, dass der Aufrufer und das aufgerufene
-Unterprogramm._[] Anzahl und Typ der Argumente kennen.
+Wichtige Voraussetzung dafür ist, dass der Aufrufer **und** das aufgerufene
+Unterprogramm Anzahl und Typ der Argumente kennen.._[]
+]
 
-.F[
+.F[:
 In C++ ist dies immer gegeben, da die Sichtbarkeit der Deklarationen (Prototyp)
 Voraussetzung für den Aufruf einer Funktion ist. Hinsichtlich C wurde ähnliches
 im C89-Standard damit erreicht, dass der Compiler bei nicht-sichtbarem Prototyp
@@ -582,25 +612,28 @@ header: #### Details bei der Unterprogramm-Rückkehr (2)
 
 ##### Bereitstellung des Rückgabewertes
 
-Die wesentlichen Details hängen hier davon ab, ob es sich um einen Grundtyp handelt._[]
-oder um eine (größere) Datenstruktur.
+Die wesentlichen Details hängen hier davon ab, ob es sich um einen Grundtyp
+handelt oder um eine größere Datenstruktur.._[]
 
-* Grundtypen werden in der Regel in einem bestimmten Register zurückgegeben.
-* Für Strukturen muss der [Aufrufer](#caller_code) Stack-Speicherplatz bereitstellen.
+* Grundtypen werden in der Regel in einem Register zurückgegeben.
+* Dies gilt auch für kleinere Datenstrukturen.
+* Für größere Datenstrukturen muss der [Aufrufer](#caller_code)
+  Stack-Speicherplatz bereitstellen.
 
-Details zur Rückgabe in einem Register regeln ggf. die [Calling Conventions](#calling_conventions).
+Details zur Rückgabe in einem Register regeln ggf. die
+[Calling Conventions](#calling_conventions).
 
-.inportant[
-Die Rückgabe über den Stack kann man als (versteckte) Übergabe einer Referenz sehen,
-welche die aufgerufene Funktion genau so benutzt, als sei sie über die Argumentliste
-übergeben worden.
+.N[
+Die Rückgabe über den Stack kann man als (versteckte) Übergabe einer Referenz
+sehen, welche die aufgerufene Funktion genau so benutzt, als sei sie über die
+Argumentliste übergeben worden.
 ]
 
-.F[
-Um die mit Strukturen beliebiger Größe verbundenen Probleme zu vermeiden, waren in den
-Anfangszeiten von C Funktions-Rückgabewerte auf Grundtypen (inkl. Zeiger) beschränkt.
-Erst mit dem C89-Standard wurde verbindlich die Möglichkeit eingeführt, auch Strukturen
-als Rückgabewert einer Funktion zu verwenden.
+.F[:
+Um die mit Strukturen beliebiger Größe verbundenen Probleme zu vermeiden, waren
+in den Anfangszeiten von C Rückgabewerte von Funktionen auf Grundtypen (inkl.
+Zeiger) beschränkt. Erst mit dem C89-Standard wurde verbindlich die Möglichkeit
+eingeführt, beliebige Strukturen als Rückgabewert einer Funktion zu verwenden.
 ]
 
 ---
@@ -613,20 +646,21 @@ header: #### Details bei der Unterprogramm-Rückkehr (3)
 Symmetrisch zum Aufruf sind hierbei zwei Schritte notwendig:._[]
 
 * Erster Schritt
-  * Die beim [Einsprung](#jsr_code) in das Unterprogramms gesicherten Werte werden
-    in die entsprechenden Register zurück geschrieben.
-  * Der Program-Counter zeigt damit auf den nächsten Befehl und der Stack-Pointer
-    steht so, wie er nach Übertragen der Aufrufargumente stand.
+  * Die beim [Einsprung](#jsr_code) in das Unterprogramms gesicherten Register
+    werden restauriert.
+  * Der Program-Counter zeigt damit auf den nächsten Befehl und der
+    Stack-Pointer steht so, wie er nach Übertragen der Aufrufargumente stand.
 
 * Zweiter Schritt
-  * Im Code des Aufrufers wird dafür gesorgt, dass der für diese Funktion eigentlich
-    gültige Wert des Stack-Pointer restauriert wird.
+  * Im Code des Aufrufers wird dafür gesorgt, dass der für diese Funktion
+    eigentlich gültige Wert des Stack-Pointer restauriert wird.
 
-.F[
-Da Unterprogramme seit langer Zeit wesentlicher Bestandteil höherer Programmiersprachen
-sind, verfügen viele moderne CPU-Architekturen - insbesondere hinsichtlich des Rücksprungs -
-über Maschinenbefehle, welche dabei helfen, die hier im Detail dargestellten Abläufe
-effizient zusammenzufassen.
+.F[:
+Da Unterprogramme seit langer Zeit wesentlicher Bestandteil höherer
+Programmiersprachen sind, verfügen viele moderne CPU-Architekturen –
+insbesondere hinsichtlich des Rücksprungs aus Unterprogramen – über
+Maschinenbefehle, welche die hier im Detail dargestellten Abläufe effizient
+zusammenzufassen.
 ]
 
 ---
@@ -636,27 +670,26 @@ header: #### Dynamische Speicheranforderung
 
 Grundsätzlich ist dies eine Operation, die vom ablaufenden Programm explizit angestoßen werden muss:
 
-* In C mit:
-  * `malloc` - angegeben wird die Speichergröße in Byte
-  * `calloc` - ähnlich wie zuvor aber Multiplikator._[]
-  * `realloc` - spätere Änderung der Größe._[2]
+* In C mit:._[]
+  * `malloc` – angegeben wird die Speichergröße in Byte
+  * `calloc` – ähnlich wie zuvor aber Multiplikator.
+  * `realloc` – spätere Änderung der Größe.
 
 * In C++ mit:
-  * `new T` - Größe wird daraus als `sizeof T` bestimmt
-  * `new T[N]` - ähnlich wie zuvor aber mit Multiplikator `N`
+  * `new T` – Größe wird daraus als `sizeof T` bestimmt
+  * `new T[N]` – ähnlich wie zuvor aber mit Multiplikator `N`
 
 Rückgabewert ist jeweils ein Zeiger auf den dynamisch bereitgestellten Speicher.
 In C++ läuft dabei automatisch der `T`-Konstruktor ab, bzw. `N` solcher Konstruktoren.
 
 
 .F[:
-Prinzipiell multipliziert. `calloc` die beiden Werte. Der erste bestimmt dabei das Alignment.
-Ferner wird der Speicherinhalt explizit gelöscht (mit Null initialisiert), anders als
-bei `malloc`, das den Speicherbereich so wie vorgefunden zurückliefert.  
-
-2: Falls `realloc` den bereits zugeordneten Speicherbereich nicht vergrößern kann, wird dessen
-Inhalt asn diejenige Stelle im Speicher verschoben, dessen Adresse als Ergebnis geliefert
-wird.
+Prinzipiell multipliziert `calloc` die beiden Werte. Der erste bestimmt dabei
+das Alignment. Ferner wird der Speicherinhalt explizit gelöscht (mit Null
+initialisiert), anders als bei `malloc`, das den Speicherbereich so wie
+vorgefunden zurückliefert. Falls `realloc` den bereits zugeordneten
+Speicherbereich nicht vergrößern kann, wird dessen Inhalt an diejenige Stelle
+im Speicher verschoben, deren Adresse als Ergebnis geliefert wird.
 ]
 
 ---
@@ -664,34 +697,66 @@ template: plain
 name: heap_release
 header: #### Dynamische Speicherfreigabe
 
-Grundsätzlich ist dies eine Operation, die vom ablaufenden Programm explizit angestoßen werden muss:
+Grundsätzlich ist dies eine Operation, die vom ablaufenden Programm explizit
+angestoßen werden muss:
 
 * In C mit:
-  * `free` - anzugeben ist dabei der bei der Anforderung erhaltene Zeiger
+  * `free` – anzugeben ist dabei der bei der Anforderung erhaltene Zeiger
 
 * In C++ mit:
-  * `delete` - anzugeben ist ein von `new T` erhaltener Zeiger
-  * `delete[N]` - anzugeben ist ein von `new T[N]` erhaltener Zeiger
+  * `delete` – anzugeben ist ein von `new T` erhaltener Zeiger
+  * `delete[N]` – anzugeben ist ein von `new T[N]` erhaltener Zeiger
 
 In C++ läuft dabei automatisch der `T`-Destruktor ab.
+
+---
+template: plain
+name: heap_release
+header: #### Fehlerquellen bei Verwendung von dynamischem Speicher
+
+Folgende Fehlerquellen sind im Umgang mit dynamischen Speicher zu beachten:
+
+* Es kann kein weiterer Speicher verfügbar gemacht werden.
+
+  * Seit C++98 hat dies eine Exception zur Folge.
+
+  * Es kann durch einen entsprechenden Handler aber auch das vor C++98
+    angewendete Verfahren aktiviert werden, nämlich dass unzureichender
+    Hauptspeicher von `new` durch Rückgabe eines Null-Zeigers gemeldet
+    werden.
+
+Weiterhin im Verantwortungsbereich des Software-Entwicklers liegt die korrekte
+Kombination
+
+* von `new` mit `delete`,
+* von `nev[N]` mit `delete[]`, und
+* von `malloc`, `calloc`, `realloc` mit `free`._[]
+
+.F[:
+Seit C89 kann bei `free` genau wie bei `delete` davon ausgegangen werden, dass
+die Übergabe eines Null-Zeigers (oder `nullptr` in C++11) wirkungslos bleibt.
+]
+
 
 ---
 template: plain
 name: stacklimit
 header: ### Stack-Limit
 
-Da die verschiedenen Arten der Datenablage prinzipiell um den selben Speicher konkurrieren, muss
-verhindert werden, dass sie ineinander überlaufen. Insbesondere beim Stack kann dies ein Problem
-sein, denn der SP wird so oft und von so vielen Maschinenbefehlen auch implizit verändert.
+Da die verschiedenen Arten der Datenablage prinzipiell um den selben Speicher
+konkurrieren, muss verhindert werden, dass die einzelnen, für unterschiedliche
+Zwecke verwendeten Bereiche nicht ineinander hinein laufen. Insbesondere beim
+Stack kann dies ein Problem sein, denn der SP wird sehr oft und von sehr vielen
+Maschinenbefehlen – auch implizit – verändert.
 
 Folgende Techniken können zur Anwendung kommen:._[]
 
 * [spezielle CPU-Register](#stacklimit_cpureg)
 * [nicht zugeordnete Speicherseite](#stacklimit_pagefault)
-* [generieren von "sicherem Code"](#stacklimit_codegen)
+* [Generieren von "sicherem Code"](#stacklimit_codegen)
 * [statische Vorab-Analyse](#stacklimit_analysis)
 
-.F[
+.F[:
 Kommt keine dieser Möglichkeiten in Betracht bleibt nur beten und hoffen ...
 ]
 
@@ -700,57 +765,62 @@ template: plain
 name: stacklimit_cpureg
 header: #### Stacklimit mit speziellen CPU-Registern überwachen
 
-Die wichtigste Voraussetzung ist hier natürlich, dass die CPU entsprechende Register bietet!
+Die wichtigste Voraussetzung ist hier natürlich, dass die CPU entsprechende
+Register bietet!
 
 * Diese werden auf die Stackgrenzen gesetzt.
-* Verlässt der SP den zulässigen Bereich, wird typischerweise ein Interrupt ausgelöst.
+* Verlässt der SP den zulässigen Bereich, wird typischerweise ein Interrupt
+  ausgelöst.
 
 In der Interrupt-Reaktion muss eine Notfallmaßnahme greifen:
 
-* Unterstützt ein Betriebssystem die Programmausführung, wird der Prozess beendet.
-* Ohne diese Unterstützung bleibt meist nur der Neustart (Warm-Boot) als Ausweg.
+* Unterstützt ein Betriebssystem die Programmausführung, wird der Prozess
+  beendet.
+* Ohne diese Unterstützung bleibt meist nur der Neustart (Warm-Boot) als
+  Ausweg.
 
 ---
 template: plain
 name: stacklimit_pagefault
 header: #### Stacklimit mit nicht zugeordneter Speicherseite überwachen
 
-Dies setzt eine MMU und deren - zumindest rudimentäre - Verwaltung durch ein Betriebssystem voraus.
+Dies setzt eine MMU (memory Management Unit) voraus und deren – zumindest
+rudimentäre – Verwaltung durch ein Betriebssystem.
 
 .I[
-Grundidee ist, zwischen Stack-Pointer und `brk`-Adresse immer mindestens eine, nicht physikalisch
-zugeordnete Speicherseite zu frei zu lassen.
+Grundidee ist, zwischen Stack-Pointer und `brk`-Adresse immer mindestens eine
+nicht physikalisch zugeordnete Speicherseite frei zu lassen.
 ]
 
-Kommt es nun zu einem Page-Fault aufgrund des nicht zugeorneten Speichers
+Kommt es nun zu einem Page-Fault aufgrund des nicht zugeordneten Speichers, wird
 
-* bei Aufruf eines Unterprogramms, wird dem Stack eine weitere Seite zugeordnet;
-* bei Verschieben der `brk`-Adresse, wird dem Heap eine weitere Seite zugeordnet.
+* bei Aufruf eines Unterprogramms, dem Stack eine weitere Seite zugeordnet;
+* bei Verschieben der `brk`-Adresse, dem Heap eine weitere Seite zugeordnet.
 
 .N[
-Einzige Ausnahme ist, dass die neue Seite die letzte zwischen Stack und Heap wäre.
-In diesem Fall wird das Programm abgebrochen.
+Einzige Ausnahme ist, dass die neue Seite die letzte freie Seite zwischen Stack
+und Heap wäre: In diesem Fall wird die Programmausführung abgebrochen.
 ]
 
 
 ---
 template: plain
 name: stacklimit_codegen
-header: #### Stacklimit-Probleme durch "sicheren Code" vermeiden
+header: #### Stacklimit-Probleme durch sicheren Code vermeiden
 
-Wenn keine anderen Mittel zur Verfügung stehen und "Sicherheit vor Schnelligkeit" geht,
-könnte auch 
+Wenn keine anderen Mittel zur Verfügung stehen und "Sicherheit vor
+Schnelligkeit" geht, könnte auch 
 
 * vor jedem `push` (Register auf Stack legen)
 * vor jedem `jsr` (Unterprogramm aufrufen)
 
-der aktuelle Wert des Stack-Pointers mit der `brk`-Adresse verglichen werden. Ist der
-aktuelle Abstand nicht mehr ausreichend für die anstehende Operation, wird das Programm
-abgebrochen.
+der aktuelle Wert des Stack-Pointers mit der `brk`-Adresse verglichen werden.
+Ist der aktuelle Abstand nicht mehr ausreichend für die anstehende Operation,
+wird die Programmausführung abgebrochen.
 
 .N[
-Voraussetzung ist hier natürlich, dass verwendete Compiler eine solche Code-Generierung
-unterstützen muss.
+Voraussetzung ist hier natürlich, dass verwendete Compiler eine solche
+Code-Generierung zumindest optional unterstützt.
 ]
 
 ---
@@ -758,21 +828,19 @@ template: plain
 name: stacklimit_analysis
 header: #### Stacklimit durch statische Analyse ausschließen
 
-Eine andere Möglichkeit - vor "Beten und Hoffen" - wäre schließlich die, sämtliche
-Unterprogrammaufrufe zu analysieren und deren maximale Schachtelung._[] zu ermitteln.
+Eine andere Möglichkeit – vor "Beten und Hoffen" – wäre schließlich die,
+sämtliche Unterprogrammaufrufe zu analysieren und deren maximalen Stackbedarf
+zu ermitteln.
 
-Dies per Hand zu erledigen ist aufwändig und fehlerträchtig. Die Unterstützung durch ein
-statisches Analyse-Werkzeug wäre somit wünschenswert.
+Dies per Hand zu erledigen ist aufwändig und fehlerträchtig, da die
+Schachtelung ja auch von Programmablauf abhängt. Die Unterstützung durch ein
+statisches Analyse-Werkzeug ist in diesem Fall mehr als nur wünschenswert.
 
 Weitere Voraussetzungen sind:
 
-* Unterprogramme dürfen weder direkt noch indirekt rekursiv sein
-* und die Schachtelungstiefe darf nicht datenabhängig sein.
-
-.F[:
-Das Wort "maximal" bezieht sich auf den Bedarf an Stackspeicher, nicht auf die Anzahl
-der aktiven Unterprogramme.
-]
+* sind Unterprogramme direkt oder indirekt rekursiv, muss die maximale Tiefe
+  bestimmt werden;
+* insbesondere darf diese nicht datenabhängig sein!
 
 ---
 template: linkinfo
@@ -803,17 +871,22 @@ section: Mapping Classes to Code And Data
 name: member_data
 header: ### Abbildung von Member-Daten
 
-Grundsätzlich wird aus den Member-Daten einer Klasse eine Struktur gebildet:
+Grundsätzlich wird aus den Member-Daten einer Klasse eine Struktur gebildet.
+Die Reihenfolge bleibt dabei erhalten:
 
-* Die Reihenfolge bleibt dabei erhalten:
-  * im Quelltext nachfolgende Member stehen im Speicher an einer größeren Addresse;
-  * sofern aus Alignment-Gründen notwendig gibt es zwischen den Membern ungenutzten Speicher (Padding);
-  * auch am Ende der Struktur kann ein Padding erforderlich sein;
+* Im Quelltext nachfolgende Member stehen im Speicher an einer größeren
+  Addresse.
+
+* Sofern aus Alignment-Gründen notwendig, gibt es zwischen den Membern
+  ungenutzten Speicher (Padding).
+
+* Auch am Ende der Struktur kann ein Padding erforderlich sein.
 
 .N[
-Vordergründig scheint das Padding am Ende nur für den Fall notwendig zu sein, dass von der betreffenden
-Struktur Arrays gebildet werden, es wird jedoch von C und C++ stets als Bestandteil der Struktur bzw.
-der Member-Daten einer Klassen gesehen.
+Vordergründig scheint das Padding am Ende nur für den Fall notwendig zu sein,
+dass von der betreffenden Struktur Arrays gebildet werden, es wird jedoch von C
+und C++ stets als Bestandteil der Struktur bzw. der Member-Daten einer Klasse
+gesehen.
 ]
 
 ---
@@ -821,20 +894,22 @@ template: plain
 name: padding
 header: #### Padding und Alignment
 
-Der allgemeine Grund für Padding in Strukturen sind Alignment-Anforderungen der Hardware
+Der allgemeine Grund für Padding in Strukturen sind Alignment-Anforderungen der
+Hardware:
 
-* Oft kann nicht jeder Datentype an einer beliebigen Stelle im Speicher stehen sondern erfordert die
-  Ausrichtung auf ene bestimmte Adresse-Grenze, Beispielsweise könnte es notwendig sein, dass
+* Oft kann nicht jeder Datentyp an einer beliebigen Stelle im Speicher stehen
+  sondern erfordert die Ausrichtung auf ene bestimmte Adress-Grenze
+  Beispielsweise könnte es notwendig sein, dass
   * 32-Bit Ganzzahlen an einer durch 4 teilbaren Adresse und
   * 64-Bit Ganzzahlen an einer durch 8 teilbaren Adresse stehen.
 
-* Da Strukturen prinzipiell auch als Arrays angelegt werden können, muss ferner die Struktur
-  insgesamt gemäß den strengstens Aligmment-Anforderungen der in ihr enthaltenen Elemente
-  ausgerichtet sein.
+* Da Strukturen prinzipiell auch als Arrays angelegt werden können, muss ferner
+  die Struktur insgesamt gemäß den strengstens Alignment-Anforderungen der in
+  ihr enthaltenen Elemente ausgerichtet sein.
 
 .N[
-Würde die zweite Regel nicht befolgt, hätten bei Arrays von Strukturen die Elemente der Struktur
-unterschiedlichen Offsets zum Beginn der Struktur.
+Würde die zweite Regel nicht befolgt, hätten bei Arrays von Strukturen die
+Elemente der Struktur an unterschiedlichen Indizes unterschiedlichen Offset.
 ]
 
 ---
@@ -848,12 +923,12 @@ Die Garantie, dass die Elemente einer Struktur gemäß ihrer Reihenfolge im Quel
 aufsteigenden Adressen abgelegt werden, erfordert bei
 
 ```
-	struct s {
-		short a;	// assume 16 bit for short
-		long b;		// assuming 32 bit for long
-	}
+struct s {
+    unsigned a;  // assume 32 bit for int
+    long long b; // assume 64 bit for long long
+}
 ```
-das Einfügen von vier (ungenutzten) Bytes zwischen `a` und `b` .
+das Einfügen von vier (ungenutzten) Bytes zwischen `a` und `b`.
 Die Größe der Struktur (`sizeof (struct s)`) ist damit 16 (4+4+8) Bytes.
 
 ---
@@ -865,12 +940,13 @@ header: #### Padding und Alignment (3)
 
 Bei der umgekehrten Anordnung
 ```
-	struct s {
-		long b;		// assuming 32 bit for long
-		short a;	// assume 16 bit for short
-	}
+struct s {
+    long long b; // assume 64 bit for long long
+    int a;       // assume 32 bit for short
+}
 ```
-scheinen dagegen 12 Bytes ausreichend zu sein, da zwischen `b` und `a` nichts eingefügt werden muss ...
+scheinen dagegen 12 (= 8+4) Bytes ausreichend zu sein, da zwischen `b` und `a`
+nichts eingefügt werden muss ...
 
 ---
 template: plain
@@ -879,26 +955,25 @@ header: #### Padding und Alignment (4)
 
 ##### Padding nach dem letzten Strukturelement (Nowendigkeit)
 
-... allerdings würde ohne eventuelles Padding am Ende gegen eine seit den Anfängen von C
-gültige Regel._[] verstoßen, die besagt dass für jedes Array
-
+... allerdings würde ohne Padding am Ende gegen eine seit den Anfängen von C
+gültige Regel verstoßen, die besagt dass für jedes Array
 
 ```
-	struct s { ... } array[N];
+struct s { ... } arr[N];
 
 ```
 die Beziehungen
 
-* `(sizeof array / sizeof (struct s)) == N` und
-* `(sizeof array / array[0]) == N`
+* `(sizeof arr / sizeof (struct s)) == N` und
+* `(sizeof arr / arr[0]) == N`
 
-stets erfüllt sind. Damit ist unter anderem garantiert, dass sich die Anzahl der Elemente in
-einem initialisierten Array
+erfüllt sein muss. Damit ist unter anderem garantiert, dass sich die Anzahl der
+Elemente in einem initialisierten Array
 ```
-	struct s array[] = { {1, 2}, {3, 4}, {5, 6}};
+struct s array[] = { {1, 2}, {3, 4}, {5, 6} };
 ```
-in jedem Fall mit den obigen Ausdrücken berechnen lassen und die Anordnung der Elemente
-in der Strukturdefinition dafür keine Rolle spielt.
+in jedem Fall mit den obigen Ausdrücken berechnen lassen und die Anordnung der
+Elemente in der Strukturdefinition dafür keine Rolle spielt.
 
 ---
 template: withinfo
@@ -910,8 +985,8 @@ header: ### Abbildung von Member-Funktionen
 Hier ist zum einen zu unterscheiden zwischen Member-Funktionen
 [mit und ohne](#inline_optimization) den Zusatz `inline`.
 
-Bei Funktionen, die zu echten Unterprogrammen kompiliert werden (nicht `inline`), ist ferner
-zu unterscheidem zwischen
+Bei Funktionen, die zu echten Unterprogrammen kompiliert werden (nicht `inline`)
+kompiliert werden, ist ferner zu unterscheidem zwischen:
 
 * [Statischem Linken](#static_linking) und
 * [Dynamischem Linken](#dynamic_linking).
@@ -921,21 +996,23 @@ template: plain
 name: inline_optimization
 header: #### Reguläre vs. Inline-Member-Funktionen
 
-Ursprünglich war das Schlüsselwort `inline` nur dazu gedacht, dem Compiler einen Hinweis zu geben,
-dass für eine damit markierte Funktion der enthaltene Code direkt an der Aufrufstelle eingesetzt
-werden soll. Der konnte diesen Hinweis zu ignorieren.
+Ursprünglich war das Schlüsselwort `inline` nur dazu gedacht, dem Compiler einen
+Hinweis zu geben, dass für eine damit markierte Funktion der enthaltene Code
+direkt an der Aufrufstelle eingesetzt werden kann. Der Compiler konnte diesen
+Hinweis auch ignorieren.
 
 Mittlerweile hat sich die Situation umgekehrt:
 
 .N[
-Zumindest im Fall höherer Optimierungsstufen entscheiden viele Compiler mittlerweile von
-sich aus, ob sie statt eines Unterprogramm-Aufrufs den Code einer Funktion direkt an der
-Aufrufstelle *auch dann* einsetzen, wenn die betreffende Funktion *nicht* mit `inline`
-markiert ist.
+Zumindest im Fall höherer Optimierungsstufen entscheiden viele Compiler von sich
+aus, dass sie statt eines Unterprogramm-Aufrufs den Code der Start-Funktion direkt
+an der Aufrufstelle auch dann einsetzen, wenn diese Funktion *nicht* mit `inline`
+markiert tst.
 ]
 
-Andererseits ignoriert z.B. der GCC Inline-Funktionen, wenn alle Optimierungen abgeschaltet
-sind (Debug-Kompilierung), um so auch das Setzen von Break-Points in solchen Funktionen zu
+Andererseits ignoriert z.B. der GCC Inline-Funktionen, wenn alle Optimierungen
+abgeschaltet sind (Debug-Kompilierung), und sollte so auch das Setzen von Break-Points
+Jin solchen Funktionen zu
 vereinfachen.
 
 ---
@@ -952,13 +1029,14 @@ gegen Programmgröße:
 .N[
 Es gibt allerdings eine wichtige Ausnahme:
 
-Für sehr einfache Inline-Funktionen - insbesondere typische *Getter* und *Setter* - 
-machen Inline-Funktionen nicht nur die Programmausführung *schneller* sondern auch den Code
+Für sehr einfache Inline-Funktionen – insbesondere typische *Getter* und *Setter* – 
+machen diese nicht nur die Programmausführung *schneller* sondern auch den Code
 insgesamt *kleiner*!
 ]
 
-.F[
-Wieviel mehr Code hängt natürlich ab von der Anzahl der Stellen im Gesamtprogramm
+.F[:
+Wieviel Platz im Code-Speicher verfügbar ist hängt natürlich ab von der Anzahl der
+Satelitten im Gesamtprogramm ab.
 ]
 
 ---
@@ -966,44 +1044,57 @@ template: plain
 name: compile_call
 header: #### Nicht-Inline Member-Funktionen
 
-Für diese wird der Code nur einmal erzeugt und im Speicher abgelegt während an den
-Aufrufstellen nur
+Für diese wird der Code nur einmal erzeugt und im Speicher abgelegt, während
+an den Aufrufstellen lediglich
 
 * die [Argumente versorgt](#caller_code) werden und anschließend
 * ein [Unterprogramm-Sprung](#jsr_code) erfolgt.
 
-Sofern die Funktion eine nennenswerte Größe hat, ist der Unterprogrammsprung allerdings
-der weniger entscheidende Nachteil.
+Sofern die Funktion eine nennenswerte Größe hat, ist der Unterprogrammsprung
+allerdings der weniger entscheidende Nachteil.
 
 .N[
-Eine viel wichtigere Rolle spielt bei modernen CPU-Architekturen die Tatsache, dass
-durch die Verzweigung der sequntielle Ausführung unterbrochen wird.
+Eine viel wichtigere Rolle kommt modernen CPU-Architekturen zu, welche die
+Tatsache, dass durch die Verzweigung die rein sequentielle Ausführung
+unterbrochen wird.
 ]
 
-Dies hat zur Folge, dass bei Eintritt in das Unterprogramm und bei dessen Verlassen
-die Pipeline mit bereits teilweise dekodierten Maschinenbefehlen und diverse Cache-Speicher
-wieder neu gefüllt werden müssen.
+Dies hat zur Folge, dass bei Eintritt in das Unterprogramm und bei dessen
+Verlassen die Pipeline mit bereits teilweise dekodierten Maschinenbefehlen
+dort gespeichert worden sein müsste.
 
 ---
 template: plain
 name: contra_inline
 header: #### Nachteile von Inline-Funktionen
 
-Weitere Nachteile von Inline-Funktionen können sich aus folgenden Punkten ergeben:
+[PIMPL-Idiom]: http://en.wikibooks.org/wiki/C%2B%2B_Programming/Idioms
 
-* Sie können als nicht zugleich `virtual` sein._[] und
-* die Implementierung muss im Header-Files erfolgen.
+Weiterhin ist bei der Verwendung von Inline-Funktionen folgendes zu bedenken:
 
-Ersteres schränkt den Umfang ein, in dem abgeleitete Klassen von den Basisklassen
-geerbte Member-Funktionen überschreiben können, letzteres erhöht die Abhängigkeiten
-zur Compile-Zeit.
+* Die Implementierung muss im Header-Files erfolgen.
 
-.F[
-Rein technisch gesehen kann eine Member-Funktion auch `virtual inline` sein.
-Dies wird allerdings in vielen Fällen dazu führen, dass eine solche Funktion
-als potenziell polymorph betrachtet werden muss und trotz `inline` vom Compiler
-Code für ein echtes Unterprogramm und dessen Aufruf erzeugt wird.
+* In der Kombination mit `virtual` werden `inline` Funktionen oftmals dennoch
+  als echtes Unterprogramm umgesetzt.
+
+.N[
+Anders gesagt: bei der Kombination von `inline` und `virtual` bleibt ersteres
+u.U.  wirkungslos – [detaillierte Erläuterungen](#virtual_inline) folgen später.
 ]
+
+Die Implementierung im Header-File erhöht jedoch den Grad der Kopplung durch
+Compilezeit-Abhängigkeiten, womit Änderungen an einer `inline` Funktion oft
+umfangreiche Re-Kompilierungen auslösen.._[]
+
+.F[:
+Im Grunde genommen geschieht durch `inline` für Member-Funktionen das Gegenteil
+von dem, was für Member-Daten durch Anwendung des [PIMPL-Idiom] erreicht werden
+soll.
+]
+
+Der Verzicht auf `virtual` – damit `inline` auf jeden Fall Wirkung zeigt –
+beschränkt abgeleitete Klassen darin, von ihren Basisklassen geerbte
+Member-Funktionen zu überschreiben, um deren Verhalten anzupassen.
 
 ---
 template: withinfo
@@ -1012,19 +1103,29 @@ section: Public versus Private Base Classes
 name: public_bases
 header: ### Öffentliche Basisklassen
 
+[LSP]: http://en.wikipedia.org/wiki/Liskov_substitution_principle
+[Vererbung]: http://en.wikipedia.org/wiki/Class_diagram#Generalization
+
 Gemäß der objektorientierten Sichtweise entspricht dies der *Vererbung*.
 
-Aus Sicht auf die Member-Daten handelt es sich um eine reine Verschachtelung:
+Aus Sicht auf die Member-Daten handelt es sich zunächst nur um eine
+Verschachtelung von Strukturen:
 
 * Die Daten der für die Bassklasse erzeugten Struktur sind
-* in den Daten der für die abgeleitete Klasse erzeugten Struktur direkt enthalten.
 
-Zusätzlich gilt das LSP (Liskov'sches Ersetzungsprinzip), gemäß dem ein ggf. erforderlicher
-Up-Cast (`Derived` => `Base`) vom Compiler automatisch vorgenommen wird.
+* **direkt enthalten** in den Daten der für die abgeleitete Klasse erzeugten
+  Struktur.
+
+Zusätzlich gilt das [LSP] (Liskov Substitution Principle), gemäß dem ein ggf.
+erforderlicher Up-Cast (`Derived` => `Base`) vom Compiler automatisch erfolgt.
 
 .N[
-Da die Daten der Basisklasse direkt am Anfang der abgeleiteten Klasse liegen, erfordert
-das LSP zur Laufzeit keinerlei Code!
+Da die Daten der Basisklasse direkt am Anfang der abgeleiteten Klasse liegen,
+erfordert das LSP zur Laufzeit keinerlei Code!._[]
+]
+
+.F[:
+Bei Mehrfachvererbung gilt diese Aussage nur noch eingeschränkt.
 ]
 
 ---
@@ -1034,19 +1135,35 @@ section: Public versus Private Base Classes
 name: private_bases
 header: ### Private Basisklassen
 
+[Komposition]: http://en.wikipedia.org/wiki/Class_diagram#Composition
+[GoF]: http://c2.com/cgi/wiki?DesignPatternsBook
+[Template Methode Pattern]: http://c2.com/cgi/wiki?TemplateMethodPattern
+
 Gemäß der objektorientierten Sichtweise entspricht dies der Komposition.
-So gesehen sind private Basisklassen in C++ lediglich eine Alternative zur typischen Vorgehensweise,
-[Komposition über Member-Daten](member_composition) zu realisieren.
 
-* Zusätzlich hat bei einer privaten Basisklassen aber die abgeleitete Klasse die Möglichkeit,
-  geerbte Methoden zu überschreiben.
+So gesehen sind private Basisklassen in C++ zunächst lediglich eine Alternative
+zur Realisierung der [Komposition über Member-Daten](#member_composition).
 
-* Daher kann das *Template Methode Pattern* des GoF-Buchs in C++ auch mit einer geringerer Kopplung
-  zwischen Basisklasse und abgeleiteter Klassen umgesetzt werden.
+* Zusätzlich hat bei einer privaten Basisklassen aber die abgeleitete Klasse die
+  Möglichkeit, geerbte Methoden zu überschreiben.
+
+* Daher kann das [GoF] [Template Methode Pattern] in C++ auch mit geringerer
+  Kopplung._[] zwischen Basisklasse und abgeleiteten Klassen umgesetzt werden.
+
+.F[:
+Stronger or looser coupling between too classes defines how much the one depends
+on the other – be in terms of documented behaviour (the good part) or accidental
+implementation details (what should be avoided in theory but happens in
+practice). In case of private base classes the coupling only exists through the
+public interface **plus** `virtual` members and hence is lesser as in case of
+public base classes, where coupling – at least potentially – may also be via the
+protected interface.
+]
 
 .N[
-Das Speicher-Layout ist zwar dasselbe wie bei Vererbung, es gilt aber *nicht* das LSP, d.h. ein
-`Derived`-Objekt wird nicht stillschweigend ein `Base`-Objekt substituieren.
+Das Speicher-Layout ist dasselbe wie bei Vererbung, es gilt aber **nicht** das
+LSP, d.h. ein `Derived`-Objekt kann nicht stillschweigend ein `Base`-Objekt
+substituieren.
 ]
 
 ---
@@ -1054,20 +1171,140 @@ template: withinfo
 graphic: ClassToMemoryMapping
 section: Composition in General
 name: member_composition
-header: ### Komposition im Allgemeinen
+header: ### Komposition über Member-Daten
 
-Komposition wird in C++ im allgemeinen dadurch realisiert, dass eine Klasse (die Gesamtheit)
-eine andere Klasse (das Teil) im Rahmen ihren Member-Daten direkt enthält.
+Komposition wird in C++ im allgemeinen dadurch realisiert, dass eine Klasse –
+die Gesamtheit – eine andere Klasse – das Teil – im Rahmen ihrer Member-Daten
+direkt enthält.
 
-* Durch die Anordnung der Daten-Member im Speicher, welche zu steigenden Adressen hin der
-  Reihenfolge im Quelltext entspricht, liegt das Teil aber nicht zwingend am Anfang der
-  Gesamtheit.
+* Durch die Anordnung der Daten-Member im Speicher, welche zu steigenden
+  Adressen hin der Reihenfolge im Quelltext von oben nach unten._[] entspricht,
+  liegt das Teil aber nicht zwingend am Anfang der Gesamtheit.
 
-* Des weiteren muss bei Bezugnahme auf das Teil dessen Name explizit verwendet werden,
-  während im Fall der Basiklasse
+* Des weiteren muss bei Bezugnahme auf das Teil dessen Name explizit verwendet
+  werden, während im Fall der Basisklasse
+
   * bei Eindeutigkeit keine weitere Qualifikation notwendig ist, und
-  * ansonsten der Klassenname als Scope-Operator (`Base::`) vorangestellt wird.
 
+  * ansonsten der Klassenname per Scope-Operator (`Base::`) vorangestellt wird.
+
+.F[:
+It is assumed here that there is only one data member defined per line. If
+several data members are defined in the same line, those more to the left get
+placed at lower addresses in memory (through lower offsets from the begin of the
+class' data space.)
+]
+
+---
+template: plain
+name: composition_example_1
+header: #### Vergleich: Komposition über Member-Daten
+
+Zur Verdeutlichung des Unterschieds der beiden Formen von Komposition
+hier zunächst der Weg über Member-Daten als Code-Fragment:
+```
+class Motor {
+    …
+public:
+    void start_engine();
+    …
+};
+
+class Car {
+    Motor m;
+    …
+    void start_engine() {
+        … // prepare starting the motor
+        m.start_engine();
+        … // check for engine errors
+    };
+}
+```
+
+        
+---
+template: plain
+name: composition_example_2
+header: #### Vergleich: Komposition über private Basisklasse
+
+Und hier das Code-Fragment mit einer privaten Basisklasse zur
+Komposition:
+```
+class Motor {
+    …
+protected:
+    void start_engine();
+    …
+};
+
+class Car : private Motor {
+    …
+public:
+    void start_engine() {
+        … // prepare starting the motor
+        Motor::start_engine();
+        … // check for engine errors
+    };
+}
+```
+
+---
+template: plain
+name: composition_example_3
+header: #### Vergleich: Komposition mit Überschreiben (1)
+
+Nur mit Hilfe einer privaten Basisklasse läßt sich die folgende Form des
+Zusammenspiels von Auto und Motor erreichen, bei welcher der Motor für die
+Benutzung durch das Auto._[] bereits *Erweiterungspunkte* vorgibt.
+```
+class Motor {
+    …
+    // extension points for aggreagate class
+    virtual void prepare_engine_start() {}
+    virtual void check_engine_errors() {}
+   …
+public:
+    void start_engine() {
+        prepare_engine_start();
+        … // actually start the engine
+        check_engine_errors();
+    }
+    …
+};
+```
+
+.F[:
+Oder wo immer der Motor später einmal als Komponente eingebaut wird ...
+]
+
+---
+template: plain
+name: composition_example_4
+header: #### Vergleich: Komposition mit Überschreiben (4)
+
+Das Auto nutzt nun lediglich die vom Motor zur Verfügung gestellten
+Erweiterungspunkte, **überschreibt aber nicht die Member-Funktion** zum Starten
+des eingebauten Motors.._[]
+
+```
+class Car : private Motor {
+    …
+public:
+    // implement extension points ...
+    virtual void prepare_engine_start() {
+        … // whatever is necessary
+    }
+    virtual void check_engine_errors() {
+        … // whatever is necessary
+    };
+}
+```
+
+.F[:
+In a more "cautious" design `Motor` could make its `start_engine()` member
+function protected (or even private!) and leave its exposition up to `Car`,
+typically then with a public `using Motor::start_engine` directive.
+]
 ---
 template: linkinfo
 graphic: ContainerImplementations
@@ -1092,81 +1329,111 @@ section:
 name: node_inheritance
 header: ### Auf Vererbung basierende Technik
 
-Hierbei wird in der Elementklasse nur die Verwaltungsinformation definiert -
+Hierbei wird in der Elementklasse nur die Verwaltungsinformation definiert –
 bei einer einfach verketteten Liste ist das lediglich der Zeiger auf das nächste Element.
 
 Um möglichst wenige Bezeichner in den globalen Namensraum einzubringen, erscheint
 es sinnvoll, die Elementklasse geschachtelt zu definieren:._[]
 ```
-	class Lifo {
-		class Node {
-			friend class Lifo;
-			Node *next;
-		protected:
-			Node() : next(nullptr) {}
-		};
-		// ...
-	};
+class Lifo {
+    class Node {
+        friend class Lifo;
+        Node *next;
+    protected:
+        Node() : next(nullptr) {}
+    };
+    …
+};
 ```
-.F[
-Durch ausschließlich nicht-öffentliche Member in der Elementklasse und die `friend`-Beziehung
-wird die Kapselung verbessert._[], da auf den `next`-Zeiger jetzt nur durch die `Lifo`-Klasse
-zugegreifen kann. Insbesondere in einigen älteren C++ Bücher findet sich zu Friend-Beziehungen
-immer wieder die Aussage, dass diese den "Zugriffsschutz aufweichen" würden. Bei einem
-angemessenen Einsatz dieses Sprachmechanismus ist jedoch das Gegenteil der Fall!
+
+---
+template: plain
+header: #### "Freundschaft" eng gekoppelter Klassen
+
+[Jiri Sukoup]: http://c2.com/cgi/wiki?JiriSoukup
+[Taming C++]: http://www.amazon.com/exec/obidos/ISBN=0201528266/portlandpatternrA/
+
+Bei C++-Entwicklern gibt es mitunter Vorbehalte in Bezug auf die Nutzung von
+`friend`-Beziehungen.
+
+Der Grund ist vermutlich, dass ältere Fachliteratur._[] mitunter die völlig
+unberechtigte Ansicht verbeitete, damit würde der Zugriffsschutz geschwächt –
+jedoch ist das Gegenteil ist der Fall!
+
+.I[
+Sofern zwei Klassen **miteinander** deutlich enger zusammenarbeiten als "mit
+dem Rest der Welt", lässt sich über `friend`-Beziehungen eine deutlich bessere
+Kapselung im Sinne des Zugriffsschutzes erzielen.
+]
+
+* Durch ausschließlich nicht-öffentliche Member in `Lifo::Node` kann auf den
+`next`-Zeiger jetzt nur noch die `Lifo`-Klasse zugreifen.
+
+* Ohne `friend`-Beziehung müssten `Lifo::Node`-s eine Member-Funktion
+bereitstellen, mit der **jeder(!)** den `next`-Zeiger verändern kann.
+
+.F[:
+Auch in C++-Fachveröffentlichungen gab und gibt es gelegentlich die Tendenz,
+einfach voneinander abzuschreiben, ohne die Sachlage selbst zu überdenken ...
+Explizit nicht zur Gruppe solcher Autoren gehört [Jiri Sukoup], der in seinem
+Buch [Taming C++] bereits 1994 den Nutzen von `friend`-Beziehungen ausführlich
+darstellte, obwohl er sich damit in Gegenposition zu anderen Autoren begab.
 ]
 
 ---
 template: plain
 header: #### Container-Elemente mit Daten
 
-Um in den Elementen des Containers auch tatsächlich einen Datenteil unterbringen zu können,
-müssen entsprechende Klassen abgeleitet werden:
+Um in den Elementen des Containers auch Daten unterzubringen, müssen
+zunächst entsprechende Klassen abgeleitet werden, z.B. für Gleitpunktzahlen ...
 ```
-	class Double_Node : public Lifo::Node {
-	public:
-		Double_Node(double d) : data(d) {}
-		double data;
-	};
+class Double_Node : public Lifo::Node {
+public:
+    Double_Node(double d) : data(d) {}
+    double data;
+};
 ```
+
+... oder Zeichenketten:
 ```
-	#include <string>
-	class Double_Node : public Lifo::Node {
-	public:
-		String_Node(const std::string &s) : data(s) {}
-		double std:string;
-	};
+#include <string>
+class Double_Node : public Lifo::Node {
+public:
+    String_Node(const std::string &s) : data(s) {}
+    std::string data;
+};
 ```
-Wie man sieht, ist der Code solcher Klassen sehr systematisch.
+
+Wie man sieht, ist der Code solcher Klassen sehr systematisch!
 
 ---
 template: plain
 header: #### Daten-Elemente als Templates
 
-Dieses immer wieder nahezu gleiche Aussehen der abgeleitete Datenklassen legt dafür
+Das immer wieder nahezu gleiche Quelltext der abgeleiteten Datenklassen legt
 die Verwendung von Templates nahe:._[]
-
-Durch die Ählichkeit im Quelltext ist die Zusammenfassung naheliegend:._[]
 ```
-	template<typename ELemType>
-	class Data_Node : public Lifo::Node {
-	public:
-		Data(const ElemType &d) : data(d) {}
-		ElementType data;
-	};
+template<typename ELemType>
+class Data_Node : public Lifo::Node {
+public:
+    Data(const ElemType &d) : data(d) {}
+    ElemType data;
+};
 ```
 .N[
-Dies hat noch nichts mit der auf Templates basierenden Implementierung von Containern
-zu tun, es geht hier einzig und allein darum, den sehr ähnlich aussehenden Quelltext
-für die Klassen der Daten-Elemente im Sinne des DRY-Principles zusammenzufassen!
+Dies hat nichts mit der auf Templates basierenden Implementierung von Containern
+zu tun, die später gezeigt wird.
 ]
 
-.F[
-Das Argument des Konstruktors wird nun zwar auf jedem Fall per Referenz übergeben,
-was im Allgemeinen zu einem leichten Overhead für Grundtypen geringer Größe führen wird.
-Im obigen Fall handelt es sich allerdings um eine Inline-Funktion handelt (durch
-Implementierung in der Klasse selbst), womit effektiv überhaupt keine Argumentübergabe
-stattfinden wird.
+An dieser Stelle geht es einzig und allein darum, den sehr ähnlichen Quelltext
+für die Klassen der Daten-Elemente im Sinne des DRY-Principles zusammenzufassen!
+
+.F[:
+Das Argument des Konstruktors wird nun auf jedem Fall per Referenz übergeben,
+was im Allgemeinen zu einem leichten Overhead für Grundtypen geringer Größe
+führen dürfte. Im obigen Fall handelt es sich jedoch um eine Inline-Funktion
+(durch Implementierung in der Klasse selbst), womit effektiv überhaupt keine
+Argumentübergabe stattfinden wird.
 ]
 
 ---
@@ -1176,36 +1443,77 @@ header: #### Datenelemente erzeugen und einfügen
 
 Dies kann für ein `Lifo c` ggf. in einem einzigen Schritt geschehen:
 ```
-	c.push(new Double_Node(47.11));
+c.push(new Double_Node(47.11));
+c.push(new String_Node("hello, world!"));
 ```
-```
-	c.push(new String_Node("hello, world!"));
-```
+
 Oder mit Templates für die Klassen der Datenelemente:
 ```
-	c.push(new Data_Node<double>(47.11));
+c.push(new Data_Node<double>(47.11));
+c.push(new Data_Node<std::string>("hello, world!"));
 ```
+
+---
+template: plain
+name: insert_elements
+header: #### Template-Helfer-Funktionen
+
+Die redundante Angabe des Typs als Template-Argument im letzten Code-Fragment
+legt die Definition einer Helferfunktion nahe:
 ```
-	c.push(new Data_Node<std::string>("hello, world!"));
+template<typename ElemType>
+Data_Node<ElemType> *make_Data_Node(const ElemType &v) {
+    return new Data_Node<ElemType>(v);
+}
+…
+c.push(make_Data_Node(47,11));
+c.push(make_Data_Node(string("hello, world")));
 ```
+
+Zur bequemen Übergabe von Zeichenketten-Literalen als `std::string` sollte
+kann man noch eine spezifische Überladung hinzufügen:._[]
+```
+Data_Node<std::string> *make_Data_Node(const char *v) {
+    return new Data_Node<std::string>(v);
+}
+…
+c.push(make_Data_Node("hello, world"));
+```
+
+.F[:
+Here we already have taken a few steps beyond the border of "programming with
+templates" land – for the moment we will retreat, but this path will be
+followed in a later chapter.
+]
 
 ---
 template: plain
 header: #### Datenelemente entnehmen
 
-Hier zeigt sich nun ein gravierender Nachteil.
-Das grundsätzliche Vorgehen sieht so aus:
+[Java Generics]: http://en.wikipedia.org/wiki/Generics_in_Java
+
+Hier zeigt sich nun ein gravierender Nachteil, denn das grundsätzlich
+erforderliche Vorgehen sieht so aus:
 ```
-	Lifo c;
-	// ...
-	Lifo::Node *p = c.pop();
+Lifo c;
+…
+Lifo::Node *p = c.pop();
 ```
 
-* Im Rahmen der Implementierung des Containers ist nichts anderes als die `Lifo::Node` Klasse
-  bekannt gewesen.
-* Insofern kann bei der Entnahme mit der Member-Funktion `Lifo::pop` auch nur ein solcher,
-  allgemeiner Elementzeiger zurückgegeben werden.
-* Für diesen Zeiger muss zur weiteren Verwendung ein expliziter Down-Cast erfolgen.
+* Im Rahmen der Implementierung des Containers ist nichts anderes als die
+  `Lifo::Node` Klasse bekannt.
+
+* Insofern kann bei der Entnahme mit der Member-Funktion `Lifo::pop` auch nur
+  ein solcher, allgemeiner Elementzeiger zurückgegeben werden.
+
+* Für diesen muss zur weiteren Verwendung ein expliziter Down-Cast
+  erfolgen.._[]
+
+.F[:
+Dies ist alles, was [Java Generics] automatisieren, und insofern sollten diese
+– trotz ähnlicher Syntax – nicht mit C++ Templates verglichen werden: es liegen
+Welten dazwischen!
+]
 
 ---
 template: plain
@@ -1213,17 +1521,29 @@ header: #### Datenelemente entnehmen (2)
 
 ##### Datenelemente verwendbar machen mit `dynamic_cast` auf Zeigerbasis
 
-Die sichere Variante verwendet einen Down-Cast mit Prüfung des Laufzeit-Typs:._[]
+Die sichere Variante verwendet einen Down-Cast mit Prüfung des Laufzeit-Typs:
 ```
-	Double_Node *p = dynamic_cast<Double_Node*>(c.pop());
-	if (p != nullptr) {
-		// OK, has expected type
-		// may access p->data now
-	}
-	else {
-		// Oops - not a Double_Node ??
-	}
+Double_Node *p = dynamic_cast<Double_Node*>(c.pop());
+if (p != nullptr) {
+    // OK, has expected type
+    // may access p->data now
+}
+else {
+    // Oops - not a Double_Node ??
+}
 ```
+
+Bereits C++98 erlaubt übrigens auch die etwas kompaktere Form._[]
+```
+if (Double_Node *p = dynamic_cast<Double_Node*>(c.pop())) …
+```
+
+womit sich die Sichtbarkeit von `p` auf die `if`-Anweisung beschränkt.
+
+.F[:
+In C++11 weiter verkürzbar zu:
+`if (auto p = dynamic_cast<Double_Node*>(c.pop())) …`
+]
 
 ---
 template: plain
@@ -1231,37 +1551,75 @@ header: #### Datenelemente entnehmen (3)
 
 ##### Datenelemente verwendbar machen mit `dynamic_cast` auf Referenzbasis
 
-Wenn im Fehlerfall ohnehin ein Abbruch erfolgen müsste (da die falsche Datenart
-völlig unerwartet vorgefunden wurde), geht es auch so:
+Wenn im Fehlerfall ohnehin ein Abbruch erfolgen müsste, da die falsche Datenart
+völlig unerwartet vorgefunden wurde und nicht weiterverarbeitet werden kann,
+geht es auch so:
 ```
-	Double_Node &n = dynamic_cast<Double_Node&>(*c.pop());
-	// if the cast didn't throw, n.data may be accessed now
+Double_Node &n = dynamic_cast<Double_Node&>(*c.pop());
+// if the cast didn't throw, n.data may be accessed now
 ```
+
+Diese Form lässt sich auch mit dem direkten Member-Zugriff verbinden:
+```
+… dynamic_cast<Double_Node&>(*c.pop()).data …
+```
+
 .N[
-Mehr zu `dynamic_cast` und ein Vergleich zur weniger sicheren
-`static_cast` folgt später.
+Mehr zu `dynamic_cast` und ein Vergleich zum weniger sicheren `static_cast`
+folgt als Bestandteil des Abschnitts [RTTI](#dynamic_cast).
 ]
+
+---
+template: plain
+name: memory_leaks
+header: ### Memory Leaks
+
+[Memory Leaks]: http://www.cprogramming.com/tutorial/memory_debugging_parallel_inspector.html
+
+Da in C++ keine Garbage Collection existiert, sind [Memory Leaks] immer wieder
+ein Thema.
+
+.W[
+In allen vorhergehenden Beispielen, welche Elemente aus dem `Lifo` entnehmen,
+wurde das Thema Speicherverwaltung bislang vernachlässigt - es wird dafür auf
+den folgenden Seiten im Zentrum stehen.
+]
+
+Am besten ist es, wenn das Thema Speicherverwaltung im frühzeitigen
+Programm-Design Berücksichtigung findet.
+
+* Probleme, die ihre Wurzeln in einem (für C++) unangemessenen Programm-Design
+  haben, nachträglich "per Debugging" anzugehen, kann schnell uferlos werden.
+
+* Zwar gibt es eine Reihe von Tools, welche beim Aufspüren solcher Probleme
+  helfen, sie demonstrieren aber nur die "Symptome" und liefern nicht die
+  "Arznei" zu deren Vermeidung.
 
 ---
 template: plain
 header: #### Verantwortlichkeit für die Speicherverwaltung
 
-Bei der auf Ableitung von den Elementklassen bestehenden Vorgehensweise liegt die
-Verantwortung für die Speicherverwaltung außerhalb der Containerklasse.
+Bei der auf Ableitung von den Elementklassen bestehenden Vorgehensweise liegt
+die Verantwortung für die Speicherverwaltung außerhalb der Containerklasse.
 
-* Die Datenelemente werden vor dem eigentlichen Einfügen im dynamischen Speicher erzeugt.
-* Daher muss auch das Löschen nach der entnahme explizit erfolgen.
+* Die Datenelemente werden **vor** dem eigentlichen Einfügen im dynamischen
+ Speicher erzeugt.
+
+* Daher muss auch das Löschen **nach** der Entnahme explizit erfolgen.
 
 ```
-	Double_Node *p = dynamic_cast<Double_Node*>(c.pop());
-	if (p != nullptr) {
-		// OK, has expected type
-		// may access p->data now
-		delete p;
-	}
+Double_Node *p = dynamic_cast<Double_Node*>(c.pop());
+if (p != nullptr) {
+    // OK, has expected type
+    … // may access p->data now
+    delete p;
+}
 ```
+
+.W[
 Dieser Code weist allerdings das Problem auf, dass ein anderer als der erwartete
 Datentyp zu einem Memory-Leak führen könnte, da dann kein `delete` erfolgt.
+]
 
 ---
 template: plain
@@ -1269,25 +1627,22 @@ header: #### Speicherfreigabe über Zeiger auf Basisklassen
 
 Ein möglicher Ausweg kann so aussehen:
 ```
-	Lifo::Node *p = c.pop();
-	if (Double_Node *dp = dynamic_cast<Double_Node*>(p)) {
-		// OK, has expected type
-		// may access p->data now
-	}
+Lifo::Node *p = c.pop();
+if (Double_Node *dp = dynamic_cast<Double_Node*>(p)) {
+    // OK, has expected type
+    … // may access p->data now
+}
 ```
-Nun könnten noch weitere, ähnliche Tests auf andere mögliche Elementtypen._[] folgen.
+Nun könnten noch weitere Tests auf andere mögliche Elementtypen, und dann ganz
+am Ende (außerhalb aller bedingten Blöcke):
 ```
-	// release dynamic memory
-	delete p;
+    // release dynamic memory
+    delete p;
 ```
 
-Allerdings ist Code wie der obige nur dann korrekt, wenn der Destruktor `Lifo::Node::~Node()`
-virtuell ist. (Dazu später mehr.)
-
-.F[
-Die spezielle, hier verwendete Syntax der `if`-Anweisung vereinfacht übrigens das *Copy&Paste*
-dieser Abschnitte etwas, da die Variable `dp` jeweils nur lokale Sichtbarkeit im Block nach
-dem Bedingungstest hat.
+.W[
+Allerdings ist Code wie der obige nur dann korrekt, wenn der Destruktor
+`Lifo::Node::~Node()` virtuell ist.
 ]
 
 ---
@@ -1297,136 +1652,153 @@ section: (Node-) Inheritance Technique
 name: templated_containers
 header: ### Auf Templates basierende Technik
 
-Bei dieser mittlerweile viel gängigeren Alternative wird zunächst die `Lifo`-Klasse selbst
-als Template definiert:
+Bei dieser in C++ mittlerweile viel gängigeren Alternative wird zunächst die
+`Lifo`-Klasse selbst als Template definiert:
 ```
-	template<class ElemType>
-	class Lifo {
-		class Node;
-	public:
-		void push(const ElemType &);
-		void pop(ElemType &);
-	};
+template<class ElemType>
+class Lifo {
+    class Node;
+    Lifo *top;
+public:
+    Lifo() : top(nullptr) {}
+    void push(const ElemType &);
+    void pop(ElemType &);
+};
 ```
 
 ---
 template: plain
 header: #### Template für Klasse der Datenelemente
 
-Durch die geschachtelte Definition der Elementklasse wird auch diese zur Template und
-kann damit den Datenteil ganz "offiziell" enthalten:
+Durch die geschachtelte Definition der Elementklasse wird auch diese zur
+Template und kann damit den Datenteil im Typ paremetriesiert enthalten:
 ```
-	template<class ElemType>
-	class Lifo<ElemType>::Node {
-		Node *next;
-		ElemType data;
-		Node(Node const* n, const ElementType& d)
-			: next(n), data(d)
-		{}
-		friend class Lifo<ElemType>;
-	};
+template<class ElemType>
+class Lifo<ElemType>::Node {
+    Node *next;
+    ElemType data;
+    Node(Node const* n, const ElemType& d)
+        : next(n), data(d)
+    {}
+    friend class Lifo<ElemType>;
+};
 ```
 
 ---
 template: plain
 header: #### Operation zum Einfügen neuer Datenelemente
 
-Mit der obigen kleinen Änderung des Designs, die den `next`-Zeigers über ein Argument des
-Konstruktor initialisiert, ergibt sich eine sehr einfach Implementierung der Einfüge-Operation:
+Mit der gezeigten Änderung des Designs, die den `next`-Zeigers über ein Argument
+des Konstruktor initialisiert, ergibt sich eine sehr einfache Implementierung
+der Einfüge-Operation:
 ```
-	template<class ElemType>
-	void Lifo<ElemType>::push(const ElemType &d) {
-		head = new Node(head, d);
-	}
+template<class ElemType>
+void Lifo<ElemType>::push(const ElemType &d) {
+    head = new Node(head, d);
+}
 ```
-Nach wie vor werden die Datenelemente im dynamischen Speicher angelegt, allerdings nun gekapselt
-im Code der Container-Klasse.
+
+.I[
+Nach wie vor werden die Datenelemente zwar im dynamischen Speicher angelegt, die
+Erzeugung ist nun allerdings gekapselt im Code der Container-Klasse.
+]
 
 ---
 template: plain
 header: #### Operation zur Entnahme von Datenelemente
 
-Da die Speicherverwaltung nun in die Verantwortung der `Lifo`-Klasse übergegangen ist,
-gehört die Freigabe des dynamischen Speichers natürlich ebenso dorthin:
+Somit erscheint es naheliegend, auch die Freigabe in der `Lifo`-Klasse zu
+kapseln:
 ```
-	template<class ElemType>
-	bool Lifo<ElemType>::pop(ElemType &d) {
-		if (head == nullptr)
-			return false;
-		auto p = head;
-		d = p->data;
-		head = p->next;
-		delete p;
-		return true;
-	}
+template<class ElemType>
+bool Lifo<ElemType>::pop(ElemType &d) {
+    if (head == nullptr)
+        return false;
+    auto p = head;
+    d = p->data;
+    head = p->next;
+    delete p;
+    return true;
+}
 ```
-Ein virtueller Destruktor ist nun nicht mehr erforderlich, da die `delete` Anweisung nicht
-über einen Basisklassen-Zeiger erfolgt.
+
+.I[
+Ein virtueller Destruktor ist nun nicht mehr erforderlich, da die `delete`
+Anweisung nicht wie in den auf Vererbung beruhenden Beispielen über einen
+Basisklassen-Zeiger erfolgt.
+]
 
 ---
 template: plain
 header: #### Destruktor der Container-Klasse
 
-Aufgrund des Übergangs der Verantwortlichkeit für die Verwaltung des dynamischen Speichers
-der Datenelemente sollte spätestens jetzt ein Destruktor eingeführt werden:
+Aufgrund des Übergangs der Verantwortlichkeit für die Verwaltung des dynamischen
+Speichers der Datenelemente sollte spätestens jetzt auch die `Lifo`-Klasse einen
+Destruktor erhalten:
 ```
-	Lifo::~Lifo() {
-		auto p = head;
-		while (p != nullptr) {
-			const auto p_next = p->next;
-			delete p;
-			p = p_next;
-		}
-	}
+Lifo::~Lifo() {
+    auto p = head;
+    while (p != nullptr) {
+        const auto p_next = p->next;
+        delete p;
+        p = p_next;
+    }
+}
 ```
-Ob ein ähnlicher Destruktor auch für die andere Implementierung sinnvoll wäre oder gar notwendig
-ist, hängt von eingehenden Analysen des Codes ab._[], wie der Container tatsächlich benutzt wird.
 
-.F[
-Ohne eine solche Analyse wird die Sache leicht zum Grund für Memory-Leaks - nämlich wenn es
-*keinen* solchen Destruktor gibt aber eigentlich einen geben müsste; oder es kommt zu vorzeitig
-freigegebenem Speicherplatz für noch benutzte Datenelemente - wenn es einen solchen Destruktor
-gibt aber eigentlich *keinen* geben dürfte).
+.N[
+Ob ein ähnlicher Destruktor auch für die andere (auf Vererbung basierende)
+Implementierung sinnvoll wäre oder gar notwendig ist, hängt von einer
+eingehenden Analyse des Codes ab, welcher den Container tatsächlich benutzt.._[]
+]
+
+.F[:
+Ohne eine solche Analyse wird die Sache leicht zum Grund für Memory-Leaks –
+nämlich wenn es *keinen* solchen Destruktor gibt aber eigentlich einen geben
+müsste; oder es kommt zu vorzeitig freigegebenem Speicherplatz von noch
+benutzten Datenelementen – wenn es einen solchen Destruktor gibt aber eigentlich
+*keinen* geben sollte).
 ]
 
 ---
 template: plain
+name: typesafe_push
 header: #### Typsicherheit beim Einfügen
 
-Neben der sicheren Speicherverwaltung macht der Blick auf die Implemetierung einen anderen
-Vorteil dieser Technik klar:
-
+Neben der sicheren Speicherverwaltung macht der Blick auf die Implementierung
+einen anderen Vorteil dieser Technik klar:
 
 Die Schnittstelle zum Einfügen und Entnehmen von Elementen ist nun typsicher:
 ```
-	Lifo<double> c1;
-	Lifo<std::string> c2;
+Lifo<double> c1;
+Lifo<std::string> c2;
 
-	// OK
-	c1.push(3.14);
-	c2.push("hi!");
+// OK
+c1.push(3.14);
+c2.push("hi!");
 
-	// Compile-Error!!
-	c1.push("hi!");
-	c2.push(3.14);
+// Compile-Error!!
+c1.push("hi!");
+c2.push(3.14);
 ```
 
 ---
 template: plain
+name: typesafe_pop
 header: #### Typsicherheit beim Entnehmen
 
 Dies gilt ebenso für die Entnahme von Elementen:
 ```
-	double d;
-	std::string s;
+double d;
+std::string s;
 
-	// OK
-	c1.pop(d);
-	c2.pop(s);
+// OK
+c1.pop(d);
+c2.pop(s);
 
-	// Compile-Error!!
-	c1.pop(s);
-	c2.pop(d);
+// Compile-Error!!
+c1.pop(s);
+c2.pop(d);
 ```
 
 ---
@@ -1436,20 +1808,24 @@ section: Non-Polymorphic Elements
 name: container_implementations
 header: #### Slicing als Nachteil der Templates
 
-Die bessere Sicherheit vor Memory-Leaks durch die Übertragung der Speicherverwaltung
-in die Vertanwortung der `Lifo`-Klasse und der Gewinn an Typsicherheit beim Einfügen
-und Entnehmen haben auch eine Kehrseite:
+Die bessere Sicherheit vor Memory-Leaks durch die Übertragung der
+Speicherverwaltung in die Vertanwortung der `Lifo`-Klasse und der Gewinn an
+Typsicherheit beim Einfügen und Entnehmen haben auch eine Kehrseite:
 
 .W[
-Eventuell erwünschter Polymorphismus für die Container-Elemente geht zunächst verloren.
+Eventuell erwünschter Polymorphismus für die Container-Elemente geht damit
+verloren.
 ]
 
-Mit einer Basisklasse für Früchte allgemein (`Fruit`) und abgeleiteten Klassen für
-spezifische Früchte (`Apple` `Banana`, `Kiwi`, ...) ist `Lifo<Fruit>` *nicht* der
-evtl. erwartete "Obstkorb":
+Mit einer Basisklasse für Früchte allgemein (`Fruit`) und abgeleiteten Klassen
+für spezifische Früchte (`Apple` `Banana`, `Kiwi`, ...) ist `Lifo<Fruit>`
+*nicht* der evtl. erwartete "Obstkorb":
 
-* Beim Einfügen wird von den speziellen Fruchtklassen der spezifische Anteil entfernt (Slicing) und
-* bei der Entnahme kommt somit nur der unspezifische (als `Fruit` implementierte) Teil zurück.
+* Beim Einfügen wird von den speziellen Fruchtklassen der spezifische Anteil
+  entfernt (Slicing) und
+
+* bei der Entnahme kommt somit nur der unspezifische, als `Fruit` implementierte
+  Teil zurück.
 
 ---
 template: withinfo
@@ -1457,21 +1833,23 @@ graphic: ContainerImplementations
 section: Polymorphic Elements
 name: container_implementations
 header: #### Template-Technik mit explizitem Polymorphismus
-
-Wird bei auf Templates basierenden Container Polymophismus hinsichtlich der Datenelemente
-gewünscht, muss explizit ein Container von Zeigern verwendet werden.
+:
+Wird bei auf Templates basierenden Container Polymorphismus hinsichtlich der
+Datenelemente benötigt, muss explizit ein Container von Zeigern verwendet
+werden:
 ```
-	Lifo<Fruit *> allMyFruits;
+Lifo<Fruit *> allMyFruits;
 ```
 
-Allerdings geht nun die Verantwortung für den Speicherplatz wieder auf denjenigen
-über, der den Container benutzt.
+.W[
+Allerdings geht damit die Verantwortung für den Speicherplatz wieder auf
+denjenigen über, der den Container benutzt.
+]
 
 Das Einfügen muss nun so erfolgen:
 ```
-	// fill some ...
-	allMyFruits.push(new Banana( ... ));
-	allMyFruits.push(new Apple( ... ));
+allMyFruits.push(new Banana( … ));
+allMyFruits.push(new Apple( … ));
 ```
 
 ---
@@ -1480,63 +1858,87 @@ header: #### Template-Technik mit explizitem Polymorphismus (2)
 
 Die Entnahme sieht prinzipiell so aus:
 ```
-	// get back ...
-	Fruit *f = nullptr;
-	while (allMyFruits.pop(f)) {
-		// got another one!
-		// now wash it, peal it, eat it,
-		// whatever ...
-		delete f; 
-	}
+Fruit *f = nullptr;
+while (allMyFruits.pop(f)) {
+    // got another one!
+    … // now wash it, peal it, eat it,
+    delete f; 
+}
 ```
-Für die Korrektheit des obigen Codes muss natürlich `Fruit::~Fruit()` virtuell sein!
+
+.W[
+Für die Korrektheit des obigen Codes muss der Destrutktor `Fruit::~Fruit()`
+virtuell sein!
+]
+
+C++ Style-Guides legen mitunter nahe, sicherheitshalber
+
+* **alle** Klassen mit einem virtuellen Destruktor auszustatten,
+* oder zumindest Klassen, die als Basisklassen verwendet werden,
+* oder zumindest Klassen, die wenigstens eine (andere) Member Funktion als
+  `virtual` definieren.._[]
+.F[:
+But all these rules miss the key question, which could have been posed already
+at design time: What knowledge about the class hierarchy is available where the
+`delete` takes place?
+]
+  
 
 ---
 template: plain
 header: #### Template-Technik mit explizitem Polymorphismus (3)
 
-Schließlich muss im Anschluss an die Entnahme einer Frucht geprüft werden, was man
-eigentlich bekommen hat:
+Schließlich muss im Anschluss an die Entnahme einer Frucht geprüft werden, was
+man eigentlich bekommen hat:
 ```
-	// got another one!
-	if (auto &apple = dynamic_cast<Apple&>(f)) {
-		// look it's an apple
-		// wash it, eat it
-	}
-	if (auto &banana = dynamic_cast<Banana&>(f)) {
-		// look, its a banana
-		// peal it, eat it
-	}
+// got another one!
+if (auto &apple = dynamic_cast<Apple&>(*f)) {
+    // look it's an apple
+    … // wash it, eat it
+}
+if (auto &banana = dynamic_cast<Banana&>(*f)) {
+    // look, it's a banana
+    … // peal it, eat it
+}
 ```
+
 Während die gezeigte Vorgehensweise funktioniert, kann sie unter dem Aspekt eines
-"echten" objekt-orientierten Ansatzes kritisiert werden.
+guten objekt-orientierten Designs kritisiert werden.
 
 .N[
-[Eine Design-Alternavtive zu typ-basierten Mehrfachverzweigungen wird später noch
-ausführlich erläutert und ist auch Thema einer Übung.](#multiway_typeswitch)
+[Eine Alternative zur obigen, typ-basierten Mehrfachverzweigungen wird später
+noch ausführlicher betrachtet.](#multiway_typeswitch)
 ]
 
 ---
 template: plain
 header: #### Pointer in auf Templates basierenden Containern
 
-Besonders durch die damit verbundene Bequemlichkeit bei den STL-Containern wird
-die Wert-Semantik schnell zur Gewohnheit. Damit geht bei expliziten Zeigern in
-Containern oft der Blick für die damit verbundenen Gefahren und besonderheiten
-verloren.
+Durch die damit verbundene Bequemlichkeit bei den STL-Containern wird die
+Wert-Semantik schnell zur Gewohnheit.
 
-.W[
-Beim gerade gezeignet "Früchtekorb" besteht beispielsweise das Riskio eines
-Memory-Leaks, wenn ein nicht-leerer Container dieser Art mittels des gerade dafür
-empfohlenen Destruktors seinen Inhalt löscht.
+Damit geht bei expliziten Zeigern in Containern oft der Blick für die damit
+verbundenen Gefahren und Besonderheiten verloren.
+
+Beim gerade gezeignet "Obstkorb" besteht z.B. ein Dilemma:
+
+* Sollte er sich als Eigentümer des Speicherplatzes sehen, auf den die
+  enthaltenen Zeiger verweisen,
+* oder sollte er das eher nicht tun?._[]
+
+.F[:
+Do not take this lightly ... an inaproriate decision may lead to a memory leak
+or even worsde, cause dangling pointers.
 ]
 
-ResourceWrapper-Klassen können hier Abhilfe schaffen, im konkreten Fall:
+.N[
+ResourceWrapper-Klassen können hier helfen, im konkreten Fall:
 
 * `Lifo<std::unique_ptr<Fruit>>` oder
 * `Lifo<std::shared_ptr<Fruit>>`
 
-Diese werden später noch ausführlicher betrachtet.
+Diese werden in einem späteren Kapitel ausführlicher behandelt.
+]
 
 ---
 template: linkinfo
@@ -1556,21 +1958,26 @@ header: ## Typ-Bestimmung zur Laufzeit
 
 ---
 template: plain
+name: rtti_prerequisites
 header: ### RTTI-Voraussetzungen
 
-Mit C++98 wurde die explizite  Laufzeit-Typinformation (RTTI) zum verbinlichen
+Mit C++98 wurde die explizite Laufzeit-Typinformation (RTTI) zum verbindlichen
 Sprachfeature.
 
-* Die Information der Klassenzugehörigkeit muss dafür im Objekt selbst untergebracht sein.
-* Nicht jedes Objekt braucht diese Information und sollte unnötigen Overhead vermeiden können.
+* Die Information der Klassenzugehörigkeit muss dafür im Objekt selbst
+  untergebracht sein.
+
+* Nicht jedes Objekt braucht diese Information und sollte unnötigen Overhead
+  vermeiden können.
 
 .I[
-Klassen müssen mindestens eine virtuelle Member Funktion haben, damit für ihre Objekte
-RTTI verfügbar ist.
+Klassen müssen mindestens eine virtuelle Member Funktion haben, damit für ihre
+Objekte RTTI verfügbar ist.
 ]
 
-Implizit war eine Laufzeit-Typidentifikation immer schon Bestandteil von C++, indem
-die Ausführung virtueller Member-Funktionen vom Laufzeityp abhängt.
+Implizit war eine Laufzeit-Typidentifikation immer schon Bestandteil von C++, da
+die Ausführung virtueller Member-Funktionen vom Laufzeityp abhängt. Insofern ist
+es auch naheliegend, RTTI an die Existenz virtueller Methode zu knüpfen.
 
 ---
 template: withinfo
@@ -1580,15 +1987,18 @@ name: dynamic_poymorphism
 header: ### Dynamischer Polymorphismus
 
 Hierbei handelt es sich um eine implizite Form der Laufzeit-Typindentifikation.
-Eine andere übliche Bezeichnung ist "spätes" oder "dynamisches" Binden (late binding).
+Eine andere übliche Bezeichnung ist "spätes Binden" (late binding) oder auch
+"dynamisches Binden".
 
-Im Unterachied zum statischen Polymorphismus entscheidet dabei der Laufzeittyp über
+Im Unterschied zum statischen Polymorphismus entscheidet dabei der Laufzeittyp über
 die Auswahl einer aufzurufenden Member-Funktion.
 
-Voraussetzung dazu ist:
-* Der Aufruf erfolgt über eine Objekt-Referenz oder einen Objekt-Zeiger. Dieser
-  legt dabei den Compilezeit-Typ fest, gemäß dem entschieden wird, **welche**
-  Funktionen überhauot aufgerufen werden können.
+Voraussetzung dafür ist:
+
+* Der Aufruf erfolgt über eine Objekt-Referenz oder einen Objekt-Zeiger. Diese(r)
+  legt den Compilezeit-Typ fest, gemäß dem entschieden wird, **welche** Member
+  Funktionen überhaupt aufgerufen werden können.
+
 * Die aufgerufene Member-Funktion wurde in der betreffenden Klasse als `virtual`
   deklariert._[]
 
@@ -1602,57 +2012,129 @@ Deklaration in einer Basisklasse ausreichend.
 template: plain
 header: #### Zweck des dynamischen Polymorphismus
 
-Dabei geht es darum, den Laufzeittyp eines Objekts zu ermitteln um auf dieser Basis zu entscheiden, welche Version einer ggf. überschriebenen virtuellen Member-Funktion aufzurufen ist.
+Generell geht es bei der Ermittlung des Laufzeittyps eines Objekts darum, auf
+dieser Basis zu entscheiden, welche von ggf. mehreren überschriebenen virtuellen
+Member-Funktion aufzurufen ist.._[]
+```
+class Base { … virtual void foo(); … };
+class Derived : public Base { … }; // this does not override foo(),
+                                   // but the following two do:
+class MoreDerived : public Derived { … virtual void foo(); … };
+class OtherDerived : public Base { … virtual void foo(); … };
+…
+void bar(Base &b) { // or: bar(Base *p) 
+    b.foo();        //     p->foo(); 
+}
+…
+// now for some calls of foo through bar:
+Base b;         bar(b); // calls Base::foo()
+Derived d;      bar(d); // same
+MoreDerived m;  bar(m); // calls MoreDerived::foo()
+OtherDerived o; bar(o); // calls OtherDerived::foo()
+```
+
+.F[:
+Another interesting point is this: to compile `bar` nothing but `Base` needs to
+be known, in fact the derived classes might not even have been written then, but
+the code manages somehow to always call the right overrides ...
+]
 
 ---
 template: plain
+name: implement_vcall
 header: #### Implementierung des dynamischen Polymorphismus
 
+Die übliche Vorgehensweise beruht auf dem indirekten Einsprung in ein
+Unterprogramm über eine Tabelle von Zeigern.
+
+Hierzu führt jedes Objekt, das einer Klasse mit **mindestens** einer virtuellen
+Member-Funktion angehört,
+
+* **genau** einen zusätzlichen Zeiger mit,
+
+* welcher wiederum auf eine Tabelle mit den Adressen **aller** ihrer virtuellen
+  Member-Funktionen zeigt.
+
+Da diese Tabelle **klassenspezifisch** ist, und muss sie in einem Gesamtprogramm
+nur **einmal pro Klasse** vorhanden sein.._[]
+
 .I[
-Die dazu in praktisch allen C++-Implementierungen übliche Vorgehensweise beruht auf
-dem Einsprungs in ein Unterprogramm über eine Tabelle von Zeigern.
+Diese Technik ist nicht zwingend aber sehr effizient und wird daher in praktisch
+allen C++-Implementierungen benutzt.
 ]
-
-Hierzu führt jedes Objekt, dass einer Klasse mit **mindestens einer**
-virtuellenen Member-Funktion angehört, **genau einen** zusätzlichen Zeiger mit,
-welcher auf eine Tabelle mit den Adressen *aller* ihrer virtuellen Member-Funktionen
-zeigt.
-
-Da diese Tabelle wiederum **klassenspezifisch** ist, und muss sie in einem
-Gesamtprogramm nur **einmal pro Klasse** vorhanden sein.._[]
 
 .F[:
 Dies gilt zumindest prinzipiell und hängt in der Praxis davon ab, dass bei einer
-modulweise getrennten Kompilierung der Linker ggf. vorsorglich pro Objekt-Modul
-angelegte Exemplare dieser Tabelle bis auf eines elminiert.
+modulweise getrennten Kompilierung der Linker ggf. vorsorglich *einmal pro
+Objekt-Modul* angelegte Exemplare dieser Tabelle bis auf eines eliminiert.
 ]
 
 ---
 template: plain
+name: virtual_inline
+header: #### Kombination von `virtual` und `inline`
+
+Die früher getroffene Feststellung, das `virtual` und `inline` einander quasi
+ausschließen, soll nun etwas präzisiert werden:
+
+* Rein technisch kann beides durchaus zusammentreffen, und zwar
+
+  * sowohl explizit –  wenn beide Schlüsselworte verwendet werden,
+
+  * wie auch implizit, wenn einer als `virtual` gekennzeichneten
+    Member Funktion direkt in der Klasse selbst implementiert wird.
+
+* Dann hängen die Details der Umsetzung vom Aufruf ab:
+
+  * Richtet sich dieser **direkt an ein Objekt**, wird der Implementierungs-Code
+    an Ort und Stelle statt eines Unterprogrammaufrufs eingesetzt.
+
+  * Geht er an ein **über Zeiger oder Referenz** angesprochenes Objekt, erfolgt
+    die zuvor beschriebene, polymorphe Umsetzung.
+
+Bei letzterer ist Unterprogrammsprung zwingend und daher wird eine Funktion, die
+`virtual` und `inline` ist, stets als potenziell polymorph betrachtet, d.h. es
+muss dafür ein echtes Unterprogramm verfügbar sein.
+
+---
+template: plain
+name: explicit_rtti
 header: ### Explizites RTTI
 
 Hierfür stehen zwei Mechanismen zur Verfügung:
 
 * `dynamic_cast` und
+
 * `typeid`
 
-Ersterer prüft den Typ im Sinne des LSP. das heißt eine abgeleitete Klasse wird
-auch an Stelle der gewünschten akzeptiert, letzterer prüft exakt.
+Ersterer prüft den Typ im Sinne des LSP, das heißt eine abgeleitete Klasse
+wird auch an Stelle der gewünschten akzeptiert, letzterer prüft exakt.
 
 ---
 template: plain
+name: dynamic_cast
 header: #### RTTI mit dynamischem Cast
 
-Es gibt zwei Formen, mit denen z.B. geprüft werden kann, ob der z.B. ein Laufzeit-Typ die von `Base` abgeleitete Klasse `Derived` - oder noch tiefer abgeleitet - ist.
+Es gibt zwei Formen, mit denen z.B. geprüft werden kann, ob der Laufzeit-Typ
+einer von `Base` abgeleitete Klasse `Derived` ist – oder noch tiefer abgeleitet.
 
 ##### `dynamic_cast` auf Zeigerbasis
+
 ```
-Base *p;
-…
+Base *p = nullptr;
+… // p gets assgned an address and may point
+  // to Base or any class derived from Base
+
 Derived *dp = dynamic_cast<Derived*>(p);
 ```
-Hier wird `dp` ein `nullptr` sein, wenn die Prüfung negativ ausgeht und muss somit
-entsprechend geprüft werden.
+Hier wird `dp` ein `nullptr` sein, wenn die Prüfung negativ ausgeht und muss
+somit entsprechend geprüft werden.
+
+```
+Base &r = … ; // r gets initialized and may refer to
+              // Base or any class derived from Base
+Derived *dp = dynamic_cast<Derived*>(&b);
+```
 
 ---
 template: plain
@@ -1660,17 +2142,26 @@ header: #### RTTI mit dynamischem Cast (2)
 
 ##### `dynamic_cast` auf Referenzbasis
 ```
-Base &r;
+Base &r = … ; // r gets initialized and may refer to
+              // Base or any class derived from Base
 …
-Derived &dr = dynamic_cast<Derived&>(d);
+Derived &dr = dynamic_cast<Derived&>(r);
 ```
 Hier wird eine Exception geworfen, wenn die Prüfung negativ ausgeht.
 
-Dadurch kann die obige Form auch leicht als Bestandteil eines größeren Ausdrucks
-verwendet werden, etwa um eine member-Funktion aufzurufen, die erst von der
-abgeleiteten Klasse hinzegfügt wurde:
+Damit kann diese Form leicht Bestandteil eines Ausdrucks verwendet werden,
+insbesondere um eine member-Funktion aufzurufen, die von einer abgeleiteten
+Klasse hinzugefügt wurde:
 ```
-… dynamic_cast<Derived &>(r).anotherMF( … ) …
+… dynamic_cast<OtherDerived &>(r).phoo( … ) …
+```
+
+Die Referenzform ist auch `Base *p`-Zeiger verwendbar:
+```
+OtherDerived &dr = dynamic_cast<OtherDerived &>(*p);
+… dynamic_cast<OtherDerived &>(*p).foo() …
+… &dynamic_cast<OtherDerived &>(*p)->foo() …
+
 ```
 
 ---
@@ -1678,11 +2169,34 @@ template: withinfo
 graphic: RuntimeTypeIdentification
 section: Storing RTTI Related Meta-Data
 name: runtime_typeident
-header: ### Typ-Identifikation zur Laufzeit
+header: ### Implementierung von explizitem RTTI
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+[`class std::type_info`]: http://en.cppreference.com/w/cpp/types/type_info
+
+Hierfür ginb es keinen Durchgängigen Standard – welche Datenstrukturen für
+effiziente Entscheidungen notwendig sind, die bei `dynamic_cast` ja auch
+Basisklassen mit einbeziehen, entscheidet jede Implementierung selbst.
+
+Ein klein wenig lässt sich jedoch erahnen:
+
+Egal ob im Rahmen von RTTI verwendet oder für eingebaute Typen und
+nicht-polymorphe Klassen:
+
+* `typeid` liefert eine Referenz auf eine `class type_info` zurück.
+
+* Jeweils ein Objekte dieser Klasse muss ein kompiliertes C++-Programm für
+  **jede** darin verwendete Klasse vorhalten, für den Fall, dass es mit
+  `typeid` angesprochen wird.._[]
+
+Um dynamischem Polymorphismus zu unterstützen könnten solche Obkekte mit der
+Sprungtabelle für die virtuellen Member-Funktionen zusammengefasst werden,
+oder sie liegen an anderen Stelle und die Sprungtabelle verweist darauf.
+
+.F[:
+Da dies statisch entscheidbar ist, kann spätestens der Linker überflüssige
+`type_info`-Objekte aus dem endgültigen, ausführbaren Programm herauslassen.
 ]
+
 
 ---
 template: linkinfo
