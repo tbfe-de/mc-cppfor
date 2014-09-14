@@ -46,19 +46,38 @@ d) Was ist zu verändern, damit in der Ausgabe am Beginn der vierten Zeile korre
    
 -- Zusatzaufgabe für besonders Schnelle
 
-3. Implementieren Sie ausgehend von der Value-Klasse zwei weitere Klassen, welche
-   jeweils eine bestimmte Zusatzfunktionalitäten bieten:
-   - Klasse Value zur Ermittlung des Durchschnitts
-   - Klasse Extrema zur Ermittlung von Minimum und Maximum
-   Überlegen Sie nicht nur, wie diesen beiden Klassen aussehen könnten und welche
-   "Schnittstelle" (womit nicht zwingend ein Interface im Sinne der OOP gemeint ist)
-   die Klasse Value ihnen zur Verfügung stellen müsste. Ließe sich diese Schnittstelle
-   ggf. auch so festlegen, dass die Klassen Value und Extrema unverändert bleiben
-   können und alein die Klasse Value bestimmt, ob sich Durchschnitt und Extrema nur
-   auf die historischen Werte oder auf ALLE jemals vorhandenen Werte bezieht?
+   Sehen Sie sich zu den folgenden Aufgaben jeweils die Musterlösungen an und
+   beantworten Sie die Fragen. (Hinweis: Die Antworten ergeben sich teilweise
+   aus den Kommentaren der genannten Quelltexte ergeben, teilweise aus einer
+   Analyse des Source-Codes.
+
+3. Welche Zusatzfunktionalität zu ihrer jeweiligen Basisklasse Value bieten die
+   beiden Klassen Average und Extrema in den beiden Lösungs-Varianten aufg3a_solved
+   und aufg3b_solved?
+
+   Worin liegt dabei der Unterschied zwischen diesen beiden beiden Varianten?
+
+   Welche zusätzlichen Veränderungen wären nötig, würde man die Basisklasse Value
+   in diesen Varianten NICHT public sondern private machen und welche sonstigen
+   Folgen hätte dies? (Testen Sie Ihre Vorhersage ggf. auch indem Sie die nötigen
+   Änderungen vornehmen.)
+
+   Worin unterscheiden sich die Lösungsvarianten aug3b_solved und aug3c_solved?
+
+4. Welche Problematik entsteht durch die Verwendung der beiden Klassen Average und
+   Extrema als Basisklassen der Klasse Statistic in aufg4_solved und warum war es
+   sinnvoll, dies ausgehend von der Variante a oder der Variante c aus dem Schritt 3
+   Aufgabe zu tun?
+
+   (Anders gefragt: welches Problem tritt auf, wenn man Teil 2 als Vorgabe nimmt?)
+
+5. Welche Vor- und Nachteile hätte es, die Statistic-Funktionalität aus den
+   Schritten 3 bzw. 4, also die Speicherung von Werten inkl. Historie, die
+   Berechnung des Durchschnitts sowie der Extrema, gemeinsam in einer Klasse zu
+   implementieren, welche dann drei Interfaces anbietet, so wie in aufg5_solved
+   gezeigt?
+
+6. Welche Vorzüge hat das Klassen-Design aus aufg6_solved, mit dem es die deutlich
+   gestiegene Komplexität (und damit die schlechtere Verständlichkeit oder alternativ
+   den erhöhten Erklärungsbedarf) evtl. ausgleichen könnte?
    
-4. Implementieren Sie - evtl. ausgehend von den verschiedenen, in der Info-Grafik
-   "Example - Class Relations" gezeigten Varianten eine Design, mit dessen Hilfe´auch
-   flexible Kombinationen möglich sind, sich also mit dem vorhandenen "Ausgangsmaterial"
-   auch leicht eine Klasse erstellen lässt, die neben aktuellen und historischen Werten
-   SOWOHL Durchschnitt als auch Extrema ermittelt.
