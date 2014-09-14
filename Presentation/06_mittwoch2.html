@@ -145,7 +145,7 @@ template: blank
 1. [Templates selbst schreiben		](#writing_templates)
 1. [Optimierung von Templates		](#optimising_templates)
 1. [Templates als Compilezeit-Funktionen](#compiletime_functions)
-1. [Advance Preprocessor Usage]		](#advanced_cpp_usage)
+1. [Fortgeschrittene Präprozessor-Verwendung](#advanced_cpp_usage)
 1. [Übung				](#exercise_wed2)
 
 -------------------------------------------------------------------------------
@@ -466,12 +466,36 @@ zu diesen Aufgabenteilen an.
 ---
 template: plain
 name: advanced_cpp_usage
-header: ## Advanced Preprocessor Usage
+header: ## Fortgeschrittene Präprozessor-Verwendung
 
 ---
 template: plain
 name: cpp_stringizing_args
 header: ### Stringizing
+
+Unter *Stringizing* wird die Möglichkeit verstanden, das Argument einer
+Makro-Expansion als String-Literal zu verwenden:
+
+* Es wird dann quasi automatisch in doppelte Gänsefüßchen eingeschlossen.
+* Wenn nötig, werden für einzelne Zeichen Escape-Sequenzen ersetzt.
+
+Als Beispiel ein Makro, der einen Ausdruck textlich und mit dem berechneten
+Wert auf Standardausgabe schreibt:
+```
+#define PrintX(x) \
+        std::cout << #x << ": " << (x) << '\n';
+```
+
+Die Anwendung kann (beispielsweise) wie folgt aussehen:
+```
+int main() {
+    auto value = 42;
+    PrintX(value++)
+    PrintX(++value)
+    PrintX(value)
+    PrintX(value *= 2)
+}
+```
 
 ---
 template: plain
@@ -481,12 +505,12 @@ header: ### Token Pasting
 ---
 template: plain
 name: cpp_code_generation
-header: ### Generating Systematic Code
+header: ### Systematischen Quelltext erzeugen
 
 ---
 template: plain
 name: cpp_coding_style
-header: ### A Small Preprocessor Style Guide
+header: ### Einige weitere Präprozessor-Tipps
 
 </textarea>
 <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->

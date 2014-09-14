@@ -164,20 +164,18 @@ header: ## Grundlegendes zu Exceptions
 
 -------------------------------------------------------------------------------
 
-* [Kontrollfluss mit und ohne Exception		](#exception_flowcontrol)
+* [Kontrollfluss mit und ohne Exceptions	](#exception_flowcontrol)
 
 -------------------------------------------------------------------------------
 
 * [Exception Klassen als "Label" verstanden	](#exception_as_label)
-* [Exception Gruppieren				](#exception_grouping)
+* [Gruppieren ähnlicher Exceptions 		](#exception_grouping)
 * [Aktivieren eines Behandlungs-Blocks		](#exception_try_block)
 
 -------------------------------------------------------------------------------
 
-* [Unvollständig behandelte Exceptions	](#exception_rethrow)
-* [Fangen aller Exceptions		](#exception_catchall)
-
--------------------------------------------------------------------------------
+* [Unvollständig behandelte Exceptions		](#exception_rethrow)
+* [Fangen aller Exceptions			](#exception_catchall)
 
 ---
 template: withinfo
@@ -186,9 +184,17 @@ section: Exception Class Hierarchies
 name: exception_hierarchies
 header: ### Hierarchien von Exception-Klassen
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Die im Rahmen von Bibliotheksfuntionen ggf. geworfenen Exceptions bilden eine
+Klassenhierarchie:
+
+* An deren Spitze steht die Klasse `std::exception`.
+
+* Weitere Klassen sind oft als Basisklassen für eigene Exception-Klassen
+  sinnvoll, etwa
+
+  * `std::logic_error` oder
+
+  * `std::runtime_error`.
 
 ---
 template: withinfo
@@ -197,9 +203,11 @@ section: Execution Path taken for Exception
 name: exception_flowcontrol
 header: ### Kontrollfluss mit und ohne Exception
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Solange keine Exceptions geworfen werden,
+
+* folgt der Kontrollfluss den üblichen Regeln, und
+
+* alle auf `try`-Blöcke folgenden `catch`-Blöcke werden übersprungen.
 
 ---
 template: withinfo
@@ -208,9 +216,18 @@ section: Exception Classes Viewn as Labels
 name: exception_as_label
 header: ### Exception Klassen als "Label" verstanden
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Sobald eine `throw`-Anweisung ausgeführt wird, stellen die den aktiven
+`try`-Blöcken nachfolgenden `catch`-Blöcke eine Art Label dar:
+
+* Verzweigt wird grundsätzlich im Kontrollfluss rückwärts, also in Richtung
+  auf die `main`-Funktion.
+
+* Die Auswahl der `catch`-Blöcke erfolgt dabei
+  * gemäß der dynamischen Schachtelung der Funktionsaufrufe, und
+  * dort ggf. für die einen einzelnen `catch-`Blöcke` von oben nach unten.
+
+* Der erste `catch`-Block, bei dem der Typ des "Arguments" der `catch`-Anweisung
+  zum Typ der geworfenen Exception passt, wird gewählt.
 
 ---
 template: withinfo
@@ -219,9 +236,18 @@ section: Grouping Exceptions
 name: exception_grouping
 header: ### Gruppieren ähnlicher Exceptions
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Bei der Auswahl des `catch`-Blocks werden in Bezug auf den Typ der geworfenen
+Exceptions auch mögliche Umwandlungen berücksichtigt:
+
+* Prinzipiell gelten die selben Umwandlungen wie bei der Parameterübergabe im
+  Rahmen von Funktionsaufrufen.
+
+* Insbesondere gilt das LSP:
+
+  * abgeleitete Klassen passen zu ihren jeweiligen Basisklassen.
+
+* Dies macht es sinnvoll, ähnliche Exceptions mittels kleiner oder größerer
+  Klassenhierarchien zusammenzufassen.
 
 ---
 template: withinfo
@@ -230,9 +256,26 @@ section: Enabling Handler Blocks
 name: exception_try_block
 header: ### Aktivieren der Ausnahmebehandlung
 
+Als Sprungziel in Frage kommen die **aktiven** `catch`-Blöcke.
+
+* Das sind alle `catch`-Blöcke,
+
+  * deren vorangehender `try`-Block vom Kontrollfluss erreicht ...
+
+  * ... und noch nicht wieder verlassen wurde.
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Ein `try`-Block ist nicht mehr aktiv, wenn er explizit verlassen wird durch
+
+* `return`
+* `break`
+* `continue`
+
+oder die letzte enthaltene Anweisung vollständig ausgeführt wurde.
 ]
+
+Ab diesem Moment werden auch die nachfolgenden `catch`-Blöcke nicht mehr als
+"Sprungziel" für ein `throw` in Betracht gezogen.
 
 ---
 template: withinfo
@@ -241,9 +284,22 @@ section: Re-throw Exceptions
 name: exception_rethrow
 header: ### Unvollständig behandelte Exceptions
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Catch-Blöcke, welche nur eine teilweise Auflösung der Fehlersituation leisten,
+können die gefangene Exception erneut werfen:
+```
+    try {
+        …
+        … // code that may throw SomeException
+        …
+    }
+    catch (SomeException &ex) {
+        …
+        … // partial recovery only
+        …
+        throw;
+    }
+}
+```
 
 ---
 template: withinfo
@@ -252,9 +308,29 @@ section: Catch Any Exception
 name: exception_catchall
 header: ### Fangen aller Exceptions
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Es besteht die Möglichkeit, einen `catch`-Block für alle erdenklichen
+Exception "passend" zu machen:
+
+* Hierzu sind in den runden Klammern drei Punkte (analog zu variadischen
+  Funktionen) anzugeben.
+
+  * Ein solcher Block sollte immer am Ende aller `catch`-Blöcke zu einem
+    `try`-Block stehen.
+
+  * Andernfalls gilt er vorrangig zu spezifischeren, nachfolgenden
+    `catch`-Blöcken des selben `try`-Blocks.
+
+```
+int main() {
+    try {
+        …
+        …
+    }
+    catch (...) {
+        std::cerr << "!! unhandled exception !!\n";
+    }
+}
+```
 
 ---
 template: linkinfo
@@ -289,9 +365,28 @@ section: (No) Disconnected Class Hierarchy
 name: disconnected_class_hierarchy
 header: ### (Keine) isolierte Klassenhierarchie
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Bilden eigene Exceptions eine isolierte Klassenhierarchie, so kann (sehr
+allgemeiner) Code diese **nicht** über Standard-Exceptions abfangen:
+
+```
+int main() {
+    using namespace std;
+    try {
+        …
+        … // ordinary application
+        …
+        return EXIT_SUCCESS; // macro in <cstdlib>
+    }
+    catch (exception &e) {
+        cerr << "terminated by standard exception: "
+             << e.what() << endl;
+    }
+    catch (...) {
+        cerr << "terminated by unknown exception" << endl;
+    }
+    return EXIT_FAILURE; // macro in <cstdlib>
+}
+```
 
 ---
 template: withinfo
@@ -300,9 +395,11 @@ section: (Bad) Order of Handlers
 name: wrong_catch_order
 header: ### (Falsche) Behandlungsblock-Abfolge
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Werden die `catch`-Blöcke für Exceptions falsch angeordnet,
+
+* kann ein weiter oben stehender, allgemeiner Block
+
+* einen weiter unter stehenden, spezifischeren Block unwirksam machen.
 
 ---
 template: withinfo
@@ -311,8 +408,21 @@ section: Optimal Re-Throwing
 name: correct_rethrow
 header: ### Optimale Weiterleitung
 
+Das Weiterwerfen eines gefangenen Exception-Objekts mit
+```
+…
+catch (SomeException &ex) {
+    …
+    // only partial recovery
+    throw ex;
+}
+```
+
+führt zur Erstellung einer Kopie **im Rahmen der Anweisung `throw ex;`**
+
 .N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+Mit `throw;` kann das ursprünglich gefangene Exception-Objekt **ohne Kopieren**
+weitergeworfen werden.
 ]
 
 ---
@@ -322,9 +432,17 @@ section: Sclicing Exception Object
 name: avoidable_copy_slicing
 header: ### (Vermeidbarer) Rückschnitt auf Basisklasse
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Durch (vermeidbares) Kopieren des Exception-Objekts können geworfene
+Exceptions einer abgeleiteten Klasse per Slicing auf die Basisklasse
+reduziert werden.
+
+**Dies ist im Allgemenen nicht wünchenswert.**
+
+Daher sollte ein Kopieren vermieden werden:
+
+* Argumente von `catch`-Blöcken als Referenz spezifizieren.
+
+* Bei nur teilweise Auflösung Exception mit `throw;` weiterwerfen.
 
 ---
 template: withinfo
@@ -333,9 +451,8 @@ section: Sub-optimal Re-throwing
 name: problematic_rethrow
 header: ### Sub-optimale Weiterleitung
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
-]
+Sub-optimal ist grundsätzlich jede Weiterleitung, bei der das Exception-Objekt
+unnötig kopiert wird.
 
 ---
 template: withinfo
@@ -344,9 +461,88 @@ section: (No) Throwing from Destructoes
 name: dtor_exception_nogo
 header: ### (Keine) Exceptions aus Destruktoren werfen
 
-.N[
-Siehe Info-Grafik zusammen mit den Ausführungen des Dozenten.
+.W[
+Exceptions, die von Destruktoren geworfen werden, können ein Programm abbrechen,
+wenn der Destruktor im Rahmen eines Exception-Handlings ausgeführt wird.
 ]
+
+Falls ein Destruktor Operationen benutzen muss, die u.U. eine Exception
+auslösen, sollte der Code sicherheitshalber in einen `try`-Block verpackt
+werden, der alle Exceptions fängt und ignoriert:._[]
+```
+class MyClass {
+    …
+    ~MyClass() {
+        try {
+            … // whatever needs be done
+        }
+        catch (...) {
+            if (!std::uncaught_exception()) throw;
+        }
+    }
+}; 
+```
+.F[:
+Ob es tatsächlich sinnvoll ist, die Exception wie gezeigt weiterzuwerfen, falls
+der Destruktor **nicht** im Rahmen eines Exceptions-Handlings abläuft, muss je
+nach Sachlage individuell entschieden werden.
+]
+
+---
+template: plain
+name: no_more_throwspec
+header: ## `throw`-Spezifikationen vermeiden
+
+Nachdem über viele Jahre hinweg von C++-Experten praktisch einhellig empfohlen
+worden war, die seinerzeit von C++98 eingeführten `throw`-Spezifikationen zu
+vermeiden, wurden diese nun mit C++11 zum *deprecated feature*.
+
+---
+template: plain
+name: noexcept
+header: ## Exception-Freiheit mit `noexcept` ankündigen
+
+Neu eingeführt wurde mit C++11 die `noexcept`-Qualifikation für Funktionen,
+welche folgendes bewirkt:
+
+* Wirft eine damit qualifizierte Funktion dennoch eine Exception, kommt es zum
+  unwiderruflichen Prgrammabbruch (nach Durchlaufen eines frei festzulegenden
+  Handlers).
+
+* Andere Funktionen betrachten eine mit `noexcept` qualifzierte Funktion als
+  *aufrufbar ohne Risiko, dass es zu einer Exceptions kommt*.._[]
+
+.N[
+Insgesamt liegen mit der Umsetzung von `noexcept` durch gängige Compiler noch
+zu wenige Erfahrungen vor, um eindeutige Richtlinien und Empfehlungen zur
+Benutzung dieses Features geben zu können.
+]
+
+.F[:
+Dies ist insofern richtig, als Exceptions – treten Sie dennoch auf – prakisch
+unmittelbar zum Programmabbruch führen, d.h. im Kontext des Aufrufs muss die
+Möglichkeit von Exceptions bei solchen Funktionen in der Tat nicht berücksichigt
+werden ... dennoch wird u.U. das Programm abgebrochen.
+]
+
+---
+template: plain
+name: noexcept
+header: ## Bedingte Exception-Freiheit mit `noexcept`
+
+Über das auf der vorhergenden Seite gesagte hinaus ist `noxecept` auch eine
+Compilezeit-Funktion, mit welcher – insbesondere in Templates – die **bedingte
+Freiheit Exceptions** deklariert werden kann.
+
+* Hiermit kann eine Funktion zum Ausdruck bringen, dass Exceptions nur dann
+  auftreten werden, wenn bestimmte aufgerufene Funktinen solche werfen.
+
+* Dadurch kann zur Compilezeit bei der Instanziierung von Templates mit
+  konkreten Typen entschieden werden, ob bei einer bestimmten Operation das
+  Risiko von Exceptions besteht.
+
+* Dies eröffnet letztlich die Möglichkeit, dass Bibliotheksfunktionen über
+  Template-Metaprogrammierung unterschiedliche Implementierungen wählen.
 
 ---
 template: plain

@@ -300,14 +300,15 @@ auf den Streubereichn.
 template: plain
 header: #### Entstehung von Überläufern
 
+Gut streuende Hashfunktionen liefern bis zu einer ca. 80%-igen Belegung des zur
+Verfügung stehenden Index-Raumes nur selten Überläufer.
+
 .N[
 Bildet die Hash-Funktion verschiedene Schlüssel auf ein und denselben Index ab,
 spricht man von einem Überläufer.
 ]
 
-Gut streuende Hashfunktionen liefern bis zu einer ca. 80%-igen Belegung des zur
-Verfügung stehenden Index-Raumes nur selten Überläufer. Prinzipiell können
-Überläufer aber ab dem zweiten Eintrag immer auftreten.
+Prinzipiell können Überläufer aber ab dem zweiten Eintrag immer auftreten.
 
 * Eine Strategie zur Behandlung von Überläufern muss Bestandteil jedes
   hash-basierten Datenspeicherungsverfahrens sein.
@@ -424,14 +425,32 @@ Um Random-Access-Iteratoren handelt es sich bei._[]
 die jeweiligen `const_`, `reverse_` und `const_reverse_`-Varianten
 eingeschlossen.
 
+---
+template: plain
+header: ### Grenzprüfung bei Random-Access-Iteratoren
+
+Hier ist zu beachten, dass die Minimal-Anforderungen des C++-Standards so
+gefasst sind, dass eine hoch-effiziente Implementierung möglich ist, auch
+wenn dies auf Kosten der Sicherheit geht.
+
 .W[
 Wenn Operationen, an denen Iteratoren mit wahlfreiem Zugriff beteiligt sind,
 eine (neue) Iterator-Position außerhalb des Containers liefern, ist das Ergebnis
-undefiniert wenn die Grenzen des Containers dabei überschritten werden.
-
-Ferner muss für ein definiertes Ergebnis der Differenzbildung sichergestellt
-sein, dass die beteiligten Iteratoren in den selben Container zeigen.
+undefiniert.
 ]
+
+Gültige Positionen sind dabei auch die möglichen Endstellungen (am
+Container-Ende für normale Iteratoren bzw. an Container-Anfang für
+Reverse-Iteratoren).
+
+.W[
+Für ein definiertes Ergebnis bei der Differenzbildung müssen die beteiligten
+Iteratoren gültige Positionen (inklusive der Endpositionen) im selben Container
+haben.
+]
+
+Sichergestellt ist aber, dass zwei Iteratoren, die in verschiedene Container
+zeigen, niemals als "gleich" angesehen werden.
 
 ---
 template: linkinfo
@@ -472,14 +491,15 @@ header: ### Iteratoren als verbindendes Element
 Mit Iteratoren als Bindeglied zwischen Containern und Algorithmen sind bei
 
 * ca. 40 Algorithmen (-Familien) und
+
 * 12 Containern im ISO-Standard
 
-nur 40 und keine 480 (= 12 × 40) Implementierungen notwendig.._[]
+keine 480 (= 12 × 40) Implementierungen notwendig.._[]
 
 .F[:
-Bei Berücksichtigung der Tatsache, dass nicht alle Algorithmen für alle
-Container sinnvoll sind, wird sich die Zahl der erforderlichen Implementierungen
-entsprechend reduizieren, es dürften aber immer noch mehrere hundert sein.
+Unter Berücksichtigung der Tatsache, dass nicht alle Algorithmen für alle
+Container sinnvoll sind, wird die Zahl der erforderlichen Implementierungen
+um die hundert sein.
 ]
 
 ---
@@ -615,7 +635,7 @@ finden gibt es einige aus pragmatischen Sicht sinnvolle aber dennoch
 
 Eine davon betrifft die Frage, wie mit aus einem Container gelöschten ELementen
 grundsätzlich zu verfahen ist, wenn der "löschende" Algorithmus den Container
-nicht phsysisch verkleinern kann.
+nicht physisch verkleinern kann.
 
 Beim "logischen Löschen" von Elementen aus Containern
 
@@ -625,7 +645,7 @@ Beim "logischen Löschen" von Elementen aus Containern
   geliefert.
 
 .N[
-In den späteren Code-Fragmenten dieses Kapitels folgen konkrete Beispiele.]
+In den späteren Code-Fragmenten dieses Kapitels folgen konkrete Beispiele.
 ]
 
 ---
@@ -664,7 +684,7 @@ T2 my_copy(T1 from, T1 upto, T2 dest) {
 .F[:
 Damit dieser Algorithmus ggf. per *Copy&Paste* in ein Programm übernommen und
 ausprobiert werden kann, wurde er vorsorglich `my_copy` genannt, so dass auch
-bei `using namespace std;` einen Konflikt mit `std::copy` ausgeschlossen ist.
+bei `using namespace std;` ein Konflikt mit `std::copy` ausgeschlossen ist.
 ]
 
 ---
@@ -726,7 +746,7 @@ selbst implementiert werden, ihre Implementierung ist aber insofern interessant,
 als die zugrundeliegende Technik in ähnlich gelagerten Fällen zur Vermeidung
 redundanter Typangaben eingesetzt werden kann:
 ```
-template<typename T>
+  template<typename T>
 inline std::back_inserter_iterator<T> std::back_inserter(T &c) {
     return std::back_insert_iterator<T>(c);
 }
@@ -907,23 +927,28 @@ könnten **dahinter** (= an größeren Adressen im Speicher) liegende Variablen
 template: plain
 header: #### Kopieren zwischen unterschiedlichen Container-Typen
 
-Beim Kopieren ist – wie schon öfter gezeigt – die Kombination unterschiedlicher
-Container möglich. Dabei erfolgen ggf. notwendige Anpassungen des Elementtyps
-automatisch:
+Beim Kopieren zwischen ganz unterschiedlichen Containern erfolgen auch
+ggf. notwendige Anpassungen des Elementtyps:
 ```
 using namespace std;
 vector<double> v;
+
 // from standard input float-s appended to vector ...
 copy(istream_iterator<float>(cin), istream_iterator<float>(),
      back_inserter(v));
+
 // ... to classic array (widening to double) ...
 double data[100]; const auto N = sizeof data / sizeof data[0];
+
 // ... (protecting against overflow) ...
 if (v.size() < N) v.resize(N);
+
 // ... (remembering filling state) ...
 const auto endp = copy(v.begin(), v.end(), data);
+
 // ... to set (truncating to integer) ...
 set<int> s; copy(data, endp, inserter(s, s.begin()));
+
 // ... to stdout with semicolon and space after each value
 copy(s.begin(), s.end(), ostream_iterator<int>(cout, "; "));
 ```
@@ -992,7 +1017,7 @@ else {
 template: plain
 header: #### Löschen aller Elemente mit dem Wert 542
 
-``
+```
 const auto end = std::remove(v.begin(), v.end(), 542);
 ```
 
@@ -1004,8 +1029,14 @@ v.erase(end, v.end());
 ```
 
 .I[
-Code wie der gerade gezeigte ist eher in generischen Templates zweckmäßig, bei
-denen die Klasse von `v` keine (große) Rolle spielen soll.
+Code wie der gerade gezeigte ist vor allem in generischen Templates zweckmäßig,
+bei denen die Klasse von `v` völlig offen gehalten werden soll.._[]
+]
+
+.F[:
+Wird ein bestimmter, typischer und auch häufiger Anwendungsfall von solchen
+Templates deutlich sub-optimal behandelt, kann immer noch eine entsprechende
+Spezialisierung erfolgen.
 ]
 
 ---
@@ -1067,13 +1098,9 @@ void print_words(const std::string &s) {
 };
 ```
 .N[
-Hier entfallen die Klammern, da der Name der Funktion weitergegeben wird.._[]
+Hier entfallen die Klammern, da der Name der Funktion weitergegeben wird.
 ]
 
-
-(Der Aufruf dieser Funktion erfolgt innerhalb der Implementierung von `std::for_each`
-heraus.)
-]
 ```
 std::for_each(v.begin(), v.end(), print_words);
 ```
@@ -1089,7 +1116,7 @@ Hierzu ein leicht modifiziertes Beispiel, bei dem der Funktor die Argumente
 durchnummeriert:
 ```
 struct PrintWordsEnumerated {
-    void operator()(const std::string &e) {
+    void operator()(const std::string &s) {
         std::cout << ++n << ": " << s << "\n";
     }
     PrintWordsEnumerated() : n(0) {}
@@ -1137,8 +1164,8 @@ void foo(std::ostream &output) {
 ```
 
 .I[
-Dies ist nur noch mit Funktoren sauber abzubilden, mit einer Funktion scheidet
-diese Technik aus.
+Dies ist nur noch mit Funktoren (und Lambdas) sauber abzubilden, mit einer
+Funktion scheidet diese Technik aus.
 ]
 
 ---
@@ -1274,7 +1301,7 @@ header: ##### Mit Funktionszeiger
 
 Zunächst muss die Funktion definiert werden:
 ```
-bool lt42(int v) { return v < 42; }
+bool lt42(int n) { return n < 42; }
 ```
 Dann kann sie als Prädikat dienen:
 ```
@@ -1299,7 +1326,7 @@ header: ##### Mit Funktor
 Zunächst muss die Funktor-Klasse definiert werden:
 ```
 struct Lt42 {
-    bool operator()(int v) const { return v < 42; }
+    bool operator()(int n) const { return n < 42; }
 };
 ```
 Dann wird sie als Prädikat zu einem temporären Objekt instanziiert:
@@ -1324,7 +1351,7 @@ header: ##### Mit C++11-Lambda
 
 Hier ist das Prädikat unmittelbar bei der Übergabe zu sehen:
 ```
-… std::count_if( … , … , [](int v) { return v < 42; });
+… std::count_if( … , … , [](int n) { return n < 42; });
 ```
 
 ##### Mit Standard-Bibliotheksfunktion
@@ -1343,7 +1370,7 @@ Dies ist die aus der C-Programmierung bekannte Technik.
 
 Beispiel: Ausgeben aller Elemente mit einem Wert ungleich 524:
 ```
-bool notEq524(int v) { return v != 524; }
+bool notEq524(int n) { return n != 524; }
 
 void foo(const std::vector<int> &v) {
     …
@@ -1364,7 +1391,7 @@ Dies ist eine für C++-typische Technik.
 Beispiel: Kopieren aller Elemente, die nicht den Wert 524 haben:
 ```
 struct NotEq524 {
-    bool operator()(int v) const { return v != 524; }
+    bool operator()(int n) const { return n != 524; }
 };
 void foo(const std::vector<int> &v) {
     …
@@ -1390,7 +1417,7 @@ class NotEq {
     const int cmp;
 public:
     NotEq(int c) : cmp(c) {}
-    bool operator()(int v) const { return v != cmp; }
+    bool operator()(int n) const { return n != cmp; }
 };
 void foo(const std::vector &v) {
     …
@@ -1435,7 +1462,7 @@ void foo(const std::vector &v) {
     …
     std::copy_if(v.begin(), v.end(),
                  std::ostream_iterator<int>(std::cout, " "),
-                 [](int v) { v != 524; }
+                 [](int n) { n != 524; }
     );
     …
 }
@@ -1450,7 +1477,7 @@ void foo(const std::vector &v, int hide) {
     …
     std::copy_if(v.begin(), v.end(),
     	         std::ostream_iterator<int>(std::cout, " "),
-                 [hide](int v) { v != hide; }
+                 [hide](int n) { n != hide; }
     );
     …
 }
@@ -1466,9 +1493,9 @@ getauscht und als Ergebnis wird ein Iterator zurückgegeben, der das neue
 logische Ende markiert.
 
 .N[
-Ist die Klasse des Containers genau festgelegt, besteht oft die Alternative,
-statt der eines generischen Algorithmus eine spezifische Member-Funktion zu
-verwenden. Sofern diese Alternative besteht, sollte sie vorgezogen werden.
+Ist die Klasse des Containers genau festgelegt, steht alternativ zu einem
+generischen Algorithmus mitunter eine spezifische Member-Funktion zur
+Verfügung. Deren Verwendung ist dann in aller Regel effizienter.
 ]
 
 Mit `std::list<std::string> li` beispielsweise statt
