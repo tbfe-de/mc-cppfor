@@ -584,7 +584,7 @@ std::vector<std::string> sv;
 …
 assert(sv.size() >= 5);
 for (auto it = sv.begin()+3; it != sv.end()-2; ++it)
-    … *it* …
+    … *it …
 ```
 
 .F[:
@@ -743,7 +743,7 @@ wenn `c` leer ist:
 
 ```
 // mit modifizierbaren Vorwaerts-Iterator:
-for (auto it = c.begin(); it != .cend(); ++it) …
+for (auto it = c.begin(); it != c.end(); ++it) …
 …
 // mit nicht-modifizierbaren Vorwaerts-Iterator:
 for (auto it = c.cbegin(); it != c.cend(); ++it) …
@@ -771,6 +771,7 @@ header: ### Index-basierter Zugriff
 
 Für die Container
 
+* `std::array`,
 * `std::vector` und
 * `std::deque`
 

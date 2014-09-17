@@ -1,0 +1,2 @@
+This example shows how (somewhat blindly) including one header into an other
+header for any presumably dependant class may fail in a strange way.

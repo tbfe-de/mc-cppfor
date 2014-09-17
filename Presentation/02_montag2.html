@@ -1289,7 +1289,6 @@ des eingebauten Motors.._[]
 ```
 class Car : private Motor {
     …
-public:
     // implement extension points ...
     virtual void prepare_engine_start() {
         … // whatever is necessary
@@ -1297,7 +1296,9 @@ public:
     virtual void check_engine_errors() {
         … // whatever is necessary
     };
-}
+public:
+    using Motor::start_engine;
+};
 ```
 
 .F[:

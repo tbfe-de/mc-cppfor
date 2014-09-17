@@ -254,7 +254,7 @@ Hierfür benutzt die UML im Wesentlichen die selbe Symbolik – der Unterschied
 besteht lediglich darin, dass
 
 * bei Objekten der Name unterstrichen ist und
-* der Klassenname auch entfallen kann._[]
+* der Klassenname auch entfallen kann.._[]
 
 ##### Klassen
 Diese kommen einem *Bauplan* gleich und beschreiben in der UML-Darstellung alle
@@ -527,7 +527,7 @@ nicht realisierbar.
 .pull-left[
 ```
 class Parent {
-    class Child c*;
+    class Child *c;
     …
     Parent() : c(nullptr) {}
     void setChild(Child *c_) {
@@ -733,6 +733,8 @@ graphic: UML-ClassesAndRelations
 section: Inheritance
 name: inheritance
 header: ### Vererbung
+
+[LSP]: http://en.wikipedia.org/wiki/Liskov_substitution_principle
 
 Hierbei geht es um die Beziehung zwischen einem
 
@@ -1042,11 +1044,15 @@ Die zusammengefasste Darstellung des Falls `«overlapping»` in Bezug auf
 
 * den Quelltext,
 
-* den Konstruktor- sowie
+* den Konstruktor-._[] sowie
 
 * den Destruktor-Ablauf
 
 erlaubt den drekten Vergleich zum Fall `«disjoint»`.
+
+.F[:
+Siehe auch [Aufgabe von Dienstagvormittag (Teil 1)](../Examples/03_tuesday1_x1).
+]
 
 ---
 template: withinfo
@@ -1090,7 +1096,7 @@ header: ## Beispiele zu Klassenbeziehungen
 
 -------------------------------------------------------------------------------
 
-* [Orientiert am GoF "Observer" Muster		](#with_elaboration)
+* [Orientiert am GoF *Observer Muster*		](#with_elaboration)
 
 -------------------------------------------------------------------------------
 
@@ -1110,8 +1116,14 @@ Anpassbare Komponenten entstehen normalerweise entweder
   ersten Entwurf noch nicht eingeplante – neue Variante benötigt wird.
 
 .N[
-In den konkreten Beispielen zu diesem Abschnitt ist die Template-Version der
+In den konkreten Beispielen._[] zu diesem Abschnitt ist die Template-Version der
 `RingBuffer`-Klasse eine solche anpassbare Komponente.
+]
+
+.F[:
+Sieha auch
+[Aufgabe Dienstagvormittag (Teil 2)](../Examples/03_tuesday1_x2) und
+[Examples/ClassDesigns/ReusableComponent](../Examples/ClassDesigns/ReusableComponent)
 ]
 
 ---
@@ -1125,7 +1137,7 @@ Die Nutzung einer (angepassten) Komponente reduziert den Aufwand an immer wieder
 neu zu schreibendem Code.
 
 .N[
-In den konkreten Beispeilen zu diesem Abschnitt wird
+In den konkreten Beispielen._[] zu diesem Abschnitt wird
 
 * die Template-Version der `RingBuffer`-Klasse ggf.
 * mit unterschiedlichen Instanziierungs-Argumenten
@@ -1135,6 +1147,10 @@ verwendet.
 
 Die Alternative dazu wäre *Copy&Paste-Programmierung*, also ein klarer Verstoß
 gegen das *DRY-Pinciple*.
+
+.F[:
+[Examples/ClassDesigns/AdaptedComponent](../Examples/ClassDesigns/AdaptedComponent)
+]
 
 ---
 template: withinfo
@@ -1148,12 +1164,16 @@ Basisklassen zu zahlen, lassen sich ggf. flexible Kombinationsmöglichkeiten
 mit einem guten Grad an Wiederverwendung durch Mehrfachverarbung erreichen.
 
 .N[
-In den konkreten Beispielen zu diesem Abschnitt werden aus den Klassen `Average`
+In den konkreten Beispielen._[] zu diesem Abschnitt werden aus den Klassen `Average`
 und `Extrema` mittels Mehrfachvererbung zur Klasse `Statistic` kombiniert,
 womit diese beide Fähigkeiten vereint:
 
 * den Mittelwert aller Daten zu ermitteln, und
 * das Minimum und Maximum aller Daten zu ermitteln.
+]
+
+.F[:
+[Examples/ClassDesigns/DiamondShaped](../Examples/ClassDesigns/DiamondShaped)
 ]
 
 ---
@@ -1167,7 +1187,7 @@ Die Nutzung von Interfaces kann die Komplexität der Gesamt-Architektur aus der
 "Sicht einzelner Klienten" etwas vereinfachen.
 
 .N[
-In den konkreten Beispielen zu diesem Abschnitt werden
+In den konkreten Beispielen._[] zu diesem Abschnitt werden
 
 * zu einer gemeinsamen Klasse `Statistic`
 * drei Interfaces definiert,
@@ -1176,6 +1196,10 @@ so dass
 
 * hinsichtlich der *Nutzer* dieser Klasse jeweils klar ist,
 * auf welches Sub-Set der Gesamt-Funktionalität sie angewiesen sind.
+]
+
+.F[:
+[Examples/ClassDesigns/ThreeInterfaces](../Examples/ClassDesigns/ThreeInterfaces)
 ]
 
 ---
@@ -1189,7 +1213,7 @@ header: ### Inkrementale Erweiterbarkeit durch Mix-Ins
 das virtuelle Basisklassen notwendig werden.
 
 .N[
-In den konkreten Beispielen zu diesem Abschnitt werden
+In den konkreten Beispielen._[] zu diesem Abschnitt werden
 
 * die Klassen `Average`, `Extrema` und `Statistic` flexibel zusammengesetzt
   durch
@@ -1197,23 +1221,27 @@ In den konkreten Beispielen zu diesem Abschnitt werden
 * mit den beiden Mixins `AverageMixin` und `ExtremaMixin`.
 ]
 
+.F[:
+Leicht vereinfacht (ohne `RingBuffer`-Komponente) in
+[Aufgabe von Dienstagvormittag (Teil 3, Variante 1)](../Examples/03_tuesday1_x3)
+]
+
 ---
 template: withinfo
 graphic: Example-ClassDesign
 section: Close to GoF "Observer" Pattern
 name: with_elaboration
-header: ### Orientiert am GoF "Observer" Muster
+header: ### Orientiert am GoF *Observer Muster*
 
 [Observer Pattern]: http://en.wikipedia.org/wiki/Observer_pattern
 
 Das "Flaggschiff" unter allen hier verglichenen Entwürfen.
 
-Es vereint hohe Flexibilität und geringe Kopplung ... erfordert allerdings auch
-die Bereitschaft zu einer etwas tieferen Beschäftigung mit dem Design und seiner
-Implementierung, um es endgültig zu verstehen.
+Es vereint hohe Flexibilität und geringe Kopplung ... hat allerdings auch die
+komplexeste Implementierung.
 
 .N[
-In den konkreten Beispielen zu diesem Abschnitt werden in Anlehnung an das
+In den konkreten Beispielen._[] zu diesem Abschnitt werden in Anlehnung an das
 [Observer Pattern]
 
 * die Klassen `Average`, `Extrema` und `Statistic` flexibel zusammengesetzt
@@ -1225,6 +1253,11 @@ wobei Abhänggkeiten gering gehalten werden
 
 * über das `INotifyUpdate`-Interface und
 * ein flexibles Registrierungsprotokoll.
+]
+
+.F[:
+Leicht vereinfacht (ohne `RingBuffer`-Komponente) in
+[Aufgabe von Dienstagvormittag (Teil 3, Variante 2)](../Examples/03_tuesday1_x3)
 ]
 
 ---

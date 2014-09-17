@@ -218,8 +218,8 @@ so dass sich die Verwendung eines [Build-System]s empfiehlt.._[]
 .F[:
 Unter den heute verwendeten Build-Systemen hat das 1976 an den [Bell-Labs] von
 Stuart Feldman entwickelte [Unix `make`] weitaus mehr als eine nur historische
-Bedeutung, in der ihrer Kernsyntax sind auch moderne Derivate wie [GNU make]
-und [CMake] nach wie vor identisch zu ihrem Vorläufer.
+Bedeutung, in der Kernsyntax sind auch moderne Derivate wie [GNU make] und
+[CMake] immer noch identisch zu ihrem Vorbild.
 ]
 
 ---
@@ -246,7 +246,7 @@ class Base {
 ```
 // header file: Derived.h
 #include "Base.h"
-class Base : public Derived {
+class Derived : public Base {
     // ...
 };
 ```
@@ -280,7 +280,7 @@ class Base {
 #ifndef DERIVED_H
 #define DERIVED_H
 #include "Base.h"
-class Base : public Derived {
+class Derived : public Base {
     …
 };
 #endif
@@ -296,16 +296,13 @@ die wiederholte Einführung von Bezeichnern stark einschränkt.
 template: plain
 header: #### Namespaces
 
-.W[
-Der Include-Guard sollte stets auch den Namen des `namespace` enthalten!
-]
+Wie das folgende Beispiel deutlich macht, ist der Klassenname für sich allein
+als Include-Guard u.U. problematisch:
 
-Wie folgende Beispiel zeigt, ist der pure Klassenname in einem Header-File
-als Include-Guard nicht unbedingt ausreichend:
 .pull-left[
 ```
-#ifndef MINE_SOMECLASS_H
-#define MINE_SOMECLASS_H
+#ifndef SOMECLASS_H
+#define SOMECLASS_H
 namespace Mine {
     class SomeClass {
         …
@@ -317,8 +314,8 @@ namespace Mine {
 
 .pull-right[
 ```
-#ifndef OTHER_SOMECLASS_H
-#define OTHER_SOMECLASS_H
+#ifndef SOMECLASS_H
+#define SOMECLASS_H
 namespace Other {
     class SomeClass {
         …
@@ -327,6 +324,21 @@ namespace Other {
 #endif
 ```
 ]
+
+Wenn jetzt beide Files inkludiert werden, macht der erste den Inhalt des zweiten
+quasi "unsichtbar" ... was aber vermutlich erst nach einer überaus langwierigen
+Fehlersuche offenbar wird.
+
+.W[
+Somit sollte der Include-Guard auch den Namen des `namespace` enthalten, also
+z.B. `MINE_SOMECLASS_H` und `OTHER_SOMECLASS_H`.._[]
+]
+
+.F[:
+Auch stellt sich die Frage, ob man im Include-Guard tatsächlich alle Buchstaben
+groß schreiben sollte ...
+]
+
 
 
 ---
@@ -370,8 +382,8 @@ namespace Other {
 
 .F[:
 In kompilierbarer Form finden Sie die Dateien zu diesem Beispiel unter
-[Examples/Cyclic_Broken](../Examples/Cyclic_Broken) und
-[Examples/Cyclic](../Examples/Cyclic) (fehlerbereinigt).
+[Examples/Cyclic/Broken](../Examples/Cyclic/Broken) und
+[Examples/Cyclic/Fixed](../Examples/Cyclic/Fixed) (fehlerbereinigt).
 ]
 
 ---
@@ -393,8 +405,8 @@ vielen Bezugnahmen.
   wird und keine`extern`-Deklaration vorausgeht.
 
 .W[
-Die Verwendung von `const` auf globaler Ebene impliziert - vielleicht
-überraschenderweise - den Sichbarkeitsschutz gegenüber dem Linker.._[]
+Die Verwendung von `const` auf globaler Ebene impliziert – vielleicht
+überraschenderweise – den Sichbarkeitsschutz gegenüber dem Linker.._[]
 ]
 
 .F[:
@@ -478,7 +490,7 @@ if (a > b) swap(&a, &b);
 
 .pull-right[
 ```
-void swap(int r, int s) {
+void swap(int &r, int &s) {
     const int t = r;
     r = s;
     s = t;
@@ -498,7 +510,7 @@ header: ### Referenzen versus Zeiger
 
 C++ Referenzen können auf zwei Arten betrachtet werden:
 
-* Eine alternative Syntax für Zeigern, welche
+* Eine alternative Syntax für Zeiger, welche
 
   * die Dereferezierung bei der Verwendung impliziert (`*` automatisch
     vorangestellt);
@@ -506,12 +518,12 @@ C++ Referenzen können auf zwei Arten betrachtet werden:
   * bzw. den Adress-Operator bei der Initialisierung (`&` autmatisch
     vorangestellt).
 
-* Oder aber einen Alias-Name für bereits (an anderer Stelle) existierenden
+* Oder aber einen Alias-Name für bereits (an anderer Stelle) existierenden,
   typisierten Speicherplatz.
 
 .N[
 Der für Zeiger und Referenzen erzeugte Maschinen-Code unterscheidet sich in
-der Regel nicht - unterschiedlich ist nur die Syntax bei Initialisierung und
+der Regel nicht – unterschiedlich ist nur die Syntax bei Initialisierung und
 beim Zugriff auf das, was referenziert wird.._[]
 ]
 
@@ -531,7 +543,7 @@ header: ### RValue-Referenzen
 [Rvalue-Referenzen]: http://en.cppreference.com/w/cpp/language/reference
 
 Mit C+11 neu eingeführt wurde das Konzept der [Rvalue-Referenzen]. Sie lassen
-sich nur mit Audrücken intitialisieren, also *temporären Werten* auf die dann
+sich nur mit Audrücken initialisieren, also *temporären Werten*, auf die dann
 kein anderer Zugriff als über die Referenz besteht.
 
 Nachfolgend zusammengefasst die wichtigsten Regeln:._[]
@@ -552,7 +564,7 @@ Herkunft von Argumenten, und dort wiederum insbesondere bei
 
 .F[:
 In dem für obige Szenarien typischen Fall von Funktionsargumenten könnte im Fall
-der RValue-Referenz - anders als bei klassischen `const`-Referenzen - das
+der RValue-Referenz – anders als bei klassischen `const`-Referenzen – das
 übergebene `T` nun modifiziert werden, allerdings nur so weit, dass der
 Destruktor nach wie vor seine Arbeit verreichten kann.
 ]
@@ -570,8 +582,8 @@ Argumente können mit Default-Werten versehen werden.
   ebenfalls einen Default-Wert haben.
 
 .N[
-Der Defaultwert muss beim Funktionsaufruf bekannt sein als im Header-File stehen
-als Bestandteil des Funktions-Prototyps.
+Der Defaultwert muss beim Funktionsaufruf bekannt sein, also im Header-File
+stehen als Bestandteil des Funktions-Prototyps.
 ]
 
 Die Namen für die formalen Argumente sind auch hier optional:._[]
@@ -599,9 +611,9 @@ header: ### Überladen von Funktionen
 Mehrere Funktionen gleichen Namens können parallel existieren sofern sie sich in
 Anzahl und/oder Typ ihrer Argumente unterscheiden:
 ```
-void foo(const char *);     /*1*/
-double foo(int &, char);    /*2*/
-double foo(double, double); /*3*/
+void foo(const char *);         /*1*/
+double foo(const int &, char);  /*2*/
+double foo(double, double);     /*3*/
 ```
 
 Gemäß den tatsächlichen Argumenten entscheidet nun der Compiler, was verwendet
@@ -643,10 +655,10 @@ existieren, je eine für den konstanten und den nicht-konstanten Fall:
   Compile-Fehler, da String-Literale den Typ `const char *` haben.
 
 .F[:
-Generell gesehen ist es kein Problem, wenn einer Funktion, die versprochen hat,
-über ein Zeiger- oder Referenz-Argument erreichbaren Speicherplatz nicht zu
-verändern, die Adresse von veränderbaren Speichreplatz bekommt - **umgekehrt
-ist es aber sehr wohl ein Problem!**
+Generell ist es kein Problem, wenn eine Funktion, die versprochen hat, über ein
+Zeiger- oder Referenz-Argument erreichbaren Speicherplatz nicht zu verändern,
+die Adresse von veränderbaren Speichreplatz bekommt – **umgekehrt ist es aber
+sehr wohl ein Problem!**
 ]
 
 ---
@@ -675,7 +687,7 @@ header: #### Operator-Überladung mit freistehender Funktion
 
 Diese sieht prinzipiell so aus:
 ```
-MyClass operaor+(const MyClass &lhs, const MyClass &rhs) {
+MyClass operator+(const MyClass &lhs, const MyClass &rhs) {
     … // do whatever must be done
     return …;
 }
@@ -709,7 +721,7 @@ header: #### Überladung von Kopier-Konstruktor und -Zuweisung
 [Rule Of Three]: http://en.cppreference.com/w/cpp/language/rule_of_three
 
 Für einige Arten von Objekten muss die Zuweisungs-Operation überladen werden, da
-der Default - elementweise Zuweisung - ungeignet ist.._[]
+der Default – elementweise Zuweisung – ungeeignet ist.._[]
 ```
 class MyClass {
     T *some_ptr;
@@ -728,7 +740,7 @@ welcher individuell für jedes Objekt vorhanden sein muss.._[]
 ]
 
 .F[:
-In C++ books this is often referred to as [Rule of Three] - the third member
+In C++ books this is often referred to as [Rule of Three] – the third member
 function for which the default is not appropriate is the destructor, of course.
 ]
 
@@ -744,19 +756,19 @@ Initialisierung und die Zuweisung unterschiedlich zu implementieren,._[]
 abhängig davon ob
 
 * der dazu verwendete Ausdruck direkt ein Objekt repräsentiert, das danach
-  unverändert weiter existieren soll, oder
+  unverändert im Speicher weiter existiert, oder
 
-* temporärer Speicherplatz für einen berechneten Ausdruck oder ein
-  Funktionsergebnis, der ohnehin bald verworfen wird.
+* temporären Speicherplatz (für einen berechneten Ausdruck oder ein
+  Funktionsergebnis), der ohnehin bald verworfen wird.
 
 ```
 class MyClass {
 public:
     …
-    // copy versions (rhs lives on separately afterwards)
+    // copy versions (rhs lives on in memory)
     MyClass(const MyClass& rhs);
     MyClass& operator=(const MyClass& rhs);
-    // move versions (rhs gets destroyed afterwards)
+    // move versions (rhs destroyed soon after)
     MyClass(MyClass&& rhs);
     MyClass& operator=(MyClass&& rhs);
 }
@@ -769,7 +781,7 @@ Turning the classic C++ *Rule of Three* into the [Rule of Five] in C++11.
 ---
 template: plain
 name: move_ctor_assign
-header: #### Implementierung von Move-Konstruktor und -Zuweisung
+header: #### Implementierung von Move-Konstruktor/Zuweisung
 
 Nachdem Move-Versionen deklariert sind, müssen diese natürlich auch
 implementiert werden.
@@ -777,14 +789,14 @@ implementiert werden.
 Wenn der Kopierkonstruktor wie folgt aussieht ...
 ```
 MyClass::MyClass(const MyClass &rhs)
-    : …, some_ptr(new T(*rhs.some_ptr)), …    // cloning ressource
+    : …, some_ptr(new T(*rhs.some_ptr)), …    // cloning resource
 { … }
 ```
 
 ... könnte dieser Move-Konstruktor angemessen sein:
 ```
-MyClass::MyClass(MyClass &rhs)
-    : …, some_ptr(rhs.some_ptr), …    // taking over ressource
+MyClass::MyClass(MyClass &&rhs)
+    : …, some_ptr(rhs.some_ptr), …    // taking over resource
 { …; rhs.some_ptr = nullptr; … }      // INVALIDATING it for rhs!
 ```
 
@@ -805,9 +817,9 @@ header: #### Unterscheidung Copy- und Move-Versionen
 Existieren beide Fassungen (Copy und Move), ergibt sich folgendes Verhalten:
 
 ```
-MyClass foo() { return …; }  // … must return something of
-                             // type MyClass (or at least
-                             // something convertible to it)
+MyClass foo() { return …; }  // … must be an expression of
+                             // type MyClass (or something
+                             // convertible to MyClass)
 MyClass a;        // (expects c'tor with no argumens)
 MyClass b(a);     // copy c'tor (does not alter a)
 MyClass c(foo()); // move c'tor (may alter temporary)
@@ -831,14 +843,14 @@ Die wichtigsten Regeln für automatische Typkonvertierungen sind:
 
 * Aufzählungstyp in arithmetischen Wert;
 
-* Zeiger als Wahrheitswert (alles ungleich `nullptr` ist `true`);
+* Zeiger in Wahrheitswert (alles ungleich `nullptr` ist `true`);
 
 * Typisierter Zeiger in allgemeinen Zeiger (`void *`);
 
 * Zeiger oder Referenz auf öffentlich abgeleitete Klasse in
   Zeiger bzw. Referenz auf Basisklasse;
 
-* Öffentlich abgeleitete Klasse auf Basisklasse durch [Slicing];
+* Öffentlich abgeleitete Klasse in Basisklasse durch [Slicing];
 
 * Klassenspezifische Typ-Konvertierung sofern in den beteiligten Objekten
   vorgesehen.
@@ -875,10 +887,10 @@ name: static_cast
 header: #### Typ-Konvertierung mit `static_cast`
 
 Hiermit lassen sich alle Typ-Umwandlungen explizit hervorheben, welche der
-Comiler auch automatisch vorgenommen hätte. Häufig entfallen dann Warnungen,
-die der Compiler typischerweise für nicht exakt übereinstimmende arithmetische
-Wert gibt, die sich durch die Umwandlung veändern könnten (da im Zieltyp nicht
-darstellbar).
+Compiler auch automatisch vorgenommen hätte. Häufig entfallen dann Warnungen,
+die der Compiler oft bei nicht übereinstimmenden Typen arithmetischer Werte
+gibt, insbesondere wenn diese sich durch die Typ-Umwandlung verändern könnten
+da im Zieltyp nicht darstellbar.
 
 Darüberhinaus funktioniert der `static_cast` in **beide** Richtungen für alle
 Umwandlungen, welche als **automatische** Umwandlung nur in einer Richtung
@@ -1159,7 +1171,7 @@ name: const_cast
 header: ### Typ-Sicherheit in C++
 
 Die praktische Konsequenz aus den Risiken, welche die Konstrukte zur
-expliziten Typumwandlung mitbringen - **allen voran `reinterpret_cast`** -
+expliziten Typumwandlung mitbringen – **allen voran `reinterpret_cast`** -
 ist diese:
 
 .W[
@@ -1257,7 +1269,7 @@ Ein Objekt der `std::string`-Klasse speichert typischerweise drei Zeiger:
 .N[
 Insbsondere sind die gültigen Zeichen nicht dahingehend eingeschränkt, dass ein
 ein Zeichen mit der ganzzahligen Wertigkeit 0 (ein "NUL-Byte") die Zeichenkette
-beendet - in einem `std::string` können beliebige auch als eingebetteter Inhalt
+beendet – in einem `std::string` können beliebige auch als eingebetteter Inhalt
 auftreten.
 ]
 
@@ -1349,7 +1361,7 @@ mit klassischen String-Literalen im C-Stil aufrufbar sein, besteht die sparsamte
 Lösung in der Verwendung des Argumenttyps `const std::string &`.
 ]
 
-Eine - gemessen am zu schreibenden Code - deutlich aufwändigere Lösung ist es,
+Eine – gemessen am zu schreibenden Code – deutlich aufwändigere Lösung ist es,
 Überladungen für
 
 * `const char *`,
@@ -1450,7 +1462,7 @@ name: stdstring_moreops
 
 header: ### Weitere Operationen im Überblick
 
-Hierfür sei an dieser Stelle auf die - beabsichtigte - Ähnlichkeit zwischen
+Hierfür sei an dieser Stelle auf die – beabsichtigte – Ähnlichkeit zwischen
 `std::string` und `std::vector<char>` verwiesen:
 
 * Auch ein `std::string` bietet die übliche Iterator-Schnittstelle.
@@ -1612,7 +1624,7 @@ Sehr flexibel ist das obige Verfahren jedoch nicht, da stets nur **genau ein**
 Begrenzerzeichen vorgegeben werden kann.
 ]
 
-Eine Zeichenauswahl - z.B. Punkt, Komma oder Semikolon - ist nicht möglich.._[]
+Eine Zeichenauswahl – z.B. Punkt, Komma oder Semikolon – ist nicht möglich.._[]
 
 .F[:
 Though a small helper function accepting a delimiter sets shouldn't be that hard
@@ -1662,7 +1674,7 @@ Das Front-End der I/O-Streams besteht aus
 As with `std::string` the architecture is even more generic as the "classes"
 explained above are rather `typedef`s for more generic template classes, each
 of which is parametrized in a character type and some more aspects. This fact
-need not be made prominently visible if - as it is the case here - the focus
+need not be made prominently visible if – as it is the case here – the focus
 is to explain the relation between the classes participating in the design.
 ]
 
@@ -1768,8 +1780,8 @@ Jeder Stream besitzt eine Reihe von Zustandsbits.
 
 * So lange keines davon gesetzt ist, befindet sich der Stream im "good"-Zustand.
 
-* Bei im Rahmen der Eingabe eines bestimmten Datentyps unerwarteten - also nicht
-  zu verarbeitenden - Zeichen, wird das `std::ios::badbit`-Bit gesetzt.
+* Bei im Rahmen der Eingabe eines bestimmten Datentyps unerwarteten – also nicht
+  zu verarbeitenden – Zeichen, wird das `std::ios::badbit`-Bit gesetzt.
 
 * Tritt im Rahmen der Eingabe die *End-Of-File*-Bedingung ein, wird das
   `std::ios::eofbit` gesetzt.
@@ -1789,8 +1801,8 @@ alle Operationen ignoriert, **ausgenommen `clear()` und `close()`**.
 
 Dies ist besonders bei der Verarbeitung von Eingaben wichtig:
 
-* Beim Wechsel des Zustands bleibt die aktuelle Position - also welches Zeichen
-  als nächstes im Rahmen einer Eingabe verarbeitet wird - so, wie sie beim
+* Beim Wechsel des Zustands bleibt die aktuelle Position – also welches Zeichen
+  als nächstes im Rahmen einer Eingabe verarbeitet wird – so, wie sie beim
   **Auslösen** des Zustandswechsels war.
 
 * Bei einem Fehler im Eingabeformat, z.B. wenn ein Buchstabe erscheint, wo eine
@@ -1877,7 +1889,7 @@ oder Funktion überall dort verwendet werden, wo syntaktisch ein Datentyp stehen
 kann.
 
 .N[
-Bei der späteren Verwendung der Template - auch Instanziierung genannt - sind
+Bei der späteren Verwendung der Template – auch Instanziierung genannt – sind
 in den spitzen Klammern konkrete Typen einzutragen.
 ]
   
@@ -1904,7 +1916,7 @@ Klasse oder Funktion überall dort verwendet werden, wo syntaktisch eine
 Compilezeit-Konstante des betreffenden Typs stehen kann.
 
 .N[
-Bei der späteren Verwendung der Template - auch Instanziierung genannt - sind
+Bei der späteren Verwendung der Template – auch Instanziierung genannt – sind
 in den spitzen Klammern konkrete Compilezeit-Konstanten einzutragen.
 ]
   

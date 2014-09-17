@@ -1,0 +1,1 @@
+../AdaptedComponent/Value.h
