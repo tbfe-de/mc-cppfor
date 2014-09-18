@@ -1,0 +1,94 @@
+#include "IODrive.h"
+
+int main(int argc, char* argv[]) {
+
+	return IODrive(std::cout)
+		//	.config_details_uncond(true)
+		//	.config_titles_only(true)
+		//	.config_summary_only(true)
+		//	.config_no_summary(true)
+		//	.config_failure_stop(true)
+		//	.config_interactive_mode(true)
+		//	.config_page_output(true)
+		//	.config_line_length(100)
+			.config(argc, argv)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Typical test input
+		//
+		.test("realistic example")
+		// -------------------------------------------------------------------
+		.supply_line("one two three four five six")
+		.expect_line("six")
+		.expect_line("five")
+		.expect_line("four")
+		.expect_line("three")
+		.expect_line("two")
+		.expect_line("one")
+		.run_to_return(reverseWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Border case with no input supplied.
+		//
+		.test("empty input")
+		// -------------------------------------------------------------------
+		.supply("")
+		.expect("")
+		// -------------------------------------------------------------------
+		.run_to_return(reverseWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Border case with just one word.
+		//
+		.test("one word")
+		// -------------------------------------------------------------------
+		.supply_line("one")
+		.expect_line("one")
+		// -------------------------------------------------------------------
+		.run_to_return(reverseWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Two words in single line.
+		//
+		.test("two words - single line")
+		// -------------------------------------------------------------------
+		.supply_line("one two")
+		.expect_line("two")
+		.expect_line("one")
+		// -------------------------------------------------------------------
+		.run_to_return(reverseWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Two words in two lines.
+		//
+		.test("two words - two lines")
+		// -------------------------------------------------------------------
+		.supply_line("one")
+		.supply_line("two")
+		.expect_line("two")
+		.expect_line("one")
+		// -------------------------------------------------------------------
+		.run_to_return(reverseWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Two words in three lines.
+		//
+		.test("two words - three lines")
+		// -------------------------------------------------------------------
+		.supply_line("one")
+		.supply_line("")
+		.supply_line("two")
+		.expect_line("two")
+		.expect_line("one")
+		// -------------------------------------------------------------------
+		.run_to_return(reverseWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Sometimes interactive testing might still be desirable ...
+		//
+		.test_cincout("type some words to be reversed", reverseWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		.summarize() // ... and set return value of main to success / failure.
+		;
+}

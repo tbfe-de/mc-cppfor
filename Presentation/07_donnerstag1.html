@@ -323,7 +323,7 @@ header: ### Basierend auf virtuellen Member-Funktionen
 
 [GoF Template Methode Pattern]: http://en.wikipedia.org/wiki/Template_method_pattern
 
-Bei der klassichen Realisierung des [GoF Template Methode Pattern]s
+Bei der klassischen Realisierung._[] des [GoF Template Methode Pattern]s
 
 * sind virtuelle Member-Funktionen einer Basisklasse die
 
@@ -339,9 +339,8 @@ abgeschlossene Teil.._[]
 ]
 
 .F[:
-More exactly: Some member function of the base class that contains the "template
-methode". (But please do **not** confuse this with the meaning the term template
-otherwise has in C++ - two quite different pairs of shoes!)
+Siehe
+[Examples/OpenClose/virtual_functions.cpp](../Examples/OpenClose/virtual_functions.cpp)
 ]
 
 ---
@@ -351,7 +350,7 @@ section: C++ Template Mechanism
 name: oc_with_cpp_templates
 header: ### Basierend auf C++-Templates
 
-Bei der Realisierung mit Templates ist die
+Bei der Realisierung mit Templates._[] ist die
 
 * abgeleitete Klasse der geschlossene Teil,
 
@@ -364,6 +363,11 @@ Bei der Realisierung mit Templates ist die
 .I[
 Ein deutlicher Vorteil dieser Variante ist, dass von ungenutzten
 Erweiterungspunkten keine leeren Unterprogramm-Einsprünge übrig bleiben.
+]
+
+.F[:
+Siehe
+[Examples/OpenClose/template_baseclass.cpp](../Examples/OpenClose/template_baseclass.cpp)
 ]
 
 ---

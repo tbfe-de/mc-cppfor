@@ -563,7 +563,7 @@ header: ### Output-Iterator-Kategorie
 
 Output-Iteratoren sind *abwechselnd*
 
-* für den *Schreib-Zugriff* zu derefenenzieren (`*`)
+* für den *Schreib-Zugriff* zu dereferenzieren (`*`)
 
 * und *weiterzuschalten* (`++`).
 
@@ -1072,7 +1072,7 @@ Zunächst ein Funktor, der dies leistet:
 ```
 struct PrintWords {
     void operator()(const std::string &e) {
-        cout << ": " << s << "\n";
+        cout << ": " << e << "\n";
     }
 };
 ```
@@ -1093,8 +1093,8 @@ header: #### Vergleich mit Funktion
 
 Mit einer Funktion sieht das Beispiel so aus:
 ```
-void print_words(const std::string &s) {
-    cout << ": " << s << "\n";
+void print_words(const std::string &e) {
+    cout << ": " << e << "\n";
 };
 ```
 .N[
@@ -1134,7 +1134,7 @@ werden, lassen sich auch Argumente aus der Aufruf-Umgebung weiterreichen:
 ```
 struct PrintWordsEnumerated {
     void operator()(const std::string &e) {
-        os << ++n << ": " << s << "\n";
+        os << ++n << ": " << e << "\n";
     }
     PrintWordsEnumerated(std::ostream &os_) : n(0), os(os_) {}
 private:
@@ -1145,7 +1145,8 @@ private:
 
 Diese sind dann bei der Verwendung zu versorgen:
 ```
-	std::for_each(v.begin(), v.end(), PrintWords(std::cout));
+std::for_each(v.begin(), v.end(),
+              PrintWordsEnumerated(std::cout));
 ```
 
 ---
@@ -1158,7 +1159,8 @@ in lokalen Variablen oder Argumenten vorliegen:
 ```
 void foo(std::ostream &output) {
     …
-    std::for_each(v.begin(), v.end(), PrintWords(output));
+    std::for_each(v.begin(), v.end(),
+                  PrintWordsEnumerated(output));
     …
 }
 ```

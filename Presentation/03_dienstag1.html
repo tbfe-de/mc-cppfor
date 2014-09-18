@@ -513,9 +513,12 @@ section: Association
 name: undirected_association
 header: ### Ungerichtete Assoziation in C++
 
-Streng genommen bedeutet die allgemeine Assoziation in C++, dass die beiden
-Klassen gegenseitig aufeinander verweisen, was z.B. in Form zweier Pointer
-realisiert sein könnte.
+Streng genommen erfordert die Assoziation in C++, dass zwei Klassen gegenseitig
+aufeinander verweisen, was z.B. mittels zweier Pointer.._[]
+
+.F[:
+Siehe: [Examples/ClassRelations/general_association.cpp](../Examples/ClassRelations/general_association.cpp)
+]
 
 .I[
 Programmiertechnisch lässt sich nur einer dieser beiden Pointer durch eine
@@ -524,6 +527,7 @@ nicht realisierbar.
 ]
 
 #### Beispiel-Code zur ungerichteten Assoziation
+
 .pull-left[
 ```
 class Parent {
@@ -561,12 +565,17 @@ section: Association
 name: directed_association
 header: ### Gerichtete Assoziation
 
-Durch Hinzufügen eines Pfeils an der Assoziationslinie kann die "eingeschränkte
-Navigierbarkeit" zum Ausdruck gebracht werden.
+Durch Hinzufügen eines Pfeils an der Assoziationslinie wird ggf. die
+*eingeschränkte Navigierbarkeit* dargestellt.._[]
+
+.F[:
+Siehe: [Examples/ClassRelations/directed_association.cpp](../Examples/ClassRelations/directed_association.cpp)
+]
 
 .I[
-Für die programmiertechnische Umsetzung wird damit klar, welche Klasse die
-jeweils andere – z.B. per Zeiger oder Referenz – erreichen können muss.._[]
+Für die programmiertechnische Umsetzung bedeutet dies eine Vereinfachung, da
+nun klar, dass nur eine Klasse auf die andere verweisen muss – z.B. per Zeiger
+oder Referenz.
 ]
 
 #### Beispiel-Code zur gerichteten Assoziation
@@ -598,11 +607,6 @@ Child second(first);
 ```
 ]
 
-.F[:
-Die direkte Einbettung der erreichbaren Klasse als Daten-Member entspräche
-jedoch der [Komposition](#composition).
-]
-
 ---
 template: withinfo
 graphic: UML-ClassesAndRelations
@@ -610,29 +614,32 @@ section: Composition
 name: composition
 header: ### Komposition
 
-Die Komposition ist eine stärkere, häufig Form der Aggregation, bei der das
-Teil in seiner Lebenszeit an die Gesamtheit gebunden ist.
+Komposition wird durch eine ausgefüllte Raute zum Ausdruck gebracht, welche an
+einem Ende der Assoziationslinie hinzugefügt wird.._[]
 
-.N[
-In der UML-Darstellung wird an die (Assoziations-) Linie zwischen den beiden
-beteiligten Klassen auf der Seite der Gesamtheit eine *ausgefüllte* Raute
-hinzugefügt.
+.F[:
+Siehe: [Examples/ClassRelations/composition.cpp](../Examples/ClassRelations/composition.cpp)
+]
+
+.I[
+Komposition ist eine häufige, stärkere Form der Aggregation, bei der die
+Lebensdauer des "Teils" (Ende ohne Raute) an die der "Gesamtheit" (Ende
+mit Raute) gebunden ist.
 ]
 
 #### Beispiel-Code zur Komposition
 .pull-left[
 ```
 class Car {
-    class Motor someMotor;
+    class Motor engine;
     …
     Car( … )
-        : someMotor( … )
+        : engine( … )
     {}
 };
 …
-Car someCar; // creates also
-             // the (builtin)
-             // motor
+Car someCar; // also creates
+             // the engine
 ```
 ]
 
@@ -671,9 +678,9 @@ hinzugefügt.._[]
 
 .F[:
 Aus pragmatischer Sicht ist darauf hinzuweisen, dass Aggregation und Assoziation
-häufig eng beieinander liegen und mitunter sogar "Ansichtssache" sind, womit
-sich ein längeres Nachdenken oder gar eine kontroverse Diskussion darüber nicht
-lohnt, welche Art von Beziehung per UML darzustellen ist.
+häufig eng beieinander liegen und mitunter auch "Ansichtssache" sind, womit ein
+längeres Nachdenken oder gar eine kontroverse Diskussion darüber nicht lohnt,
+welche Art von Beziehung per UML darzustellen ist.
 ]
 
 ---
@@ -684,15 +691,15 @@ header: #### Beispiel-Code zur Aggregation
 .pull-left[
 ```
 class Car {
-    class Motor *m;
+    class Motor *e;
     …
-    Car(Motor *m_ = nullptr)
-        : m(m_)
+    Car(Motor *e_ = nullptr)
+        : e(e_)
     {}
-    void setEngine(Motor *m_) {
-        assert(m && !m_
-           || !m && m_);
-        m = m_;
+    void setEngine(Motor *e_) {
+        assert(e && !e_
+           || !e && e_);
+        e = e_;
     }
 };
 
@@ -709,9 +716,11 @@ Motor firstMotors;
 Motor otherMotor;
 Motor unusedMotor;
 ```
+Prefering pointers over references looks like an appropriate decision if a car,
+during its lifetime, may get a replacement engine.._[]
 ]
 
-Einige Autos (mit und ohne Motor):
+Some Cars (with and without Motor):
 ```
 Car soldCar(&firstMotor);        // a car with and ...
 Car usedForCrashTest;            // ... without an engine
@@ -720,11 +729,8 @@ soldCar.setEngine(nullptr);      // remove old engine ...
 soldCar.setEngine(otherMotor);   // ... for replacement
 ```
 
-
 .F[:
-Prefering pointers over references here is an arbitrary decision, but it looks
-like an appropriate design if a car – durings its lifetime – may get an exchange
-engine.
+Siehe: [Examples/ClassRelations/aggregation.cpp](../Examples/ClassRelations/aggregation.cpp)
 ]
 
 ---

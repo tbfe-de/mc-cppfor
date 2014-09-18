@@ -1,0 +1,104 @@
+#include "IODrive.h"
+
+int main(int argc, char* argv[]) {
+
+	return IODrive(std::cout)
+		//	.config_details_uncond(true)
+		//	.config_titles_only(true)
+		//	.config_summary_only(true)
+		//	.config_no_summary(true)
+		//	.config_failure_stop(true)
+			.config_interactive_mode(true)
+		//	.config_page_output(true)
+		//	.config_line_length(100)
+			.config(argc, argv)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Typical test input
+		//
+		.test("realistic example")
+		// -------------------------------------------------------------------
+		.supply_line("one two three one one four five six six five")
+		.expect_line("five")
+		.expect_line("four")
+		.expect_line("one")
+		.expect_line("six")
+		.expect_line("three")
+		.expect_line("two")
+		.run_to_return(uniqueWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Border case with no input supplied.
+		//
+		.test("empty input")
+		// -------------------------------------------------------------------
+		.supply("")
+		.expect("")
+		// -------------------------------------------------------------------
+		.run_to_return(uniqueWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Border case with just one word.
+		//
+		.test("one word")
+		// -------------------------------------------------------------------
+		.supply_line("one")
+		.expect_line("one")
+		// -------------------------------------------------------------------
+		.run_to_return(uniqueWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Three identical words.
+		//
+		.test("three same words")
+		// -------------------------------------------------------------------
+		.supply_line("one one one")
+		.expect_line("one")
+		// -------------------------------------------------------------------
+		.run_to_return(uniqueWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Three different words.
+		//
+		.test("three different words")
+		// -------------------------------------------------------------------
+		.supply_line("one two three")
+		.expect_line("one")
+		.expect_line("three")
+		.expect_line("two")
+		// -------------------------------------------------------------------
+		.run_to_return(uniqueWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Three different words ordered.
+		//
+		.test("three different words - in order")
+		// -------------------------------------------------------------------
+		.supply_line("one three two")
+		.expect_line("one")
+		.expect_line("three")
+		.expect_line("two")
+		// -------------------------------------------------------------------
+		.run_to_return(uniqueWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Three different words ordered reverse.
+		//
+		.test("three different words - in reversed order")
+		// -------------------------------------------------------------------
+		.supply_line("two three one")
+		.expect_line("one")
+		.expect_line("three")
+		.expect_line("two")
+		// -------------------------------------------------------------------
+		.run_to_return(uniqueWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Sometimes interactive testing might still be desirable ...
+		//
+		.test_cincout("type some words to order w/o duplicates", uniqueWords)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		.summarize() // ... and set return value of main to success / failure.
+		;
+}

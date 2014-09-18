@@ -1,0 +1,91 @@
+#include "IODrive.h"
+
+int main(int argc, char* argv[]) {
+
+	return IODrive(std::cout)
+		//	.config_details_uncond(true)
+		//	.config_titles_only(true)
+		//	.config_summary_only(true)
+		//	.config_no_summary(true)
+		//	.config_failure_stop(true)
+		//	.config_interactive_mode(true)
+		//	.config_page_output(true)
+		//	.config_line_length(100)
+			.config(argc, argv)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Typical test input
+		//
+		.test("realistic example")
+		// -------------------------------------------------------------------
+		.supply_line("one two three one one four five six six five")
+		.expect_line("five:2")
+		.expect_line("four:1")
+		.expect_line("one:3")
+		.expect_line("six:2")
+		.expect_line("three:1")
+		.expect_line("two:1")
+		.run_to_return(wordCount)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Border case with no input supplied.
+		//
+		.test("empty input")
+		// -------------------------------------------------------------------
+		.supply("")
+		.expect("")
+		// -------------------------------------------------------------------
+		.run_to_return(wordCount)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Border case with just one word.
+		//
+		.test("one word")
+		// -------------------------------------------------------------------
+		.supply_line("one")
+		.expect_line("one:1")
+		// -------------------------------------------------------------------
+		.run_to_return(wordCount)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Three identical words.
+		//
+		.test("three words - all same")
+		// -------------------------------------------------------------------
+		.supply_line("one one one")
+		.expect_line("one:3")
+		// -------------------------------------------------------------------
+		.run_to_return(wordCount)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Three words, two identical.
+		//
+		.test("three words - two same")
+		// -------------------------------------------------------------------
+		.supply_line("one two one")
+		.expect_line("one:2")
+		.expect_line("two:1")
+		// -------------------------------------------------------------------
+		.run_to_return(wordCount)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Three different word.
+		//
+		.test("three words - all different")
+		// -------------------------------------------------------------------
+		.supply_line("one two three")
+		.expect_line("one:1")
+		.expect_line("three:1")
+		.expect_line("two:1")
+		// -------------------------------------------------------------------
+		.run_to_return(wordCount)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		// Sometimes interactive testing might still be desirable ...
+		//
+		.test_cincout("type some words to count", wordCount)
+
+		// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		.summarize() // ... and set return value of main to success / failure.
+		;
+}
