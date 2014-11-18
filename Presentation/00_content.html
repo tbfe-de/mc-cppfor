@@ -163,34 +163,35 @@ class: agenda
 name: agenda
 header: ## Agenda
 
-Themenplanung._[] Montag bis Freitag (Ende mit Mittagspause)
+Planned Topics._[] Monday to Friday (last day end after lunch break)
 
-------------------------------------------------------------------------------
+-----------------------------------------------------------------
 
-* [ Montag(1): C++-Basics - Wiederholung und Vertiefung	](01_montag1.html)
-* [ Montag(2): Hardwarenahe Betrachtung von C++		](02_montag2.html)
+* [Monday(1): General C++-Basics (and some major C++11 changes)	](01_monday1.html)
+* [Monday(2): More C++-Basics (Templates, Execeptions, Library)	](02_monday2.html)
 
-------------------------------------------------------------------------------
+-----------------------------------------------------------------
 
-* [ Dienstag(1): Klassische Objektorientierung in C++	](03_dienstag1.html)
-* [ Dienstag(2): STL: Container und Iteratoren(1)	](04_dienstag2.html)
+* [Tuesday(1): STL Container Classes				](03_tuesday1.html)
+* [Tuesday(2): STL Iterators and Algorithms)			](04_tuesday2.html)
 
-------------------------------------------------------------------------------
+-----------------------------------------------------------------
 
-* [Mittwoch(1): STL: Iteratoren(2) und Algorithmen	](05_mittwoch1.html)
-* [Mittwoch(2): Programmieren mit Templates		](06_mittwoch2.html)
+* [Wednesday(1): C++ from Top - Classes and Class Relations	](05_wednesday1.html)
+* [Wednesday(2): C++ from Bottom - How it uses the Hardware	](06_wednesday2.html)
 
-------------------------------------------------------------------------------
+-----------------------------------------------------------------
 
-* [Donnerstag(1): *DRY-* und *Open Close*-Principle	](07_donnerstag1.html)
-* [Donnerstag(2): Exceptions				](08_donnerstag2.html)
+* [Thursday(1): From Parametrized Types to Metaprogramming	](07_thursday1.html)
+* [Thursday(2): The Multi-Paradigm Nature of C++		](08_thursday2.html)
 
-------------------------------------------------------------------------------
+-----------------------------------------------------------------
 
-* [Freitag: Ressource-Management			](09_freitag1.html)
+* [Friday: Ressource-Management in the Light of Exceptions	](09_friday1.html)
 
 .F[:
-Weitere Inhalte können nach Absprache aufgenommen werden.
+Setting of priorities is negotiatable and more additional topics may be
+included if there is a common demand.
 ]
 
 ---
@@ -213,10 +214,10 @@ Kursunterlage, betreffend:._[]
 * [Private Annnotations			](#private_annotations)
 
 .F[:
-In der Online-Version enthält die Liste anklickbare Links. Hier wie in allen
-folgenden Verwendungen sind diese nur sehr dezent hervorgehoben, damit sie nicht
-zu sehr vom allgemeinen Lesefluss ablenken. Erst bei Überstreichen mit dem
-Mauszeiger geben sie sich deutlicher zu erkennen.
+In der Online-Version enthält die obige Liste anklickbare Links. Sie sind dort -
+wie auch in allen folgenden Verwendungen - allerdings nur dezent hervorgehoben,
+um nicht vom Lesefluss ablenken. Beim Überstreichen mit dem Mauszeiger geben sie
+sich deutlicher zu erkennen.
 ]
 
 ---
@@ -273,7 +274,6 @@ verbietet es jedoch, das Dokument den Kursteilnehmern als eigene Kopie zur
 Verfügung zu stellen.
 ]
 
-
 ---
 template: plain
 name: training_document
@@ -290,16 +290,17 @@ erschöpfende Behandlungen des jeweiligen Themas angelegt werden.
 * typische Anwendungsbeispiele zu zeigen,._[]
 * dabei vor häufigen Fehlern zu warnen,
 * insgesamt den roten Faden durch den behandelten Stoff zu liefern,
-* sowie die zugrundeliegenden gedanklichen Modelle und Zusammenhänge zu
-  verdeutlichen - beides oft als [Info-Grafiken](#info_graphics).
+* sowie die gedanklichen Modelle und tieferen Zusammenhänge zu
+  verdeutlichen.
 ]
 
-Darüber hinaus sind zu den dargestellten Themen **Fragen jeglicher Art jederzeit
-willkommen** - auch und gerade wenn diese über den Inhalt der jeweils behandelten
-Präsentationseiten hinausgehen!
+Darüber hinaus sind **Fragen jeglicher Art jederzeit willkommen**.
+
+Das gilt auch und gerade(!) dann, wenn diese über den Inhalt der jeweils
+behandelten Präsentationseite hinausgehen.
 
 .F[:
-Bitte beachten Sie zum Punkt Anwendungsbeispiele unbedingt auch die Folgeseite!
+Bitte beachten Sie zum Punkt Anwendungsbeispiele auch die Folgeseite.
 ]
 
 ---
@@ -326,7 +327,7 @@ Sollten Sie Papier-Ausdrucke wünschen, erläutert Ihnen der Dozent gerne, wie S
 diese - auf Einzelfälle bezogen - über den Kursraum-Drucker selbst anfertigen
 können. Für einen **Gesamtausdruck** wenden Sie sich ggf. **möglichst am ersten
 oder zweiten Tag** ebenfalls an den Dozenten, damit das Ausdrucken auf einem
-zentralen Hochleistungsgerät erfolgen kann.
+zentralen Hochleistungsdrucker erfolgen kann.
 ]
 
 ---
@@ -350,7 +351,8 @@ Sie können die elektronische Form der Unterlagen gerne
 * sowie künftig aktualisierte Versionen aus dem Internet beziehen.
 
 .N.center[
-Bitte beachten Sie dazu aber auch die [Weitergabe-Lizenz](#online_version).
+Bitte beachten Sie dabei die [Weitergabe-Lizenz](#online_version) auf der
+folgenden Seite.
 ]
 
 ---
@@ -371,7 +373,7 @@ Sie haben die Möglichkeit zum Download unter: http://tbfe.de/archiv
 
 .W[
 Das verfügbar gemachte Material wurde mit angemessener Sorgfalt erstellt und
-geprüft. Haftungsansprüche bei dennoch enthaltenen Fehlern sind ausgeschlossen.
+geprüft. Haftungsansprüche bei noch enthaltenen Fehlern sind ausgeschlossen.
 ]
 
 Hinweise auf Fehler, Unvollständigkeiten oder generelle Anregungen und
@@ -416,7 +418,7 @@ HTML-Datei, aber einen anderen Suffix:
 
 * zu der Datei, die Sie gerade lesen (falls Sie dies im Browser tun)
 
-* gehört z.B. druckbare Version [`00_inhalt.pdf`](00_inhalt.pdf). 
+* gehört z.B. druckbare Version [`00_content.pdf`](00_content.pdf). 
 
 Mit einer aktuellen Version des *Google Chrome* Browsers können Sie eine solche
 PDF-Datei auch jederzeit selbst erstellen:
@@ -456,13 +458,14 @@ begleitend zu den Kapiteln dieser Schulungsunterlage erhalten.
 
 .F[:
 Sie können derartige Grafiken stets Anklicken, um eine große Version zu
-erhalten. Die hier gezeigte Grafik hat natürlich keine fachliche Bedeutung
-sondern ist nur dazu gedacht, dass Sie damit die "Navigation" im Browser
-einüben können. (Bei entsprechend starkem Zoom sollten Sie in der zentralen
-Sprechblase ein Zitat erkennen, das manchen "Oldtimern" möglicherweise noch
-aus einer Fernseh-Show der späten 60er bekannt ist [...] und in der zeitweilig
-bereits ein - über Akustikkoppler mit den Telefonhörer verbundenes - Modem zum
-Einsatz kam.)
+erhalten. Die hier gezeigte Grafik hat keine fachliche Bedeutung sondern ist nur
+dazu gedacht, dass Sie damit die "Navigation" im Browser einüben können. (Bei
+entsprechend starkem Zoom sollten Sie in der zentralen Sprechblase ein Zitat
+erkennen, das manchen "Oldtimern" möglicherweise noch aus einer Fernseh-Show der
+späten 60er bekannt ist, in der gelegentlich aus dem Wohnzimmer ausgewählter
+Zuschauer mittels über Akustikkoppler und Telefonleitung übertragener Signale
+eine Armbrust ferngesteuert wurde ... für die damalige Zeit ein futuristisches
+High-Tech Show-Element.)
 ]
 
 [...]: http://de.wikipedia.org/wiki/Der_goldene_Schu%C3%9F
@@ -527,12 +530,12 @@ name: other_languages
 header: ### Übersetzung in andere Sprachen
 
 Moderne Browser bieten heute oft "auf Knopfdruck" eine Online-Übersetzung.
-Deren Qualität ist mittlerweile schon erstaunlich brauchbar.._[] Somit sollten
-Sie diesen Service bei Bedarf nutzen.
+Deren Qualität ist mittlerweile schon recht brauchbar.._[] Somit sollten Sie
+diesen Service bei Bedarf nutzen.
 
 .F[:
-Dies gilt zumindest für relativ nahe verwandte Sprachfamilien, wie etwa die
-römisch-germanischen.
+Dies gilt zumindest für dem Deutschen relativ nahe verwandte Sprachfamilien,
+wie etwa die römisch-germanischen.
 ]
 
 Sie können den Online-Übersetzungs-Service gleich jetzt ausprobieren
@@ -541,19 +544,50 @@ Sie können den Online-Übersetzungs-Service gleich jetzt ausprobieren
 
 * mit der nächsten Seite Englisch -> Deutsch.
 
-Einzelne Kapitel dieser Unterlage werden nach und nach vom Autor ins Englische
-übersetzt und dann nur noch in dieser Sprache verfügbar sein, da eine parallele
-Aktualisierung von mehrsprachigen Unterlagen sehr aufwändig ist.
+Diese Unterlage wird nach und nach vom Autor ins Englische übersetzt und dann
+nur noch in dieser Sprache verfügbar sein, da eine parallele Aktualisierung von
+mehrsprachigen Unterlagen sehr aufwändig ist.
 
 .N[
-Die Vermischung zweier Sprachen im selben Kapitel wird jedoch auf Ausnahmen
-beschränkt bleiben - wie etwa in diesem Kapitel die folgende Seite.
+Die Vermischung zweier Sprachen im selben Unterkapitel oder auf ein und
+derselben Seite wird dabei die Ausnahme bleiben (z.B. bei nachträglich
+ergänzten Fußnoten, welche dann in englischer Sprache verfasst sind).
 ]
 
 ---
 template: plain
 name: private_annotations
 header: ### Private Annotations
+
+Of course you may want to extend this document with your own annotations while
+taking this course.
+
+#### Print Version
+
+The bottom part on all pages of the print version has been deliberately left
+empty so that you can use it freely for annotations.
+
+Of course, if you donwload a more recent version of this presentation at any
+later it may be less usable, so you may want to consider the next page too.
+
+.I[
+The explanations on the next page are only meant for those who prefer to keep
+this document - **including private annotations** - as a "fully electronic"
+version, which can e.g. be put on a memory stick or stored in the cloud.
+]
+
+In no way it is necessary to read and follow the instructions given on the next
+page to benefit from this training. They only deal with how to get some **added
+value** from this electronic document.
+
+.N.center[
+If you are happy with paper print-outs, you may well stop reading here.
+]
+
+---
+template: plain
+name: private_annotations
+header: #### Electronic Annotations
 
 The core content of this HTML file is witten in readable [markdown format].._[]
 
@@ -562,7 +596,7 @@ With minor extensions, if you happen to know markdown already.
 ]
 
 You have the option to handle this document by purely electronic means,
-*including private annotations* you may want to add.
+*including private annotations* you may want to add by and by over time.
 
 1. Save the HTML files of the presentation locally.
 
@@ -574,9 +608,9 @@ changing to *presenter's mode* with the `p` key.
 * **You may try it out right now - back to normal is also with `p`.**
 
 .I[
-Future versions of this presentation **may or may not** use the notes section for
-their own purposes - but in any case it should be possible to merge your private
-annotations with a [diff-tool].
+Future versions of this presentation **may or may not** use the notes section
+for their own purposes - but in any case it should be possible to merge your
+private annotations with a [diff-tool].
 ]
 
   [markdown format]: http://de.wikipedia.org/wiki/Markdown
