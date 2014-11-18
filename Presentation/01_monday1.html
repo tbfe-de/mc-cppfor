@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>C++-For (1) - Montag Teil 1</title>
+    <title>C++-For (1) - Monday Part 1</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
     <!-- when changing the stylesheet file please see also remark below -->
@@ -136,16 +136,14 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
 layout: false
 template: blank
 
-  [C++ FOR]: 00_inhalt.html#agenda
+  [C++ FOR]: 00_content.html#agenda
 
 # [C++ FOR] (Montagvormittag)
 
 ---------------------------------------------------------------------------
 
-1. [Auffrischung einiger wichtige Grundlagen		](#cpp_basics)
-1. [Überblick und Wiederholung: Standard-Strings	](#string_basics)
-1. [Überblick und Wiederholung: I/O-Streams		](#iostream_basics)
-1. [Grundlegendes zu Templates				](#template_basics)
+1. [Auffrischung einiger wichtige Grundlagen	](#cpp_basics)
+1. [Zeiger und Referenzen			](#reference_types)
 
 ---------------------------------------------------------------------------
 
@@ -167,21 +165,6 @@ header: ## Auffrischung einiger wichtiger Grundlagen
 * [Schreibschutz durch den Compiler	](#const_protection)
 
 --------------------------------------------------------------------------
-
-* [Zeiger versus Referenzen		](#pointer_vs_reference)
-* [RValue-Referenzen (neu in C++11)	](#rvalue_reference)
-* [Defaultwerte für Argumente		](#default_arguments)
-
---------------------------------------------------------------------------
-
-* [Überladen von Funktionen		](#overloading_functions)
-* [Überladen von Operatoren		](#overloading_operators)
-
---------------------------------------------------------------------------
-
-* [Automatische Typ-Konvertierung	](#automatic_typeconv)
-* [Typ-Konvertierung mittels *Cast*	](#explicit_typeconv)
-* [Klassenspezifische Typ-Konvertierung	](#specified_typeconv)
 
 ---
 template: plain
@@ -425,7 +408,8 @@ name: const_protection
 header: ### Schreibschutz durch den Compiler (`const`)
 
 Mittels `const`-Qualifizierung wird die Zuweisung eines (neuen) Werts an eine
-Variable verboten. Es ist nur noch die Initialisierung bei der Definition möglich.
+Variable verboten. Es ist nur noch die Initialisierung bei der Definition
+möglich.
 
 ```
 const int x = 42;              // Initialisierung notwendig
@@ -450,27 +434,56 @@ möglich.
 
 ---
 template: plain
-header: ### Anwendung der `const`-Qualifizierung auf Zeiger
+name: reference_types
+header: ## Zeiger und Referenzen
+
+--------------------------------------------------------------------------
+
+* [Zwei Arten konstanter Zeiger			](#const_pointers)
+* [Klassische Referenzen (LValue-Referenzen)	](#classic_references)
+* [Zeiger versus Referenzen			](#pointer_vs_reference)
+* [RValue-Referenzen (neu in C++11)		](#rvalue_reference)
+
+--------------------------------------------------------------------------
+
+---
+template: plain
+name: const_pointers
+header: ### Zeiger allgemein und `const`-qualifiziert
 
 Bei Zeigern ist zu beachten, dass sich die Konstantheit auf den Zeiger selbst
 beziehen kann
 ```
-    const int *p;  // gleichbedeutend zu: int const *p;
-    *p = …;        // Compile-Fehler
+int *p1;       // pointer and pointed-to memory are modifiable
+…
+*p1 = …;       // OK (assuming valid initialisation)
+const int *p2; // same as: int const *p;
+               // only pointer is still modifiable, but ...
+*p2 = …;       // ERROR at compile-time
 ```
 
-oder auf das, was über den Zeiger erreichbar ist:
+oder auf das, was über den Zeiger erreichbar ist:._[]
 ```
-    int *const p = …; // muss initialisiert werden
-    p = …;    // Compile-Fehler
-    ++p;      // Compile-Fehler
+int *const p3 = …; // must be initialized (with address of an int)
+p3 = …;            // ERROR (would modify pointer itself)
+*p3 = …;           // OK (modifies pointed-to memory location)
+++*p3;             // OK (increments pointed-to memory location)
+++p3;              // ERROR (would modify pointer itself!) 
 ```
+
+.F[:
+Of course, both kinds of `const`-qualification may be combined if it makes sense
+for a given purpose, e.g. `const int *const p4 = …;` (or - switching the
+positions the qualification and the type to which it is applied:
+`int const *const p4 = …;`).
+]
 
 ---
 template: plain
+name: classic_references
 header: ### Bezugnahme über Referenz
 
-Das klassiche Beispiel ist eine Funktion `swap`, welche zwei Werte miteinander
+Das klassiche Beispiel ist eine Funktion, welche die Inhalte zweier Variablen
 vertauscht:
 
 .pull-left[
@@ -503,6 +516,162 @@ if (a > b) swap(a, b);
 ```
 ]
 
+In der linken Version werden Zeigerargumente verwendet und explizit Adressen
+übergeben, in der rechten sind die Argumente Referenzen. Der Unterschied besteht
+aber nur in der sparsameren Notation im Quelltext (mit Referenzen) - es kann
+identischer Maschinencode erzeugt werden.._[]
+
+.F[:
+Though there is no rule to enforce this. E.g. depending on compile time debug
+options different security checks could be generated for pointers and
+references.
+]
+
+---
+template: plain
+name: reference_initialisation
+header: #### Initialisierung von Referenzen
+
+Da Referenzen konzeptionell stets vorhandenen Speicherplatz bezeichnen,._[]
+müssen sie zwingend intialsiert werden.
+
+.N[
+It is not possible to modify a reference after initialisation so that it
+refers to a different memory location.
+]
+
+Insofern entsprechen Referenzen den konstanten Zeigern, die selbst nicht
+veränderbar sind, wohl aber der über sie erreichbare Speicherplatz.
+
+```
+int v1, v2;
+int &r = v1; // rerefence is intialized
+…
+```
+Das folgende führt **nicht** zu einem Fehler bei der Kompilierung, führt aber
+nicht dazu, dass `r` nun die Variable `v2` referenziert sondern kopiert den
+Inhalt von `v2` in `v1`:
+```
+r = v2;
+```
+
+.F[:
+Not further considering some artistic ways of initialisation here which
+deliberately subvert this:  
+`T &r = *reinterpret_cast<T*>(0);`
+]
+
+---
+template: plain
+name: const_reference
+header: #### Konstante Referenzen
+
+Die `const`-Qualifizierung bezieht sich bei der Referenz auf den darüber
+möglichen Zugriff:
+
+* Im Allgemeinen kann über eine Referenz angesprochener Speicherplatz gelesen
+  und verändert werden.
+
+* Über eine `const`-qualifizierte Referenz sind nur Lesezugriffe möglich.
+
+Im folgenden Beispiel kann die Variable `v` zwar direkt und bei Zugriff über
+`r1` verändert werden, nicht aber beim Zugriff über `r2`:
+```
+T v;
+T &r1 = v;       // r1 now refers to content of v
+const T &r2 = v; // r2 also refers to content of v
+…
+r1 = …; // OK (actually changes v)
+r2 = …; // ERROR (at compile time)
+```
+
+Lesender Zugriff ist natürlich sowohl über `r1` wie auch über `r2` möglich.._[]
+
+.F[:
+It should be obvious that in the light of references a value-tracking compiler
+must be careful not to optimise-out *read* memory access with no intervening
+*write*: the content of some location might still have been modified on a
+different access path.
+]
+
+---
+template: plain
+name: const_correctness
+header: #### Achieving the Const-Correctness
+
+The C++ compiler catches constructs that may subvert const-correctness.
+
+.pull-left[
+
+```
+const T cv = …;
+const T &cr = cv; // OK
+T &r = cv;        // ERROR
+```
+]
+
+.pull-right[
+
+```
+const T cv = …;
+const T *cp = &cv; // OK
+T *p = &cv;        // ERROR
+```
+]
+
+
+Aside from the notational there is **no substantial difference** between
+pointers and references in the two examples above.._[]
+
+.W[
+If the above initialisation would compile, the non-modifiable variable `cv`
+might be modified via a non-`const` reference (`r`) or a pointer to non-`const`
+memory (`p`).
+]
+
+.F[:
+In fact: both fragments will typically compile into the same machine
+instructions.
+]
+
+---
+template: plain
+name: const_ref_args
+header: #### Reference Arguments
+
+It should be noticed that in the most cases reference initialisation occurs
+when handing arguments to functions, hence all the peculiarities and special
+cases will be mostly observed there:
+
+Forgotten `const`-qualification, `arg` is actually not modified in `foo`:
+```
+void foo(double &arg) {
+    … // all access to arg is read-only
+}
+```
+
+.pull-left[
+Cannot call `foo` now with literal constant or `const`-qualified variable
+```
+foo(0.0); // ERROR
+double const PI = 3.14;
+foo(PI);  // ERROR
+```
+]
+
+.pull-right[
+No temporaries are silently created:._[]
+```
+const int x 42;
+foo(x);
+foo(2*PI);
+```
+]
+
+.F[:
+The reason here is ...
+]
+
 ---
 template: plain
 name: pointer_vs_reference
@@ -515,7 +684,7 @@ C++ Referenzen können auf zwei Arten betrachtet werden:
   * die Dereferezierung bei der Verwendung impliziert (`*` automatisch
     vorangestellt);
 
-  * bzw. den Adress-Operator bei der Initialisierung (`&` autmatisch
+  * bzw. den Adress-Operator bei der Initialisierung (`&` automatisch
     vorangestellt).
 
 * Oder aber einen Alias-Name für bereits (an anderer Stelle) existierenden,
@@ -569,6 +738,17 @@ der RValue-Referenz – anders als bei klassischen `const`-Referenzen – das
 Destruktor nach wie vor seine Arbeit verreichten kann.
 ]
 
+--------------------------------------------------------------------------
+
+* [Defaultwerte für Argumente		](#default_arguments)
+* [Überladen von Funktionen		](#overloading_functions)
+* [Überladen von Operatoren		](#overloading_operators)
+
+--------------------------------------------------------------------------
+
+* [Automatische Typ-Konvertierung	](#automatic_typeconv)
+* [Typ-Konvertierung mittels *Cast*	](#explicit_typeconv)
+* [Klassenspezifische Typ-Konvertierung	](#specified_typeconv)
 ---
 template: plain
 name: default_arguments
@@ -1194,763 +1374,6 @@ Klassenspezifische Typumwandlung sollten generell nur dort verwendet werden,
 wo der stillschweigende Wechsel zwischen den beteiligten Typen als "natürlich"
 empfunden wird.
 ]
-
----
-template: linkinfo
-graphic: StringBasics
-name: string_basics
-header: ## Verwendung von Standard-Strings
-
--------------------------------------------------------------------------------
-
-* [Klassen (Übersicht)			](#stdstring_classes)
-* [Kompatibilität zu C			](#stdstring_cstr)
-* [Effizienz üblicher Implementierungen	](#stdstring_efficiency)
-* [Optionales "Copy On Write"		](#stdstring_cow)
-
--------------------------------------------------------------------------------
-
-* [Grundlegende Operationen		](#stdstring_basicops)
-* [Weitere Operationen im Überblick	](#stdstring_moreops)
-* [Umwandlung von/in arithmetische Werte](#stdstring_numconv)
-* [Ein- und Ausgabe                     ](#stdstring_io)
-
--------------------------------------------------------------------------------
-
----
-template: withinfo
-graphic: StringBasics
-section: Classes
-name: stdstring_classes
-header: ### Klassen (Übersicht)
-
-Die aus C++98 bekannten `std::string` und `std::wstring` sowie die von C++11
-hinzugefügten Klassen `std::u16string` und `std::u32string` sind lediglich
-Typdefinitionen:._[]
-```
-namespace std {
-    typedef basic_string<char> string;      // since C++98
-    typedef basic_string<wchar_t> wstring;  // since C++98
-    typedef basic_string<char16_t> wstring; // since C++11
-    typedef basic_string<char32_t> wstring; // since C++11
-}
-```
-
-Weitere Details sind nachzuschlagen in:
-
-* http://en.cppreference.com/w/string/
-* http://www.cplusplus.com/string/
-
-.F[:
-The type definitions show only half the truth: other template arguments are a
-character traits class and an allocator (memory management policy). Both have
-been omitted as they do not change the essential point to make.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: C-Compatibility
-name: stdstring_cstr
-header: ### Kompatibilität zu C
-
-Die Klasse `std::string` speichert die Zeichen eines Strings in einem
-zusammenhängenden._[] Speicherstück, das in der jeweils erforderlichen
-Mindestgröße auf dem Heap angelegt wird.
-
-Ein Objekt der `std::string`-Klasse speichert typischerweise drei Zeiger:
-
-* Die Adresse des ersten enthaltenen Zeichens.
-
-* Die Addresse des letzten enthaltenen Zeichens.
-
-* Die Addresse bis zu der Speicher alloziert ist.
-
-.N[
-Insbsondere sind die gültigen Zeichen nicht dahingehend eingeschränkt, dass ein
-ein Zeichen mit der ganzzahligen Wertigkeit 0 (ein "NUL-Byte") die Zeichenkette
-beendet – in einem `std::string` können beliebige auch als eingebetteter Inhalt
-auftreten.
-]
-
-.F[:
-The C++98 standard left it to the library implementors whether to chose
-contiguous or non-contiguous storage though that freedom might be removed
-in a future version of the standard.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: C-Compatibility
-name: stdstring_cstr_use
-header: #### `std::string` als `const char *` verwenden
-
-Dort woe ein C-API `const char *` erwartet, muss ein `std::string` entsprechend
-umgewandelt übergeben werden:
-```
-std::string filename;
-… // get file name from user (or elsewhere)
-// open file for reading, using the C-API
-FILE *fp = std::fopen(filename.c_str(), "r");
-```
-
-Der obige Code ist korrekt und risikolos, da auf den von `c_str()` gelieferten
-Zeiger (bzw. der darüber erreichbare String-Inhalt) nur kurzzeitig innerhalb von
-`std::fopen` zugegriffen wird.
-
----
-template: withinfo
-graphic: StringBasics
-section: C-Compatibility
-name: stdstring_cstr_risk
-header: #### Risiken von `c_str()`
-
-bei der Verwendung von `c_str()` sollte klar sein, dass hierüber Zugang zu dem
-für den `std::string`-Inhalt auf dem Heap angelegten Speicherplatz gewährt wird:
-
-.W[
-Code wie der nachfolgende ist somit hochgradig riskant: der Zugriff auf `p`
-zeigt nach jeder Veränderung des Inhalts von `s` möglicherweise nicht mehr
-auf gültigen oder auf mittlerweile für andere Zwecke allozierten
-Speicherplatz.._F[]
-]
-
-.pull-left[
-```
-std::string s("see me, ");
-const char *p = s.c_str();
-s += std::string("feel me,");
-…
-s.append(" touch me, hear me");
-…
-```
-]
-
-.pull-right[
-```
-char *
-mamamia(std::string arg) {
-    …
-    return arg.data();    // as
-    // of C++11 same as c_str()
-}
-```
-]
-
-.F[:
-In the example on the right hand side, storing and then derefencing the
-pointer returned will access deallocated heap memory once owned by `arg`
-with near to 100% certainty.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: C-Compatibility
-name: stdstring_cstr
-header: #### `const char *` als `std::string` verwenden
-
-Die Umwandlung eines klassischen C-Strings in ein `std::string`-Objekt ist
-durch einen entsprechenden, als Typumwandlung wirkenden (nicht expliziten)
-Konstruktor stets unproblematisch.
-
-.I[
-Sollen Funktionen sowohl mit (unveränderbaren) `std::string`-Argumenten als auch
-mit klassischen String-Literalen im C-Stil aufrufbar sein, besteht die sparsamte
-Lösung in der Verwendung des Argumenttyps `const std::string &`.
-]
-
-Eine – gemessen am zu schreibenden Code – deutlich aufwändigere Lösung ist es,
-Überladungen für
-
-* `const char *`,
-* `std::string &` und
-* evtl. `std::string &&`
-
-bereitzustellen. Andererseits kann jede Version damit für den übergebenen
-Parametertyp optimiert werden.
-
----
-template: withinfo
-graphic: StringBasics
-section: Efficiency
-name: stdstring_efficiency
-header: ### Effizienz
-
-[Small String Optimization]: http://john-ahlgren.blogspot.de/2012/03/small-string-optimization-and-move.html
-
-Typische Implementierungen der `std::string`-Klasse nutzen die folgenden
-Maßnahmen zur Effizienzsteigerung:
-
-* Allozierung von Überschuss-Speicherplatz am Ende.
-
-* Wenn nötig propotionale Vergrößerung._[] der Allozierung (nicht mit
-  konstanten Faktor).
-
-* Insbesondere auf 64-Bit Hardware lohnend: [Small String Optimization]
-
-.F[:
-This means that when the current allocation doesn't suffice any more it will be
-doubled (or made 1.5 or 1.8 times as large). This gives O(1) performance to
-algorithms that fill a very long character string by appending single characters
-to the end, while increasing the allocation by a fixed amount would yield
-O(N<sup>2</sup>) performance.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: May or May not Have COW-Implementation
-name: stdstring_cow
-header: ### Copy On Write
-
-[Copy On Write (COW)]: http://www.gotw.ca/publications/optimizations.htm
-
-Durch diese Optimierung lässt sich insbesondere Code "verbessern", welcher
-häufig `std::string`s als Wertargument übergibt, obwohl eine konstante
-Referenz eher angemessen wäre.
-
-* Das Kopieren des eigentliche Inhalts eines `std::string` wird dabei
-  verzögert.
-
-* Stattdessen wird ein "Merker" gesetzt, dass das Kopieren beim ersten
-  schreibenden Zugriff nachgeholt werden muss.
-
-* Bis dahin teilen sich mehrere "Nutzer" den Inhat beim nur lesenden Zugriff.
-
-.N[
-[Copy On Write (COW)] Implementierungen, sind mittlerweile weniger häufig,
-insbesondere in multi-threaded Ablaufumgebungen, da dort oft die möglichen
-Performance-Vorteile durch gelegentlich ersparte Kopien geringer zu Buche
-schlagen als der Nachteil, alle Zugriffe auf den String-Inhalt durch geeignete
-Mechanismen koordinieren zu müssen.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: Basic Operations
-name: stdstring_basicops
-
-header: ### Grundlegende Operationen
-
-Soweit diese nicht ohnehin intuitiv verständlich sind, wie
-
-* Zuweisung mit `=`,
-
-* Vergleich mit `==`, `!=` usw.
-
-* Verkettung mit `+` sowie
-
-* Elementzugriff mit `[…]`
-
-stellen sie üblicherweise keine hohe Hürde dar.
-
-.N[
-Eine Überlegung zum Programmierstil beim Element-Zugriff könnte sein, diesen in
-nicht performance-kritischem Code konsequent mit der Member-Funktion `at()`
-vorzunehmen, um undefiertes Verhalten bei Bereichsüberschreitungen zuverlässig
-zu vermeiden.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: Advanced Operations
-name: stdstring_moreops
-
-header: ### Weitere Operationen im Überblick
-
-Hierfür sei an dieser Stelle auf die – beabsichtigte – Ähnlichkeit zwischen
-`std::string` und `std::vector<char>` verwiesen:
-
-* Auch ein `std::string` bietet die übliche Iterator-Schnittstelle.
-
-* Insofern sind neben den speziellen `std::string` Member-Funktionen auch alle
-  STL-Algorithmen anwendbar.
-
-Was jeweils zu gut verständlichen Code führt, hängt vom Einzelfall ab:
-```
-std::string s;
-…
-// process lines not only containing horizontal white-space:
-if (std::getline(std::cin, s)
- && s.find_first_not_of(" \t") == std::string::npos)) …
-
-// or alternatively:
-if (std::getline(std::cin, s)
- && std::all_of(s.begin(), s.end(),
-                [](char c) { return (c == ' ' || c == '\t'); })) …
-```
-
----
-template: withinfo
-graphic: StringBasics
-section: Numeric Conversions
-name: stdstring_numconv
-
-header: ### Umwandlung von/in arithmetische Werte
-
-Die Umwandlung zwischen Zeichenketten und arithmetische Werte in interner
-Darstellung (`int`, `unsigned`, `long` ... `double`) gehört zu den häufig
-zu lösenden Aufgaben.
-
-Vielfach findet man hier noch sehr umständlichen, unzureichenden oder teils
-sogar gefährlichen Code:
-```
-std::string tmpfilename; // fixed part followed by sequence number
-…
-const char *cp = tmpfilename.c_str();
-while (*cp && !std::isdigit(*cp)) ++cp; // locate number
-int num = atoi(cp);                     // get value into some int
-std::sprintf(cp, "%d", ++num);          // store back incremented
-```
-
----
-template: plain
-name: stdstring_str2num
-header: #### `std::string` in arithmetischen Wert umwandeln
-
-C++11 hat zu diesem Zweck eine Reihe neuer Funktionen eingeführt:
-
-* Das Namensschema ist `std::sto…` für *String To"
-
-* gefolgt von einem charakteristischen Buchstaben oder einer Kombination von
-  Buchstaben:
-
-  * `stoi` für Umwandlung nach `int`
-  * `stol` für Umwandlung nach `long`
-  * `stoul` für Umwandlung nach `unsigned long`
-  * `stoll` für Umwandlung nach `long long`
-  * `stoull` für Umwandlung nach `unsigned long long`
-  * `stof` für Umwandlung nach `float`
-  * `stod` für Umwandlung nach `double`
-  * `stold` für Umwandlung nach `long double`
-
-Die Parametrisierung ist ähnlich zu den C-Funktionen `strtol`, `strtoul` und
-`strtof`, d.h. über ein weiteres (Zeiger-) Argument kann die Position des
-Zeichens ermittelt werden, bei dem die Umwandlung beendet wurde, und ein
-drittes Argument legt die Basis des Zahlensystems (2..36) fest.
-
----
-template: plain
-name: stdstring_num2str
-header: #### Arithmetischen Werte in `std::string` umwandeln
-
-Für die Umwandlung von numerischen Werten in `std::string` führte C++11 die
-Funktion `std::to_string` mit zahlreichen Überladungen ein.
-
-Ihre Anwendung ist trivial und (zusammen mit der auf der vorherigen Seite
-eingeführten Funktion `std::stoull` aus folgendem Beispiel ersichtlich:
-```
-std::string tmpfilename; // fixed part followed by sequence number
-…
-const auto n1 = tmpfilename.find_first_of("0123456789");
-assert(n1 != std::string::npos);
-const auto n2 = tmpfilename.find_first_not_of("0123456789", n1+1);
-std::size_t nx;
-const auto num = std::stou(tmpfilename.substr(n1, n2), &nx);
-assert(nx == n2-n1);
-tmpfilename = tmpfilename.substr(0, n1)
-            + std::to_string(num+1)
-            + tmpfilename.substr(n2);
-```
-
----
-template: withinfo
-graphic: StringBasics
-section: Input and Output
-name: stdstring_io
-header: ### Ein- und Ausgabe
-
-Die Ausgabe von Zeichenketten erfolgt üblicherweise mit dem überladenene
-Ausgabeoperator:
-```
-std::string greet{"hello, world"};
-…
-std::cout << greet;
-```
-
----
-template: withinfo
-graphic: StringBasics
-section: Input and Output
-name: stdstring_in_word
-header: #### Lesen mit `operator>>`
-
-[White Space]: http://de.wikipedia.org/wiki/Leerraum
-
-Der für `std::string` überladene `operator>>` liest wortweise:
-```
-std::string word;
-while (std::cin >> word) …
-```
-
-Als Trennung zwischen den Worten gelten hier beliebig lange Leerraum-Folgen
-([White Space]a, üblicherweise (mindestens) die Zeichen:
-
-* Zeilenvorschub (`'\n'`)
-* Leerzeichen (`' '`) sowie
-* horizontale und vertikale Tabulatoren (`'\t'` und `'\v'`).
-
-.N[
-Beim Lesen von `std::string`-s mit `operator>>` können in der Regel keine
-Leerzeilen erkannt (und speziell verarbeitet) werden, da alle Zeilenvorschübe
-im Rahmen des Überspringens von [White Space] stillschweigend verworfen werden.
-]
-
----
-template: withinfo
-graphic: StringBasics
-section: Input and Output
-name: stdstring_in_word
-header: #### Lesen mit `std::getline`
-
-Eingabe können auch zeilenweise in einen `std::string` gelesen werden
-```
-std::string line;
-… std::getline(std::cin, line) …
-```
-
-oder bis zu einem beliebigen Begrenzer:
-```
-std::string field;
-… std::getline(std::cin, field, ':') …
-```
-
-.N[
-Sehr flexibel ist das obige Verfahren jedoch nicht, da stets nur **genau ein**
-Begrenzerzeichen vorgegeben werden kann.
-]
-
-Eine Zeichenauswahl – z.B. Punkt, Komma oder Semikolon – ist nicht möglich.._[]
-
-.F[:
-Though a small helper function accepting a delimiter sets shouldn't be that hard
-to write ...
-]
-
----
-template: linkinfo
-graphic: IOStreamBasics
-name: iostream_basics
-header: ## Verwendung von IO-Streams
-
--------------------------------------------------------------------------------
-
-* [Front-End und ... 	](#iostream_frontend)
-* [... Back-End 	](#iostream_backend)
-
--------------------------------------------------------------------------------
-
-* [Zustands-Bits 	](#iostream_statebits)
-
--------------------------------------------------------------------------------
-
----
-template: withinfo
-graphic: IOStreamBasics
-section: I/O-System Front-End
-name: iostream_frontend
-header: ### Front-End der I/O-Streams
-
-Das Front-End der I/O-Streams besteht aus
-
-* der Basisklasse `std::ios`._[] mit einigen allgemeinen Definitionen
-
-* davon abgeleitet die Klassen `std::istream` und `std::ostream`, welche vor
-  allem in Form von Referenzargumenten zur Parametrisierung von I/O-Strömen
-  als Funktionsargumente verwendet werden,
-
-* sowie als Klassen, von denen auch Objekte angelegt werden
-
-  * `std::ifstream`, `std::ofstream` und `std::fstream` (File-Streams) und
-
-  * `std::istringstream`, `std::ostringstream`, und `std::stringstream`
-     (String-Streams).
-
-.F[:
-As with `std::string` the architecture is even more generic as the "classes"
-explained above are rather `typedef`s for more generic template classes, each
-of which is parametrized in a character type and some more aspects. This fact
-need not be made prominently visible if – as it is the case here – the focus
-is to explain the relation between the classes participating in the design.
-]
-
----
-template: withinfo
-graphic: IOStreamBasics
-section: I/O-System Front-End
-name: io_streams
-header: #### Gemeinsame Schnittstelle
-
-Die von einer Applikation verwendbaren Operationen zur Ein- und Ausgabe liegen
-teils als Member der Klassen `std::istream` und `std::ostream` vor, teils sind
-es globale Funktionen.
-
-.N[
-Zur Unterstützung benutzerdefinierter Datentypen können auch weitere globale
-Überladungen von `operator>>` und `operator<<` existieren.
-]
-
-Für alles weitere wird auf die Standarddokumentation verwiesen, z.B.:
-
-* http://en.cppreference.com/w/cpp/io/basic_ios
-* http://en.cppreference.com/w/cpp/io/basic_istream
-* http://en.cppreference.com/w/cpp/io/basic_ostream
-
----
-template: withinfo
-graphic: IOStreamBasics
-section: I/O-System Front-End
-name: io_filestreams
-header: #### Filestreams
-
-Die Verwendung erfolgt typischerweise abhängig von der gewünschten Richtung des
-Datenstroms:
-
-* `std::ifstream` zum Lesen
-* `std::ofstream` zum Schreiben
-
-Darüberhinaus gibt es auch bidirektional verwendbare Filestreams:
-
-* `std::fstream`
-
-Für alles weitere wird auf die Standarddokumentation verwiesen, z.B.:
-
-* http://en.cppreference.com/w/cpp/io/basic_fstream
-* http://en.cppreference.com/w/cpp/io/basic_ifstream
-* http://en.cppreference.com/w/cpp/io/basic_ofstream
-
-
----
-template: withinfo
-graphic: IOStreamBasics
-section: I/O-System Front-End
-name: io_stringstreams
-header: #### Stringstreams
-
-Die Verwendung erfolgt typischerweise abhängig von der gewünschten Richtung des
-Datenstroms:
-
-* `std::istringstream` zum Lesen
-* `std::ostringstream` zum Schreiben
-
-Darüberhinaus gibt es auch bidirektional verwendbare Stringstreams:
-
-* `std::stringstream`
-
-Für alles weitere wird auf die Standarddokumentation verwiesen, z.B.:
-
-* http://en.cppreference.com/w/cpp/io/basic_stringstream
-* http://en.cppreference.com/w/cpp/io/basic_istringstream
-* http://en.cppreference.com/w/cpp/io/basic_ostringstream
-
----
-template: withinfo
-graphic: IOStreamBasics
-section: I/O-Streams Back-End
-name: iostream_backend
-header: ### Back-End der I/O-Streams
-
-Das Backend der I/O-Streams implementiert vor allem aus einem Mechanimus zur
-Datenpufferung.
-
-.N[
-Damit kann insbesondere die Übertragung von Daten in Richtung von oder zu
-einem permanenten Speicher in Blockgrößen erfolgen kann, welche die lesende
-oder schreibende Applikation selbst nicht weiter berücksichtigen muss.
-]
-
-Für alles weitere wird auf die Standarddokumentation verwiesen, z.B.:
-
-* http://en.cppreference.com/w/cpp/io/basic_streambuf
-* http://en.cppreference.com/w/cpp/io/basic_filebuf
-* http://en.cppreference.com/w/cpp/io/basic_stringbuf
-
----
-template: withinfo
-graphic: IOStreamBasics
-section: I/O-Streams State-Bits
-name: iostream_statebits
-header: ### Zustands-Bits der I/O-Streams
-
-Jeder Stream besitzt eine Reihe von Zustandsbits.
-
-* So lange keines davon gesetzt ist, befindet sich der Stream im "good"-Zustand.
-
-* Bei im Rahmen der Eingabe eines bestimmten Datentyps unerwarteten – also nicht
-  zu verarbeitenden – Zeichen, wird das `std::ios::badbit`-Bit gesetzt.
-
-* Tritt im Rahmen der Eingabe die *End-Of-File*-Bedingung ein, wird das
-  `std::ios::eofbit` gesetzt.
-
-* Bei anderen (vom Standard nicht näher spezifierten) Fehlerbedinungen kann auch
-  das `std::ios::badbit` gesetzt werden.
-
----
-template: withinfo
-graphic: IOStreamBasics
-section: I/O-Streams State-Bits
-name: iostream_statebits
-header: #### Verhalten der I/O-Streams abhängig vom Zustand
-
-Solange eines der genannten Bits gesetzt ist, werden von dem betreffenden Stream
-alle Operationen ignoriert, **ausgenommen `clear()` und `close()`**.
-
-Dies ist besonders bei der Verarbeitung von Eingaben wichtig:
-
-* Beim Wechsel des Zustands bleibt die aktuelle Position – also welches Zeichen
-  als nächstes im Rahmen einer Eingabe verarbeitet wird – so, wie sie beim
-  **Auslösen** des Zustandswechsels war.
-
-* Bei einem Fehler im Eingabeformat, z.B. wenn ein Buchstabe erscheint, wo eine
-  Ziffer erwartet wird, ist das nächste Zeichen immer noch der (störende)
-  Buchstabe.
-
-* Soll (mindestens) dieses Zeichen übersprungen werden, so muss
-
-  * **Zuerst** der Stream in den "good"-Zustand versetzt werden, und
-
-  * **erst danach** kann eine Operation (wie z.B. `ignore` zum Überspringen
-    von Zeichen) ihre Wirkung entfalten.
-
----
-template: withinfo
-graphic: IOStreamBasics
-section: I/O-Streams State-Bits
-name: iostream_statebits
-header: #### Exceptions bei Zustanswechsel
-
-Wahlweise kann das Verhalten eines Streams so eingestellt werden, dass
-
-* bei jedem Zustanswechsel und
-* allen (versuchten) Operationen außerhalb des "good"-Zustands
-
-eine Exception geworfen wird:
-```
-// Excerpt from a hypothetical "forever running" TCP-Client
-std::ifstream from_server;
-… // somehow establish connection through TCP/IP-Socket
-from_server.exceptions(std::ios::badbit
-                     | std::ios::eofbit
-                     | std::ios::failbit);
-try {
-    for (;;) {
-        std::string command_string;
-        std::getline(from_server, command_string);
-        … // process command_string
-    } /*notreached*/
-}
-catch (std::ios_base::failure &e) {
-    … // socket connection closed and/or data transfer failed
-}
-```
-
----
-template: linkinfo
-graphic: ParametrizedTypesAndSizes
-name: template_basics
-header: ## Grundlegendes zu Templates
-
--------------------------------------------------------------------------------
-
-* [Parametrisierte Typen und ...		](#parametrized_types)
-
-* [... Compilezeit-Konstanten ...		](#parametrized_constants)
-
-* [... am Beispiel einer `RingBuffer`-Klasse	](#example_ringbuffer)
-
--------------------------------------------------------------------------------
-
----
-template: withinfo
-graphic: ParametrizedTypesAndSizes
-section: Parametrizing Type
-name: parametrized_types
-header: ### Parametrisierte Typen
-
-Die ursprüngliche Absicht bei der Einführung des Template-Mechanismus in C++
-war es, sich wiederholenden Code zu vermeiden, wenn es in den verschiedenen
-Varianten einer Klasse oder (Member) Funktion lediglich um andere Datentypen
-geht.
-
-Hierzu ist
-
-* die Funktion oder Klasse mit einer formalen Typ-Parameterliste in spitzen
-  Klammern zu versehen,
-
-* in welcher dem Compiler **symbolische Namen** für die parametrisierten Typen
-  angekündigt werden.
-
-Die symbolischen Namen können in der nachfolgenden Implementierung der Klasse
-oder Funktion überall dort verwendet werden, wo syntaktisch ein Datentyp stehen
-kann.
-
-.N[
-Bei der späteren Verwendung der Template – auch Instanziierung genannt – sind
-in den spitzen Klammern konkrete Typen einzutragen.
-]
-  
----
-template: withinfo
-graphic: ParametrizedTypesAndSizes
-section: Parametrizing Size
-name: parametrized_constants
-header: ### Parametrisierte Compilezeit-Konstanten
-
-Im Rahmen einer Template-Klasse oder -Funktion können nicht nur Typen sondern
-auch Compilezeit-Konstanten parametrisiert werden.
-
-Hierzu ist
-
-* die Funktion oder Klasse mit einer formalen Wert-Parameterliste in spitzen
-  Klammern zu versehen,
-
-* in welcher dem Compiler **Typen und symbolische Namen** der parametrisierten
-  Compilezeit Konstanten angekündigt werden.
-
-Die symbolischen Namen können in der nachfolgenden in der Implementierung der
-Klasse oder Funktion überall dort verwendet werden, wo syntaktisch eine
-Compilezeit-Konstante des betreffenden Typs stehen kann.
-
-.N[
-Bei der späteren Verwendung der Template – auch Instanziierung genannt – sind
-in den spitzen Klammern konkrete Compilezeit-Konstanten einzutragen.
-]
-  
----
-template: withinfo
-graphic: ParametrizedTypesAndSizes
-section: Parametrizing Type and Size
-name: example_ringbuffer
-header: ### Beispiel `RingBuffer`
-
-Die Erweiterung der zunächst für einen bestimmten Datentyp und eine bestimmte
-Größe implementierten `RingBuffer`-Klasse zu einer Template kann mehr oder
-weniger "mechanisch" durch "Suchen und Ersetzen" erfolgen:
-
-* Das wird dadurch begünstigt, dass im ursprünglichen Code der Datentyp `double`
-  nur dort auftritt, wo in der Template-Variante der parametrisierte Typ steht.
-
-* Die Konstante `11` steht im ursprünglichen Code für die Anzahl der im
-  `RingBuffer` maximal ablegbaren Elemente **Plus Eins**.._[]
-
-  * In der Template-Variante erscheint es sinnvoll, als Parameter die Nettogröße
-    (also die maximale Anzahl der Elemente) anzugeben, die der `RingBuffer`
-    zwischenspeichern soll.
-
-  * Dies ist leicht realisierbar, indem die Konstante `11` jeweils durch `N+1`
-    ersetzt wird.
-
-.F[:
-So that "empty" and "full" state can be easily discerned without an additional
-flag, the buffer never gets completely filled but a single element is always
-left unused, if the position into which to "put" is directly behind the position
-from which to "get".
-]
-
 
 </textarea>
 <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
