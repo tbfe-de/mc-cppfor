@@ -142,8 +142,10 @@ template: blank
 
 ---------------------------------------------------------------------------
 
-1. [Auffrischung einiger wichtige Grundlagen	](#cpp_basics)
+1. [Auffrischung einiger wichtiger Grundlagen	](#cpp_basics)
 1. [Zeiger und Referenzen			](#reference_types)
+1. [Statischer Polymorphismus			](#static_polymorphism)
+1. [Typ-Kompatibilität und -Konvertierung	](#type_conversions)
 
 ---------------------------------------------------------------------------
 
@@ -738,17 +740,27 @@ der RValue-Referenz – anders als bei klassischen `const`-Referenzen – das
 Destruktor nach wie vor seine Arbeit verreichten kann.
 ]
 
+---
+template: plain
+name: static_polymorphism
+header: ## Statischer Polymorphismus
+
 --------------------------------------------------------------------------
 
-* [Defaultwerte für Argumente		](#default_arguments)
+* [Defaultwerte für Argumente._[]	](#default_arguments)
 * [Überladen von Funktionen		](#overloading_functions)
 * [Überladen von Operatoren		](#overloading_operators)
 
 --------------------------------------------------------------------------
 
-* [Automatische Typ-Konvertierung	](#automatic_typeconv)
-* [Typ-Konvertierung mittels *Cast*	](#explicit_typeconv)
-* [Klassenspezifische Typ-Konvertierung	](#specified_typeconv)
+.F[:
+Defaultwerte für Argumente wurden in diesen Abschnitt aufgenommen, da sie von
+den Auswirkungen mit dem Überladen von Funktionen konkurrieren, wenngleich aus
+Hardware-Sicht die Implementierung bei echten Funktionen (ohne `inline`) eine
+andere ist.
+]
+
+
 ---
 template: plain
 name: default_arguments
@@ -789,7 +801,7 @@ name: overloading_functions
 header: ### Überladen von Funktionen
 
 Mehrere Funktionen gleichen Namens können parallel existieren sofern sie sich in
-Anzahl und/oder Typ ihrer Argumente unterscheiden:
+Anzahl und/oder Typ ihrer Argumente unterscheiden:._[]
 ```
 void foo(const char *);         /*1*/
 double foo(const int &, char);  /*2*/
@@ -797,7 +809,7 @@ double foo(double, double);     /*3*/
 ```
 
 Gemäß den tatsächlichen Argumenten entscheidet nun der Compiler, was verwendet
-wird:._[]
+wird:
 ```
 int x; double y;
 …
@@ -808,8 +820,11 @@ foo(x, y);             /*?*/
 ```
 
 .F[:
-To figure out what happens in the last case (with the question mark in the
-comment) is left as an exercise to the reader ... :-)
+If one argument list is from left to right an exact subset of another one, this
+is similar to default arguments. But with overloading there are as many separate
+entry points as there are functions with the same name, while for default
+argument values there is just one entry point and missing argument values are
+automatically supplied.
 ]
 
 ---
@@ -1011,29 +1026,134 @@ c = a + b;        // move assignment provided operator+ is
 
 ---
 template: plain
-name: automatic_typeconv
-header: ### Automatische Typ-Konvertierungen
+name: type_conversions
+header: ## Typ-Konvertierungen
+
+--------------------------------------------------------------------------
+
+* [Typ-Kompatibilität bei grundlegenden Typen	](#basictype_typeconv)
+* [Typ-Kompatibilität und Vererbung 		](#public_base_typeconv)
+* [Explizite Typ-Konvertierung mittels *Cast*	](#explicit_typeconv)
+* [Klassenspezifische Typ-Konvertierung		](#specified_typeconv)
+* [Typ-Sicherheit generell			](#general_typesafety)
+
+--------------------------------------------------------------------------
+
+---
+template: plain
+name: basictype_typeconv
+header: ### Typ-Kompatibilität bei grundlegenden Typen
+
+Die wichtigsten Regeln für Typ-Kompatibilität und ggf. automatisch angewendete
+Typ-Konvertierungen sind hier:
+
+* Alle *arithmetischen Typen* sind miteinander kompatibel bzw. werden bei Bedarf
+  entsprechend umgewandelt.._[]
+
+* Ansonsten finden bei Bedarf folgende Umwandlungen statt:
+
+  * Aufzählungstypen in arithmetische Typen;
+  * Zeiger in Wahrheitswerte (alles außer `nullptr` ist `true`);
+  * typisierter Zeiger in allgemeine Zeiger (`void *`).
+
+.I[
+Innerhalb der arithmetischen Typen erfolgt die Umwandlung nach Möglichkeit
+**wert-erhaltend** und wird oft mit auszuführenden Maschinenbefehlen verbunden
+sein.
+]
+
+Inwieweit dies auch für die anderen Fälle gilt, hängt von Hardware-Details ab,
+insbesondere der Repräsentation von Aufzählungstypen und Zeigern.
+
+.F[:
+Dies schließt auch `char` (mitunter verwendet für kleine Ganzzahlen) und `bool`
+(Wahrheitswerte) ein.
+]
+
+---
+template: plain
+header: ### Typ-Kompatibilität bei grundlegenden Typen (2)
+
+* Außerhalb der Umwandlungen zwischen arithmetischen Typen handelt es sich um
+  **einseitig gerichtete** Umwandlungen.
+
+* D.h. es gibt **keine** automatische Umwandlung in den folgenden Fällen:
+
+  * von arithmetischen Typen in Aufzählungstypens;
+  * von Wahrheitswerten in Zeiger;
+  * von allgemeinen Zeigern in typisierte Zeiger.
+
+.I[
+Im letzten Punkt unterscheiden sich C und C++, was zu deutlich **größerer
+Typ-Sicherheit in C++** führt.
+]
+
+Anders als in C kann in C++ auf dem Umweg über allgemeine Zeiger (`void *`)
+keine "stille" Typ-Konvertierung typisierter Zeiger erfolgen.._[]
+
+.F[:
+Der Grund für das andere Verhalten liegt bei der `malloc`-Funktionsfamilie in
+der C-Bibliothek, die gemäß dem C89-Standard den Ergebnistyp `void *` hat,
+und für welche die Notwendigkeit von Cast-Operationen vermieden werden sollte.
+]
+
+---
+template: plain
+name: public_base_typeconv
+header: ### Typ-Kompatibilität und Vererbung
 
 [Slicing]: http://www.geeksforgeeks.org/object-slicing-in-c/
 
-Die wichtigsten Regeln für automatische Typkonvertierungen sind:
+* Ein **Zeiger** auf eine öffentlich abgeleitete Klasse ist kompatibel mit einem
+  **Zeiger** auf eine ihrer direkten oder indirekten._[] Basisklassen.
 
-* Innerhalb aller Typen, die arithmetische Werte darstellen, inklusive `char`
-  (= kleine Ganzzahlen) und `bool` (Wahrheitswerte);
+* Ein **Referenz** auf eine öffentlich abgeleitete Klasse ist kompatibel mit
+  einer **Referenz** auf eine ihrer direkten oder indirekten._[] Basisklassen.
 
-* Aufzählungstyp in arithmetischen Wert;
+* Basierend auf **Objekten** einer öffentlich abgeleiteten Klasse werden ggf.
+  automatisch – per [Slicing] – **Objekte** direkter oder indirekter._[]
+  Basisklassen initialisiert.
 
-* Zeiger in Wahrheitswert (alles ungleich `nullptr` ist `true`);
+.I[
+Außer bei Mehrfachvererbung sind die ersten beiden Fällen in der Regel **nicht**
+mit auszuführenden Maschinenbefehlen verbunden.
+]
 
-* Typisierter Zeiger in allgemeinen Zeiger (`void *`);
+.F[:
+Ausgenommen sind jeweils indirekte nicht-virtuelle Basisklassen im Fall von
+Mehrfachvererbung und rautenförmigen Klassenbeziehungen (in der UML als
+"«disjoint»" annotiert).
+]
 
-* Zeiger oder Referenz auf öffentlich abgeleitete Klasse in
-  Zeiger bzw. Referenz auf Basisklasse;
+---
+template: plain
+name: public_base_typeconv
+header: ### LSP - Liskov Substitution Principle
 
-* Öffentlich abgeleitete Klasse in Basisklasse durch [Slicing];
+Die auf der vorhergehenden Seite zusammengestellten Regeln sind Ausdruck dessen,
+was Barbara Liskov seinerzeit als "Principle of Substitutibiliy" forderte und
+was seitdem oft als LSP abgekürzt wird.
 
-* Klassenspezifische Typ-Konvertierung sofern in den beteiligten Objekten
-  vorgesehen.
+.N[
+**Das LSP gilt in C++ nur im Fall öffentlicher Basisklassen** und nur hier
+liegt Vererbung im Sinne der OOP vor (= *Generalisierung-Spezialisierung*,
+UML-Darstellung Verbindungslinie mit kleinem, nicht ausgefülltem Dreieck an der
+Basisklasse).
+]
+
+Öffentliche und private Basisklassen verwenden zwar dasselbe Speicher-Layout,
+**bei privaten Basisklassen gilt das LSP jedoch nicht**.._[]
+
+.N[
+Im Sine der OOP handelt es sich bei letzteren somit nicht um Vererbung sondern
+um Komposition (UML-Darstellung Verbindungslinie mit kleiner, ausgefüllter Raute
+an der Klasse des Aggregats).
+]
+
+.F[:
+This topic and especially the various forms of composition receive substantially
+deeper coverage in a later chapter.
+]
 
 ---
 template: plain
@@ -1053,53 +1173,70 @@ benutzt werden.
 
 Die neue Syntax beginnt mit einem der Schlüsselworte
 
-* `static_cast`
-* `dynamic_cast`
-* `const_cast`
-* `reinterpret_cast`
+* [`static_cast`](#static_cast_typeconv)
+* [`dynamic_cast`](#dynamic_cast_typeconv)
+* [`const_cast`](#const_cast_typeconv)
+* [`reinterpret_cast`](#reinterpret_cast_typeconv)
 
-Es folgt der gewünschte Zieltyp in spitzen Klammern und der umzuwandelnde
-Wert in runden Klammern.
+Es folgen der gewünschte Zieltyp in spitzen Klammern und der umzuwandelnde
+Wert in runden Klammern.._[]
+
+.F[:
+As an example consider the use of C-style memory allocation for some `struct s`
+in C++.  
+(Only the outermost parentheses are part of the cast syntax here.)
+```
+struct s *p = static_cast<struct s*>(std::malloc(sizeof (struct s)));
+                     
+```
+]
 
 ---
 template: plain
-name: static_cast
+name: static_cast_typeconv
 header: #### Typ-Konvertierung mit `static_cast`
 
 Hiermit lassen sich alle Typ-Umwandlungen explizit hervorheben, welche der
-Compiler auch automatisch vorgenommen hätte. Häufig entfallen dann Warnungen,
-die der Compiler oft bei nicht übereinstimmenden Typen arithmetischer Werte
-gibt, insbesondere wenn diese sich durch die Typ-Umwandlung verändern könnten
-da im Zieltyp nicht darstellbar.
+Compiler auch automatisch vorgenommen hätte.._[]
 
 Darüberhinaus funktioniert der `static_cast` in **beide** Richtungen für alle
 Umwandlungen, welche als **automatische** Umwandlung nur in einer Richtung
 eingesetzt werden:
 
-* Arithmetische Wert zu `enum`-s
+* Arithmetische Wert in Aufzählungstypen (`enum`)
 
-  * automatisch nur `enum`-s in arithmetische Werte
+  * automatisch nur Aufzählungstypen in arithmetische Werte
 
-* Generische Zeiger (`void *`) zu typisierten Zeigern
+* Generische Zeiger (`void *`) in typisierte Zeigern
 
-  * automatisch nur typisierte Zeiger in `void *`
+  * automatisch nur typisierte in generische Zeiger
 
 * Basisklassen in abgeleitete Klassen (Downcast)
 
-  * automatisch nur abgeleitete zu Basisklassen (Upcast)
+  * automatisch nur abgeleitete Klassen in Basisklassen (Upcast)
+
+.F[:
+The most typical reason for this is that many compilers will issue a warning
+when an arithmetic conversions might not be value preserving, e.g. when an
+64-bit integral value is assigned to a 32 bit integral variable. If this is
+done with a cast, most compilers will suppress the warning.
+]
 
 ---
 template: plain
-name: dynamic_cast
+name: dynamic_cast_typeconv
 header: #### Typ-Konvertierung mit `dynamic_cast`
 
 [`std::bad_cast`]:     http://en.cppreference.com/w/cpp/types/bad_cast
-[Laufzeit-Typprüfung]: 02_montag2.html#dynamic_cast
+[Laufzeit-Typprüfung]: 04_wednesday2.html#dynamic_cast
 
 Hiermit lassen sich ausschließlich Typ-Umwandlungen innerhalb von
-Klassenhierarchien vornehmen, wobei im Fall von Downcasts zur Laufzeit eine
-Überprüfung stattfindet, ggf.  mit Fehleranzeige, wenn der Cast nicht möglich
-ist.
+Klassenhierarchien vornehmen.
+
+.N[
+Im Fall von Downcasts findet zur Laufzeit eine Überprüfung mit Fehleranzeige
+statt, wenn der Cast nicht durchführbar ist.._[]
+]
 
 Die Fehleranzeige besteht
 
@@ -1109,29 +1246,43 @@ Die Fehleranzeige besteht
 
 Weiteres wird später im Rahmen der [Laufzeit-Typprüfung] (RTTI) behandelt.
 
+.F[:
+Der Grund für die mögliche Undurchführbarkeit muss zusammen mit der
+Typ-Kompatibilität zwischen Basisklassen und abgeleiteten Klassen gesehen
+werden: Ein Zeiger, der als Zeiger auf eine Basisklasse definiert ist, könnte
+stets auch auf ein Objekt einer davon abgeleiteten Klasse zeigen. Genau dies
+wird bei dem Versuch überprüft, mittels `dynamic_cast` den Basisklassenzeiger
+in einen Zeiger auf die abgeleitete Klasse umzuwandeln.
+]
+
 ---
 template: plain
 name: const_cast
 header: #### Typ-Konvertierung mit `const_cast`
 
-Die hiermit erzielbaren Typveränderungen beschränken sich auf das
+Die hiermit möglichen Typ-Umwandlungen beschränken sich auf das
 
 * Hinzufügen oder
 
-* Wegnehmen von `const` und `volatile`.
+* Wegnehmen
+
+von `const` und `volatile`.
 
 Alle anderen Unterschiede zwischen dem Zieltyp und dem Typ des umzuwandelnden
 Ausdrucks führen zu einem Compile-Fehler.
 
 .W[
-Diese Art von Cast führt gemäß C++ ISO/ANSI Standard zu undefiniertem Verhalten,
-zumindest wenn auf eine mit Schreibschutz definierte Adresse nach Wegnehmen der
-`const`-Qualifizierung schreibend zugegriffen wird.
+Ein `const_cast` hat gemäß dem C++-ISO/ANSI-Standard undefiniertes Verhalten,
+wenn auf eine mit Schreibschutz definierte Adresse schreibend zugegriffen wird.
 ]
 
 Das typische Fehlerbild kann vom Programmabsturz bis zu einer inkonsistenten
-Wertverwendung reichen (teilweise alter Wert, teilweise neuer Wert) ... oder es
-mag sogar so erscheinen, als würde alles funktionieren.
+Wertverwendung reichen (teilweise alter Wert, teilweise neuer Wert) …._[]
+
+.F[:
+Abhängig von der Testtiefe und dem verwendeten Compiler mag es auch so
+erscheinen, als würde alles wie gewünscht funktionieren.
+]
 
 ---
 template: plain
@@ -1140,25 +1291,76 @@ header: #### Typ-Konvertierung mit `reinterpret_cast`
 
 Dieses Konstrukt wird vor allem dazu eingesetzt, Zeiger auf (bekannte)
 Hardware-Adressen zu setzen, wie das u.a. im Bereich der Embedded Progammierung
-und bei Gerätetreibern notwendig sein kann.
+und bei Gerätetreibern notwendig sein kann.._[]
 
-Darüber hinaus kann man auch mit einem `reinterpret_cast`
+.F[:
+Die per `reinterpret_cast` gebotene Möglichkeit, quasi jedes Bitmuster im
+Speicher gemäß einem beliebigen Typ zu interpretieren, veranlassen C++-Kritiker
+mitunter zu der Aussage, die C++ sei unsicher da nicht vollständig typgeprüft.
+Diese Kritik muss dann aber ebenso für Sprachen gelten, welche ein zur C/C++
+`union` vergleichbares Konstrukt bieten, so etwa das gemeinhin als typsicher
+geltende Pascal.
+]
 
-* wie auch mit `static_cast` generische Zeiger (`void *`) in typisierte Zeiger
+Darüber hinaus kann man mit einem `reinterpret_cast`
+
+* **wie auch** per `static_cast` generische Zeiger (`void *`) in typisierte Zeiger
   umwandeln, und
 
-* anders als mit `static_cast` einen typisierten Zeiger direkt in einen anders
+* **anders als** per `static_cast` einen typisierten Zeiger direkt in einen anders
   typisierten Zeiger umwandeln.
 
 .N[
-Die per `reinterpret_cast` gebotene Möglichkeit, quasi jedes Bitmuster im
-Speicher gemäß einem beliebigen Typ zu interpretieren, veranlassen Kritiker
-von C++ zur Aussage, die Sprache sei unsicher, da nicht vollständig typgeprüft.
+Es ist dagegen auch mit `reinterpret_cast` nicht möglich, die `const`- und
+`volatile`-Qualifizierung zu ändern – dies erlaubt ausschließlich der
+`const_cast`.
 ]
 
-Diese Kritik muss dann aber ebenso für Sprachen gelten, welche ein zur C/C++
-`union` vergleichbares Konstrukt bieten, so etwa das gemeinhin eher als
-typsicher geltende Pascal.
+---
+template: plain
+name: reinterpret_cast_examples1
+header: #### Typ-Konvertierung mit `reinterpret_cast` (Beispiele 1)
+
+Das folgende Beispiel nimmt an, dass an der Speicheradresse `0xEAD01208` die als
+`struct uart` beschriebenen Kontrollregister einer seriellen Schnittstelle
+abgebildet sind:
+```
+struct uart *const sio = reinterpret_cast<struct uart*>(0xEAD01208);
+```
+Der Zugriff kann nun in der Syntax `sio->…` erfolgen.
+
+Gibt es mehrere solcher Strukturen, kann natürlich auch ein Array initialisiert
+werden
+```
+struct uart *const sio[] = {
+    reinterpret_cast<struct uart*>(0xEAD01200),
+    reinterpret_cast<struct uart*>(0xEAD01204),
+    …
+};
+```
+auf dessen Elemente mit `sio[0]->…`, `sio[1]->…` usw. zugegriffen wird.
+
+.F[
+Wird statt dem Pfeil die Punkt-Notation bevorzugt, geht das auch, und zwar mit:
+```
+struct uart &sio = *reinterpret_cast<struct uart*>(0xEAD01208);
+```
+]
+
+---
+template: plain
+name: reinterpret_cast_examples2
+header: #### Typ-Konvertierung mit `reinterpret_cast` (Beispiele 2)
+
+Das folgende Beispiel nimmt an, dass an der Adresse `0xCAFE` im Code-Segment
+ein gemäß den C++-Calling Conaufrufbares Unterprogramm beginnt, welches ein
+Argument vom Typ `bool` erwartet und keinen Rückgabewert liefert:
+```
+void (*xcall)(int) = reinterpret_cast<void (*)(int)>(0xCAFE);
+
+```
+Der tatsächliche Aufruf kann nun erfolgt nun mit `xcall(true)` bzw.
+`xcall(false)` erfolgen.
 
 ---
 template: plain
@@ -1167,36 +1369,36 @@ header: ### Klassenspezifische Typ-Konvertierungen
 
 Eine Klasse kann auch selbst festlegen, wie man sie aus einem anderen Typ erzeugt
 oder wie sie in einen anderen Typ umgewandelt wird. Bildlich kann man es sich so
-vorstellen:._[]
+vorstellen:
 
-* Jede Klasse verfügt über eine Art *charakteristische "Steckverbindung"* die
-  zunächst "nur zu sich selbst" passt.
+* Jede Klasse und jeder eingebaute Typ verfügt über eine Art *charakteristische
+  Steckverbindung*, die nur "zu sich selbst" passt.._[]
 
-  * Entsprechend kann man in Initialisierungen und Zuweisungen nur Objekte
-    derselben Klasse verwenden.
+  * In Initialisierungen und Zuweisungen sind daher nur Objekte von genau
+    derselben Klasse bzw. desselben Typs verwendbar.
 
-* Konstruktoren mit genau einem Argument sind weitere "Eingänge",
+* *Konstruktoren mit exakt einem Argument* – sofern nicht als `explicit`
+  markiert – sind weitere *Eingänge*.
 
-  * die sozusagen zum charakteristischen (Ausgangs-) Steckverbinder einer
-    anderen Klasse passen.
+  * Sie passen zum *Ausgangs*-Steckverbinder des Arguments.
 
-* Sogenannte Typ-Cast-Operatoren sind weitere "Ausgänge",
+* *Typ-Cast-Operatoren* sind weitere *Ausgänge*.
 
-  * die sozusagen zum charakteristischen (Eingangs-) Steckverbinder einer
-    anderen Klasse passen.
+  * Sie passen zum *Eingangs*-Steckverbinder des Ziel-Typs.
 
 .F[:
 If you like that picture you may include base class conversions by assuming
-plugs with the same basic shape for class hierarchies, using code pins to make
-the output connector of a derived class fit into the input receiptable of its
-base class, but not vice versa.
+plugs and sockets with the same basic shape for class hierarchies, using code
+pins to make the output connector of a derived class fit into the input connector
+of its base class(es), but not vice versa. (For standard conversions of basic
+types assume a set of adapter plugs that are applied as necessary.)
 ]
 
 ---
 template: plain
-header: #### Typumwandlungen durch Konstruktoren
+header: #### Typ-Konvertierungen durch Konstruktoren
 
-Konstruktoren sind dann automatische Typumwandlungen, wenn sie
+Konstruktoren sind dann automatische Typ-Konvertierungen, wenn sie
 
 * genau ein Argument besitzen und
 
@@ -1215,22 +1417,34 @@ public:
 
 ---
 template: plain
-header: #### Anwendung von Konstruktoren zur Typumwandlung
+header: #### Anwendung von Konstruktoren zur Typ-Konvertierung
 
-Typumwandlungen durch Konstruktoren kommen wie folgt zur Anwendung:
+Typ-Konvertierungen durch Konstruktoren kommen wie folgt zur Anwendung:
 
 ```
 void foo(MyClass);
 …
-foo(33);            // OK, automatic conversion by c'tor
-foo(3.3)            // NOT OK, c'tor is explict
-foo(MyClass(3.3));  // OK, c'tor has been used explicitely
+foo(33);            // OK (automatic conversion by c'tor)
+foo(3.3)            // ERROR, c'tor is explict
+foo(MyClass(3.3));  // OK (c'tor is used explicitly)
 …
+```
+Bei Referenzübergabe ist allerdings zusätzlich zu beachten, dass ein ggf.
+erforderliches, temporäres Objekt automatisch nur für `const`-qualifizierte
+Referenzen erzeugt wird:
+```
+void baz(MyClass &);
+void bar(const MyClass &);
+…
+baz(42); // ERROR (no automatic temporary for non-const reference)
+baz(MyClass(42)); // ERROR (c'tor call does not bind to reference)
+{ MyClass tmp(42); baz(tmp); } // OK (temporary explicitly created)
+bar(42); // OK (temporary of MyClass automatically created here)
 ```
 
 ---
 template: plain
-header: #### Typumwandlungen durch Type-Cast Operationen
+header: #### Typ-Konvertierungen durch Type-Cast Operationen
 
 Type-Cast Operationen benutzen eine spezielle Syntax, bei der **nach** dem
 Schlüsselwort `operator` der Zieltyp folgt:._[]
@@ -1240,33 +1454,33 @@ class MyClass {
 public:
     // this is called type-cast operator:
     operator Other() const { …; return …; } 
-    //                                 ^-- Other (or at least
-    //                                     convertible to Other)
+                                    // ^-- Other (or at least
+                                    //     convertible to Other)
 
     // the usual explicit alternative:
     int to_int() const { …; return …; }
-    //                             ^-- int (or at least
-    //                                 convertible to int)
+                                // ^-- int (or at least
+                                //     convertible to int)
 };
 ```
 
 .F[:
-Dieser stellt zugleich den Ergebnistyp dar, den die `return`-Anweisung einer
-solchen Funktion liefern muss.
+Dieser stellt zugleich den Ergebnistyp dar, den die `return`-Anweisung liefern
+muss.
 ]
 
 ---
 template: plain
-header: #### Anwendung von Type-Cast Operationen zur Typumwandlung
+header: #### Anwendung von Type-Cast Operationen zur Typ-Konvertierung
 
-Die Typumwandlungen von der vorhergehenden Seite kommen wie folgt zur Anwendung:
+Die Typ-Konvertierungen von der vorhergehenden Seite kommen wie folgt zur Anwendung:
 ```
 void foo(Other);
 void bar(int);
 …
 MyClass m;
 foo(m);           // OK, implicit use of type-cast operator
-bar(m);           // NOT OK (of course), but ...
+bar(m);           // ERROR (of course), but ...
 bar(m.to_int());  // ... usual style for explicit conversion
 ```
 
@@ -1274,7 +1488,7 @@ bar(m.to_int());  // ... usual style for explicit conversion
 template: plain
 header: #### Sonderfall: `explicit operator bool()`
 
-Eine als `explicit` markierte Typumwandlung in einen Wahrheitswert stellt einen
+Eine als `explicit` markierte Typ-Konvertierung in einen Wahrheitswert stellt einen
 Sonderfall dar:
 
 * Sie kommt **nicht** zur Anwendung bei Argumentübergabe, Initialisierung und
@@ -1338,39 +1552,39 @@ if (obj && !bv) …
 ]
 
 `#1` verwendet eine etwas ungewöhnliche aber erlaubte Form des Aufrufs der
-Typumwandlung in `bool`.
+Typ-Konvertierung in `bool`.
 
 `#2a` löst einen Fehler aus, der in einer syntaktische Mehrdeutigkeit begründet
 ist, die ein Paar zusätzlicher Klammern gemäß `#2b` beseitigt.
 
-`#3` ist eine zulässige aber überflüssige explizite Typumwandlung.
+`#3` ist eine zulässige aber überflüssige explizite Typ-Konvertierung.
 
 ---
 template: plain
-name: const_cast
+name: general_typesafety
 header: ### Typ-Sicherheit in C++
 
 Die praktische Konsequenz aus den Risiken, welche die Konstrukte zur
-expliziten Typumwandlung mitbringen – **allen voran `reinterpret_cast`** -
-ist diese:
+expliziten Typ-Konvertierung (die vier neuen Cast-Formen von C++ sowie
+die von C übernommene Cast-Syntax) mitbringen, ist diese:
 
 .W[
-Alle Formen expliziter Typumwandlung sollten auf das absolut notwendige Minimum
-beschränkt werden.
+Alle Formen *expliziter Typ-Konvertierung* (mit Cast) sollten auf das
+unvermeidliche Minimum beschränkt bleiben.
 ]
 
-Darüberhinaus werden auch klassenspezifische Typumwandlungen manchmal auf
-unerwartete Weise angewendet:._[]
+Darüberhinaus werden *klassenspezifische Typ-Konvertierungen* manchmal in
+"unerwarteter Weise" angewendet:._[]
 
 .F[:
 Or to put it slightly different: Experience showed there are scenarios of
-practical importance where a compile error would have been preferrable over
-the way the compiler made the code "correct" by applying a non-explicit
+practical importance where a compile error would have been preferred over
+the way the compiler made the code "correct" by applying a (non-explicit)
 constructor or type-cast operator.
 ]
 
-.I[
-Klassenspezifische Typumwandlung sollten generell nur dort verwendet werden,
+.N[
+Eine klassenspezifische Typ-Konvertierung sollte nur dort verwendet werden,
 wo der stillschweigende Wechsel zwischen den beteiligten Typen als "natürlich"
 empfunden wird.
 ]
