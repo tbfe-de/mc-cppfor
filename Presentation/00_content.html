@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>C++-For - Allgemeines</title>
+    <title>C++-For – Allgemeines</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <!-- when changing the stylesheet file please see also remark below -->
     <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
@@ -88,7 +88,7 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
 
 .infographic[
 [![Info-Grafik](InfoGraphics/{{graphic}}.png)](InfoGraphics/{{graphic}}.png
-                "Click to open - add [CTRL+] SHIFT for new [tabbed] window")
+                "Click to open – add [CTRL+] SHIFT for new [tabbed] window")
 ]
 
 .pagefooter[
@@ -177,8 +177,8 @@ Planned Topics._[] Monday to Friday (last day end after lunch break)
 
 -----------------------------------------------------------------
 
-* [Wednesday(1): C++ from Top - Classes and Class Relations	](05_wednesday1.html)
-* [Wednesday(2): C++ from Bottom - How it uses the Hardware	](06_wednesday2.html)
+* [Wednesday(1): C++ from Top – Classes and Class Relations	](05_wednesday1.html)
+* [Wednesday(2): C++ from Bottom – How it uses the Hardware	](06_wednesday2.html)
 
 -----------------------------------------------------------------
 
@@ -214,8 +214,8 @@ Kursunterlage, betreffend:._[]
 * [Private Annnotations			](#private_annotations)
 
 .F[:
-In der Online-Version enthält die obige Liste anklickbare Links. Sie sind dort -
-wie auch in allen folgenden Verwendungen - allerdings nur dezent hervorgehoben,
+In der Online-Version enthält die obige Liste anklickbare Links. Sie sind dort –
+wie auch in allen folgenden Verwendungen – allerdings nur dezent hervorgehoben,
 um nicht vom Lesefluss ablenken. Beim Überstreichen mit dem Mauszeiger geben sie
 sich deutlicher zu erkennen.
 ]
@@ -279,8 +279,8 @@ template: plain
 name: training_document
 header: ### Zweck der Schulungsunterlage
 
-Aufgrund des Umfangs des aktuellen ISO-Standards für C++ - das PDF-Dokument zu
-ISO/IEC 14882:2011(E) umfasst über 1300 Seiten(!) - können die nachfolgenden
+Aufgrund des Umfangs des aktuellen ISO-Standards für C++ – das PDF-Dokument zu
+ISO/IEC 14882:2011(E) umfasst über 1300 Seiten(!) – können die nachfolgenden
 Darstellungen selbst bei erheblicher thematischer Begrenzung nicht als
 erschöpfende Behandlungen des jeweiligen Themas angelegt werden.
 
@@ -310,25 +310,122 @@ header: ### Beispiel-Code
 
 Anwendungsbeispiele gibt es
 
-* zum einen als Code-Fragmente direkt in den Seiten dieser Präsentation,
+* zum einen als [Code-Fragmente](#code_fragments) in den Seiten dieser
+  Präsentation,
 
-* zum anderen in kompilierbarer Form, thematisch sortiert in entsprechenden
-  Unterverzeichnissen.
+* zum anderen in [kompilierbarer Quelltext](#compilable_code), thematisch
+  sortiert in entsprechenden Unterverzeichnissen.
 
 .N[
-Bitte sehen Sie **beide** Formen als Bestandteil der Schulungsunterlagen an -
-insbesondere was die Bewertung der Schulungsunterlagen in den Feedback-Bögen
-am Ende des Kurses betrifft, auch wenn die kompilierbaren Beispiele **nicht**
-als Ausdruck auf Papier._[] enthalten sind.
+Bitte sehen Sie die zweite Form ebenso wie die erste als Bestandteil der
+Schulungsunterlagen an, auch wenn diese Ihnen **nicht** als Ausdruck auf
+Papier zur Verfügung gestellt wird.
 ]
 
+Da Sie eine private Kopie dieser Quelltexte in Dateinform erhalten haben und
+natürlich auch auf einem externen Speichermedium mitnehmen dürfen, können Sie
+evtl. individuelle Anmerkungen direkt in diesen Dateien eintragen.._[]
+
 .F[:
-Sollten Sie Papier-Ausdrucke wünschen, erläutert Ihnen der Dozent gerne, wie Sie
-diese - auf Einzelfälle bezogen - über den Kursraum-Drucker selbst anfertigen
-können. Für einen **Gesamtausdruck** wenden Sie sich ggf. **möglichst am ersten
-oder zweiten Tag** ebenfalls an den Dozenten, damit das Ausdrucken auf einem
-zentralen Hochleistungsdrucker erfolgen kann.
+Sollten Sie handschriftliche Anmerkungen in Papier-Ausdrucken bevorzugen,
+erläutert Ihnen der Dozent gerne, wie Sie – auf Einzelfälle bezogen –
+Quelltext-Dateien an den Drucker im Kursraum senden können. Für einen evtl.
+**Gesamtausdruck** wenden Sie sich möglichst am ersten oder zweiten Tag
+ebenfalls an den Dozenten, um die Ausgabe auf einem zentralen Schnelldrucker
+vornehmen zu können.
 ]
+
+---
+template: plain
+name: code_fragments
+header: #### Code-Fragmente
+
+Diese Art von Beispielen beschränkt sich naturgemäß auf wenige Zeilen:
+```
+int main() {
+    try {
+        … // start/run actual application code
+        return EXIT_SUCCESS; // reached if everything is fine ...
+    }
+    catch (...) {
+        … // maybe log unxepected error
+        return EXIT_FAILURE; // ... but here an error had occured
+    }
+}
+```
+Außer in Kommentaren gilt folgender, manchmal wichtiger Unterschied:._[]
+
+* `…` (die Ellipsis) zeigt eine Auslassung an, evtl. gefolgt von einem
+  erläuternden Kommentar;
+* `...` (dreimal das Zeichen Punkt) steht für drei Punkte, die syntaktisch an
+  dieser Stelle erforderlich sind.
+
+.F[:
+In Kommentaren verwendet der Autor dieser Präsentation gewohnheitsmäßig stets
+`...` und niemals `…`, da die Ellipsis nicht Teil des minimalen, von C++ zu
+unterstützenden Zeichensatzes ist.
+]
+
+---
+template: plain
+name: compilable_code
+header: #### Kompilierbarer Code
+
+Da Code-Fragmente nicht kompiliert werden können, schleichen sich trotz
+sorgfältigen Korrekturlesens leicht kleine Fehler ein.._[]
+
+.F[:
+Bitte über Sie hier die notwendige Toleranz: auch und gerade als
+Software-Entwickler/in wird Ihnen bewusst sein, dass man in 10 oder 20
+frisch eingetippten Zeilen Quelltext oftmals kleine "Vertipper" enthalten,
+die vor dem allerersten Kompilieren nicht auffallen – **Hinweise auf
+Flüchtigkeitsfehler in Code-Fragmenten werden natürlich gerne entgegengenommen
+und in der Online-Version dieser Unterlage meist umgehend korrigiert.**
+]
+
+100% korrekten Code finden Sie in den verlinkten Beispielen, da diese stets
+vollständige Kompiliereinheiten bilden und somit "fehlergeprüft" sind.
+
+Betrachten Sie diese Beispiele bitte als Bestandteil – insbesondere im Hinblick
+auf die Bewertung der Unterlagen – auch wenn diese Quelltexte **nicht** in
+ausgedruckter Form enthalten sind.
+
+.N[
+Um die Durchführung dieses Kurses nicht an die Verwendung einer bestimmten
+Entwicklungsumgebung zu koppeln, gibt es zu den Beispielen keine vorbereiteten
+"Projekte".
+]
+
+---
+template: plain
+name: code_projects
+header: #### Projekt-Dateien für IDEs
+
+Wenn Sie mit einer integrierten Entwicklungsumgebung wie *Eclipse* oder
+*Visual-Studio* vertraut sind, werden Sie selbst am besten wissen, wie man ggf.
+Quelltexte in ein Projekt importiert.
+
+* Um dies zu vereinfachen, bestehen viele Beispiele (und Übungsvorgeben) aus
+  einer einzigen Quelltext-Datei, auch wenn man diese in der Praxis vielleicht
+  klassenweise in Header- und Implementierungsdateien aufteilen würde.
+
+* Zu Beispielen, an deren Kompilierung zu einem ausführbaren Programm mehrere
+  Quelltext-Dateien beteiligt sind, gibt es i.d.R. einen kleinen (einfach
+  gehaltenen) `Makefile`, womit auch die Kompilierung an der Kommandozeile
+  möglich ist.
+
+* In einigen wenigen Fällen erschien es angebracht, zentralen Code für mehrere
+  Beispiele nur einmal als Header-File bereitzustellen, d.h. einem IDE-Projekt
+  muss dann auf geeignete Art und Weise der Zugriff auf diese Files ermöglicht
+  werden.._[]
+
+.F[:
+Für die Einbindung dieser zentralen Files in eigene, an der Kommandozeile mit
+GCC kompilierte Beispiele, reicht es i.d.R. aus, deren Verzeichnispfad mit der
+Option `-I` zu übergeben.
+]
+
+
 
 ---
 template: plain
@@ -461,14 +558,14 @@ Sie können derartige Grafiken stets Anklicken, um eine große Version zu
 erhalten. Die hier gezeigte Grafik hat keine fachliche Bedeutung sondern ist nur
 dazu gedacht, dass Sie damit die "Navigation" im Browser einüben können. (Bei
 entsprechend starkem Zoom sollten Sie in der zentralen Sprechblase ein Zitat
-erkennen, das manchen "Oldtimern" möglicherweise noch aus einer Fernseh-Show der
-späten 60er bekannt ist, in der gelegentlich aus dem Wohnzimmer ausgewählter
-Zuschauer mittels über Akustikkoppler und Telefonleitung übertragener Signale
-eine Armbrust ferngesteuert wurde ... für die damalige Zeit ein futuristisches
-High-Tech Show-Element.)
+erkennen, das manchen "Oldtimern" möglicherweise noch aus einer [Fernseh-Show]
+#der späten 60er bekannt ist, in der gelegentlich aus dem Wohnzimmer
+ausgewählter Zuschauer mittels über Akustikkoppler und Telefonleitung
+übertragener Signale eine Armbrust ferngesteuert wurde … für die damalige Zeit
+ein futuristisches High-Tech Show-Element.)
 ]
 
-[...]: http://de.wikipedia.org/wiki/Der_goldene_Schu%C3%9F
+[Fernseh-Show]: http://de.wikipedia.org/wiki/Der_goldene_Schu%C3%9F
 
 ---
 template:plain
@@ -572,7 +669,7 @@ later it may be less usable, so you may want to consider the next page too.
 
 .I[
 The explanations on the next page are only meant for those who prefer to keep
-this document - **including private annotations** - as a "fully electronic"
+this document – **including private annotations** – as a "fully electronic"
 version, which can e.g. be put on a memory stick or stored in the cloud.
 ]
 
@@ -605,11 +702,11 @@ You have the option to handle this document by purely electronic means,
 When viewing the document in a browser you may chose to view your annotations by
 changing to *presenter's mode* with the `p` key.
 
-* **You may try it out right now - back to normal is also with `p`.**
+* **You may try it out right now – back to normal is also with `p`.**
 
 .I[
 Future versions of this presentation **may or may not** use the notes section
-for their own purposes - but in any case it should be possible to merge your
+for their own purposes – but in any case it should be possible to merge your
 private annotations with a [diff-tool].
 ]
 
@@ -658,7 +755,7 @@ the slide content with a line consisting of **exactly three question marks**.
 ```
 
 BTW: The easiest way to include small code examples, what might be a typical
-use case for private annotations, is to just indent them by four spaces -
+use case for private annotations, is to just indent them by four spaces –
 surrounding code fragments with lines of three or more backticks, a markdown
 extension known as [Fenced Code Blocks], is the other option.
 
@@ -670,7 +767,7 @@ extension known as [Fenced Code Blocks], is the other option.
 [Fenced Code Blocks]: https://help.github.com/articles/github-flavored-markdown#fenced-code-blocks
 
 As we are at it go: when you have this page loaded in a text editor, with the line
-above - **not displayed** when you view this in the browser - and the paragraph
+above – **not displayed** when you view this in the browser – and the paragraph
 before the code example you have a nice way how to embedde links without making
 the text flow unreadable or inconvenient to edit.
 

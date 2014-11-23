@@ -138,13 +138,13 @@ template: blank
 
   [C++ FOR]: 00_content.html#agenda
 
-# [C++ FOR] (Mittwochnachmittag)
+# [C++ FOR] (Wednesday Afternoon)
 
 -------------------------------------------------------------------------------
 1. [Generalisiertes Ausführungsmodell	](#execution_model)
 1. [Abbildung von Klassen		](#class_mapping)
 1. [Implementierung von Containern	](#implementing_containers)
-1. [Typidentifikation zur Laufzeit	](#runtime_type)
+1. [Typidentifikation zur Laufzeit	](#runtime_type_identification)
 1. [Typbasierte Verzweigungen		](#multiway_typeswitch)
 1. [Übung				](#exercise_wed2)
 
@@ -185,14 +185,14 @@ header: ### CPU und Speicher
 
 Allgemein betrachtet sind dies die Kernkomponenten jedes Computers.
 
-* Vom kleinsten Controller in der Waschmaschine ...
-* ... über klassische Mobiltelefone ...
-* ... zu Smart-Phones ...
-* ... Home-PC-s ...
-* ... File- und Applikations-Servern ...
-* ... bis zum größten Main-Frame.
+* Vom kleinsten Controller in der Waschmaschine …
+* … über klassische Mobiltelefone …
+* … zu Smart-Phones …
+* … Home-PC-s …
+* … File- und Applikations-Servern …
+* … bis zum größten Main-Frame.
 
-(OK, die größeren haben mehr als eine CPU ziemlich viel Speicher ...)
+(OK, die größeren haben mehr als eine CPU ziemlich viel Speicher …)
 
 ---
 template: withinfo
@@ -756,7 +756,7 @@ Folgende Techniken können zur Anwendung kommen:._[]
 * [statische Vorab-Analyse](#stacklimit_analysis)
 
 .F[:
-Kommt keine dieser Möglichkeiten in Betracht bleibt nur beten und hoffen ...
+Kommt keine dieser Möglichkeiten in Betracht bleibt nur beten und hoffen …
 ]
 
 ---
@@ -945,7 +945,7 @@ struct s {
 }
 ```
 scheinen dagegen 12 (= 8+4) Bytes ausreichend zu sein, da zwischen `b` und `a`
-nichts eingefügt werden muss ...
+nichts eingefügt werden muss …
 
 ---
 template: plain
@@ -954,11 +954,11 @@ header: #### Padding und Alignment (4)
 
 ##### Padding nach dem letzten Strukturelement (Nowendigkeit)
 
-... allerdings würde ohne Padding am Ende gegen eine seit den Anfängen von C
+… allerdings würde ohne Padding am Ende gegen eine seit den Anfängen von C
 gültige Regel verstoßen, die besagt dass für jedes Array
 
 ```
-struct s { ... } arr[N];
+struct s { … } arr[N];
 
 ```
 die Beziehungen
@@ -1273,7 +1273,7 @@ public:
 ```
 
 .F[:
-Oder wo immer der Motor später einmal als Komponente eingebaut wird ...
+Oder wo immer der Motor später einmal als Komponente eingebaut wird …
 ]
 
 ---
@@ -1374,7 +1374,7 @@ bereitstellen, mit der **jeder(!)** den `next`-Zeiger verändern kann.
 
 .F[:
 Auch in C++-Fachveröffentlichungen gab und gibt es gelegentlich die Tendenz,
-einfach voneinander abzuschreiben, ohne die Sachlage selbst zu überdenken ...
+einfach voneinander abzuschreiben, ohne die Sachlage selbst zu überdenken …
 Explizit nicht zur Gruppe solcher Autoren gehört [Jiri Sukoup], der in seinem
 Buch [Taming C++] bereits 1994 den Nutzen von `friend`-Beziehungen ausführlich
 darstellte, obwohl er sich damit in Gegenposition zu anderen Autoren begab.
@@ -1385,7 +1385,7 @@ template: plain
 header: #### Container-Elemente mit Daten
 
 Um in den Elementen des Containers auch Daten unterzubringen, müssen
-zunächst entsprechende Klassen abgeleitet werden, z.B. für Gleitpunktzahlen ...
+zunächst entsprechende Klassen abgeleitet werden, z.B. für Gleitpunktzahlen …
 ```
 class Double_Node : public Lifo::Node {
 public:
@@ -1394,7 +1394,7 @@ public:
 };
 ```
 
-... oder Zeichenketten:
+… oder Zeichenketten:
 ```
 #include <string>
 class Double_Node : public Lifo::Node {
@@ -1818,7 +1818,7 @@ verloren.
 ]
 
 Mit einer Basisklasse für Früchte allgemein (`Fruit`) und abgeleiteten Klassen
-für spezifische Früchte (`Apple` `Banana`, `Kiwi`, ...) ist `Lifo<Fruit>`
+für spezifische Früchte (`Apple` `Banana`, `Kiwi`, …) ist `Lifo<Fruit>`
 *nicht* der evtl. erwartete "Obstkorb":
 
 * Beim Einfügen wird von den speziellen Fruchtklassen der spezifische Anteil
@@ -1927,7 +1927,7 @@ Beim gerade gezeignet "Obstkorb" besteht z.B. ein Dilemma:
 * oder sollte er das eher nicht tun?._[]
 
 .F[:
-Do not take this lightly ... an inaproriate decision may lead to a memory leak
+Do not take this lightly … an inaproriate decision may lead to a memory leak
 or even worsde, cause dangling pointers.
 ]
 
@@ -1943,7 +1943,7 @@ Diese werden in einem späteren Kapitel ausführlicher behandelt.
 ---
 template: linkinfo
 graphic: RuntimeTypeIdentification
-name: runtime_type
+name: runtime_type_identification
 header: ## Typ-Bestimmung zur Laufzeit
 
 -----------------------------------------------------------------------
@@ -2036,7 +2036,7 @@ OtherDerived o; bar(o); // calls OtherDerived::foo()
 .F[:
 Another interesting point is this: to compile `bar` nothing but `Base` needs to
 be known, in fact the derived classes might not even have been written then, but
-the code manages somehow to always call the right overrides ...
+the code manages somehow to always call the right overrides …
 ]
 
 ---
@@ -2249,377 +2249,6 @@ in einem Beispiel.
 Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie der
 vorbereiteten Eclipse-Projekte erläutert.
 ]
--------------------------------------------------------------------------------
-
-1. [Templates selbst schreiben		](#writing_templates)
-1. [Optimierung von Templates		](#optimising_templates)
-1. [Templates als Compilezeit-Funktionen](#compiletime_functions)
-1. [Fortgeschrittene Präprozessor-Verwendung](#advanced_cpp_usage)
-1. [Übung				](#exercise_wed2)
-
--------------------------------------------------------------------------------
-
-Kürzere Pausen werden jeweils nach Bedarf eingelegt.
-
-Die Besprechung der Musterlösung(en) erfolgt zu Beginn des folgenden Vormittags.
-
----
-template: linkinfo
-graphic: TemplateBasics
-name: writing_templates
-header: ## Templates selbst schreiben
-
--------------------------------------------------------------------------------
-
-* [Template-Klassen	](#template_classes)
-
--------------------------------------------------------------------------------
-
-* [Template-Funktionen	](#template_functions)
-
---------------------------------------------------------------------------------
-
----
-template: withinfo
-graphic: TemplateBasics
-section: Template Classes
-name: template_classes
-header: ### Template-Klassen
-
-Template-Klassen sind im Hinblick auf Datentypen und/oder andere
-Compilezeit-Konstanten parametrisierte Klassen.
-
-Man spricht in diesem Zusammenhang auch von generischen Klassen.
-
-.N[
-Bei der Verwendung von Template-Klassen sind die entsprechenden Typ- und
-Wertargumente stets anzugeben.
-]
-
----
-template: withinfo
-graphic: TemplateBasics
-section: Template Functions
-name: template_functions
-header: ### Template-Funktionen
-
-Template-Funktionen sind in der Regel im Hinblick auf Datentypen._[] 
-parametrisierte Funktionen
-
-.N[
-Bei der Verwendung von Template-Funktionen ergeben sich die tatsächlich zu
-verwendenden Typen oft direkt oder indirekt aus den Typen der Aufrufargumente.
-]
-
-.F[:
-Die Parametrisierung im Hinblick auf Compilezeit-Konstanten ist bei Funktionen
-ebenfalls möglich, tritt in der Praxis aber sehr selten auf.
-]
-
----
-template: linkinfo
-graphic: ReducingCodeBloat
-name: optimising_templates
-header: ## Optimierung von Templates
-
-------------------------------------------------------------------------
-
-* [Ursache für "Code-Bloat"		](#reason_for_codebloat)
-
-------------------------------------------------------------------------
-
-* [Über einen Zwischenschritt ...	](#intermediate_step)
-* [... zur optimierten Template		](#optimised_template)
-
-------------------------------------------------------------------------
-
----
-template: withinfo
-graphic: ReducingCodeBloat
-section: Resons for Code Bloat
-name: reason_for_codebloat
-header: ### Ursache für "Code-Bloat"
-
-"Unnötig erzeugter" Maschinencode ergibt sich oft aus einer ungeschickten
-Strukturierung von Templates, bei denen erhebliche Vermischung existiert
-zwischen:
-
-* Abschnitten, welche tatsächlich von den Instanziierungsparametern abhängigen
-  Maschinencode erzeugen, und
-
-* anderen Abschnitten, welche immer auf ein und denselben Maschinencode
-  hinauslaufen.
-
----
-template: withinfo
-graphic: ReducingCodeBloat
-section: Intermediate Step
-name: intermediate_step
-header: ### Vorbereitender Zwischenschritt
-
-Die Vorbereitung für die Reduzierung von Code-Bloat besteht darin,
-
-* möglichst große, zusammenhängende Abschnitte in einer Template-Klasse oder
-  Template-Funktion zu schaffen, die **tatsächlich** von den Instanziierungs-
-  (Typ und Wert) -argumenten abhängigen, und
-
-* andere möglichst große Abschnitte, die immer auf ein und denselben
-  Maschinencode hinauslaufen.
-
----
-template: withinfo
-graphic: ReducingCodeBloat
-section: Optimised Template
-name: optimised_template
-header: ### Optimierten Template
-
-Abschnitte einer Template, die immer den selben Maschinencode hinauslaufen,
-können anschließend ausgelagert werden, und zwar:
-
-* für eine Template-Klasse in eine eine **Nicht-Template** Basisklasse, und
-
-* für eine Template-Funktion in **Nicht-Template** Hilfsfunktionen.
-
----
-template: plain
-name: compiletime_functions
-header: ## Templates als Compilezeit-Funktionen
-
-Eine weitere Sicht auf Templates ist es, sie als zur Compilezeit ausgeführte
-Funtionen zu verstehen.
-
-Der wesentliche Schlüssel dazu ist, das folgende zu verstehen:
-
-* Jeglicher "Input" muss aus Datentypen bestehen.._[]
-
-* Jeglicher "Output" betshet aus Datentypen.
-
-.I[
-Anders ausgedrückt:
-
-Templates sind (auch) Typ-Transformationen zur Compilezeit.
-]
-
-.F[:
-Mit einem kleinen Kunstgriff fallen darunter auch sämtliche zur Compilezeit
-Konstanten Werte von Grundtypen, sowie daraus berechenbaren Werte.
-]
-
----
-template: plain
-header: ### Wiederholung und Verzweigung
-
-[FP]:      http://en.wikipedia.org/wiki/Functional_programming
-[Haskell]: http://tryhaskell.org/ "hier ein interaktives Tutorial"
-
-Da sich zur Compilezeit keine Schleifen mit `while` und keine Verzweigungen
-mit `if` programmieren lassen, muss man zu den entsprechenden Alternativen
-aus *Funktionalen Programmierung* ([FP]) greifen:
-
-* Jegliche Wiederholung muss per Rekursion und
-
-* jegliche Fallunterscheidung durch Spezialisierung erfolgen.
-
-Ein bisschen muss man das aber vielleicht trainieren ...._[]
-
-.F[:
-... was ganz gut mit einer Einführung in eine "echte" FP-Sprache wie
-beispielsweise [Haskell] geht.
-]
-
----
-template: plain
-header: ### Fakultäts-Funktion als Beispiel
-
-#### Der übliche Ansatz ...
-
-Die allseits bekannte Funktion zur Fakultätsberechnung kann man in C++ mit
-einer Schleife so programmieren:
-```
-unsigned long long fakul(unsigned long long n) {
-    auto result = 1uLL;
-    while (n > 0)
-        result *= n--;
-    return result;
-}
-```
-
-Oder auch - zur Laufzeit rekursiv - so:
-```
-unsigned long long fakul(unsigned long long n) {
-    return (n == 0) ? 1 : n*fakul(n-1);
-}
-```
-
----
-template: plain
-header: ### Fakultäts-Funktion als Beispiel (2)
-
-#### ... und der im "Haskell-Stil"
-
-```
-unsigned long long fakul(unsigned long long n) {
-    return n*fakul(n-1);
-}
-unsigned long long fakul(0uLL) {
-    return 1;
-}
-```
-Natürlich ist das obige **kein gültiges C++** ... aber doch irgendwie
-verständlich, oder nicht?
-
-.I[
-Der Abbruch der in der allgemeinen Funktion eigentlich endlosen Rekursion
-erfolgt durch Spezialisierung von `fakul` für den Argumentwert `0uLL`
-(0 im Typ `unsigned long long`).
-]
-
----
-template: plain
-header: ### Fakultäts-Berechnung zur Compilezeit
-
-Das folgende aber **ist** gültiges C++ ...
-```
-template<unsigned long long n>
-struct fakul {
-    static const
-    unsigned long long result = n*fakul<n-1>::result;
-};
-template<>
-struct fakul<0uLL> {
-    static const unsigned long long result = 1;
-};
-```
-... und doch auch irgendwie "verständlich", oder?
-
-Der "Aufruf" in einem kleinen Testprogramm könnte dann so aussehen:
-```
-#include <iostream>
-int main() {
-    std::cout << fakul<5>::result << std::endl;
-}
-```
-
----
-template: plain
-header: ### Weitere Typ-Transformationen in Beispielen
-
-#### Eine Zeigerstufe hinzufügen
-```
-template<typename T>
-struct add_pointer {
-    typedef T* result;
-}
-```
-
-#### Eine Zeigerstufe wegnehmen
-```
-template<typename T>
-struct remove_pointer;
-template<typename T>
-struct remove_pointer<T*> {
-    typedef T result;
-}
-```
-#### Alle Zeigerstufen wegnehmen
-
-(Denken Sie doch einfach mal selbst kurz nach!)
-
-???
-Die Lösung lautet - natürlich - so:
-```
-template<typename T>
-struct remove_all_pointers {
-    typedef T result;
-}
-template<typename T>
-struct remove_pointer<T*> {
-    typedef remove_all_pointers<T> result;
-}
-```
-
----
-template: plain
-header: ### Type-Traits Library
-
-[Type Traits]: http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/boost_typetraits/background.html
-
-Mit C++11 wurden die zuvor unter Boost entwickelten [Type-Traits] zum Standard.
-
-Mehr dazu finden Sie hier:
-
-* http://www.cplusplus.com/reference/type_traits/
-* http://en.cppreference.com/w/cpp/types/
-
----
-template: plain
-name: exercise_wed2
-header: ## Übung
-
-Ziel der Aufgabe:
-
-Implementierung eines Algorithmus (im Stil der STL) und schrittweiser Ausbau
-zu einer Template.._[]
-
-.N[
-Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie der
-vorbereiteten Eclipse-Projekte erläutert.
-]
-
-.F[:
-Die letzten Ausbaustufen liegen etwas oberhalb der Zielsetzung dieser Schulung.
-Insofern bietet sich dazu vielleicht vorerst nur ein Studium der Musterlösungen
-zu diesen Aufgabenteilen an.
-]
-
----
-template: plain
-name: advanced_cpp_usage
-header: ## Fortgeschrittene Präprozessor-Verwendung
-
----
-template: plain
-name: cpp_stringizing_args
-header: ### Stringizing
-
-Unter *Stringizing* wird die Möglichkeit verstanden, das Argument einer
-Makro-Expansion als String-Literal zu verwenden:
-
-* Es wird dann quasi automatisch in doppelte Gänsefüßchen eingeschlossen.
-* Wenn nötig, werden für einzelne Zeichen Escape-Sequenzen ersetzt.
-
-Als Beispiel ein Makro, der einen Ausdruck textlich und mit dem berechneten
-Wert auf Standardausgabe schreibt:
-```
-#define PrintX(x) \
-        std::cout << #x << ": " << (x) << '\n';
-```
-
-Die Anwendung kann (beispielsweise) wie folgt aussehen:
-```
-int main() {
-    auto value = 42;
-    PrintX(value++)
-    PrintX(++value)
-    PrintX(value)
-    PrintX(value *= 2)
-}
-```
-
----
-template: plain
-name: cpp_token_pasting
-header: ### Token Pasting
-
----
-template: plain
-name: cpp_code_generation
-header: ### Systematischen Quelltext erzeugen
-
----
-template: plain
-name: cpp_coding_style
-header: ### Einige weitere Präprozessor-Tipps
 
 </textarea>
 <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->

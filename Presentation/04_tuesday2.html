@@ -138,14 +138,15 @@ template: blank
 
   [C++ FOR]: 00_content.html#agenda
 
-# [C++ FOR] (Tuesday Afternoon)
+# [C++ FOR] (Tuesday Afternoon)
 
 -------------------------------------------------------------------------------
 
-1. [Assoziative Container	](#associative_containers)
-1. [Iterator-Kategorien		](#iterator_categories)
-1. [Iterator-Konventionen	](#iterator_usages)
-1. [Übung			](#exercise_tue2)
+1. [Assoziative Container			](#associative_containers)
+1. [Iterator-Kategorien		 		](#iterator_categories)
+1. [Konventionen der Iterator-Schnittstelle	](#iterator_conventions)
+1. [Flexibilität durch Iteratoren		](#iterator_flexibility)
+1. [Übung					](#exercise_tue2)
 
 -------------------------------------------------------------------------------
 
@@ -455,14 +456,14 @@ zeigen, niemals als "gleich" angesehen werden.
 ---
 template: linkinfo
 graphic: STL-IteratorUsages
-name: iterator_usages
+name: iterator_conventions
 header: ## Iterator-Konventionen
 
 ----------------------------------------------------------------------------
 
-* [Iteratoren verbinden ...	](#iterators_as_glue)
-* [... Container mit ...	](#container_axis)
-* [ ... Algorithmen		](#algorithm_axis)
+* [Iteratoren verbinden …	](#iterators_as_glue)
+* [… Container mit …		](#container_axis)
+* [… Algorithmen		](#algorithm_axis)
 
 ----------------------------------------------------------------------------
 
@@ -471,13 +472,13 @@ header: ## Iterator-Konventionen
 
 ----------------------------------------------------------------------------
 
-* [Erfolgreiche und ...		](#success_from_searching)
-* [... gescheiterte Suche	](#failure_from_searching)
+* [Erfolgreiche und …		](#success_from_searching)
+* [… gescheiterte Suche		](#failure_from_searching)
 
 ----------------------------------------------------------------------------
 
-* [Füllstands- und ...		](#state_from_filling)
-* [... Löschenanzeige		](#removing_logically_only)
+* [Füllstands- und …		](#state_from_filling)
+* [… Löschenanzeige		](#removing_logically_only)
 
 ----------------------------------------------------------------------------
 
@@ -630,7 +631,7 @@ finden gibt es einige aus pragmatischen Sicht sinnvolle aber dennoch
 "merkwürdige"._[] Besonderheiten.
 
 .F[:
-... des Merkens würdige ...
+… des Merkens würdige …
 ]
 
 Eine davon betrifft die Frage, wie mit aus einem Container gelöschten ELementen
@@ -650,6 +651,7 @@ In den späteren Code-Fragmenten dieses Kapitels folgen konkrete Beispiele.
 
 ---
 template: plain
+name: iterator_flexibility
 header: ## Flexibilität durch Iteratoren
 
 Die konsequente Verwendung von Iteratoren bei der Implementierung aller
@@ -746,7 +748,7 @@ selbst implementiert werden, ihre Implementierung ist aber insofern interessant,
 als die zugrundeliegende Technik in ähnlich gelagerten Fällen zur Vermeidung
 redundanter Typangaben eingesetzt werden kann:
 ```
-  template<typename T>
+   template<typename T>
 inline std::back_inserter_iterator<T> std::back_inserter(T &c) {
     return std::back_insert_iterator<T>(c);
 }
@@ -815,15 +817,15 @@ std::copy(li.begin(), li.end(),
 ```
 
 Etwas ungewöhnlich ist hier das zusätzliche Argument. Dessen Zweck ist es, einen
-Optimierungshinweis zu geben, den der Insert-Iterator ggf. verwenden würde, um
-die Suche nach der Einfügeposition abzukürzen. Üblicherweise wird – wenn kein
-besser Hinweis gegeben werden kann – der Beginn-Iterator des jeweiligen Sets
-verwendet.
+Optimierungshinweis zu geben, den der Insert-Iterator ggf. verwendet, um die
+Suche nach der Einfügeposition abzukürzen. Üblicherweise wird – wenn kein
+wirklicher Hinweis gegeben werden kann – der Beginn-Iterator des jeweiligen Sets
+verwendet.._[]
 
 .F[:
 Da es sich nur um einen Hinweis handelt, ist die Angabe unkritisch, auch wenn
 man einen falschen Hinweis gibt (oder keinen passenden Hinweise angibt, obwohl
-einer existiert). Dann bleibt lediglich eine Optimierungs-Chance ungenutzt ...
+einer existiert). Dann bleibt lediglich eine Optimierungs-Chance ungenutzt …
 ]
 
 ---

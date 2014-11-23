@@ -138,7 +138,7 @@ template: blank
 
   [C++ FOR]: 00_content.html#agenda
 
-# [C++ FOR] (Montagvormittag)
+# [C++ FOR] (Monday Morning)
 
 ---------------------------------------------------------------------------
 
@@ -223,7 +223,7 @@ erforderlichen zweiten Header-File direkt zu inkludieren.
 ```
 // header file: Base.h
 class Base {
-    // ...
+    …
 };
 ```
 ]
@@ -232,7 +232,7 @@ class Base {
 // header file: Derived.h
 #include "Base.h"
 class Derived : public Base {
-    // ...
+    …
 };
 ```
 ]
@@ -311,7 +311,7 @@ namespace Other {
 ]
 
 Wenn jetzt beide Files inkludiert werden, macht der erste den Inhalt des zweiten
-quasi "unsichtbar" ... was aber vermutlich erst nach einer überaus langwierigen
+quasi "unsichtbar" … was aber vermutlich erst nach einer überaus langwierigen
 Fehlersuche offenbar wird.
 
 .W[
@@ -321,7 +321,7 @@ z.B. `MINE_SOMECLASS_H` und `OTHER_SOMECLASS_H`.._[]
 
 .F[:
 Auch stellt sich die Frage, ob man im Include-Guard tatsächlich alle Buchstaben
-groß schreiben sollte ...
+groß schreiben sollte …
 ]
 
 
@@ -341,7 +341,7 @@ Include Guard aus der folgenden Situation resultiert:._[]
 #include "OtherClass.h"
 namespace Mine {
     class SomeClass {
-        // ...
+        …
         OtherClass *link;
     };
 }
@@ -357,7 +357,7 @@ namespace Mine {
 #include "SomeClass.h"
 namespace Other {
     class OtherClass {
-        // ...
+        …
         SomeClass *link;
     };
 }
@@ -671,7 +671,7 @@ foo(2*PI);
 ]
 
 .F[:
-The reason here is ...
+The reason here is …
 ]
 
 ---
@@ -981,14 +981,14 @@ header: #### Implementierung von Move-Konstruktor/Zuweisung
 Nachdem Move-Versionen deklariert sind, müssen diese natürlich auch
 implementiert werden.
 
-Wenn der Kopierkonstruktor wie folgt aussieht ...
+Wenn der Kopierkonstruktor wie folgt aussieht …
 ```
 MyClass::MyClass(const MyClass &rhs)
     : …, some_ptr(new T(*rhs.some_ptr)), …    // cloning resource
 { … }
 ```
 
-... könnte dieser Move-Konstruktor angemessen sein:
+… könnte dieser Move-Konstruktor angemessen sein:
 ```
 MyClass::MyClass(MyClass &&rhs)
     : …, some_ptr(rhs.some_ptr), …    // taking over resource

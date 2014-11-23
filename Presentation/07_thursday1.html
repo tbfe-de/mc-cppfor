@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>C++ For (7) - Donnerstag Teil 1</title>
+    <title>C++ For (7) - Thursday Part 1</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
     <!-- when changing the stylesheet, please also change EACH 'styling-by:' -->
@@ -138,13 +138,14 @@ template: blank
 
   [C++ FOR]: 00_content.html#agenda
 
-# [C++ FOR] (Donnerstagvormittag)
+# [C++ FOR] (Thursday Morning)
 
 -------------------------------------------------------------------------------
 
-1. [Pragmatische Leitgedanken der Software-Entwicklung	](#guiding_principles)
-1. [Beispiel für "Open Close"-Prinzip			](#openclose_example)
-1. [Übung						](#exercise_thu1)
+1. [Templates selbst schreiben			](#writing_templates)
+1. [Optimierung von Templates			](#optimising_templates)
+1. [Templates als Compilezeit-Funktionen	](#compiletime_functions)
+1. [Übung					](#exercise_thu1)
 
 -------------------------------------------------------------------------------
 
@@ -155,220 +156,291 @@ Mittagspause.
 
 ---
 template: linkinfo
-graphic: GuidingPrinciples
-name: guiding_principles
-header: ## Pragmatische Leitgedanken der Software-Entwicklung
+graphic: TemplateBasics
+name: writing_templates
+header: ## Templates selbst schreiben
 
 -------------------------------------------------------------------------------
 
-* ["Open-Close"			](#oc_principle)
+* [Template-Klassen	](#template_classes)
 
 -------------------------------------------------------------------------------
 
-* ["Don't Repeat Yourself"	](#dry_principle)
+* [Template-Funktionen	](#template_functions)
 
--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 ---
 template: withinfo
-graphic: GuidingPrinciples
-section: OC Principle
-name: oc_principle
-header: ### "Open Close"-Prinzip
+graphic: TemplateBasics
+section: Template Classes
+name: template_classes
+header: ### Template-Klassen
 
-Gemäß diesem Prinzip sollte jede Software-Architektur einen gesunden Ausgleich zwischen zwei
-gegeneinander stehenden Zielen gewährleisten:
+Template-Klassen sind im Hinblick auf Datentypen und/oder andere
+Compilezeit-Konstanten parametrisierte Klassen.
 
-* Software sollte *offen für Veränderungen* sein, beispielsweise
+Man spricht in diesem Zusammenhang auch von generischen Klassen.
 
-  * Anpassung an künftig geänderten Bedarf
-  * Absehbar anstehende Erweiterungen
-  * Verwendung in ähnlich gelagerten Fällen
-
-* Software sollte aber auch *robust* sein in dem Sinne, dass
-
-  * Änderungen nicht versehentlich oder in einer ansonsten unbeabsichtigten Weise erfolgen;
-  * zumindest sollten unbeabsichtigte Änderungen leicht zu identifizieren sein,
-  * ebenso solche, die zielgerichtet im Rahmen der Offenheit erfolgten aber aus irgend
-    einem Grund unvollständig blieben.
-
----
-template: plain
-header: #### Mechanismen zur Strukturierung
-
-##### Klassen
-
-Klassen fassen "Daten" und "Verarbeitung" zusammen und sind somit ein
-Mechanismus zur Kapselung, der den Blick auf die abstrakten Operationen lenkt,
-weg von Datenstrukturen und Algorithmen.
-
-##### Unterprogramme
-
-Unterprogramme teilen Verarbeitungsschritte auf, vom komplexen Gesamtablauf bis
-hinunter zu kleinen, einfach überschau- und testbaren Einheiten.
-
-##### Bibliotheken
-
-Bilbliotheken sind Sammlungen wiederverwendbarer Komponenten, die für sich
-betrachtet kein "Eigenleben" führen sondern erst "von außen" zum Leben erweckt
-werden.
-
----
-template: plain
-header: #### Mechanismen zur Strukturierung (2)
-
-##### Frameworks
-
-Frameworks folgen den "Hollywood-Principle": *Don't call us, we call you*.
-
-Sie stellen eine oft eine sehr komplexe Gesamtfunktionalität zur Verfügung, und
-enthalten "Erweiterungspunkte" an denen spezifische Anpassungen "eingehängt"
-werden können.
-
-##### Geplante Erweiterbarkeit
-
-**JA**, aber auch: *"Keep It Small and Simple!"*
-
-Beginnen Sie stets mit der einfachsten Variante
-
-* einer Klasse,
-* eines Algorithmus,
-* einer Applkation,
-* eines Programmsystems, ...
-
-welche Ihr Problem löst, und erweitern Sie diese inkrementell bei neu
-erkanntem Bedarf.
-
----
-template: withinfo
-graphic: GuidingPrinciples
-section: DRY Principle
-name: dry_principle
-header: ### "Don't Repeat Yourself"
-
-[Turing-Tests]: http://de.wikipedia.org/wiki/Turing-Test
-
-Eine wichtige Erkenntnis zur erfolgreichen Arbeitsteilung zwischen *"Mensch und
-Maschine"* ist:
-
-**Menschen**
-
-* besitzen oft ein hohes Maß an Kreativität,
-* sind aber in aler Regel schlecht darin, Dinge präzise zu wiederholen,
-  * sei es in immer wieder ein- und derselben Weise,
-  * sei es mit systematischen Variationen.
-
-**Computer**
-
-* besitzen kaum echte Kreativität,._[]
-* sind aber extrem gut darin, Dinge präzise zu wiederholen:
-  * Insbesondere ermüden sie nicht, auch bei sich ständig wiederholten und
-  * dabei allenfalls leicht variierenden Tätigkeiten.
-
-.F[:
-Es ist dabei weniger entscheidend, dass per Computer vielleicht gelegentlich
-"überraschende Ergebnisse" erzielt werden können - etwa in der Art, dass ein
-Computer ein Musikstück komponieren könnte, das es vielleicht sogar in die
-Hitparade schafft. Interessanter ist die Frage nach einem Programm, mit dessen
-Hilfe ein Computer im Dialog mit einem menschlichen Partner von diesem nicht
-innerhalb weniger Minuten als Maschine erkannt würde, wie es im Fall der
-[Turing-Tests] letzten Endes doch immer wieder geschieht.
+.N[
+Bei der Verwendung von Template-Klassen sind die entsprechenden Typ- und
+Wertargumente stets anzugeben.
 ]
 
 ---
-template: plain
-header: #### Mechanismen zur Wiederverwendung
+template: withinfo
+graphic: TemplateBasics
+section: Template Functions
+name: template_functions
+header: ### Template-Funktionen
 
-##### Klassen
+Template-Funktionen sind in der Regel im Hinblick auf Datentypen._[] 
+parametrisierte Funktionen
 
-Universell gehaltene Klassen bilden in der Regel die kleinsten,
-wiederverwendbaren Bausteine in einem (konsequent) Objektorientierten Entwurf.
-
-##### Unterprogramme
-
-In einem eher klassichen (prozeduralen) Entwurf dominieren Unterprogramme,
-evtl. ergänzt durch einfache Datenstrukturen.
-
-##### Datenstrukturen
-
-Mit Hilfe der C++ Templates lassen sich sehr gut wiederverwendbare Bausteine für
-Datenstrukturen realisieren.._[]
+.N[
+Bei der Verwendung von Template-Funktionen ergeben sich die tatsächlich zu
+verwendenden Typen oft direkt oder indirekt aus den Typen der Aufrufargumente.
+]
 
 .F[:
-OK ... technisch gesehen sind die STL-Container natürlich Klassen ...
+Die Parametrisierung im Hinblick auf Compilezeit-Konstanten ist bei Funktionen
+ebenfalls möglich, tritt in der Praxis aber sehr selten auf.
 ]
 
 ---
 template: linkinfo
-graphic: Example-OpenClosePrinciple
-name: openclose_example
-header: ## Beispiel für "Open Close"-Prinzip
+graphic: ReducingCodeBloat
+name: optimising_templates
+header: ## Optimierung von Templates
 
--------------------------------------------------------------------------------
+------------------------------------------------------------------------
 
-* [Basierend auf virtuellen Member-Funktionen	](#oc_with_polymorphism)
+* [Ursache für "Code-Bloat"		](#reason_for_codebloat)
 
--------------------------------------------------------------------------------
+------------------------------------------------------------------------
 
-* [Basierend auf C++-Templates			](#oc_with_cpp_templates)
+* [Über einen Zwischenschritt …		](#intermediate_step)
+* [… zur optimierten Template		](#optimised_template)
 
--------------------------------------------------------------------------------
-
----
-template: withinfo
-graphic: Example-OpenClosePrinciple
-section: Virtual Member Functions
-name: oc_with_polymorphism
-header: ### Basierend auf virtuellen Member-Funktionen
-
-[GoF Template Methode Pattern]: http://en.wikipedia.org/wiki/Template_method_pattern
-
-Bei der klassischen Realisierung._[] des [GoF Template Methode Pattern]s
-
-* sind virtuelle Member-Funktionen einer Basisklasse die
-
-  * vorausgeplanten "Erweiterungspunkte",
-
-* an denen spezifische abgeleitete Klassen
-
-  * die jeweils unterschiedlich geforderte Funktionalität "einhängen".
-
-.I[
-Im Sinne des [Open-Close-Principles](#oc_principle) ist die Basisklasse der
-abgeschlossene Teil.._[]
-]
-
-.F[:
-Siehe
-[Examples/OpenClose/virtual_functions.cpp](../Examples/OpenClose/virtual_functions.cpp)
-]
+------------------------------------------------------------------------
 
 ---
 template: withinfo
-graphic: Example-OpenClosePrinciple
-section: C++ Template Mechanism
-name: oc_with_cpp_templates
-header: ### Basierend auf C++-Templates
+graphic: ReducingCodeBloat
+section: Resons for Code Bloat
+name: reason_for_codebloat
+header: ### Ursache für "Code-Bloat"
 
-Bei der Realisierung mit Templates._[] ist die
+"Unnötig erzeugter" Maschinencode ergibt sich oft aus einer ungeschickten
+Strukturierung von Templates, bei denen erhebliche Vermischung existiert
+zwischen:
 
-* abgeleitete Klasse der geschlossene Teil,
+* Abschnitten, welche tatsächlich von den Instanziierungsparametern abhängigen
+  Maschinencode erzeugen, und
 
-  * mit "Erweiterungspunkten" in einer typ-parametrisierten Basisklasse,
+* anderen Abschnitten, welche immer auf ein und denselben Maschinencode
+  hinauslaufen.
 
-* über welche die jeweils geforderte Funktionalität
+---
+template: withinfo
+graphic: ReducingCodeBloat
+section: Intermediate Step
+name: intermediate_step
+header: ### Vorbereitender Zwischenschritt
 
-  * durch die zur Instanziierung verwendeten Klassen "eingehängt" wird.
+Die Vorbereitung für die Reduzierung von Code-Bloat besteht darin,
+
+* möglichst große, zusammenhängende Abschnitte in einer Template-Klasse oder
+  Template-Funktion zu schaffen, die **tatsächlich** von den Instanziierungs-
+  (Typ und Wert) -argumenten abhängigen, und
+
+* andere möglichst große Abschnitte, die immer auf ein und denselben
+  Maschinencode hinauslaufen.
+
+---
+template: withinfo
+graphic: ReducingCodeBloat
+section: Optimised Template
+name: optimised_template
+header: ### Optimierten Template
+
+Abschnitte einer Template, die immer den selben Maschinencode hinauslaufen,
+können anschließend ausgelagert werden, und zwar:
+
+* für eine Template-Klasse in eine eine **Nicht-Template** Basisklasse, und
+
+* für eine Template-Funktion in **Nicht-Template** Hilfsfunktionen.
+
+---
+template: plain
+name: compiletime_functions
+header: ## Templates als Compilezeit-Funktionen
+
+Eine weitere Sicht auf Templates ist es, sie als zur Compilezeit ausgeführte
+Funtionen zu verstehen.
+
+Der wesentliche Schlüssel dazu ist, das folgende zu verstehen:
+
+* Jeglicher "Input" muss aus Datentypen bestehen.._[]
+
+* Jeglicher "Output" betshet aus Datentypen.
 
 .I[
-Ein deutlicher Vorteil dieser Variante ist, dass von ungenutzten
-Erweiterungspunkten keine leeren Unterprogramm-Einsprünge übrig bleiben.
+Anders ausgedrückt:
+
+Templates sind (auch) Typ-Transformationen zur Compilezeit.
 ]
 
 .F[:
-Siehe
-[Examples/OpenClose/template_baseclass.cpp](../Examples/OpenClose/template_baseclass.cpp)
+Mit einem kleinen Kunstgriff fallen darunter auch sämtliche zur Compilezeit
+Konstanten Werte von Grundtypen, sowie daraus berechenbaren Werte.
 ]
+
+---
+template: plain
+header: ### Wiederholung und Verzweigung
+
+[FP]:      http://en.wikipedia.org/wiki/Functional_programming
+[Haskell]: http://tryhaskell.org/ "hier ein interaktives Tutorial"
+
+Da sich zur Compilezeit keine Schleifen mit `while` und keine Verzweigungen
+mit `if` programmieren lassen, muss man zu den entsprechenden Alternativen
+aus *Funktionalen Programmierung* ([FP]) greifen:
+
+* Jegliche Wiederholung muss per Rekursion und
+
+* jegliche Fallunterscheidung durch Spezialisierung erfolgen.
+
+Ein bisschen muss man das aber vielleicht trainieren …_[]
+
+.F[:
+… was ganz gut mit einer Einführung in eine "echte" FP-Sprache wie
+beispielsweise [Haskell] geht.
+]
+
+---
+template: plain
+header: ### Fakultäts-Funktion als Beispiel
+
+#### Der übliche Ansatz …
+
+Die allseits bekannte Funktion zur Fakultätsberechnung kann man in C++ mit
+einer Schleife so programmieren:
+```
+unsigned long long fakul(unsigned long long n) {
+    auto result = 1uLL;
+    while (n > 0)
+        result *= n--;
+    return result;
+}
+```
+
+Oder auch - zur Laufzeit rekursiv - so:
+```
+unsigned long long fakul(unsigned long long n) {
+    return (n == 0) ? 1 : n*fakul(n-1);
+}
+```
+
+---
+template: plain
+header: ### Fakultäts-Funktion als Beispiel (2)
+
+#### … und der im "Haskell-Stil"
+
+```
+unsigned long long fakul(unsigned long long n) {
+    return n*fakul(n-1);
+}
+unsigned long long fakul(0uLL) {
+    return 1;
+}
+```
+Natürlich ist das obige **kein gültiges C++** … aber doch irgendwie
+verständlich, oder nicht?
+
+.I[
+Der Abbruch der in der allgemeinen Funktion eigentlich endlosen Rekursion
+erfolgt durch Spezialisierung von `fakul` für den Argumentwert `0uLL`
+(0 im Typ `unsigned long long`).
+]
+
+---
+template: plain
+header: ### Fakultäts-Berechnung zur Compilezeit
+
+Das folgende aber **ist** gültiges C++ …
+```
+template<unsigned long long n>
+struct fakul {
+    static const
+    unsigned long long result = n*fakul<n-1>::result;
+};
+template<>
+struct fakul<0uLL> {
+    static const unsigned long long result = 1;
+};
+```
+… und doch auch irgendwie "verständlich", oder?
+
+Der "Aufruf" in einem kleinen Testprogramm könnte dann so aussehen:
+```
+#include <iostream>
+int main() {
+    std::cout << fakul<5>::result << std::endl;
+}
+```
+
+---
+template: plain
+header: ### Weitere Typ-Transformationen in Beispielen
+
+#### Eine Zeigerstufe hinzufügen
+```
+template<typename T>
+struct add_pointer {
+    typedef T* result;
+}
+```
+
+#### Eine Zeigerstufe wegnehmen
+```
+template<typename T>
+struct remove_pointer;
+template<typename T>
+struct remove_pointer<T*> {
+    typedef T result;
+}
+```
+#### Alle Zeigerstufen wegnehmen
+
+(Denken Sie doch einfach mal selbst kurz nach!)
+
+???
+Die Lösung lautet - natürlich - so:
+```
+template<typename T>
+struct remove_all_pointers {
+    typedef T result;
+}
+template<typename T>
+struct remove_pointer<T*> {
+    typedef remove_all_pointers<T> result;
+}
+```
+
+---
+template: plain
+header: ### Type-Traits Library
+
+[Type Traits]: http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/boost_typetraits/background.html
+
+Mit C++11 wurden die zuvor unter Boost entwickelten [Type-Traits] zum Standard.
+
+Mehr dazu finden Sie hier:
+
+* http://www.cplusplus.com/reference/type_traits/
+* http://en.cppreference.com/w/cpp/types/
 
 ---
 template: plain
@@ -377,22 +449,18 @@ header: ## Übung
 
 Ziel der Aufgabe:
 
-Das GoF [Template Methode Pattern][GoF-TMP] soll - als Beispiel für das
-"Open-Close"-Prinzip - in zwei Techniken umgesetzt werden.
-
-1. "Klassisch" mit virtuellen Member-Funktionen
-2. "Modern" mit C++-Templates._[]
+Implementierung eines Algorithmus (im Stil der STL) und schrittweiser Ausbau
+zu einer Template.._[]
 
 .N[
 Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie der
 vorbereiteten Eclipse-Projekte erläutert.
 ]
 
-  [Gof-TMP]: http://en.wikipedia.org/wiki/Template_method_pattern
-
-.F[
-... die wiederum nur eine zufällige namentliche Übereinstimmung mit dem
-Pattern haben.
+.F[:
+Die letzten Ausbaustufen liegen etwas oberhalb der Zielsetzung dieser Schulung.
+Insofern bietet sich dazu vielleicht vorerst nur ein Studium der Musterlösungen
+zu diesen Aufgabenteilen an.
 ]
 
 </textarea>

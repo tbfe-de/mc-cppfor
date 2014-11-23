@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>C++ For (9) - Freitag</title>
+    <title>C++ For (9) - Friday</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
     <!-- when changing the stylesheet, please also change EACH 'styling-by:' -->
@@ -138,10 +138,11 @@ template: blank
 
   [C++ FOR]: 00_content.html#agenda
 
-# [C++ FOR] (Freitagvormittag)
+# [C++ FOR] (Friday Morning)
 
 -------------------------------------------------------------------------------
 
+1. [Richtlinien für den Exception-Einsatz	](#exception_guidelines)
 1. [Ressourcen ohne und mit RAII verwalten	](#resource_management)
 1. [Smart-Pointer 				](#smart_pointers)
 1. [Übung					](#exercise_fri1)
@@ -151,8 +152,240 @@ template: blank
 Kürzere Pausen werden jeweils nach Bedarf eingelegt.
 
 .N[
-Die Besprechung der Musterlösung(en) erfolgt direkt nach der Übung, da am
-letzten Kurstag der Nachmittagsteil entfällt.
+Wenn der Nachmittagsteil am Freitag entfällt, folgt am Ende dieses Abschnitts
+an Stelle der Übung direkt die Besprechung der Musterlösung(en).
+]
+
+---
+template: linkinfo
+guidelines: ExceptionDetails
+name: exception_guidelines
+header: ## Richtlinien für den Exception-Einsatz
+
+-------------------------------------------------------------------------------
+
+* [(Keine) isolierte Klassenhierarchie	](#disconnected_class_hierarchy)
+
+-------------------------------------------------------------------------------
+
+* [(Falsche) Behandlungsblock-Abfolge	](#wrong_catch_order)
+
+-------------------------------------------------------------------------------
+
+* [Optimale Weiterleitung		](#correct_rethrow)
+  * [(Rückschnitt auf Basisklasse)	](#avoidable_copy_slicing)
+  * [(Sub-optimale Weiterleitung)	](#problematic_rethrow)
+
+-------------------------------------------------------------------------------
+
+* [Exceptions in Destruktoren vermeiden	](#dtor_exception_nogo)
+
+-------------------------------------------------------------------------------
+
+---
+template: withinfo
+graphic: ExceptionDetails
+section: (No) Disconnected Class Hierarchy
+name: disconnected_class_hierarchy
+header: ### (Keine) isolierte Klassenhierarchie
+
+Bilden eigene Exceptions eine isolierte Klassenhierarchie, so kann (sehr
+allgemeiner) Code diese **nicht** über Standard-Exceptions abfangen:
+
+```
+int main() {
+    using namespace std;
+    try {
+        …
+        … // ordinary application
+        …
+        return EXIT_SUCCESS; // macro in <cstdlib>
+    }
+    catch (exception &e) {
+        cerr << "terminated by standard exception: "
+             << e.what() << endl;
+    }
+    catch (...) {
+        cerr << "terminated by unknown exception" << endl;
+    }
+    return EXIT_FAILURE; // macro in <cstdlib>
+}
+```
+
+---
+template: withinfo
+graphic: ExceptionDetails
+section: (Bad) Order of Handlers
+name: wrong_catch_order
+header: ### (Falsche) Behandlungsblock-Abfolge
+
+Werden die `catch`-Blöcke für Exceptions falsch angeordnet,
+
+* kann ein weiter oben stehender, allgemeiner Block
+
+* einen weiter unter stehenden, spezifischeren Block unwirksam machen.
+
+---
+template: withinfo
+graphic: ExceptionDetails
+section: Optimal Re-Throwing
+name: correct_rethrow
+header: ### Optimale Weiterleitung
+
+Das Weiterwerfen eines gefangenen Exception-Objekts mit
+```
+…
+catch (SomeException &ex) {
+    …
+    // only partial recovery
+    throw ex;
+}
+```
+
+führt zur Erstellung einer Kopie **im Rahmen der Anweisung `throw ex;`**
+
+.N[
+Mit `throw;` kann das ursprünglich gefangene Exception-Objekt **ohne Kopieren**
+weitergeworfen werden.
+]
+
+---
+template: withinfo
+graphic: ExceptionDetails
+section: Sclicing Exception Object
+name: avoidable_copy_slicing
+header: ### (Vermeidbarer) Rückschnitt auf Basisklasse
+
+Durch (vermeidbares) Kopieren des Exception-Objekts können geworfene
+Exceptions einer abgeleiteten Klasse per Slicing auf die Basisklasse
+reduziert werden.
+
+**Dies ist im Allgemenen nicht wünchenswert.**
+
+Daher sollte ein Kopieren vermieden werden:
+
+* Argumente von `catch`-Blöcken als Referenz spezifizieren.
+
+* Bei nur teilweise Auflösung Exception mit `throw;` weiterwerfen.
+
+---
+template: withinfo
+graphic: ExceptionDetails
+section: Sub-optimal Re-throwing
+name: problematic_rethrow
+header: ### Sub-optimale Weiterleitung
+
+Sub-optimal ist grundsätzlich jede Weiterleitung, bei der das Exception-Objekt
+unnötig kopiert wird.
+
+---
+template: withinfo
+graphic: ExceptionDetails
+section: (No) Throwing from Destructoes
+name: dtor_exception_nogo
+header: ### (Keine) Exceptions aus Destruktoren werfen
+
+.W[
+Exceptions, die von Destruktoren geworfen werden, können ein Programm abbrechen,
+wenn der Destruktor im Rahmen eines Exception-Handlings ausgeführt wird.
+]
+
+Falls ein Destruktor Operationen benutzen muss, die u.U. eine Exception
+auslösen, sollte der Code sicherheitshalber in einen `try`-Block verpackt
+werden, der alle Exceptions fängt und ignoriert:._[]
+```
+class MyClass {
+    …
+    ~MyClass() {
+        try {
+            … // whatever needs be done
+        }
+        catch (...) {
+            if (!std::uncaught_exception()) throw;
+        }
+    }
+}; 
+```
+.F[:
+Ob es tatsächlich sinnvoll ist, die Exception wie gezeigt weiterzuwerfen, falls
+der Destruktor **nicht** im Rahmen eines Exceptions-Handlings abläuft, muss je
+nach Sachlage individuell entschieden werden.
+]
+
+---
+template: plain
+name: no_more_throwspec
+header: ## `throw`-Spezifikationen vermeiden
+
+Nachdem über viele Jahre hinweg von C++-Experten praktisch einhellig empfohlen
+worden war, die seinerzeit von C++98 eingeführten `throw`-Spezifikationen zu
+vermeiden, wurden diese nun mit C++11 zum *deprecated feature*.
+
+---
+template: plain
+name: noexcept
+header: ## Exception-Freiheit mit `noexcept` ankündigen
+
+Neu eingeführt wurde mit C++11 die `noexcept`-Qualifikation für Funktionen,
+welche folgendes bewirkt:
+
+* Wirft eine damit qualifizierte Funktion dennoch eine Exception, kommt es zum
+  unwiderruflichen Prgrammabbruch (nach Durchlaufen eines frei festzulegenden
+  Handlers).
+
+* Andere Funktionen betrachten eine mit `noexcept` qualifzierte Funktion als
+  *aufrufbar ohne Risiko, dass es zu einer Exceptions kommt*.._[]
+
+.N[
+Insgesamt liegen mit der Umsetzung von `noexcept` durch gängige Compiler noch
+zu wenige Erfahrungen vor, um eindeutige Richtlinien und Empfehlungen zur
+Benutzung dieses Features geben zu können.
+]
+
+.F[:
+Dies ist insofern richtig, als Exceptions – treten Sie dennoch auf – prakisch
+unmittelbar zum Programmabbruch führen, d.h. im Kontext des Aufrufs muss die
+Möglichkeit von Exceptions bei solchen Funktionen in der Tat nicht berücksichigt
+werden … dennoch wird u.U. das Programm abgebrochen.
+]
+
+---
+template: plain
+name: noexcept
+header: ## Bedingte Exception-Freiheit mit `noexcept`
+
+Über das auf der vorhergenden Seite gesagte hinaus ist `noxecept` auch eine
+Compilezeit-Funktion, mit welcher – insbesondere in Templates – die **bedingte
+Freiheit Exceptions** deklariert werden kann.
+
+* Hiermit kann eine Funktion zum Ausdruck bringen, dass Exceptions nur dann
+  auftreten werden, wenn bestimmte aufgerufene Funktinen solche werfen.
+
+* Dadurch kann zur Compilezeit bei der Instanziierung von Templates mit
+  konkreten Typen entschieden werden, ob bei einer bestimmten Operation das
+  Risiko von Exceptions besteht.
+
+* Dies eröffnet letztlich die Möglichkeit, dass Bibliotheksfunktionen über
+  Template-Metaprogrammierung unterschiedliche Implementierungen wählen.
+
+---
+template: plain
+name: exercise_thu2
+header: ## Übung
+
+Ziel der Aufgabe:
+
+Erweiterung einer Klasse mit einer Fehlerbehandlung unter Nutzung von Exceptions.._[]
+
+.N[
+Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie der
+vorbereiteten Eclipse-Projekte erläutert.
+]
+
+.F[:
+Diese Aufgabe bietet über die Anwendung von Exceptions hinausgehend auch noch
+die Möglichkeit, entweder mit Hilfe virtueller Member-Funktionen oder mit Hilfe
+von Templates eine besonders flexible Lösung zu schaffen.
 ]
 
 ---
@@ -167,9 +400,9 @@ header: ## Ressourcen ohne und mit RAII
 
 -------------------------------------------------------------------------------
 
-* [Mit RAII verwaltete Ressourcen ...		](#raii_style)
-* [... für Ausführung einer Anweisungsfolge ...	](#raii_codeblock)
-* [... oder Lebensdauer eines Objekts belegen	](#raii_lifetime)
+* [Mit RAII verwaltete Ressourcen …		](#raii_style)
+* [… für Ausführung einer Anweisungsfolge …	](#raii_codeblock)
+* [… oder Lebensdauer eines Objekts belegen	](#raii_lifetime)
 
 -------------------------------------------------------------------------------
 
@@ -448,9 +681,9 @@ header: ## Smart-Pointer
 
 -------------------------------------------------------------------------------
 
-* [Problem zyklischer Referenzierung mit ...		](#refcount_problem)
-* [... "nur beobachtenden" Zeiger als Ausweg und ...	](#weak_ptr_solution)
-* [... "verlorene" Ressourcen				](#weak_ptr_dangling)
+* [Problem zyklischer Referenzierung mit …		](#refcount_problem)
+* [… "nur beobachtenden" Zeiger als Ausweg und …	](#weak_ptr_solution)
+* [… "verlorene" Ressourcen				](#weak_ptr_dangling)
 
 -------------------------------------------------------------------------------
 
@@ -487,7 +720,7 @@ er sollte in neuen Programmen aber nicht mehr verwendet werden.._[]
 
 .F[:
 Substituting an `std::auto_ptr` with an `std::unique_ptr` should cause no major
-pains ... if any problems occur they may rather indicate sleeping bugs caused by
+pains … if any problems occur they may rather indicate sleeping bugs caused by
 the special behavior of an `std::auto_ptr` and will now only become more obvious
 with an `std::unique_ptr`.
 ]

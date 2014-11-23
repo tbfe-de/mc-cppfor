@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>C++ For (8) - Donnerstag Teil 2</title>
+    <title>C++ For (8) - Thursday Part 2</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
     <!-- when changing the stylesheet, please also change EACH 'styling-by:' -->
@@ -138,12 +138,15 @@ template: blank
 
   [C++ FOR]: 00_content.html#agenda
 
-# [C++ FOR] (Donnerstagnachmittag)
+# [C++ FOR] (Thursday Afternoon)
 
 -------------------------------------------------------------------------------
 
-1. [Richtlinien für den Exception-Einsatz	](#exception_details)
-1. [Übung					](#exercise_thu2)
+1. [Pragmatische Leitgedanken der Software-Entwicklung	](#guiding_principles)
+1. [C++ als "Multi-Paradigmen"-Sprache			](#multi_paradigm_cpp)
+1. [Design-Patterns - kritisch hinterfragt		](#design_patterns)
+1. [Fortgeschrittene Präprozessor-Verwendung		](#advanced_preprocessor)
+1. [Übung						](#exercise_thu2)
 
 -------------------------------------------------------------------------------
 
@@ -153,215 +156,285 @@ Die Besprechung der Musterlösung(en) erfolgt zu Beginn des folgenden Vormittags
 
 ---
 template: linkinfo
-graphic: ExceptionDetails
-name: exception_details
-header: ## Richtlinien für den Exception-Einsatz
+graphic: GuidingPrinciples
+name: guiding_principles
+header: ## Pragmatische Leitgedanken der Software-Entwicklung
 
 -------------------------------------------------------------------------------
 
-* [(Keine) isolierte Klassenhierarchie	](#disconnected_class_hierarchy)
+* ["Open-Close"			](#oc_principle)
 
 -------------------------------------------------------------------------------
 
-* [(Falsche) Behandlungsblock-Abfolge	](#wrong_catch_order)
-
--------------------------------------------------------------------------------
-
-* [Optimale Weiterleitung		](#correct_rethrow)
-  * [(Rückschnitt auf Basisklasse)	](#avoidable_copy_slicing)
-  * [(Sub-optimale Weiterleitung)	](#problematic_rethrow)
-
--------------------------------------------------------------------------------
-
-* [Exceptions in Destruktoren vermeiden	](#dtor_exception_nogo)
+* ["Don't Repeat Yourself"	](#dry_principle)
 
 -------------------------------------------------------------------------------
 
 ---
 template: withinfo
-graphic: ExceptionDetails
-section: (No) Disconnected Class Hierarchy
-name: disconnected_class_hierarchy
-header: ### (Keine) isolierte Klassenhierarchie
+graphic: GuidingPrinciples
+section: OC Principle
+name: oc_principle
+header: ### "Open Close"-Prinzip
 
-Bilden eigene Exceptions eine isolierte Klassenhierarchie, so kann (sehr
-allgemeiner) Code diese **nicht** über Standard-Exceptions abfangen:
+Gemäß diesem Prinzip sollte jede Software-Architektur einen gesunden Ausgleich zwischen zwei
+gegeneinander stehenden Zielen gewährleisten:
 
+* Software sollte *offen für Veränderungen* sein, beispielsweise
+
+  * Anpassung an künftig geänderten Bedarf
+  * Absehbar anstehende Erweiterungen
+  * Verwendung in ähnlich gelagerten Fällen
+
+* Software sollte aber auch *robust* sein in dem Sinne, dass
+
+  * Änderungen nicht versehentlich oder in einer ansonsten unbeabsichtigten Weise erfolgen;
+  * zumindest sollten unbeabsichtigte Änderungen leicht zu identifizieren sein,
+  * ebenso solche, die zielgerichtet im Rahmen der Offenheit erfolgten aber aus irgend
+    einem Grund unvollständig blieben.
+
+---
+template: plain
+header: #### Mechanismen zur Strukturierung
+
+##### Klassen
+
+Klassen fassen "Daten" und "Verarbeitung" zusammen und sind somit ein
+Mechanismus zur Kapselung, der den Blick auf die abstrakten Operationen lenkt,
+weg von Datenstrukturen und Algorithmen.
+
+##### Unterprogramme
+
+Unterprogramme teilen Verarbeitungsschritte auf, vom komplexen Gesamtablauf bis
+hinunter zu kleinen, einfach überschau- und testbaren Einheiten.
+
+##### Bibliotheken
+
+Bilbliotheken sind Sammlungen wiederverwendbarer Komponenten, die für sich
+betrachtet kein "Eigenleben" führen sondern erst "von außen" zum Leben erweckt
+werden.
+
+---
+template: plain
+header: #### Mechanismen zur Strukturierung (2)
+
+##### Frameworks
+
+Frameworks folgen den "Hollywood-Principle": *Don't call us, we call you*.
+
+Sie stellen eine oft eine sehr komplexe Gesamtfunktionalität zur Verfügung, und
+enthalten "Erweiterungspunkte" an denen spezifische Anpassungen "eingehängt"
+werden können.
+
+##### Geplante Erweiterbarkeit
+
+**JA**, aber auch: *"Keep It Small and Simple!"*
+
+Beginnen Sie stets mit der einfachsten Variante
+
+* einer Klasse,
+* eines Algorithmus,
+* einer Applkation,
+* eines Programmsystems, …
+
+welche Ihr Problem löst, und erweitern Sie diese inkrementell bei neu
+erkanntem Bedarf.
+
+---
+template: withinfo
+graphic: GuidingPrinciples
+section: DRY Principle
+name: dry_principle
+header: ### "Don't Repeat Yourself"
+
+[Turing-Tests]: http://de.wikipedia.org/wiki/Turing-Test
+
+Eine wichtige Erkenntnis zur erfolgreichen Arbeitsteilung zwischen *"Mensch und
+Maschine"* ist:
+
+**Menschen**
+
+* besitzen oft ein hohes Maß an Kreativität,
+* sind aber in aler Regel schlecht darin, Dinge präzise zu wiederholen,
+  * sei es in immer wieder ein- und derselben Weise,
+  * sei es mit systematischen Variationen.
+
+**Computer**
+
+* besitzen kaum echte Kreativität,._[]
+* sind aber extrem gut darin, Dinge präzise zu wiederholen:
+  * Insbesondere ermüden sie nicht, auch bei sich ständig wiederholten und
+  * dabei allenfalls leicht variierenden Tätigkeiten.
+
+.F[:
+Es ist dabei weniger entscheidend, dass per Computer vielleicht gelegentlich
+"überraschende Ergebnisse" erzielt werden können - etwa in der Art, dass ein
+Computer ein Musikstück komponieren könnte, das es vielleicht sogar in die
+Hitparade schafft. Interessanter ist die Frage nach einem Programm, mit dessen
+Hilfe ein Computer im Dialog mit einem menschlichen Partner von diesem nicht
+innerhalb weniger Minuten als Maschine erkannt würde, wie es im Fall der
+[Turing-Tests] letzten Endes doch immer wieder geschieht.
+]
+
+---
+template: plain
+header: #### Mechanismen zur Wiederverwendung
+
+##### Klassen
+
+Universell gehaltene Klassen bilden in der Regel die kleinsten,
+wiederverwendbaren Bausteine in einem (konsequent) Objektorientierten Entwurf.
+
+##### Unterprogramme
+
+In einem eher klassichen (prozeduralen) Entwurf dominieren Unterprogramme,
+evtl. ergänzt durch einfache Datenstrukturen.
+
+##### Datenstrukturen
+
+Mit Hilfe der C++ Templates lassen sich sehr gut wiederverwendbare Bausteine für
+Datenstrukturen realisieren.._[]
+
+.F[:
+OK … technisch gesehen sind die STL-Container natürlich Klassen ...
+]
+
+---
+template: linkinfo
+graphic: Example-OpenClosePrinciple
+name: openclose_example
+header: ### Beispiel für "Open Close"-Prinzip
+
+-------------------------------------------------------------------------------
+
+* [Basierend auf virtuellen Member-Funktionen	](#oc_with_polymorphism)
+
+-------------------------------------------------------------------------------
+
+* [Basierend auf C++-Templates			](#oc_with_cpp_templates)
+
+-------------------------------------------------------------------------------
+
+---
+template: withinfo
+graphic: Example-OpenClosePrinciple
+section: Virtual Member Functions
+name: oc_with_polymorphism
+header: ### Basierend auf virtuellen Member-Funktionen
+
+[GoF Template Methode Pattern]: http://en.wikipedia.org/wiki/Template_method_pattern
+
+Bei der klassischen Realisierung._[] des [GoF Template Methode Pattern]s
+
+* sind virtuelle Member-Funktionen einer Basisklasse die
+
+  * vorausgeplanten "Erweiterungspunkte",
+
+* an denen spezifische abgeleitete Klassen
+
+  * die jeweils unterschiedlich geforderte Funktionalität "einhängen".
+
+.I[
+Im Sinne des [Open-Close-Principles](#oc_principle) ist die Basisklasse der
+abgeschlossene Teil.._[]
+]
+
+.F[:
+Siehe
+[Examples/OpenClose/virtual_functions.cpp](../Examples/OpenClose/virtual_functions.cpp)
+]
+
+---
+template: withinfo
+graphic: Example-OpenClosePrinciple
+section: C++ Template Mechanism
+name: oc_with_cpp_templates
+header: ### Basierend auf C++-Templates
+
+Bei der Realisierung mit Templates._[] ist die
+
+* abgeleitete Klasse der geschlossene Teil,
+
+  * mit "Erweiterungspunkten" in einer typ-parametrisierten Basisklasse,
+
+* über welche die jeweils geforderte Funktionalität
+
+  * durch die zur Instanziierung verwendeten Klassen "eingehängt" wird.
+
+.I[
+Ein deutlicher Vorteil dieser Variante ist, dass von ungenutzten
+Erweiterungspunkten keine leeren Unterprogramm-Einsprünge übrig bleiben.
+]
+
+.F[:
+Siehe
+[Examples/OpenClose/template_baseclass.cpp](../Examples/OpenClose/template_baseclass.cpp)
+]
+
+---
+template: plain
+name: multi_paradigm_cpp
+header: ## C++ as "Multi-Paradigm" Language
+
+TBD
+
+---
+template: plain
+name: design_patterns
+header: ## Design Patterns - Critically Reviewed
+
+TBD
+
+---
+template: plain
+name: advanced_preprocessor
+header: ## Fortgeschrittene Nutzung des Präprozessors
+
+TBD
+
+---
+template: plain
+name: cpp_stringizing_args
+header: ### Stringizing
+
+Unter *Stringizing* wird die Möglichkeit verstanden, das Argument einer
+Makro-Expansion als String-Literal zu verwenden:
+
+* Es wird dann quasi automatisch in doppelte Gänsefüßchen eingeschlossen.
+* Wenn nötig, werden für einzelne Zeichen Escape-Sequenzen ersetzt.
+
+Als Beispiel ein Makro, der einen Ausdruck textlich und mit dem berechneten
+Wert auf Standardausgabe schreibt:
+```
+#define PrintX(x) \
+        std::cout << #x << ": " << (x) << '\n';
+```
+
+Die Anwendung kann (beispielsweise) wie folgt aussehen:
 ```
 int main() {
-    using namespace std;
-    try {
-        …
-        … // ordinary application
-        …
-        return EXIT_SUCCESS; // macro in <cstdlib>
-    }
-    catch (exception &e) {
-        cerr << "terminated by standard exception: "
-             << e.what() << endl;
-    }
-    catch (...) {
-        cerr << "terminated by unknown exception" << endl;
-    }
-    return EXIT_FAILURE; // macro in <cstdlib>
+    auto value = 42;
+    PrintX(value++)
+    PrintX(++value)
+    PrintX(value)
+    PrintX(value *= 2)
 }
 ```
 
 ---
-template: withinfo
-graphic: ExceptionDetails
-section: (Bad) Order of Handlers
-name: wrong_catch_order
-header: ### (Falsche) Behandlungsblock-Abfolge
-
-Werden die `catch`-Blöcke für Exceptions falsch angeordnet,
-
-* kann ein weiter oben stehender, allgemeiner Block
-
-* einen weiter unter stehenden, spezifischeren Block unwirksam machen.
-
----
-template: withinfo
-graphic: ExceptionDetails
-section: Optimal Re-Throwing
-name: correct_rethrow
-header: ### Optimale Weiterleitung
-
-Das Weiterwerfen eines gefangenen Exception-Objekts mit
-```
-…
-catch (SomeException &ex) {
-    …
-    // only partial recovery
-    throw ex;
-}
-```
-
-führt zur Erstellung einer Kopie **im Rahmen der Anweisung `throw ex;`**
-
-.N[
-Mit `throw;` kann das ursprünglich gefangene Exception-Objekt **ohne Kopieren**
-weitergeworfen werden.
-]
-
----
-template: withinfo
-graphic: ExceptionDetails
-section: Sclicing Exception Object
-name: avoidable_copy_slicing
-header: ### (Vermeidbarer) Rückschnitt auf Basisklasse
-
-Durch (vermeidbares) Kopieren des Exception-Objekts können geworfene
-Exceptions einer abgeleiteten Klasse per Slicing auf die Basisklasse
-reduziert werden.
-
-**Dies ist im Allgemenen nicht wünchenswert.**
-
-Daher sollte ein Kopieren vermieden werden:
-
-* Argumente von `catch`-Blöcken als Referenz spezifizieren.
-
-* Bei nur teilweise Auflösung Exception mit `throw;` weiterwerfen.
-
----
-template: withinfo
-graphic: ExceptionDetails
-section: Sub-optimal Re-throwing
-name: problematic_rethrow
-header: ### Sub-optimale Weiterleitung
-
-Sub-optimal ist grundsätzlich jede Weiterleitung, bei der das Exception-Objekt
-unnötig kopiert wird.
-
----
-template: withinfo
-graphic: ExceptionDetails
-section: (No) Throwing from Destructoes
-name: dtor_exception_nogo
-header: ### (Keine) Exceptions aus Destruktoren werfen
-
-.W[
-Exceptions, die von Destruktoren geworfen werden, können ein Programm abbrechen,
-wenn der Destruktor im Rahmen eines Exception-Handlings ausgeführt wird.
-]
-
-Falls ein Destruktor Operationen benutzen muss, die u.U. eine Exception
-auslösen, sollte der Code sicherheitshalber in einen `try`-Block verpackt
-werden, der alle Exceptions fängt und ignoriert:._[]
-```
-class MyClass {
-    …
-    ~MyClass() {
-        try {
-            … // whatever needs be done
-        }
-        catch (...) {
-            if (!std::uncaught_exception()) throw;
-        }
-    }
-}; 
-```
-.F[:
-Ob es tatsächlich sinnvoll ist, die Exception wie gezeigt weiterzuwerfen, falls
-der Destruktor **nicht** im Rahmen eines Exceptions-Handlings abläuft, muss je
-nach Sachlage individuell entschieden werden.
-]
+template: plain
+name: cpp_token_pasting
+header: ### Token Pasting
 
 ---
 template: plain
-name: no_more_throwspec
-header: ## `throw`-Spezifikationen vermeiden
-
-Nachdem über viele Jahre hinweg von C++-Experten praktisch einhellig empfohlen
-worden war, die seinerzeit von C++98 eingeführten `throw`-Spezifikationen zu
-vermeiden, wurden diese nun mit C++11 zum *deprecated feature*.
+name: cpp_code_generation
+header: ### Systematischen Quelltext erzeugen
 
 ---
 template: plain
-name: noexcept
-header: ## Exception-Freiheit mit `noexcept` ankündigen
-
-Neu eingeführt wurde mit C++11 die `noexcept`-Qualifikation für Funktionen,
-welche folgendes bewirkt:
-
-* Wirft eine damit qualifizierte Funktion dennoch eine Exception, kommt es zum
-  unwiderruflichen Prgrammabbruch (nach Durchlaufen eines frei festzulegenden
-  Handlers).
-
-* Andere Funktionen betrachten eine mit `noexcept` qualifzierte Funktion als
-  *aufrufbar ohne Risiko, dass es zu einer Exceptions kommt*.._[]
-
-.N[
-Insgesamt liegen mit der Umsetzung von `noexcept` durch gängige Compiler noch
-zu wenige Erfahrungen vor, um eindeutige Richtlinien und Empfehlungen zur
-Benutzung dieses Features geben zu können.
-]
-
-.F[:
-Dies ist insofern richtig, als Exceptions – treten Sie dennoch auf – prakisch
-unmittelbar zum Programmabbruch führen, d.h. im Kontext des Aufrufs muss die
-Möglichkeit von Exceptions bei solchen Funktionen in der Tat nicht berücksichigt
-werden ... dennoch wird u.U. das Programm abgebrochen.
-]
-
----
-template: plain
-name: noexcept
-header: ## Bedingte Exception-Freiheit mit `noexcept`
-
-Über das auf der vorhergenden Seite gesagte hinaus ist `noxecept` auch eine
-Compilezeit-Funktion, mit welcher – insbesondere in Templates – die **bedingte
-Freiheit Exceptions** deklariert werden kann.
-
-* Hiermit kann eine Funktion zum Ausdruck bringen, dass Exceptions nur dann
-  auftreten werden, wenn bestimmte aufgerufene Funktinen solche werfen.
-
-* Dadurch kann zur Compilezeit bei der Instanziierung von Templates mit
-  konkreten Typen entschieden werden, ob bei einer bestimmten Operation das
-  Risiko von Exceptions besteht.
-
-* Dies eröffnet letztlich die Möglichkeit, dass Bibliotheksfunktionen über
-  Template-Metaprogrammierung unterschiedliche Implementierungen wählen.
+name: cpp_coding_style
+header: ### Einige weitere Präprozessor-Tipps
 
 ---
 template: plain
@@ -370,17 +443,22 @@ header: ## Übung
 
 Ziel der Aufgabe:
 
-Erweiterung einer Klasse mit einer Fehlerbehandlung unter Nutzung von Exceptions.._[]
+Das GoF [Template Methode Pattern][GoF-TMP] soll - als Beispiel für das
+"Open-Close"-Prinzip - in zwei Techniken umgesetzt werden.
+
+1. "Klassisch" mit virtuellen Member-Funktionen
+2. "Modern" mit C++-Templates._[]
 
 .N[
 Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie der
 vorbereiteten Eclipse-Projekte erläutert.
 ]
 
-.F[:
-Diese Aufgabe bietet über die Anwendung von Exceptions hinausgehend auch noch
-die Möglichkeit, entweder mit Hilfe virtueller Member-Funktionen oder mit Hilfe
-von Templates eine besonders flexible Lösung zu schaffen.
+  [Gof-TMP]: http://en.wikipedia.org/wiki/Template_method_pattern
+
+.F[
+… die wiederum nur eine zufällige namentliche Übereinstimmung mit dem
+Pattern haben.
 ]
 
 </textarea>
