@@ -142,10 +142,11 @@ template: blank
 
 -------------------------------------------------------------------------------
 
-1. [Richtlinien für den Exception-Einsatz	](#exception_guidelines)
-1. [Ressourcen ohne und mit RAII verwalten	](#resource_management)
-1. [Smart-Pointer 				](#smart_pointers)
-1. [Übung					](#exercise_fri1)
+1. [Pragmatische Leitgedanken der Software-Entwicklung	](#guiding_principles)
+1. [C++ als "Multi-Paradigmen"-Sprache			](#multi_paradigm_cpp)
+1. [Design-Patterns - kritisch hinterfragt		](#design_patterns)
+1. [Fortgeschrittene Präprozessor-Verwendung		](#advanced_preprocessor)
+1. [Übung						](#exercise_fri1)
 
 -------------------------------------------------------------------------------
 
@@ -158,768 +159,310 @@ an Stelle der Übung direkt die Besprechung der Musterlösung(en).
 
 ---
 template: linkinfo
-guidelines: ExceptionDetails
-name: exception_guidelines
-header: ## Richtlinien für den Exception-Einsatz
+graphic: GuidingPrinciples
+name: guiding_principles
+header: ## Pragmatische Leitgedanken der Software-Entwicklung
 
 -------------------------------------------------------------------------------
 
-* [(Keine) isolierte Klassenhierarchie	](#disconnected_class_hierarchy)
+* ["Open-Close"			](#oc_principle)
 
 -------------------------------------------------------------------------------
 
-* [(Falsche) Behandlungsblock-Abfolge	](#wrong_catch_order)
-
--------------------------------------------------------------------------------
-
-* [Optimale Weiterleitung		](#correct_rethrow)
-  * [(Rückschnitt auf Basisklasse)	](#avoidable_copy_slicing)
-  * [(Sub-optimale Weiterleitung)	](#problematic_rethrow)
-
--------------------------------------------------------------------------------
-
-* [Exceptions in Destruktoren vermeiden	](#dtor_exception_nogo)
+* ["Don't Repeat Yourself"	](#dry_principle)
 
 -------------------------------------------------------------------------------
 
 ---
 template: withinfo
-graphic: ExceptionDetails
-section: (No) Disconnected Class Hierarchy
-name: disconnected_class_hierarchy
-header: ### (Keine) isolierte Klassenhierarchie
+graphic: GuidingPrinciples
+section: OC Principle
+name: oc_principle
+header: ### "Open Close"-Prinzip
 
-Bilden eigene Exceptions eine isolierte Klassenhierarchie, so kann (sehr
-allgemeiner) Code diese **nicht** über Standard-Exceptions abfangen:
+Gemäß diesem Prinzip sollte jede Software-Architektur einen gesunden Ausgleich zwischen zwei
+gegeneinander stehenden Zielen gewährleisten:
 
+* Software sollte *offen für Veränderungen* sein, beispielsweise
+
+  * Anpassung an künftig geänderten Bedarf
+  * Absehbar anstehende Erweiterungen
+  * Verwendung in ähnlich gelagerten Fällen
+
+* Software sollte aber auch *robust* sein in dem Sinne, dass
+
+  * Änderungen nicht versehentlich oder in einer ansonsten unbeabsichtigten
+    Weise erfolgen;
+  * zumindest sollten unbeabsichtigte Änderungen leicht zu identifizieren sein,
+  * ebenso solche, die zielgerichtet im Rahmen der Offenheit erfolgten aber aus
+    irgend einem Grund unvollständig blieben.
+
+---
+template: plain
+header: #### Mechanismen zur Strukturierung
+
+##### Klassen
+
+Klassen fassen "Daten" und "Verarbeitung" zusammen und sind somit ein
+Mechanismus zur Kapselung, der den Blick auf die abstrakten Operationen lenkt,
+weg von Datenstrukturen und Algorithmen.
+
+##### Unterprogramme
+
+Unterprogramme teilen Verarbeitungsschritte auf, vom komplexen Gesamtablauf bis
+hinunter zu kleinen, einfach überschau- und testbaren Einheiten.
+
+##### Bibliotheken
+
+Bilbliotheken sind Sammlungen wiederverwendbarer Komponenten, die für sich
+betrachtet kein "Eigenleben" führen sondern erst "von außen" zum Leben erweckt
+werden.
+
+---
+template: plain
+header: #### Mechanismen zur Strukturierung (2)
+
+##### Frameworks
+
+Frameworks folgen den "Hollywood-Principle": *Don't call us, we call you*.
+
+Sie stellen eine oft eine sehr komplexe Gesamtfunktionalität zur Verfügung, und
+enthalten "Erweiterungspunkte" an denen spezifische Anpassungen "eingehängt"
+werden können.
+
+##### Geplante Erweiterbarkeit
+
+**JA**, aber auch: *"Keep It Small and Simple!"*
+
+Beginnen Sie stets mit der einfachsten Variante
+
+* einer Klasse,
+* eines Algorithmus,
+* einer Applkation,
+* eines Programmsystems, …
+
+welche Ihr Problem löst, und erweitern Sie diese inkrementell bei neu
+erkanntem Bedarf.
+
+---
+template: withinfo
+graphic: GuidingPrinciples
+section: DRY Principle
+name: dry_principle
+header: ### "Don't Repeat Yourself"
+
+[Turing-Tests]: http://de.wikipedia.org/wiki/Turing-Test
+
+Eine wichtige Erkenntnis zur erfolgreichen Arbeitsteilung zwischen *"Mensch und
+Maschine"* ist:
+
+**Menschen**
+
+* besitzen oft ein hohes Maß an Kreativität,
+* sind aber in aler Regel schlecht darin, Dinge präzise zu wiederholen,
+  * sei es in immer wieder ein- und derselben Weise,
+  * sei es mit systematischen Variationen.
+
+**Computer**
+
+* besitzen kaum echte Kreativität,._[]
+* sind aber extrem gut darin, Dinge präzise zu wiederholen:
+  * Insbesondere ermüden sie nicht, auch bei sich ständig wiederholten und
+  * dabei allenfalls leicht variierenden Tätigkeiten.
+
+.F[:
+Es ist dabei weniger entscheidend, dass per Computer vielleicht gelegentlich
+"überraschende Ergebnisse" erzielt werden können - etwa in der Art, dass ein
+Computer ein Musikstück komponieren könnte, das es vielleicht sogar in die
+Hitparade schafft. Interessanter ist die Frage nach einem Programm, mit dessen
+Hilfe ein Computer im Dialog mit einem menschlichen Partner von diesem nicht
+innerhalb weniger Minuten als Maschine erkannt würde, wie es im Fall der
+[Turing-Tests] letzten Endes doch immer wieder geschieht.
+]
+
+---
+template: plain
+header: #### Mechanismen zur Wiederverwendung
+
+##### Klassen
+
+Universell gehaltene Klassen bilden in der Regel die kleinsten,
+wiederverwendbaren Bausteine in einem (konsequent) Objektorientierten Entwurf.
+
+##### Unterprogramme
+
+In einem eher klassichen (prozeduralen) Entwurf dominieren Unterprogramme,
+evtl. ergänzt durch einfache Datenstrukturen.
+
+##### Datenstrukturen
+
+Mit Hilfe der C++ Templates lassen sich sehr gut wiederverwendbare Bausteine für
+Datenstrukturen realisieren.._[]
+
+.F[:
+OK … technisch gesehen sind die STL-Container natürlich Klassen ...
+]
+
+---
+template: linkinfo
+graphic: Example-OpenClosePrinciple
+name: openclose_example
+header: ### Beispiel für "Open Close"-Prinzip
+
+-------------------------------------------------------------------------------
+
+* [Basierend auf virtuellen Member-Funktionen	](#oc_with_polymorphism)
+
+-------------------------------------------------------------------------------
+
+* [Basierend auf C++-Templates			](#oc_with_cpp_templates)
+
+-------------------------------------------------------------------------------
+
+---
+template: withinfo
+graphic: Example-OpenClosePrinciple
+section: Virtual Member Functions
+name: oc_with_polymorphism
+header: ### Basierend auf virtuellen Member-Funktionen
+
+[GoF Template Methode Pattern]: http://en.wikipedia.org/wiki/Template_method_pattern
+
+Bei der klassischen Realisierung._[] des [GoF Template Methode Pattern]s
+
+* sind virtuelle Member-Funktionen einer Basisklasse die
+
+  * vorausgeplanten "Erweiterungspunkte",
+
+* an denen spezifische abgeleitete Klassen
+
+  * die jeweils unterschiedlich geforderte Funktionalität "einhängen".
+
+.I[
+Im Sinne des [Open-Close-Principles](#oc_principle) ist die Basisklasse der
+abgeschlossene Teil.._[]
+]
+
+.F[:
+Siehe
+[Examples/OpenClose/virtual_functions.cpp](../Examples/OpenClose/virtual_functions.cpp)
+]
+
+---
+template: withinfo
+graphic: Example-OpenClosePrinciple
+section: C++ Template Mechanism
+name: oc_with_cpp_templates
+header: ### Basierend auf C++-Templates
+
+Bei der Realisierung mit Templates._[] ist die
+
+* abgeleitete Klasse der geschlossene Teil,
+
+  * mit "Erweiterungspunkten" in einer typ-parametrisierten Basisklasse,
+
+* über welche die jeweils geforderte Funktionalität
+
+  * durch die zur Instanziierung verwendeten Klassen "eingehängt" wird.
+
+.I[
+Ein deutlicher Vorteil dieser Variante ist, dass von ungenutzten
+Erweiterungspunkten keine leeren Unterprogramm-Einsprünge übrig bleiben.
+]
+
+.F[:
+Siehe
+[Examples/OpenClose/template_baseclass.cpp](../Examples/OpenClose/template_baseclass.cpp)
+]
+
+---
+template: plain
+name: multi_paradigm_cpp
+header: ## C++ as "Multi-Paradigm" Language
+
+TBD
+
+---
+template: plain
+name: design_patterns
+header: ## Design Patterns - Critically Reviewed
+
+TBD
+
+---
+template: plain
+name: advanced_preprocessor
+header: ## Fortgeschrittene Nutzung des Präprozessors
+
+TBD
+
+---
+template: plain
+name: cpp_stringizing_args
+header: ### Stringizing
+
+Unter *Stringizing* wird die Möglichkeit verstanden, das Argument einer
+Makro-Expansion als String-Literal zu verwenden:
+
+* Es wird dann quasi automatisch in doppelte Gänsefüßchen eingeschlossen.
+* Wenn nötig, werden für einzelne Zeichen Escape-Sequenzen ersetzt.
+
+Als Beispiel ein Makro, der einen Ausdruck textlich und mit dem berechneten
+Wert auf Standardausgabe schreibt:
+```
+#define PrintX(x) \
+        std::cout << #x << ": " << (x) << '\n';
+```
+
+Die Anwendung kann (beispielsweise) wie folgt aussehen:
 ```
 int main() {
-    using namespace std;
-    try {
-        …
-        … // ordinary application
-        …
-        return EXIT_SUCCESS; // macro in <cstdlib>
-    }
-    catch (exception &e) {
-        cerr << "terminated by standard exception: "
-             << e.what() << endl;
-    }
-    catch (...) {
-        cerr << "terminated by unknown exception" << endl;
-    }
-    return EXIT_FAILURE; // macro in <cstdlib>
+    auto value = 42;
+    PrintX(value++)
+    PrintX(++value)
+    PrintX(value)
+    PrintX(value *= 2)
 }
 ```
 
 ---
-template: withinfo
-graphic: ExceptionDetails
-section: (Bad) Order of Handlers
-name: wrong_catch_order
-header: ### (Falsche) Behandlungsblock-Abfolge
-
-Werden die `catch`-Blöcke für Exceptions falsch angeordnet,
-
-* kann ein weiter oben stehender, allgemeiner Block
-
-* einen weiter unter stehenden, spezifischeren Block unwirksam machen.
-
----
-template: withinfo
-graphic: ExceptionDetails
-section: Optimal Re-Throwing
-name: correct_rethrow
-header: ### Optimale Weiterleitung
-
-Das Weiterwerfen eines gefangenen Exception-Objekts mit
-```
-…
-catch (SomeException &ex) {
-    …
-    // only partial recovery
-    throw ex;
-}
-```
-
-führt zur Erstellung einer Kopie **im Rahmen der Anweisung `throw ex;`**
-
-.N[
-Mit `throw;` kann das ursprünglich gefangene Exception-Objekt **ohne Kopieren**
-weitergeworfen werden.
-]
-
----
-template: withinfo
-graphic: ExceptionDetails
-section: Sclicing Exception Object
-name: avoidable_copy_slicing
-header: ### (Vermeidbarer) Rückschnitt auf Basisklasse
-
-Durch (vermeidbares) Kopieren des Exception-Objekts können geworfene
-Exceptions einer abgeleiteten Klasse per Slicing auf die Basisklasse
-reduziert werden.
-
-**Dies ist im Allgemenen nicht wünchenswert.**
-
-Daher sollte ein Kopieren vermieden werden:
-
-* Argumente von `catch`-Blöcken als Referenz spezifizieren.
-
-* Bei nur teilweise Auflösung Exception mit `throw;` weiterwerfen.
-
----
-template: withinfo
-graphic: ExceptionDetails
-section: Sub-optimal Re-throwing
-name: problematic_rethrow
-header: ### Sub-optimale Weiterleitung
-
-Sub-optimal ist grundsätzlich jede Weiterleitung, bei der das Exception-Objekt
-unnötig kopiert wird.
-
----
-template: withinfo
-graphic: ExceptionDetails
-section: (No) Throwing from Destructoes
-name: dtor_exception_nogo
-header: ### (Keine) Exceptions aus Destruktoren werfen
-
-.W[
-Exceptions, die von Destruktoren geworfen werden, können ein Programm abbrechen,
-wenn der Destruktor im Rahmen eines Exception-Handlings ausgeführt wird.
-]
-
-Falls ein Destruktor Operationen benutzen muss, die u.U. eine Exception
-auslösen, sollte der Code sicherheitshalber in einen `try`-Block verpackt
-werden, der alle Exceptions fängt und ignoriert:._[]
-```
-class MyClass {
-    …
-    ~MyClass() {
-        try {
-            … // whatever needs be done
-        }
-        catch (...) {
-            if (!std::uncaught_exception()) throw;
-        }
-    }
-}; 
-```
-.F[:
-Ob es tatsächlich sinnvoll ist, die Exception wie gezeigt weiterzuwerfen, falls
-der Destruktor **nicht** im Rahmen eines Exceptions-Handlings abläuft, muss je
-nach Sachlage individuell entschieden werden.
-]
+template: plain
+name: cpp_token_pasting
+header: ### Token Pasting
 
 ---
 template: plain
-name: no_more_throwspec
-header: ## `throw`-Spezifikationen vermeiden
-
-Nachdem über viele Jahre hinweg von C++-Experten praktisch einhellig empfohlen
-worden war, die seinerzeit von C++98 eingeführten `throw`-Spezifikationen zu
-vermeiden, wurden diese nun mit C++11 zum *deprecated feature*.
+name: cpp_code_generation
+header: ### Systematischen Quelltext erzeugen
 
 ---
 template: plain
-name: noexcept
-header: ## Exception-Freiheit mit `noexcept` ankündigen
-
-Neu eingeführt wurde mit C++11 die `noexcept`-Qualifikation für Funktionen,
-welche folgendes bewirkt:
-
-* Wirft eine damit qualifizierte Funktion dennoch eine Exception, kommt es zum
-  unwiderruflichen Prgrammabbruch (nach Durchlaufen eines frei festzulegenden
-  Handlers).
-
-* Andere Funktionen betrachten eine mit `noexcept` qualifzierte Funktion als
-  *aufrufbar ohne Risiko, dass es zu einer Exceptions kommt*.._[]
-
-.N[
-Insgesamt liegen mit der Umsetzung von `noexcept` durch gängige Compiler noch
-zu wenige Erfahrungen vor, um eindeutige Richtlinien und Empfehlungen zur
-Benutzung dieses Features geben zu können.
-]
-
-.F[:
-Dies ist insofern richtig, als Exceptions – treten Sie dennoch auf – prakisch
-unmittelbar zum Programmabbruch führen, d.h. im Kontext des Aufrufs muss die
-Möglichkeit von Exceptions bei solchen Funktionen in der Tat nicht berücksichigt
-werden … dennoch wird u.U. das Programm abgebrochen.
-]
+name: cpp_coding_style
+header: ### Einige weitere Präprozessor-Tipps
 
 ---
 template: plain
-name: noexcept
-header: ## Bedingte Exception-Freiheit mit `noexcept`
-
-Über das auf der vorhergenden Seite gesagte hinaus ist `noxecept` auch eine
-Compilezeit-Funktion, mit welcher – insbesondere in Templates – die **bedingte
-Freiheit Exceptions** deklariert werden kann.
-
-* Hiermit kann eine Funktion zum Ausdruck bringen, dass Exceptions nur dann
-  auftreten werden, wenn bestimmte aufgerufene Funktinen solche werfen.
-
-* Dadurch kann zur Compilezeit bei der Instanziierung von Templates mit
-  konkreten Typen entschieden werden, ob bei einer bestimmten Operation das
-  Risiko von Exceptions besteht.
-
-* Dies eröffnet letztlich die Möglichkeit, dass Bibliotheksfunktionen über
-  Template-Metaprogrammierung unterschiedliche Implementierungen wählen.
-
----
-template: plain
-name: exercise_thu2
+name: exercise_fri1
 header: ## Übung
 
 Ziel der Aufgabe:
 
-Erweiterung einer Klasse mit einer Fehlerbehandlung unter Nutzung von Exceptions.._[]
+Das GoF [Template Methode Pattern][GoF-TMP] soll - als Beispiel für das
+"Open-Close"-Prinzip - in zwei Techniken umgesetzt werden.
+
+1. "Klassisch" mit virtuellen Member-Funktionen
+2. "Modern" mit C++-Templates._[]
 
 .N[
 Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie der
 vorbereiteten Eclipse-Projekte erläutert.
 ]
 
-.F[:
-Diese Aufgabe bietet über die Anwendung von Exceptions hinausgehend auch noch
-die Möglichkeit, entweder mit Hilfe virtueller Member-Funktionen oder mit Hilfe
-von Templates eine besonders flexible Lösung zu schaffen.
-]
-
----
-template: linkinfo
-graphic: ResourceManagement
-name: resource_management
-header: ## Ressourcen ohne und mit RAII
-
--------------------------------------------------------------------------------
-
-* [Klassische APIs				](#classic_resource_api)
-
--------------------------------------------------------------------------------
-
-* [Mit RAII verwaltete Ressourcen …		](#raii_style)
-* [… für Ausführung einer Anweisungsfolge …	](#raii_codeblock)
-* [… oder Lebensdauer eines Objekts belegen	](#raii_lifetime)
-
--------------------------------------------------------------------------------
-
----
-template: withinfo
-graphic: ResourceManagement
-section: Classic Resource Management APIs
-name: classic_resource_api
-header: ### Klassische APIs
-
-Klassisches Ressource-Management beruht auf zwei getrennten Operationen:
-
-* Belegen der Ressource (Acquire, Allocate, Open, …)
-
-* Freigeben der Ressource (Release, Free, Close, …)
-
-Bei beiden Operationen besteht das Problem, dass sie vergessen werden könnten,
-bei der zweiten zusätzlich das Problem, dass sie zu früh stattfinden
-könnte.._[]
-
-.F[:
-Zum falschen Zeitpunkt ausgeführte Operationen sind oft einer zu komplexen
-Programmlogik anzulasten. Die vorwiegend genutzten und daher relativ gut
-getesteten Ausführungspfade sind dann zwar ohne Probleme, Schwierigkeiten
-treten aber bei seltenen Konstellationen auf, deren Vorgeschichte – zwecks
-Nachvollziehung des Fehlers – zudem oft schwer reproduzierbar ist.
-]
-
----
-template: plain
-header: #### Um welche Ressourcen geht es?
-
-Grundsätzlich werden unter dem Begriff hier alle "knappen Betriebsmittel" verstanden,
-über die ein Programm nicht während seiner gesamten Ausführungszeit verfügen kann.
-
-Die folgende Liste ist nur beispielhaft zu sehen und keineswegs erschöpfend:
-
-* Hauptspeicher 
-
-* Mutexe
-
-* Dateien 
-
-* Prozesse
-
-* Datenbank-Verbindungen
-
-* …
-
----
-template: plain
-header: #### Wie werden Ressourcen repräsentiert?
-
-In C/C++ gibt es zwei besonders häufig verwendete Abstraktionen, die eine
-Ressource repräsentieren:
-
-* **Zeiger** – eine Speicheradresse, an der wesentliche Informationen zur
-  Ressource stehen, oftmals repräsentiert durch eine Struktur, deren Inhalt im
-  Detail aber nicht von Interesse ist.
-
-* **Handles** – in der Regel eine Ganzzahl, die einer Service-Schnittstelle zu
-  übergeben ist und dieser gegenüber die Ressource repräsentiert.._[]
-
-.F[:
-Mitunter – aber nicht grundsätzlich – sind Handles Indizes, mit welchen Einträge
-einer hinter der Service-Schnittstelle angesiedelten Tabelle ausgewählt werden.
-]
-
----
-template: withinfo
-graphic: ResourceManagement
-section: Wrapped Resource
-name: raii_style
-header: ### Mit RAII verwaltete Ressourcen
-
-[RAII]: http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization
-
-Bei [RAII] handelt es sich um die Ablürzung der von Bjarne Stroustrup
-empfohlenen Technik, klassische Ressourcen zu verpacken:
-
-.N.center[
-Ressource Acquisition Is Initialisation
-]
-
-In der Regel ist dazu eine kleine Hilfsklasse erforderlich, welche
-
-* die Ressource-Anforderung im Konstruktor und
-
-* die Ressource-Freigabe im Destruktor
-
-vornimmt.
-
----
-template: withinfo
-graphic: ResourceManagement
-section: Acquire Resource for Code Segment
-name: raii_codeblock
-header: ### RAII-Ressource für Anweisungsfolge belegen
-
-Da in C++ überall neue (geschachtelte) Blöcke beginnen können, lässt sich die
-Anweisungssequenz, während der die Ressource belegt ist, nach Belieben
-festlegen.
-
-* Eine Variable vom Typ des Ressource-Wrappers wird an der Stelle eines
-  Code-Blocks (als Stack-Objekt) angelegt, ab dem die Ressource benötigt wird.
-
-* Der Destruktor des Ressource-Wrappers wird automatisch ausgeführt, wenn der
-  betreffende Code-Block verlassen wird.
-
-.N[
-Durch die automatische Ausführung des Destruktors wird die Ressource in jedem
-Fall zuverlässig freigegeben.
-]
-
-Insbesondere spielt es keine Rolle, wie und warum der Kontrollfluss den
-betreffenden Code-Block verlässt – also egal ob nach Ausführung der letzen
-Anweisung, vorzeitiges `return`, `break`, `continue` oder `throw`, letzteres
-auch in indirekt in einer aufgerufenen Funktion.
-  
----
-template: withinfo
-graphic: ResourceManagement
-section: Acquire Resource for Object Lifetime
-name: raii_lifetime
-header: ### RAII-Ressource für Objekt-Lebensspanne belegen
-
-Objekte die (per Komposition) als Teil anderer Objekte existieren, werden
-
-* während der Erzeugung des umfassenden Objekts automatisch mit angelegt und
-
-* während dessen Zerstörung automatisch mit zerstört.
-
-Damit kann ein Ressource-Wrapper die Belegungsdauer einer Ressource zuverlässig an
-die Lebensspanne eines bestimmten (anderen) Objekts binden.
-
----
-template: plain
-header: #### Explizite Anforderung mehrerer Ressourcen ohne RAII
-
-Fordert eine Klasse in ihrem Konstruktor mehr als eine Ressource explizit an –
-**ohne Verwendung von RAII** -, besteht nur bei einer besonders sorgfältigen
-Vorgehensweise Sicherheit vor Ressource-Leaks.
-
-##### Beispiel-Code für Klasse – kein RAII
-
-```
-class Choice {
-    …
-    Window *w;   // optional, if needed allocated on heap with new
-    MenuItem *m; // acually an array, allocated on heap with new[]
-public:
-    Choice( … );
-    ~Choice();
-    …
-};
-```
-Offensichtlich benötigt die Klasse `Choice` zwei Sorten von Ressourcen:
-
-* ein `Window` (optional, also Multiplizität 0..1);
-
-* eine mehr oder weniger große Zahl von `MenuItem`-s (Multiplizität 1..*).
-
----
-template: plain
-header: ##### Beispiel-Code `Choice`-Konstruktor – kein RAII
-
-Zunächst werden beide Zeiger sicher initialisiert, dann werden die Ressourcen
-angefordert:
-```
-Choice::Choice( … )
-    : w(nullptr), m(nullptr) {
-    try {
-    	w = new Window( … );
-    	m = new MenuItem[…];
-    } 
-    catch( … ) {
-    	delete w;   // delete is nullptr-safe, so no problem if
-    	delete[] m; // either of first or second new above threw
-    	throw;
-    }
-};
-```
-
-.W[
-Bevor der Konstruktor (fehlerfrei) beendet wurde, ist der Destruktur noch nicht
-aktiv – evtl. auftretende Probleme müssen daher in einem lokalen `catch`-Block
-behandelt werden.
-]
-
----
-template: plain
-header: ##### Beispiel-Code `Choice`-Destruktor – kein RAII
-
-Nach erfolgreichem Durchlaufen des Konstruktors wird der Destruktor aktiviert.
-Dieser muss dann so aussehen:
-```
-Choice::~Choice() {
-    delete w;    // matching kind of new easy to verify
-    delete[] m;  // by quick comparison with c'tor code
-}
-```
-
-.W[
-Genau diese beiden Anweisungen waren schon einmal nötig – im `catch`-Block
-des Konstruktors. Es liegt eine unschöne Duplizierung von Code vor (Verletzung
-des DRY-Principles).
-]
-
----
-template: plain
-header: #### Anforderung mehrerer Ressourcen mit RAII
-
-Hierbei wandert die Operation zur Freigabe in den Wrapper der betreffenden
-Ressource:
-```
-class WindowRes {
-    Window *res;
-public:
-    WindowRes( … ) : res(new Window( … )) {}
-    ~WindowRes()  { … ; delete res; … }
-    operator Window*() { return res; }
-};
-```
-
-```
-class MenuItemRes {
-    MenuItem *res;
-public:
-    MenuItemRes( … ) : res(new MenuItem[…]) {}
-    ~MenuItemRes() { … ; delete[] res; … }
-    MenuItem &operator[](int i) { return res[i]; }
-};
-```
-
----
-template: plain
-header: ##### Beispiel-Code Vereinfachung `Choice`-Klasse – mit RAI
-
-```
-class Choice {
-    …
-    WindowRes wr;
-    MenuItemResr mr;
-public:
-    Choice( … ) : WindowRes( … ), MenuItemRes( … ) {
-        … // in case something special is necessary,
-          // but NO try-catch required to handle
-          // problems with ressource allocation
-    }
-    ~Choice() {
-        … // in case something special is necessary
-        // but NO d'tor required to return ressources
-    }
-    …
-};
-```
-
-* Der Destruktor ist nicht mehr für die Ressourcen zuständig – diese werden
-  eigenständig von ihrem jeweiligen Wrapper verwaltet.
-
-* Er kann ganz entfallen, wenn ansonsten keine Aufräumungsarbeiten notwendig sind.
-
----
-template: linkinfo
-graphic: SmartPointers
-name: smart_pointers
-header: ## Smart-Pointer
-
--------------------------------------------------------------------------------
-
-* [Smart-Pointer von C++11._[] im Vergleich	](#unique_vs_shared)
-
--------------------------------------------------------------------------------
-
-* [Prinzip der Referenzzählung			](#refcount_principle)
-
--------------------------------------------------------------------------------
-
-* [Problem zyklischer Referenzierung mit …		](#refcount_problem)
-* [… "nur beobachtenden" Zeiger als Ausweg und …	](#weak_ptr_solution)
-* [… "verlorene" Ressourcen				](#weak_ptr_dangling)
-
--------------------------------------------------------------------------------
-
-* [Varianten der Implementierung		](#implementation_choices)
-
-.F[:
-Berücksichtigt sind hier nur die Smart-Pointer von C++11, da mit diesem Standard
-zugleich der mit C++98 eingeführte `std::auto_ptr` abgekündigt wurde.
-]
-
----
-template: withinfo
-graphic: SmartPointers
-section: Comparing Smart Pointers
-name: unique_vs_shared
-header: ### Smart-Pointer von C++11 im Vergleich
-
-[Smart-Pointer]: http://en.cppreference.com/w/cpp/memory
-
-Die von C++11 bereitgestellten [Smart-Pointer] repräsentieren die beiden
-wichtigsten Beziehungen, die ein Zeiger (evtl. als Bestandteil eines Objekt)
-zu auf dem Heap angelegten (anderen) Objekt haben kann:
-
-* Exklusive Eigentümerschaft: `std::unique_ptr`
-
-* Geteilte Eigentümerschaft: `std::shared_ptr`
-
-* Nutzer ohne Eigentümerschaft: `std::weak_ptr`
-
-.N[
-Den mit C++98 eingeführte `std::auto_ptr` gibt es in C++11 zwar weiterhin,
-er sollte in neuen Programmen aber nicht mehr verwendet werden.._[]
-]
-
-.F[:
-Substituting an `std::auto_ptr` with an `std::unique_ptr` should cause no major
-pains … if any problems occur they may rather indicate sleeping bugs caused by
-the special behavior of an `std::auto_ptr` and will now only become more obvious
-with an `std::unique_ptr`.
-]
-
----
-template: plain
-header: #### Exklusive Eigentümerschaft: `std::unique_ptr`
-
-Die Verwendung dieser Art von Smart-Pointer hilft dabei, die exklusive
-Eigentümerschaft für das referenzierte Objekt zu garantieren.
-
-.N[
-
-* Es gibt einen *Move-Konstruktor*,
-
-* aber **keinen** *Copy-Konstruktor*.
-
--------------------------------------
-
-* Es gibt ein *Move-Assignment*,
-
-* aber **kein** Copy-Assignment.
-]
-
----
-template: plain
-header: Geteilte Einegtümerschaft: `std::shared_ptr`
-
-Die Verwendung dieser Art von Smart-Pointer hilft dabei, die geteilte
-Eigentümerschaft zu garantieren. Ihre Objekte enhalten jeweils *zwei*
-Zeiger:._[]
-
-  * Einer zeigt auf das referenzierte Objekt,
-  * der andere auf ein Referenzzähler-Hilfsobjekt.
-
-Von
-
-* Default-Konstruktor,
-* Copy- und Move-Konstruktor,
-* Copy- und Move-Assignment sowie
-* Destruktor
-
-der `std::shared_ptr`-Klasse wird der Referenzzähler gemäß der Anzahl der
-Referenzierer des über den Zeiger erreichbaren Objekts verwaltet.
-
-.N[
-Fällt der Stand des Referenzzählers im Hilfsobjekt von 1 auf 0, wird der
-Destruktur des referenzierten Objekts ausgeführt.
-]
-
-.F[:
-Dies gilt für die typische Implementierung, eine etwa sparsamere Implementierung
-erfordert nur einer Zeiger, hat aber eine schlechtere Performance zur Laufzeit.
-]
-
----
-template: withinfo
-graphic: SmartPointers
-section: Problem of Cyclic References
-name: refcount_problem
-header: ### Problem der zyklischen Referenzierung
-
-Mitunter kann es notwendig werden, dass
-
-* ein Objekt, auf das per `std::shared_ptr` verwiesen wird,
-
-* selbst wiederum einen `std::shared_ptr` enthält, der auf Objekte der eigenen
-  Art zeigen kann.._[]
-
-.W[
-Dies vorausgesetzt, kann es zyklische Ketten von Referenzen geben, die einen
-isolierten, unerreichbar gewordenen Verbund von Objekten im Speicher darstellen,
-dessen Teile nur noch untereinander über `std::shared_ptr` verbunden sind.
-]
-
-.F[:
-Es müssen nicht zwingend Objekte der eigenen Art sein, auch bei der Konstellation
-*"A zeigt auf B und B auf A"* oder *"A zeigt auf B, B zeigt auf C und C zeigt auf
-A"* kann das beschriebene Problem auftreten.
-]
-
----
-template: withinfo
-graphic: SmartPointers
-section: Breaking Cycles Using Weak Pointers
-name: weak_ptr_solution
-header: #### Nutzer ohne Eigentümerschaft: `std::weak_ptr`
-
-Mittels `std::weak_ptr` lassen sich zyklische Referenzen vermeiden.
-
-Bei einem Design unter Einbeziehung von `std::weak_ptr` ist hinsichtlich
-der Referenzierer eines Objekts zu prüfen, ob es sich
-
-* um (echte) Ressource-Eigentümer handelt
-
-* oder lediglich um Ressource-Beobachter?
-
-.W[
-Letztere müssen damit klarkommen, dass ihnen die Ressource "entzogen" wird, wenn
-es dafür keine anderen ("echten") Eigentümer mehr gibt.
-]
-
----
-template: withinfo
-graphic: SmartPointers
-section: Dangling Weak Pointer
-name: weak_ptr_dangling
-header: ### "Verlorene" Ressourcen
-
-Da die `std::weak_ptr` lediglich Beobachter sind,  unterstützen sie keinen
-direkten Zugriff zur referenzierten Ressource (mit `*` oder `->`).
-
-Vielmehr muss durch Aufruf der Member-Funktion `lock` zunächst ein
-`std::shared_ptr`._[] geholt werden und ähnlich wie beim `dynamic_cast` werden
-die zwei häufigsten Verwendungen gezielt unterstützt:
-
-* Erste Vorgehensweise:
-
-  * Rückgabe eines Zeigers und nachfolgend erforderlicher Test,
-  * wenn dieser ergibt, dass der Zeiger ein `nullptr` ist, existiert das
-    ursprünglich beobachtete Objekt nicht mehr.
-
-* Zweiten Vorgehensweise:
-
-  * man erhält eine gültige Referenz (die ohne weitere Prüfungen nutzbar ist),
-  * wenn das ursprünglich beobachtete Objekt nicht mehr existiert, wird eine
-    Exception geworfen.
-
-.F[:
-Dieser `std::shared_ptr` ist es dann, der das Objekt ggf. am Leben hält, wenn
-die anderen Eigentümer zwischenzeitlich verschwinden sollten.
-]
-
----
-template: withinfo
-graphic: SmartPointers
-section: Implementation Choices
-name: implementing_smart_ptrs
-header: ### Typische Smart-Pointer Implementierungen
-
-#### `std::shared_ptr` - meist verwendete Variante
-
-Hierbei enthält ein `std::shared_ptr` (mindestens._[]) zwei Zeiger, von denen
-einer auf das referenzierte Objekt und der andere auf das Helfer-Objekt zeigt.
-
-.F[:
-Wenn ein `std::shared_ptr` über einen Basisklassen-Zeiger auf eine virtuelle
-Basis-Klasse eines Objekts zeigt, das von dieser Klasse abgeleitet ist, kann
-zum effizienten Zugriff auf das referenzierte Objekt noch ein weiterer Zeiger
-erforderlich werden.
-]
-
-Das Helfer-Objekt wiederum enthält zwei Zähler, von denen einer typisch nur die
-Eigentümer, der andere beides, Eigentümer **plus** Beobachter zählt.
-
-* Der erste Zähler entscheidet daraüber, wann das referenzierte Objekt
-  freigegeben werden kann,
-
-* der zweite Zähler entscheidet darüber, wann das Hilfsobjekt freigegeben
-  werden kann.
-
----
-template: withinfo
-graphic: SmartPointers
-section: Implementation Choices
-name: alternative_shared_ptr
-header: #### `std::shared_ptr` - alternative Implementierung
-
-In einer alternativen Implementierung enthält ein `std::shared_ptr` nur
-**einen** Zeiger auf ein Helfer-Objekt, welches außer dem Referenzzählern einen
-Zeiger auf das referenzierte Objekt enthält.
-
-#### `std::weak_ptr` - typische Implementierung
-
-Die Implementierung entspricht im Wesentlichen dem der `std::smart_ptr`, also
-zwei Zweiger (auf referenziertes Objekt und Helfer-Objekt) oder nur ein Zeiger
-(auf Helfer-Objekt und von dort weiter zum referenzierten Objekt).
-
-#### `std::unique_ptr` - typische Implementierung
-
-Hierfür ist in der Regel ein klassischer Zeiger ausreichend.._[]
-
-.F[:
-If the `std::unique_ptr` implementation supports a "stateful custom deleter"
-another pointer will be required.
-]
-
----
-template: plain
-name: exercise_thu2
-header: ## Übung
-
-Ziel der Aufgabe:
-
-Entwicklung eines Ressource-Wrappers im RAII-Stil zum C `FILE`-API.
-
-.N[
-Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie der
-vorbereiteten Eclipse-Projekte erläutert.
+  [Gof-TMP]: http://en.wikipedia.org/wiki/Template_method_pattern
+
+.F[
+… die wiederum nur eine zufällige namentliche Übereinstimmung mit dem
+Pattern haben.
 ]
 
 </textarea>
