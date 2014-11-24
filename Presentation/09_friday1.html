@@ -304,18 +304,275 @@ OK … technisch gesehen sind die STL-Container natürlich Klassen ...
 ]
 
 ---
+template: plain
+name: multi_paradigm_cpp
+header: ## C++ as "Multi-Paradigm" Language
+
+Commonly C++ is understood as *Object Oriented Programming Language*.
+
+This is correct, but only part of the truth, because C++ (also)
+
+* is a Classical *Procedural Programming Language*,
+
+* allows to get as *Close to the Hardware* as is possible with C …
+
+  * … which is nearly as close as is possible with *Assembler*,
+
+* supports *Generic Programming* and *Meta-Programming* via Templates,
+
+* and C++11 even has adopted elements of *Functional Programming*.
+
+.N[
+This is both, good and bad at the same time: it allows to chose the paradigm
+most appropriate to solve a given problem – but (not only) novices may easily
+make a bad choice and end up much worse as if there had been fewer choices.
+]
+
+---
+template: plain
+header: ### Choosing the Right Paradigm
+
+There is no easy answer but one:
+
+* gather experience,
+
+* allow some failures,
+
+* apply corrections as soon as things start to run in the wrong direction.
+
+.N.center[
+For mission critical projects find support through experts.
+]
+
+And: Do not blame the language for "insufficient support" of a certain style
+you know and like from a different programming language, which you personally
+favour.._[]
+
+.F[:
+For team leaders: place discussions about the "right" programming language and
+"deficits of C++" early in your time frame. Maybe there is even a better choice
+as C++, if not for the whole project, then maybe for parts of it. Maybe you can
+give those who are strongly opposed to C++ a small corner in which they can work
+with what they like most, be it C#, Java or Scala, Haskell, Lisp … but at a point
+close all discussions and have your team members commit themselves to use C++ …
+from which they should chose the appropriate paradigm, of course.
+]
+
+---
+template: plain
+header: ### How to Recognize that Things Start to Go Wrong?
+
+See the first section of this chapter for the "deeper goals" of any software
+development work.
+
+If you observe increasing failure to reach these, you may have chosen …
+
+* [more probably] … **the wrong (combination of) paradigm(s)** …
+
+* [less probably] … **the sub-optimal programming language** …
+
+… for the problem at hand.
+
+---
+template: plain
+name: design_patterns
+header: ## Design Patterns - Critically Reviewed
+
+To begin with:
+
+.N.center[
+Design patterns are a good thing, really!
+]
+
+Having said that, be sure to understand the following.
+
+* Each design pattern has a purpose – understand which it is!
+
+* Each design pattern has a context – make sure the context of the problem you
+  want to solve matches.
+
+.N.center[
+Do not slavilshly apply patterns, because "patterns are good".
+]
+
+---
+template: plain
+header: ### The GoF Book
+
+Design patterns became famous in the mid nineteen-nineties through the
+[GoF-Book].._[]
+
+While this book surely filled a gap that had already been open far too long at
+that time, it should not be overestimated, but read (and especially followed)
+only with a grain of salt:
+
+* At the time he book was published, many C++ compilers already supported
+  templates but there were not in that wide-spread use, as they became after
+  they had been standardized with C++98.._[]
+
+* Therefore most any abstraction was done with virtual member functions (aka.
+  [late binding], [dynamic polymorphism], etc.) – with consequences detailed on
+  the next pages.
+
+* The GoF authors even remind to that fact in the book's foreword, but some of
+  its more slavish fllowers seem to have skipped that part.
+
+.F[:
+*GoF* is the abbreviation for *"Gang of Four* and honors the fact that, while
+for authors conrtibuted essential parts, referrers were usually too lazy to
+remember (or enumarate) all of them. Here they are: [Erich Gamma],
+[Richard Helm], [Ralph Johnson], [John Vlissides].
+]
+
+---
+
+template: plain
+header: ### Shortcomings of the GoF Book Patterns
+
+(If you happen to be a GoF-Book Fan and think the word "shortcoming" sounds too
+deprecating, feel free to replace it by something more neutral.)
+
+The implementation style for the patterns discussed in the GoF-Book ver
+strongly tends to shift type-safety from compile-time to run-time.
+
+* **There is a – sometimes small, sometimes big – gain:**
+
+  * It may help to susbstantially reduce the modules to recompile in a large
+    software system after a tiny or even moderate change.
+
+* **There is a -sometimes big, sometimes small - loss:**
+
+  * Problems reaching from slightly flawed designs to subtle or even quite
+    obvious implementation errors may only show when the software runs, not
+    yet when it is compiled.
+
+---
+template: plain
+header: ### Design Patterns and OOP-Languages
+
+Because of the GoF-Book prevalence, some of its (sometimes slavish) followers
+start to meassure the "quality" of a programming language by the degree to which
+it supports dynamic polymorphism and introspection features - both not the true
+strengths of C++.
+
+* The GoF-Book, though it seems to relate to C++ as all of its examples are in
+  C++ and only ome few in [SmallTalk] implementations are shown, still has a
+  very strong connection to the world of SmallTalk.
+
+* The market share of SmallTalk was already declining in the mid 1990s, mostly
+  caused by the rise of Java and later C#.
+
+In their spirit – not syntax or implementation(!) – Java and C# tried to get
+much closer to SmallTalk as C++ ever did.._[]
+
+.N[
+Considering Design-Patterns only in the GoF-Book style while dropping
+C++-Templates mostly or completely makes C++ surely inferior.
+]
+
+.F[:
+In fact, there is a famous citation of Bjarne Stroustrup, when asked about the
+relation of SmallTalk and whether C++ should move into this direction too:
+*SmallTalk is the best SmallTalk that exists.*
+]
+
+---
+template: plain
+header: ### DP-Examples
+
+In the following a small subset of classical design patterns is discussed with
+respect how they relate to the multi-paradigm nature of C++.
+
+.N[
+A more complete and detailed discussion is far beyond what can be covered in
+this course.
+]
+
+The patterns examples following have not been selected because they are the
+ones "most typically" used, or as they make particularly good (or bad) examples
+for design patterns in C++.
+
+---
+template: plain
+header: #### DP-Example: Iterator
+
+Using Iterators to run through sequences is long-standing practice.
+
+There are two main advantages:
+
+* Type-Safety
+
+* Abstraction
+
+While it is often worthwhile to consider to implement iterators (as nested
+helper class) for new kinds of container classes, there is very little reason to
+do this in the style suggested by the GoF-Book.
+
+.N[
+If you add new types of containers, determine the appropriate iterator category
+(input or output, uni- or bidirectional, …) and follow the category's specific
+iterator requirements (as examplified by the STL classes).
+]
+
+Then – and **only then** – the new container class is immediately ready to be
+used with STL algorithms.
+
+---
+template: plain
+header: #### DP-Example: Composite
+
+If you consider to use the composite, first look for ready-made solutions from
+libraries.._[]
+
+* Such might not have the interface shown in the GoF-Book …
+
+* … but a more appropriate one for the purpose for which they are designed.
+
+Two examples of practical importance are the file system interface and a
+(unlimted-depth) dictionary-like class from Boost.
+
+.F[:
+Furthermore you might be interested in the following example, as an advanced
+case-study how to build recursively nested structures of basic data types and
+even executable functions in C++: TBD
+]
+
+template: plain
+
+---
 template: linkinfo
 graphic: Example-OpenClosePrinciple
-name: openclose_example
-header: ### Beispiel für "Open Close"-Prinzip
+header: #### DP-Example: Template-Methode
+
+From the general perspective the design pattern called *Template-Methode* is
+an ideal example for the [Open-Close Principle](#oc_principle).
+
+.W[
+Do not confuse the name chosen for this pattern with C++-Templates – the
+similarity is purely accidental._[]
+]
+
+.F[:
+It may be even assumed that Erich Gamma and his three co-authors may have chosen
+a different name if C++-Templates had already been in widespread use at the time
+they worked on their manuscript.
+]
+
+What especially may contribute to confusion is that one of the two typical
+implementations actually uses C++-Templates.
+
+---
+template: linkinfo
+graphic: Example-OpenClosePrinciple
+header: #### DP Template-Methode Implementation Alternatives
 
 -------------------------------------------------------------------------------
 
-* [Basierend auf virtuellen Member-Funktionen	](#oc_with_polymorphism)
+* [Based on Dynamic Polymorphism	](#oc_with_polymorphism)
 
 -------------------------------------------------------------------------------
 
-* [Basierend auf C++-Templates			](#oc_with_cpp_templates)
+* [Based on C++-Templates		](#oc_with_cpp_templates)
 
 -------------------------------------------------------------------------------
 
@@ -324,28 +581,27 @@ template: withinfo
 graphic: Example-OpenClosePrinciple
 section: Virtual Member Functions
 name: oc_with_polymorphism
-header: ### Basierend auf virtuellen Member-Funktionen
+header: ##### DP Template Methode Pattern Based on virtual Member Functions
 
 [GoF Template Methode Pattern]: http://en.wikipedia.org/wiki/Template_method_pattern
 
-Bei der klassischen Realisierung._[] des [GoF Template Methode Pattern]s
+In the classical implementation._[] of the [GoF Template Methode Pattern]
 
-* sind virtuelle Member-Funktionen einer Basisklasse die
+* virtual member functions of a base class are
 
-  * vorausgeplanten "Erweiterungspunkte",
+  * pre-planned *Extension Points*,
 
-* an denen spezifische abgeleitete Klassen
+* at which specific derived classes
 
-  * die jeweils unterschiedlich geforderte Funktionalität "einhängen".
+  * attach a different functionality, as required.
 
 .I[
-Im Sinne des [Open-Close-Principles](#oc_principle) ist die Basisklasse der
-abgeschlossene Teil.._[]
+In the sense of the [Open-Close-Principle](#oc_principle) the base class is the
+closed part.._[]
 ]
 
 .F[:
-Siehe
-[Examples/OpenClose/virtual_functions.cpp](../Examples/OpenClose/virtual_functions.cpp)
+See [Examples/OpenClose/virtual_functions.cpp](../Examples/OpenClose/virtual_functions.cpp)
 ]
 
 ---
@@ -353,48 +609,143 @@ template: withinfo
 graphic: Example-OpenClosePrinciple
 section: C++ Template Mechanism
 name: oc_with_cpp_templates
-header: ### Basierend auf C++-Templates
+header: ##### DP Template Methode Pattern Based on C++-Templates
 
-Bei der Realisierung mit Templates._[] ist die
+When implemented with C++-Templates._[]
 
-* abgeleitete Klasse der geschlossene Teil,
+* the derived class is the closed part,
 
-  * mit "Erweiterungspunkten" in einer typ-parametrisierten Basisklasse,
+  * with pre-planned *Extension Points* in a generic class kept open for the
+    moment via a type parameter,
 
-* über welche die jeweils geforderte Funktionalität
+* to which the required functionality
 
-  * durch die zur Instanziierung verwendeten Klassen "eingehängt" wird.
+  * is attached through instantiating it with different actual (base) classes.
 
 .I[
-Ein deutlicher Vorteil dieser Variante ist, dass von ungenutzten
-Erweiterungspunkten keine leeren Unterprogramm-Einsprünge übrig bleiben.
+A substantial improvement here is that unused extension points do not result in
+empty subroutine calls but just "go away".
 ]
 
 .F[:
-Siehe
+See
 [Examples/OpenClose/template_baseclass.cpp](../Examples/OpenClose/template_baseclass.cpp)
 ]
 
 ---
 template: plain
-name: multi_paradigm_cpp
-header: ## C++ as "Multi-Paradigm" Language
+header: #### DP-Example: State
 
-TBD
+There are many ways to implement state machines, with 
+
+* in "pure C" with nested `switch`-statements (outer for states and inner for
+  events or vice versa) as the most straight-forward approach,
+
+* as readable and easily maintainable "pure C" alternative with tables of
+  function pointers,
+
+* and the style suggested by the GoF-Book being only one of many other
+  alternatives.
+
+.N[
+As discussed in the book [Implementing State Machines in C and C++] the GoF
+pattern even has some drawbacks when the considering UML-style "nested states",
+which are generally helpful to specify state machines with a good degree of
+reuse and extensibility.
+]
+
+Other alternatives like [Boost.State] and [Boost.MSM] implement state-machine
+with advanced meta programming techniques, where the second (in principle) even
+allows to chose from several [DSL]-s, e.g. to specify the machine in a tabular
+layout or close to other standard descriptions.
 
 ---
 template: plain
-name: design_patterns
-header: ## Design Patterns - Critically Reviewed
+header: #### DP-Example: Singleton
 
-TBD
+The singleton pattern seems easy to understand, but - or maybe because of that -
+it is probably often misused or at least too "heavy wight" to just solve the
+problem at hand.
+
+Instead of the singleton in GoF-Book style `static` local variables provide an
+easy alternative:._[]
+```
+Instance &getInstance() {
+   static Instance singleton;
+   return singleton;
+}
+```
+
+For an extended discussion see the example series in: [TBD]
+
+.F[:
+The author of this presentation has seen full-blown GoF-style singletons applied
+in scenarios where a "good ol'" plain global (variable) would have fullfilled
+the purpose perfectly and much easier.
+]
+
+---
+template: plain
+header: ### Design Patterns - Closing Remark
+
+To end with:
+
+**Design patterns are a good thing, really …**
+
+* … but when used for the intended purpose
+
+* … within the appropriate context …
+
+* … and **never** if they limit the choice of chosing the most appropriate
+  from the different paradigms C++ has to offer.
 
 ---
 template: plain
 name: advanced_preprocessor
 header: ## Fortgeschrittene Nutzung des Präprozessors
 
-TBD
+--------------------------------------------------------------------
+
+* [Der C++-Präprozessor beherrscht kein C++](#cpp_stringizing_args)
+
+* [Verwendung von Makro-Argumenten als String-Literal (Stringizing)](#cpp_stringizing_args)
+
+* [Verketten von Makro-Argumenten zu neuen Tokens (Token Pasting)](#cpp_token_pasting)
+
+* [Systematische, tabellengesteuerte Quelltext-Erzeugung](#cpp_code_generation)
+
+* [Allgemeine Stil-Hinweise und weitere Tipps](#cpp_coding_style)
+
+--------------------------------------------------------------------
+
+---
+template: plain
+header: ### Der Präprozessor kennt kein C(++)
+
+Der Syntax des Präprozessors ist extrem einfach und erkennt nur:
+
+* Kommentare sowie Zeichen- und Zeichenketten-Literale._[]
+
+* Zeilenverkettung durch Abschluss einer Zeile mit Gegenschrägstrich
+
+* Präprozessor-Direktiven in Zeilen beginnend mit einem Hash-Zeichen
+  (White-Space direkt vor und hinter `#` optional möglich).
+
+* Bezeichner, denen optional ein paar runder Klammern folgt, und innerhalb
+  dieser Kommata (als Argumenttrenner) sowie weitere, paarige runde Klammern
+  (welche die Wirkung enthaltener Kommata als Argumenttrenner aufheben).
+
+.W[
+Makro-Bezeichner liegen außerhalb von Namespaces und ihr Ersatztext wird ohne
+Beachtung des syntaktischen Kontexts als einfache Text-Substitution eingesetzt.
+]
+
+.F[:
+Dies bedingt sich gegenseitig, denn sonst könnten z.B. Zeichen-Literale und
+Kommentare keine Gänsefüßchen (`"`) und Zeichenketten-Literale keine
+Kommentarbegrenzer (`/*`, `*/` und `//`) oder einfache Apostrophe (`'`)
+enthalten.
+]
 
 ---
 template: plain
@@ -430,40 +781,208 @@ template: plain
 name: cpp_token_pasting
 header: ### Token Pasting
 
+Hierunter versteht man das "Aneinanderkleben" von Makro-Argumenten und fest
+vorgegebenen Bestandteilen, um daraus neue Bezeichner zu erzeugen:
+```
+#define DEFINE_ERROR_THROWER(clazz, name)\
+    virtual void clazz::throw_ ## name() {throw clazz::name();}
+…
+DEFINE_ERROR_THROWER(MyParser, PrematureEndOfFile)
+DEFINE_ERROR_THROWER(MyParser, InvalidExpression)
+```
+
 ---
 template: plain
 name: cpp_code_generation
 header: ### Systematischen Quelltext erzeugen
+
+Hierfür könnte z.B. eine Liste von Bezeichnern vorliegen, für die ggf. an
+unterschiedlichen Stellen eines Quelltextes, unterschiedlicher Code zu erzeugen
+ist.
+
+Der Trick dabei ist, den Namen des zu expandierenden Makro einem anderen Makro
+als Parameter zu übergeben:
+```
+#define FOR_ALL_ERRORS(m)\
+    m(PrematureEndOfFile, "file ends prematurely")\
+    m(IncompleteLine    , "line ends prematurely")\
+    m(InvalidExpression , "bad expression syntax")\
+    … // usw.
+```
+
+Dieser Makro könnte dann mit den beiden auf der nächsten Seite gezeigten Makros
+als Parameter aufgerufen werden:
+```
+FOR_ALL_ERRORS(DEF_ERROR_CLASS)
+FOR_ALL_ERRORS(DEF_THROW_HELPER)
+```
+
+---
+template: plain
+name: cpp_code_generation
+header: ### Systematischen Quelltext erzeugen (2)
+
+Die einzige Regel ist, dass die an `FOR_ALL_ERRORS` zu übergebenden Makros
+genau zwei Argumente entgegennehmen müssen:
+```
+#define DEF_ERROR_CLASS(name, desc)\
+    class name : public std::runtime_error {\
+        public: name() : std::runtime_error(desc) {}\
+    };
+```
+Diese müssen natürlich nicht zwingend im Ersatztext verwendet werden:
+```
+#define DEF_THROW_HELPER(name, desc)\
+    virtual void throw_ ## name() { throw name(); }
+```
+
+Eine intensive, praktische Verwendung dieser Techniken zeigt das Beispiel: TBD
 
 ---
 template: plain
 name: cpp_coding_style
 header: ### Einige weitere Präprozessor-Tipps
 
+Generell sollten
+
+* Makros zur systematischen Quelltext-Erzeugung einfach gehalten werden,
+
+* und der Präprozessor nur dann für die systematische Code-Erzeugung
+  genutzt werden,
+
+  * wenn sich dadurch wirklich signifikante Vereinfachungen,
+
+  * sowie höhere Fehlersicherheit und verbesserte Wartbarkeit ergibt.._[]
+
+.N[
+Es kann durchaus sinnvoll sein, im Ersatztext von *Helfer-Makros* wiederum
+*Helfer-Funktionen* und/oder *Helfer-Templates* zu verwenden, insbesondere wenn
+deren Argumentlisten systematische Ähnlichkeiten und Wiederholungen aufweisen.
+]
+
+.F[:
+Z.B. weil absehbar ist, dass **weitere** (ähnlich gelagerte) Fälle nach und nach
+zu ergänzen sind und/oder der erzeugte Quelltext für **alle** bisherigen Fälle
+gemeinsame Anpassungen erfordern könnte.
+]
+
+---
+template: plain
+header: #### Fortsetzungszeilen fördern die Lesbarkeit
+
+Dies wurde in den gezeigten Beispielen schon häufig praktiziert.
+
+Ggf. kann zusätzlich auch erwogen werden,._[]
+
+* den Gegenschrägstrich für die Fortsetzungszeilen immer in ein und dieselbe
+  Spalte zu setzen,
+
+* und das Ende der Makro-Definition durch einen Kommentar explizit sichtbar zu
+  machen.
+```
+#define DEF_ERROR_CLASS(name, desc)                 \
+class name : public std::runtime_error {            \
+      public: name() : std::runtime_error(desc) {}    \
+};                                    // END-OF-MACRO
+```
+
+.F[:
+Klären Sie aber besser vorab, ob eine solche, auf gute Lesbarkeit getrimmte
+Formatierung beim nächsten Lauf eines "C++-Beautifiers" oder durch automatische
+"Einrückungshilfen" ihrer IDE nicht schon bald wieder zerstört wird.
+]
+
+
+---
+template: plain
+header: #### Namenskonventionen für Makros
+
+Da die Namen von Makros nicht mit C++ Namespaces verbunden sind, sollte jedes
+Projekt verbindliche Regeln aufstellen, welche Namen für Makros verwendet werden
+dürfen.._[]
+
+Diese könnten z.B. sein:
+
+* Erstes Zeichen Großbuchstabe,
+* gefolgt von zwei oder mehr weiteren Zeichen,
+* die Großbuchstaben, Ziffern oder Tiefstrich sein dürfen,
+* Ende mit `_H` aber nur bei Makros, die Include-Guards steuern.
+
+.N[
+Die "Mindestens-drei-Zeichen"-Regel beugt Komplikationen vor, die durch die oft
+noch übliche Konvention entstehen, Typ-Parameter in Templates `T1`, `T2`, `T3`,
+… zu nennen.
+]
+
+.F[:
+Oftmals unbekannt ist auch, dass nicht nur der C89-Standard alle Makronamen für
+die Zwecke der Implementierung reserviert, welche mit einem Tiefstrich beginnen,
+sondern andere, evtl. in einem Projekt relevante Standards weitergehende Regeln
+enthalten können. So reserviert z.B. POSIX alle Makro-Namen für interne Zwecke,
+die mit `LC`, `E`, `SIG` oder `SIG_` beginnen, sofern ein Großbuchstabe oder
+eine Ziffer folgt.
+]
+
+---
+template: plain
+header: #### Makros nur lokal definieren
+
+Weitere vorbeugende Maßnahmen gegen Überraschungen, welche aus nicht
+beabsichtigten Ersetzungen des Präprozessors resultieren, sind diese:
+
+* Nur über kurze Quelltextabschnitte hinweg nötige Makros zur systematischen
+  Erzeugung von Quelltext sollten ggf. direkt nach ihrer letzten Verwendung
+  wieder mit `#undef' gelöscht werden.
+
+* Ferner kann durch einen vorgeschalteten Test mit `#ifdef` ein evtl.
+  unbeabsichtigtes Überschreiben eines gleichnamigen Makros verhindert werden.
+
+Wird wie im Beispiel auf der nächsten Seite gezeigt, welches die oft notwendige
+Umwandlung von per `enum` definierten Bezeichnern in entsprechende (druckbare)
+Zeichenketten demonstriert.._[]
+
+.F[:
+Tatsächlich setzt dieses Beispiel die in C++11 eingeführten *Enum Klassen* ein,
+bei welchen die einzelnen Bezeichner qualifiziert zu verwenden sind. Damit zeigt
+sich aber zugleich eine Stärke der Quelltext-Erzeugung durch Makros: um auf die
+klassischen Aufzählungstypen (zurück) zu wechseln, muss lediglich der Makro
+`MAP_COLOUR_TO_STRING` angepasst werden, nicht aber dessen Verwendungen.
+]
+
+---
+template: plain
+header: #### Makros nur lokal definieren (Beispiel)
+
+```
+enum class Colour : unsigned char { Red, Blue, Green };
+…
+#ifdef MAP_COLOUR_TO_STRING
+#error "macro 'MAP_COLOUR_TO_STRING' already defined"
+#endif
+#define MAP_COLOUR_TO_STRING(c)\
+    case Colour::c: return "Colour::" #c
+std::string colour2string(Colour c) {
+    switch (c) {
+        MAP_COLOUR_TO_STRING(Red);
+        MAP_COLOUR_TO_STRING(Blue);
+        MAP_COLOUR_TO_STRING(Green);
+        … // maybe map more colours
+        default: {
+            using UC = unsigned char;
+            return "Colour::0x"
+                  + std::to_string(static_cast<UC>(c), 16);
+        }
+    }
+}
+#undef MAP_COLOUR_TO_STRING
+```
+
 ---
 template: plain
 name: exercise_fri1
 header: ## Übung
 
-Ziel der Aufgabe:
-
-Das GoF [Template Methode Pattern][GoF-TMP] soll - als Beispiel für das
-"Open-Close"-Prinzip - in zwei Techniken umgesetzt werden.
-
-1. "Klassisch" mit virtuellen Member-Funktionen
-2. "Modern" mit C++-Templates._[]
-
-.N[
-Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie der
-vorbereiteten Eclipse-Projekte erläutert.
-]
-
-  [Gof-TMP]: http://en.wikipedia.org/wiki/Template_method_pattern
-
-.F[
-… die wiederum nur eine zufällige namentliche Übereinstimmung mit dem
-Pattern haben.
-]
+TBD
 
 </textarea>
 <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
