@@ -521,27 +521,29 @@ used with STL algorithms.
 template: plain
 header: #### DP-Example: Composite
 
-If you consider to use the composite, first look for ready-made solutions from
-libraries.._[]
+The composite implemented in GoF-Book style ties together its various leaf
+types with a a common base class – including the collection that allows
+recursive nesting.
 
-* Such might not have the interface shown in the GoF-Book …
+This puts some restrictions on the types that can be used (or at least
+wrapping unrelated classes so that they can have common parent).
 
-* … but a more appropriate one for the purpose for which they are designed.
+Boost.Variant offers an alternative:
 
-Two examples of practical importance are the file system interface and a
-(unlimted-depth) dictionary-like class from Boost.
+* It can easily tie together unrelated basic types,
+* commonly used library classes (like `std::string`) too, of course,
+* and even executable code via `std::function`.
+
+For recursive nesting an `std::map` may be added, holding the variant
+as its value part keyed with an `std::string` for access.._[].
 
 .F[:
-Furthermore you might be interested in the following example, as an advanced
-case-study how to build recursively nested structures of basic data types and
-even executable functions in C++: TBD
+In other words: more or less mimicking the core of Python's object
+modell. For some example code (just as proof of concept) see [TBD].
 ]
 
-template: plain
-
 ---
-template: linkinfo
-graphic: Example-OpenClosePrinciple
+template: plain
 header: #### DP-Example: Template-Methode
 
 From the general perspective the design pattern called *Template-Methode* is
@@ -645,19 +647,24 @@ There are many ways to implement state machines, with
   function pointers,
 
 * and the style suggested by the GoF-Book being only one of many other
-  alternatives.
+  alternatives.._[]
 
 .N[
-As discussed in the book [Implementing State Machines in C and C++] the GoF
-pattern even has some drawbacks when the considering UML-style "nested states",
-which are generally helpful to specify state machines with a good degree of
-reuse and extensibility.
+As discussed in the book [Implementing State Machines in C and C++] by Miro
+Samek, the GoF pattern even has some drawbacks when the considering UML-style
+"nested states", which are generally helpful to achieve a good degree of reuse
+and provide a path for easy extensibility.
 ]
 
-Other alternatives like [Boost.State] and [Boost.MSM] implement state-machine
-with advanced meta programming techniques, where the second (in principle) even
-allows to chose from several [DSL]-s, e.g. to specify the machine in a tabular
-layout or close to other standard descriptions.
+.F[:
+Of special interest for C++ developers may also be [Boost.State] and
+[Boost.MSM], which both implement state-machines by use of C++ meta programming
+techniques. The latter (in principle) even allows to chose among several
+"front-ends" and "back-ends", i.e. DSL-s describing the states and transitions
+and drivers to receive events and make them execute the machine. (The default
+front-end is a tabular layout similar to the "pure C" solution with function
+pointers.)
+]
 
 ---
 template: plain
@@ -692,12 +699,12 @@ To end with:
 
 **Design patterns are a good thing, really …**
 
-* … but when used for the intended purpose
+* … when used for the intended purpose …
 
 * … within the appropriate context …
 
-* … and **never** if they limit the choice of chosing the most appropriate
-  from the different paradigms C++ has to offer.
+* …  but **probably not so** if they radically limit the freedom to chose the
+  most appropriate from the set of paradigms C++ supports.
 
 ---
 template: plain
