@@ -145,6 +145,7 @@ template: blank
 1. [Templates selbst schreiben			](#writing_templates)
 1. [Optimierung von Templates			](#optimising_templates)
 1. [Templates als Compilezeit-Funktionen	](#compiletime_functions)
+1. [Fortgeschrittene Präprozessor-Verwendung	](#advanced_preprocessor)
 1. [Übung					](#exercise_thu1)
 
 -------------------------------------------------------------------------------
@@ -441,6 +442,284 @@ Mehr dazu finden Sie hier:
 
 * http://www.cplusplus.com/reference/type_traits/
 * http://en.cppreference.com/w/cpp/types/
+
+---
+template: plain
+name: advanced_preprocessor
+header: ## Fortgeschrittene Nutzung des Präprozessors
+
+--------------------------------------------------------------------
+
+* [Der C++-Präprozessor beherrscht kein C++](#cpp_stringizing_args)
+
+* [Verwendung von Makro-Argumenten als String-Literal (Stringizing)](#cpp_stringizing_args)
+
+* [Verketten von Makro-Argumenten zu neuen Tokens (Token Pasting)](#cpp_token_pasting)
+
+* [Systematische, tabellengesteuerte Quelltext-Erzeugung](#cpp_code_generation)
+
+* [Allgemeine Stil-Hinweise und weitere Tipps](#cpp_coding_style)
+
+--------------------------------------------------------------------
+
+---
+template: plain
+header: ### Der Präprozessor kennt kein C(++)
+
+Der Syntax des Präprozessors ist extrem einfach und erkennt nur:
+
+* Kommentare sowie Zeichen- und Zeichenketten-Literale._[]
+
+* Zeilenverkettung durch Abschluss einer Zeile mit Gegenschrägstrich
+
+* Präprozessor-Direktiven in Zeilen beginnend mit einem Hash-Zeichen
+  (White-Space direkt vor und hinter `#` optional möglich).
+
+* Bezeichner, denen optional ein paar runder Klammern folgt, und innerhalb
+  dieser Kommata (als Argumenttrenner) sowie weitere, paarige runde Klammern
+  (welche die Wirkung enthaltener Kommata als Argumenttrenner aufheben).
+
+.W[
+Makro-Bezeichner liegen außerhalb von Namespaces und ihr Ersatztext wird ohne
+Beachtung des syntaktischen Kontexts als einfache Text-Substitution eingesetzt.
+]
+
+.F[:
+Dies bedingt sich gegenseitig, denn sonst könnten z.B. Zeichen-Literale und
+Kommentare keine Gänsefüßchen (`"`) und Zeichenketten-Literale keine
+Kommentarbegrenzer (`/*`, `*/` und `//`) oder einfache Apostrophe (`'`)
+enthalten.
+]
+
+---
+template: plain
+name: cpp_stringizing_args
+header: ### Stringizing
+
+Unter *Stringizing* wird die Möglichkeit verstanden, das Argument einer
+Makro-Expansion als String-Literal zu verwenden:
+
+* Es wird dann quasi automatisch in doppelte Gänsefüßchen eingeschlossen.
+* Wenn nötig, werden für einzelne Zeichen Escape-Sequenzen ersetzt.
+
+Als Beispiel ein Makro, der einen Ausdruck textlich und mit dem berechneten
+Wert auf Standardausgabe schreibt:
+```
+#define PrintX(x) \
+        std::cout << #x << ": " << (x) << '\n';
+```
+
+Die Anwendung kann (beispielsweise) wie folgt aussehen:
+```
+int main() {
+    auto value = 42;
+    PrintX(value++)
+    PrintX(++value)
+    PrintX(value)
+    PrintX(value *= 2)
+}
+```
+
+---
+template: plain
+name: cpp_token_pasting
+header: ### Token Pasting
+
+Hierunter versteht man das "Aneinanderkleben" von Makro-Argumenten und fest
+vorgegebenen Bestandteilen, um daraus neue Bezeichner zu erzeugen:
+```
+#define DEFINE_ERROR_THROWER(clazz, name)\
+    virtual void clazz::throw_ ## name() {throw clazz::name();}
+…
+DEFINE_ERROR_THROWER(MyParser, PrematureEndOfFile)
+DEFINE_ERROR_THROWER(MyParser, InvalidExpression)
+```
+
+---
+template: plain
+name: cpp_code_generation
+header: ### Systematischen Quelltext erzeugen
+
+Hierfür könnte z.B. eine Liste von Bezeichnern vorliegen, für die ggf. an
+unterschiedlichen Stellen eines Quelltextes, unterschiedlicher Code zu erzeugen
+ist.
+
+Der Trick dabei ist, den Namen des zu expandierenden Makro einem anderen Makro
+als Parameter zu übergeben:
+```
+#define FOR_ALL_ERRORS(m)\
+    m(PrematureEndOfFile, "file ends prematurely")\
+    m(IncompleteLine    , "line ends prematurely")\
+    m(InvalidExpression , "bad expression syntax")\
+    … // usw.
+```
+
+Dieser Makro könnte dann mit den beiden auf der nächsten Seite gezeigten Makros
+als Parameter aufgerufen werden:
+```
+FOR_ALL_ERRORS(DEF_ERROR_CLASS)
+FOR_ALL_ERRORS(DEF_THROW_HELPER)
+```
+
+---
+template: plain
+name: cpp_code_generation
+header: ### Systematischen Quelltext erzeugen (2)
+
+Die einzige Regel ist, dass die an `FOR_ALL_ERRORS` zu übergebenden Makros
+genau zwei Argumente entgegennehmen müssen:
+```
+#define DEF_ERROR_CLASS(name, desc)\
+    class name : public std::runtime_error {\
+        public: name() : std::runtime_error(desc) {}\
+    };
+```
+Diese müssen natürlich nicht zwingend im Ersatztext verwendet werden:
+```
+#define DEF_THROW_HELPER(name, desc)\
+    virtual void throw_ ## name() { throw name(); }
+```
+
+Eine intensive, praktische Verwendung dieser Techniken zeigt das Beispiel: TBD
+
+---
+template: plain
+name: cpp_coding_style
+header: ### Einige weitere Präprozessor-Tipps
+
+Generell sollten
+
+* Makros zur systematischen Quelltext-Erzeugung einfach gehalten werden,
+
+* und der Präprozessor nur dann für die systematische Code-Erzeugung
+  genutzt werden,
+
+  * wenn sich dadurch wirklich signifikante Vereinfachungen,
+
+  * sowie höhere Fehlersicherheit und verbesserte Wartbarkeit ergibt.._[]
+
+.N[
+Es kann durchaus sinnvoll sein, im Ersatztext von *Helfer-Makros* wiederum
+*Helfer-Funktionen* und/oder *Helfer-Templates* zu verwenden, insbesondere wenn
+deren Argumentlisten systematische Ähnlichkeiten und Wiederholungen aufweisen.
+]
+
+.F[:
+Z.B. weil absehbar ist, dass **weitere** (ähnlich gelagerte) Fälle nach und nach
+zu ergänzen sind und/oder der erzeugte Quelltext für **alle** bisherigen Fälle
+gemeinsame Anpassungen erfordern könnte.
+]
+
+---
+template: plain
+header: #### Fortsetzungszeilen fördern die Lesbarkeit
+
+Dies wurde in den gezeigten Beispielen schon häufig praktiziert.
+
+Ggf. kann zusätzlich auch erwogen werden,._[]
+
+* den Gegenschrägstrich für die Fortsetzungszeilen immer in ein und dieselbe
+  Spalte zu setzen,
+
+* und das Ende der Makro-Definition durch einen Kommentar explizit sichtbar zu
+  machen.
+```
+#define DEF_ERROR_CLASS(name, desc)                 \
+class name : public std::runtime_error {            \
+      public: name() : std::runtime_error(desc) {}    \
+};                                    // END-OF-MACRO
+```
+
+.F[:
+Klären Sie aber besser vorab, ob eine solche, auf gute Lesbarkeit getrimmte
+Formatierung beim nächsten Lauf eines "C++-Beautifiers" oder durch automatische
+"Einrückungshilfen" ihrer IDE nicht schon bald wieder zerstört wird.
+]
+
+
+---
+template: plain
+header: #### Namenskonventionen für Makros
+
+Da die Namen von Makros nicht mit C++ Namespaces verbunden sind, sollte jedes
+Projekt verbindliche Regeln aufstellen, welche Namen für Makros verwendet werden
+dürfen.._[]
+
+Diese könnten z.B. sein:
+
+* Erstes Zeichen Großbuchstabe,
+* gefolgt von zwei oder mehr weiteren Zeichen,
+* die Großbuchstaben, Ziffern oder Tiefstrich sein dürfen,
+* Ende mit `_H` aber nur bei Makros, die Include-Guards steuern.
+
+.N[
+Die "Mindestens-drei-Zeichen"-Regel beugt Komplikationen vor, die durch die oft
+noch übliche Konvention entstehen, Typ-Parameter in Templates `T1`, `T2`, `T3`,
+… zu nennen.
+]
+
+.F[:
+Oftmals unbekannt ist auch, dass nicht nur der C89-Standard alle Makronamen für
+die Zwecke der Implementierung reserviert, welche mit einem Tiefstrich beginnen,
+sondern andere, evtl. in einem Projekt relevante Standards weitergehende Regeln
+enthalten können. So reserviert z.B. POSIX alle Makro-Namen für interne Zwecke,
+die mit `LC`, `E`, `SIG` oder `SIG_` beginnen, sofern ein Großbuchstabe oder
+eine Ziffer folgt.
+]
+
+---
+template: plain
+header: #### Makros nur lokal definieren
+
+Weitere vorbeugende Maßnahmen gegen Überraschungen, welche aus nicht
+beabsichtigten Ersetzungen des Präprozessors resultieren, sind diese:
+
+* Nur über kurze Quelltextabschnitte hinweg nötige Makros zur systematischen
+  Erzeugung von Quelltext sollten ggf. direkt nach ihrer letzten Verwendung
+  wieder mit `#undef' gelöscht werden.
+
+* Ferner kann durch einen vorgeschalteten Test mit `#ifdef` ein evtl.
+  unbeabsichtigtes Überschreiben eines gleichnamigen Makros verhindert werden.
+
+Wird wie im Beispiel auf der nächsten Seite gezeigt, welches die oft notwendige
+Umwandlung von per `enum` definierten Bezeichnern in entsprechende (druckbare)
+Zeichenketten demonstriert.._[]
+
+.F[:
+Tatsächlich setzt dieses Beispiel die in C++11 eingeführten *Enum Klassen* ein,
+bei welchen die einzelnen Bezeichner qualifiziert zu verwenden sind. Damit zeigt
+sich aber zugleich eine Stärke der Quelltext-Erzeugung durch Makros: um auf die
+klassischen Aufzählungstypen (zurück) zu wechseln, muss lediglich der Makro
+`MAP_COLOUR_TO_STRING` angepasst werden, nicht aber dessen Verwendungen.
+]
+
+---
+template: plain
+header: #### Makros nur lokal definieren (Beispiel)
+
+```
+enum class Colour : unsigned char { Red, Blue, Green };
+…
+#ifdef MAP_COLOUR_TO_STRING
+#error "macro 'MAP_COLOUR_TO_STRING' already defined"
+#endif
+#define MAP_COLOUR_TO_STRING(c)\
+    case Colour::c: return "Colour::" #c
+std::string colour2string(Colour c) {
+    switch (c) {
+        MAP_COLOUR_TO_STRING(Red);
+        MAP_COLOUR_TO_STRING(Blue);
+        MAP_COLOUR_TO_STRING(Green);
+        … // maybe map more colours
+        default: {
+            using UC = unsigned char;
+            return "Colour::0x"
+                  + std::to_string(static_cast<UC>(c), 16);
+        }
+    }
+}
+#undef MAP_COLOUR_TO_STRING
+```
 
 ---
 template: plain
