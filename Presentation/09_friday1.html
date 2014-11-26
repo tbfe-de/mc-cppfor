@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>C++ For (9) – Friday</title>
+    <title>(9) C++ For - Friday</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
     <!-- when changing the stylesheet, please also change EACH 'styling-by:' -->
@@ -597,30 +597,69 @@ using it with all appropriate STL algorithms.
 
 ---
 template: plain
+header: #### DP-Example: Observer
+
+  [Boost.Function]: http://www.boost.org/doc/libs/release/doc/html/function.html
+  [Boost.Signals]: http://www.boost.org/doc/libs/release/doc/html/signals.html
+  [Boost.Signals2]: http://www.boost.org/doc/libs/release/doc/html/signals2.html
+
+At its core the observer pattern is about decoupling a number of otherwise
+independant components or sub-systems so that each one doesn't have to know too
+many details of the other one.
+
+For dynamic control over coupling._[] an implementation may simply use C++11
+`std::function` (or [Boost.Function] in C++98) as STL container element and a
+tiny loop (approx. two lines of code) for message dispatch.
+
+A ready-to-use library approach taking this road is available with
+
+* [Boost.Signals] and
+* [Boost.Signals2],
+
+though it supports some extras – like flexible result collectors – hampering
+performance in a direct comparison to more light-weight approaches without
+such features.
+
+* See https://testbit.eu/cpp11-signal-system-performance
+
+.F[:
+Sensibly decoupling components with static connections to each other is more or
+less a developer's "every day job" (if she understands the requirements of good
+software engineering); if that were subsummed under the observer pattern, any
+non-trivial software would be full of observers …
+]
+
+---
+template: plain
 header: #### DP-Example: Composite
 
-The composite implemented in GoF book style ties together its various leaf
-types with a a common base class – including the collection that allows
-recursive nesting.
+  [Boost.Variant]: http://www.boost.org/doc/libs/release/doc/html/variant.html
+  [Boost.Property_Tree]: http://www.boost.org/doc/libs/release/doc/html/property_tree.html
 
-This puts some restrictions on the types that can be used – at least it
-requires wrappers for unrelated classes so that they can share a common parent.
+The composite in GoF book style ties together its various leaf types with a
+common base class – including a collection that enables recursive nesting.
 
-Boost.Variant offers an alternative:
+This puts restrictions on the types that can be used – or at least requires
+wrappers for unrelated classes, so they can have a common parent.
 
-* It can easily tie together unrelated basic types,
-* and of course commonly used library classes too (like `std::string`),
-* even executable code (via `std::function`).
+[Boost.Variant] offers an elegant alternative:
 
-For recursive nesting e.g. an `std::map` may be added
+* It can easily tie together any unrelated basic types and classes,
+* (therefore commonly used library classes like `std::string` too),
+* and even callable code via `std::function`.
+
+For recursive nesting any STL container may be added, e.g. an `std::map`
 
 * holding the variant as its value part,
 * keyed with an `std::string` for access.._[]
 
+(Another ready-to-use library solution to consider is [Boost.Property_Tree],
+especially for a composite to hold persistant state or configuration data.)
+
 .F[:
 In other words: more or less mimicking the core of Python's object modell. For
 some example code (rather meant as proof of concept but to be used as is) see
-[TBD].
+[Examples/DynamicVariant/dv-poc.cpp](../Examples/DynamicVariant/dv-poc.cpp)
 ]
 
 ---
@@ -775,8 +814,8 @@ MySingleton &getMySingletonInstance() {
    return instance;
 }
 ```
-(The above and some variations are avaliable as a small series of examples in
-[TBD].)
+The above and some variations are avaliable as a small series of examples in
+[Examples/Singleton](../Examples/Singleton).
 
 .N[
 In his book [Modern C++ Design] Andrei Alexandrescu spends a full chapter on the
@@ -788,7 +827,7 @@ are addressed and possible solutions shown.
 
 .F[:
 Despite this simple and elegant alternative exists in C++ (and even in C, if
-the reference is replaced with a pointer), full-blown GoF-style singletons
+the reference is replaced with a pointer), full-blown GoF book style singletons
 are not unusual, even in scenarios where a plain "good ol' global" (variable)
 would have sufficed.
 ]
