@@ -340,12 +340,11 @@ Include Guard aus der folgenden Situation resultiert:._[]
 #ifndef SOMECLASS_H
 #define SOMECLASS_H
 #include "OtherClass.h"
-namespace Mine {
-    class SomeClass {
-        …
-        OtherClass *link;
-    };
-}
+…
+class SomeClass {
+    …
+    OtherClass *link;
+};
 #endif
 ```
 ]
@@ -356,12 +355,11 @@ namespace Mine {
 #ifndef OTHERCLASS_H
 #define OTHERCLASS_H
 #include "SomeClass.h"
-namespace Other {
-    class OtherClass {
-        …
-        SomeClass *link;
-    };
-}
+…
+class OtherClass {
+    …
+    SomeClass *link;
+};
 #endif
 ```
 ]
@@ -377,22 +375,21 @@ template: plain
 name: definition_reference
 header: ### Definition/Reference-Modell
 
-Zu jeder in einem Progamm verwendeten Variablen (egal Grundttyp oder
-Objekt-Instanz) muss es **genau eine** Definition geben, mit möglicherweise
-vielen Bezugnahmen.
+Zu jeder in einem Progamm verwendeten Variablen muss es **genau eine**
+Definition geben (mit möglicherweise vielen Bezugnahmen).
 
-* Bei der Bezugnahme aus einer anderen Übersetzungseinheit muss diese
-  wiederum eine `extern`-Deklaration vornehmen.
+* Bei der Bezugnahme aus einer anderen Übersetzungseinheit muss diese eine
+  `extern`-Deklaration vornehmen.
 
-* Die tatsächliche **Definition darf** ebenfalls das Wort `extern` enthalten,
+* Die tatsächliche Definition **darf** das Wort `extern` enthalten, auch
   wenn sie mit einer Initialisierung verbunden ist.
 
-* Sie **muss** es sogar, wenn zugleich eine `const`-Qualifizierung verwendet
-  wird und keine`extern`-Deklaration vorausgeht.
+* Sie **muss** dies u.U. sogar, wenn zugleich eine `const`-Qualifizierung
+  verwendet wird und keine `extern`-Deklaration vorausgeht.
 
 .W[
-Die Verwendung von `const` auf globaler Ebene impliziert – vielleicht
-überraschenderweise – den Sichbarkeitsschutz gegenüber dem Linker.._[]
+Die Verwendung von `const` auf globaler Ebene impliziert ansonsten den
+Sichbarkeitsschutz gegenüber dem Linker.._[]
 ]
 
 .F[:
@@ -400,9 +397,9 @@ Einstmals wurde von Bjarne Stroustrup damit das Ziel verfolgt, eine möglichst
 unproblematische Umstellung von `#define`-s auf `const` zu unterstützen. Das
 Risiko von Name Clashes in der Link-Phase wurde damit ausgeschlossen auf Kosten
 von evtl. mehrfach für den selben Zweck reservierten Speicher im globalen
-Bereich, der bei einfachen Datentypen wiederum von optimierenden Compilern
-vermieden werden kann, solange kein Zugriff auf die Adresse der jeweiligen
-Variablen erfolgte.
+Bereich (der bei einfachen Datentypen von optimierenden Compilern vermieden
+werden kann, sofern kein Zugriff auf die Adresse der jeweiligen Variablen
+erfolgte.
 ]
 
 ---
@@ -421,12 +418,12 @@ extern const unsigned VERSION; // nur Bezugnahme
 
 Folgendes führt nun zu einem Compile-Fehler:._[]
 ```
-    ++x;
+++x;
+…
+if (VERSION = 3014u) {
+    // special case for version 3.14
     …
-    if (VERSION = 3014u) {
-        // special case for version 3.14
-        …
-    }
+}
 ```
 
 .F[:
@@ -442,10 +439,10 @@ header: ## Zeiger und Referenzen
 
 --------------------------------------------------------------------------
 
-* [Zwei Arten konstanter Zeiger			](#const_pointers)
-* [Klassische Referenzen (LValue-Referenzen)	](#classic_references)
+* [Zeiger allgemein und `const`-qualifiziert	](#const_pointers)
+* [Klassische Referenzen (Lvalue-Referenzen)	](#classic_references)
 * [Zeiger versus Referenzen			](#pointer_vs_reference)
-* [RValue-Referenzen (neu in C++11)		](#rvalue_reference)
+* [Rvalue-Referenzen (neu in C++11)		](#rvalue_reference)
 
 --------------------------------------------------------------------------
 
@@ -484,7 +481,7 @@ positions the qualification and the type to which it is applied:
 ---
 template: plain
 name: classic_references
-header: ### Bezugnahme über Referenz
+header: ### Klassiche Referenzen (Lvalue-Referenzen)
 
 Das klassiche Beispiel ist eine Funktion, welche die Inhalte zweier Variablen
 vertauscht:
@@ -678,7 +675,7 @@ The reason here is …
 ---
 template: plain
 name: pointer_vs_reference
-header: ### Referenzen versus Zeiger
+header: ### Zeiger versus Referenzen
 
 C++ Referenzen können auf zwei Arten betrachtet werden:
 
@@ -710,7 +707,7 @@ Compiler hingewiesen: http://gcc.godbolt.org/
 ---
 template: plain
 name: rvalue_reference
-header: ### RValue-Referenzen
+header: ### Rvalue-Referenzen
 
 [Rvalue-Referenzen]: http://en.cppreference.com/w/cpp/language/reference
 
@@ -736,7 +733,7 @@ Herkunft von Argumenten, und dort wiederum insbesondere bei
 
 .F[:
 In dem für obige Szenarien typischen Fall von Funktionsargumenten könnte im Fall
-der RValue-Referenz – anders als bei klassischen `const`-Referenzen – das
+der Rvalue-Referenz – anders als bei klassischen `const`-Referenzen – das
 übergebene `T` nun modifiziert werden, allerdings nur so weit, dass der
 Destruktor nach wie vor seine Arbeit verreichten kann.
 ]
@@ -748,17 +745,18 @@ header: ## Statischer Polymorphismus
 
 --------------------------------------------------------------------------
 
-* [Defaultwerte für Argumente._[]	](#default_arguments)
+* [Defaultwerte für Argumente		](#default_arguments)
 * [Überladen von Funktionen		](#overloading_functions)
 * [Überladen von Operatoren		](#overloading_operators)
 
 --------------------------------------------------------------------------
 
+Defaultwerte für Argumente wurden in diesen Abschnitt aufgenommen, da ihre
+Wirkung mit dem Überladen von Funktionen konkurriert.._[]
+
 .F[:
-Defaultwerte für Argumente wurden in diesen Abschnitt aufgenommen, da sie von
-den Auswirkungen mit dem Überladen von Funktionen konkurrieren, wenngleich aus
-Hardware-Sicht die Implementierung bei echten Funktionen (ohne `inline`) eine
-andere ist.
+Aus Hardware-Sicht ist die Implementierung bei echten Funktionen (ohne `inline`)
+allerdings unterschiedlich.
 ]
 
 
@@ -767,19 +765,18 @@ template: plain
 name: default_arguments
 header: ### Defaultwerte für Argumente
 
-Argumente können mit Default-Werten versehen werden.
+Argumente können "von rechts nach links" mit Default-Werten versehen werden,
+das heißt:
 
-* Dies muss ggf. von rechts nach links geschehen, das heißt: 
-
-* Sobald ein Argument einen Default-Wert hat, müssen die weiter rechts stehenden
-  ebenfalls einen Default-Wert haben.
+* Sobald ein Argument einen Default-Wert hat,
+* müssen alle rechts davon stehenden ebenfalls einen haben.
 
 .N[
 Der Defaultwert muss beim Funktionsaufruf bekannt sein, also im Header-File
 stehen als Bestandteil des Funktions-Prototyps.
 ]
 
-Die Namen für die formalen Argumente sind auch hier optional:._[]
+Die Namen für die formalen Argumente sind aber auch hier optional:._[]
 ```
 // the following function can be called with 1..3 arguments:
 double foo(int &count, int minsize = 0, char separator = 'z');
@@ -808,29 +805,30 @@ void foo(const char *);         /*1*/
 double foo(const int &, char);  /*2*/
 double foo(double, double);     /*3*/
 ```
-
-Gemäß den tatsächlichen Argumenten entscheidet nun der Compiler, was verwendet
-wird:
+.N[
+Welche Funktion aufgerufen wird (oder der Aufruf mehrdeutig ist),
+entscheidet der Compiler gemäß den tatsächlichen Argumenten.
+]
 ```
 int x; double y;
 …
-foo("hello, world");   /*1*/
-foo(42, 'z');          /*2*/
-foo(y, y/2);           /*3*/
-foo(x, y);             /*?*/
+foo("hello, world");   /*calls 1*/
+foo(42, 'z');          /*calls 2*/
+foo(y, y/2);           /*calls 3*/
+foo(x, y);             /*calls ?*/
 ```
 
 .F[:
 If one argument list is from left to right an exact subset of another one, this
-is similar to default arguments. But with overloading there are as many separate
-entry points as there are functions with the same name, while for default
-argument values there is just one entry point and missing argument values are
-automatically supplied.
+is similar to default values for arguments. But with overloading there are as
+many separate entry points as there are functions with the same name, while for
+default argument values there is just one entry point and missing argument
+values are automatically supplied.
 ]
 
 ---
 template: plain
-header: #### Überladen von Funktionen (cont.)
+header: #### Überladen von Funktionen (2)
 
 Die `const`-Qualifizierung eines Parameters macht ebenfalls einen Unterschied:
 ```
@@ -851,10 +849,9 @@ existieren, je eine für den konstanten und den nicht-konstanten Fall:
   Compile-Fehler, da String-Literale den Typ `const char *` haben.
 
 .F[:
-Generell ist es kein Problem, wenn eine Funktion, die versprochen hat, über ein
-Zeiger- oder Referenz-Argument erreichbaren Speicherplatz nicht zu verändern,
-die Adresse von veränderbaren Speichreplatz bekommt – **umgekehrt ist es aber
-sehr wohl ein Problem!**
+Generell ist es kein Problem, wenn eine Funktion, welche über ein Zeiger- oder
+Referenz-Argument erreichbaren Speicherplatz nicht verändern wird, die Adresse
+von prinzipiell schreibbarem Speicher bekommt – **wohl aber umgekehrt!**
 ]
 
 ---
@@ -931,8 +928,8 @@ public:
 ```
 
 .N[
-Der klassische Indikator sind als Member enthaltene Zeiger auf Speicherplatz,
-welcher individuell für jedes Objekt vorhanden sein muss.._[]
+Der klassische Indikator sind als Member-Daten enthaltene Zeiger auf
+Speicherplatz, welcher individuell für jedes Objekt vorhanden sein muss.._[]
 ]
 
 .F[:
@@ -947,7 +944,7 @@ header: #### Überladung von Move-Konstruktor und -Zuweisung
 
 [Rule Of Five]: http://en.cppreference.com/w/cpp/language/rule_of_three
 
-In C++11 können die [RValue-Referenzen](#rvalue_ref) dazu verwendet werden,
+In C++11 können die [Rvalue-Referenzen](#rvalue_ref) dazu verwendet werden,
 Initialisierung und die Zuweisung unterschiedlich zu implementieren,._[]
 abhängig davon ob
 
@@ -1028,7 +1025,7 @@ c = a + b;        // move assignment provided operator+ is
 ---
 template: plain
 name: type_conversions
-header: ## Typ-Konvertierungen
+header: ## Typ-Kompatibilität und -Konvertierungen
 
 --------------------------------------------------------------------------
 
@@ -1073,7 +1070,7 @@ Dies schließt auch `char` (mitunter verwendet für kleine Ganzzahlen) und `bool
 
 ---
 template: plain
-header: ### Typ-Kompatibilität bei grundlegenden Typen (2)
+header: #### Typ-Kompatibilität bei grundlegenden Typen (2)
 
 * Außerhalb der Umwandlungen zwischen arithmetischen Typen handelt es sich um
   **einseitig gerichtete** Umwandlungen.
@@ -1128,28 +1125,46 @@ Mehrfachvererbung und rautenförmigen Klassenbeziehungen (in der UML als
 
 ---
 template: plain
-name: public_base_typeconv
-header: ### LSP - Liskov Substitution Principle
+name: public_base_lsp
+header: #### Öffentliche Basisklassen und LSP
+
+[Principle of Substitutibility]: http://dictionary.reference.com/browse/liskov+substitution+principle
 
 Die auf der vorhergehenden Seite zusammengestellten Regeln sind Ausdruck dessen,
-was Barbara Liskov seinerzeit als "Principle of Substitutibiliy" forderte und
-was seitdem oft als LSP abgekürzt wird.
+was Barbara Liskov seinerzeit als
+
+* "*[Principle of Substitutibility]*"
+
+für die Objekt-Orientierte Programmierung als forderte und was seitdem oft als
+LSP abgekürzt wird.
 
 .N[
 **Das LSP gilt in C++ nur im Fall öffentlicher Basisklassen** und nur hier
-liegt Vererbung im Sinne der OOP vor (= *Generalisierung-Spezialisierung*,
-UML-Darstellung Verbindungslinie mit kleinem, nicht ausgefülltem Dreieck an der
-Basisklasse).
+liegt Vererbung im Sinne der OOP vor.
 ]
 
-Öffentliche und private Basisklassen verwenden zwar dasselbe Speicher-Layout,
-**bei privaten Basisklassen gilt das LSP jedoch nicht**.._[]
+Diese wird auch *Generalisierung-Spezialisierung* genannt und in der
+UML-Darstellung durch Verbindungslinie mit kleinem, nicht ausgefülltem Dreieck
+an der Basisklasse spezifiziert.
+
+---
+template: plain
+name: private_base_no_lsp
+header: #### Private Basisklassen (kein LSP)
+
+Öffentliche und private Basisklassen in C++
+
+* verwenden zwar ein und dasselbe Speicher-Layout,
+
+* **bei privaten Basisklassen gilt das LSP jedoch nicht**.
 
 .N[
 Im Sine der OOP handelt es sich bei letzteren somit nicht um Vererbung sondern
-um Komposition (UML-Darstellung Verbindungslinie mit kleiner, ausgefüllter Raute
-an der Klasse des Aggregats).
+um Komposition.._[]
 ]
+
+In der UML-Darstellung wird die Komposition durch eine Verbindungslinie mit
+kleiner, ausgefüllter Raute an der Klasse des Aggregats spezifziert.
 
 .F[:
 This topic and especially the various forms of composition receive substantially
@@ -1167,9 +1182,9 @@ Mittels sogenannter [Cast-Operation]en lassen sich weitere Typ-Umwandlungen
 erzwingen.
 
 .W[
-Die C-Syntax, bei welcher man den neuen Typ in runde Klammern setzt und den
-umzuwandelnden Wert als Operand dahinter schreibt, sollte in C++ nicht mehr
-benutzt werden.
+Die Cast-Syntax von C, bei welcher man den Zieltyp in runde Klammern einschließt
+und den umzuwandelnden Wert direkt dahinter schreibt, sollte in C++ vermieden
+werden.
 ]
 
 Die neue Syntax beginnt mit einem der Schlüsselworte
@@ -1179,15 +1194,15 @@ Die neue Syntax beginnt mit einem der Schlüsselworte
 * [`const_cast`](#const_cast_typeconv)
 * [`reinterpret_cast`](#reinterpret_cast_typeconv)
 
-Es folgen der gewünschte Zieltyp in spitzen Klammern und der umzuwandelnde
+Es folgen der Zieltyp in spitzen Klammern und der umzuwandelnde
 Wert in runden Klammern.._[]
 
 .F[:
 As an example consider the use of C-style memory allocation for some `struct s`
 in C++.  
-(Only the outermost parentheses are part of the cast syntax here.)
 ```
-struct s *p = static_cast<struct s*>(std::malloc(sizeof (struct s)));
+struct s *p = static_cast<struct s*>(std::malloc(sizeof (struct s))); // required conversion in C++
+          … (struct s*) std::malloc(sizeof (struct s)); // C-style cast, possible but deprecated in C++
                      
 ```
 ]
@@ -1243,7 +1258,7 @@ Die Fehleranzeige besteht
 
 * bei Casts auf Zeigerbasis in der Rückgabe eines Nullzeigers;
 
-* bei Casts auf Referenzbasis im Auslösen einer [`std::bad_cast`]-Exception.
+* bei Casts auf Referenzbasis in einer [`std::bad_cast`]-Exception.
 
 Weiteres wird später im Rahmen der [Laufzeit-Typprüfung] (RTTI) behandelt.
 
@@ -1264,7 +1279,6 @@ header: #### Typ-Konvertierung mit `const_cast`
 Die hiermit möglichen Typ-Umwandlungen beschränken sich auf das
 
 * Hinzufügen oder
-
 * Wegnehmen
 
 von `const` und `volatile`.
@@ -1277,12 +1291,12 @@ Ein `const_cast` hat gemäß dem C++-ISO/ANSI-Standard undefiniertes Verhalten,
 wenn auf eine mit Schreibschutz definierte Adresse schreibend zugegriffen wird.
 ]
 
-Das typische Fehlerbild kann vom Programmabsturz bis zu einer inkonsistenten
-Wertverwendung reichen (teilweise alter Wert, teilweise neuer Wert) …._[]
+Das typische Fehlerbild reicht von der inkonsistenten Wertverwendung (teilweise
+alter Wert, teilweise neuer Wert) bis zum Programmabsturz …._[]
 
 .F[:
-Abhängig von der Testtiefe und dem verwendeten Compiler mag es auch so
-erscheinen, als würde alles wie gewünscht funktionieren.
+Abhängig von der Testtiefe, dem verwendeten Compiler, Optimierungs-Optionen usw.
+mag es allerdings auch so erscheinen, als würde alles wie gewünscht funktionieren.
 ]
 
 ---
@@ -1320,38 +1334,37 @@ Es ist dagegen auch mit `reinterpret_cast` nicht möglich, die `const`- und
 ---
 template: plain
 name: reinterpret_cast_examples1
-header: #### Typ-Konvertierung mit `reinterpret_cast` (Beispiele 1)
+header: #### Typ-Konvertierung mit `reinterpret_cast` (Beispiel 1)
 
-Das folgende Beispiel nimmt an, dass an der Speicheradresse `0xEAD01208` die als
-`struct uart` beschriebenen Kontrollregister einer seriellen Schnittstelle
-abgebildet sind:
+Das folgende Beispiel nimmt an, dass an der Speicheradresse `0xEAD0` die als
+`struct uart` beschriebenen Kontrollregister abgebildet sind:
 ```
-struct uart *const sio = reinterpret_cast<struct uart*>(0xEAD01208);
+struct uart *const sio = reinterpret_cast<struct uart*>(0xEAD0);
 ```
 Der Zugriff kann nun in der Syntax `sio->…` erfolgen.
 
-Gibt es mehrere solcher Strukturen, kann natürlich auch ein Array initialisiert
-werden
+Gibt es mehrere solche Register-Strukturen im Speicher (als Memory-Mapped-I/O)
+abgebildet, kann natürlich auch ein Array initialisiert
 ```
 struct uart *const sio[] = {
-    reinterpret_cast<struct uart*>(0xEAD01200),
-    reinterpret_cast<struct uart*>(0xEAD01204),
+    reinterpret_cast<struct uart*>(0xEAD0),
+    reinterpret_cast<struct uart*>(0xEAD8),
     …
 };
 ```
-auf dessen Elemente mit `sio[0]->…`, `sio[1]->…` usw. zugegriffen wird.
+und über dieses mit `sio[0]->…`, `sio[1]->…` usw. zugegriffen werden.
 
-.F[
+.F[:
 Wird statt dem Pfeil die Punkt-Notation bevorzugt, geht das auch, und zwar mit:
 ```
-struct uart &sio = *reinterpret_cast<struct uart*>(0xEAD01208);
+struct uart &sio = *reinterpret_cast<struct uart*>(0xEAD0);
 ```
 ]
 
 ---
 template: plain
 name: reinterpret_cast_examples2
-header: #### Typ-Konvertierung mit `reinterpret_cast` (Beispiele 2)
+header: #### Typ-Konvertierung mit `reinterpret_cast` (Beispiel 2)
 
 Das folgende Beispiel nimmt an, dass an der Adresse `0xCAFE` im Code-Segment
 ein gemäß den C++-Calling Conaufrufbares Unterprogramm beginnt, welches ein
@@ -1360,8 +1373,15 @@ Argument vom Typ `bool` erwartet und keinen Rückgabewert liefert:
 void (*xcall)(int) = reinterpret_cast<void (*)(int)>(0xCAFE);
 
 ```
-Der tatsächliche Aufruf kann nun erfolgt nun mit `xcall(true)` bzw.
-`xcall(false)` erfolgen.
+Der tatsächliche Aufruf kann nun mit
+```
+xcall(true);
+```
+bzw.
+```
+xcall(false);
+```
+erfolgen.
 
 ---
 template: plain
@@ -1369,21 +1389,21 @@ name: specified_typeconv
 header: ### Klassenspezifische Typ-Konvertierungen
 
 Eine Klasse kann auch selbst festlegen, wie man sie aus einem anderen Typ erzeugt
-oder wie sie in einen anderen Typ umgewandelt wird. Bildlich kann man es sich so
-vorstellen:
+oder wie sie in einen anderen Typ umgewandelt wird, was man sich bildlich so
+vorstellen kann:
 
 * Jede Klasse und jeder eingebaute Typ verfügt über eine Art *charakteristische
   Steckverbindung*, die nur "zu sich selbst" passt.._[]
 
-  * In Initialisierungen und Zuweisungen sind daher nur Objekte von genau
-    derselben Klasse bzw. desselben Typs verwendbar.
+  * In Initialisierungen und Zuweisungen sind daher zunächst nur Objekte von
+    genau dieser Klasse bzw. diesem Typ verwendbar.
 
-* *Konstruktoren mit exakt einem Argument* – sofern nicht als `explicit`
+* **Konstruktoren mit exakt einem Argument** – sofern nicht als `explicit`
   markiert – sind weitere *Eingänge*.
 
-  * Sie passen zum *Ausgangs*-Steckverbinder des Arguments.
+  * Sie passen zum *Ausgangs*-Steckverbinder des Argument-Typs.
 
-* *Typ-Cast-Operatoren* sind weitere *Ausgänge*.
+* **Typ-Cast-Operatoren** sind weitere *Ausgänge*.
 
   * Sie passen zum *Eingangs*-Steckverbinder des Ziel-Typs.
 
@@ -1430,17 +1450,27 @@ foo(3.3)            // ERROR, c'tor is explict
 foo(MyClass(3.3));  // OK (c'tor is used explicitly)
 …
 ```
-Bei Referenzübergabe ist allerdings zusätzlich zu beachten, dass ein ggf.
-erforderliches, temporäres Objekt automatisch nur für `const`-qualifizierte
-Referenzen erzeugt wird:
+---
+template: plain
+header: #### Temporärer Objekte im Rahmen der Typ-Konvertierung
+
+Bei Referenzübergabe ist zusätzlich zu beachten, dass bei der
+Konvertierung ein temporäres Objekt notwendig wird:
 ```
-void baz(MyClass &);
-void bar(const MyClass &);
+void baz(MyClass &); // non-const reference argument
 …
-baz(42); // ERROR (no automatic temporary for non-const reference)
-baz(MyClass(42)); // ERROR (c'tor call does not bind to reference)
-{ MyClass tmp(42); baz(tmp); } // OK (temporary explicitly created)
-bar(42); // OK (temporary of MyClass automatically created here)
+baz(42);                       // ERROR (no automatic temporary
+                               //        for non-const reference)
+baz(MyClass(42));              // ERROR (c'tor call does not bind
+                               //        to non-const reference)
+{ MyClass tmp(42); baz(tmp); } // OK
+```
+
+Automatisch wird dies nur für `const`-qualifizierte Referenzen erzeugt:
+```
+void bar(const MyClass &); // const reference argument
+…
+bar(42);                       // OK (automatic temporary)
 ```
 
 ---
@@ -1508,7 +1538,7 @@ public:
     }
     …
 };
-
+…
 MyClass obj;
 extern void foo(bool);
 ```
@@ -1518,6 +1548,13 @@ template: plain
 header: #### Beispiele: `explicit operator bool()`
 
 Die folgenen Code-Fragmente setzten das begonnene Beispiel fort:
+
+* `#1` zeigt eine etwas ungewöhnliche aber erlaubte Form des Aufrufs der
+  Typ-Konvertierung in `bool`.
+* `#2a` löst einen Fehler aus, der in einer syntaktische Mehrdeutigkeit
+  begründet ist, die das Paar zusätzlicher Klammern in `#2b` beseitigt.
+* `#3` ist eine zulässige aber überflüssige explizite Typ-Konvertierung.
+
 .pull-left[
 ```
 // this does NOT compile ...
@@ -1552,25 +1589,17 @@ if (obj && !bv) …
 ```
 ]
 
-`#1` verwendet eine etwas ungewöhnliche aber erlaubte Form des Aufrufs der
-Typ-Konvertierung in `bool`.
-
-`#2a` löst einen Fehler aus, der in einer syntaktische Mehrdeutigkeit begründet
-ist, die ein Paar zusätzlicher Klammern gemäß `#2b` beseitigt.
-
-`#3` ist eine zulässige aber überflüssige explizite Typ-Konvertierung.
-
 ---
 template: plain
 name: general_typesafety
 header: ### Typ-Sicherheit in C++
 
 Die praktische Konsequenz aus den Risiken, welche die Konstrukte zur
-expliziten Typ-Konvertierung (die vier neuen Cast-Formen von C++ sowie
-die von C übernommene Cast-Syntax) mitbringen, ist diese:
+expliziten Typ-Konvertierung – also die vier neuen Cast-Formen von C++
+sowie die von C übernommene Cast-Syntax – einbringen, ist diese:
 
 .W[
-Alle Formen *expliziter Typ-Konvertierung* (mit Cast) sollten auf das
+Alle Formen expliziter Typ-Konvertierung (mit Cast) sollten auf das
 unvermeidliche Minimum beschränkt bleiben.
 ]
 
@@ -1584,7 +1613,7 @@ the way the compiler made the code "correct" by applying a (non-explicit)
 constructor or type-cast operator.
 ]
 
-.N[
+.I[
 Eine klassenspezifische Typ-Konvertierung sollte nur dort verwendet werden,
 wo der stillschweigende Wechsel zwischen den beteiligten Typen als "natürlich"
 empfunden wird.
