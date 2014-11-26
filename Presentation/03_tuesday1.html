@@ -142,10 +142,11 @@ template: blank
 
 -------------------------------------------------------------------------------
 
-1. [Sequenzielle Container			](#sequence_containers)
-1. [Grundlegendes zu Iteratoren			](#iterator_basics)
-1. [Details zu Iteratoren			](#iterator_details)
-1. [Übung					](#exercise_tue1)
+1. [Sequenzielle Container		](#sequence_containers)
+1. [Grundlagen zu Iteratoren 		](#iterator_basics)
+1. [Assoziative Container		](#associative_containers)
+1. [Weitere Details Iteratoren 		](#iterator_details)
+1. [Übung				](#exercise_tue1)
 
 -------------------------------------------------------------------------------
 
@@ -595,9 +596,198 @@ gehören. Andernfalls ist die Addition einer Ganzzahl ein Compile-Fehler.
 
 ---
 template: linkinfo
+graphic: STL-AssociativeContainers
+name: associative_containers
+header: ## Assoziative Container der STL
+
+-------------------------------------------------------------------------------
+
+* [Kombination der Varianten	](#associative_combinations)
+
+-------------------------------------------------------------------------------
+
+* [Speicherverfahren:  
+   Red-Black-Tree._[]		](#associative_rb_tree)
+* [Speicherverfahren:  
+   Hashing			](#associative_hashing)
+
+--------------------------------------------------------------------------------
+
+.F[:
+Eine stets balancierte Variante des Binärbaums.
+]
+
+---
+template: withinfo
+graphic: STL-AssociativeContainers
+section: Combinations of Associative Containers
+name: associative_combinations
+header: ### Kombination der Varianten
+
+Die verfügbaren assoziativen Container unterscheiden sich in folgenden Aspekten:
+
+* Zur Abspeicherung verwendete Datenstruktur:
+
+  * Red-Black-Tree (Binärbaum) vs. Hashing (neu in C++11)
+
+* Nur Schlüssel oder Schlüssel mit zugeordnetem Wert:
+
+  * `set` vs. `map`
+
+* Eindeutige Schlüssel oder Mehrfachschlüssel erlaubt:
+
+  * normale vs. `multi`-Version
+
+.I[
+Da die drei Kriterien unabhängig voneinander sind, ergeben sich insgesamt
+acht (2<sup>3</sup>) Kombinationen.
+]
+
+---
+template: withinfo
+graphic: STL-AssociativeContainers
+section: RB-Tree-based Storage
+name: associative_combinations
+header: ### Speicherverfahren Red-Black-Tree
+
+Hierbei handelt es sich um eine permanent balancierte._[] Variante des
+Binärbaums.
+
+.F[:
+Ein Binärbaum ist balanciert, wenn alle Zweige eine möglichst gleichmäßige Tiefe
+haben. Ein unbalancierter Binärbaum entspricht im Extremfall einer einfach
+verketteten Liste.
+]
+
+Die folgende Tabelle verdeutlicht den Zusammenhang zwischen der Tiefe eines
+balancierten Binärbaums und der Anzahl enthaltener Einträge. Die Tiefe bestimmt
+vor allem auch die (maximal) nötige Anzahl von Vergleiche, mit der ein gegebener
+Schlüssel gefunden werden kann.
+
+| Tiefe | und minimale .. maximale Zahl der Einträge              |
+| :---- | :------------------------------------------------------ |
+|   1   | 1 .. 1                                                  |
+|   2   | 2 .. 3                                                  |
+|   5   | 16 .. 31                                                |
+|   7   | 64 .. 127                                               |
+|  10   | 512 .. 1023                                             |
+|  20   | 524 288 .. 1 048 575 (ca. eine Million)                 |
+|  30   | 536 870 912 .. 1 073 741 823 (ca. eine Milliarde)       |
+|  40   | 549 755 813 888 .. 1 099 511 627 775 (ca. eine Billion) |
+
+
+---
+template: withinfo
+graphic: STL-AssociativeContainers
+section: Hash-based Storage
+name: associative_combinations
+header: ### Speicherverfahren Hashing
+
+[Big O Notation]: http://en.wikipedia.org/wiki/Big_O_notation
+[Quicksort]:      http://en.wikipedia.org/wiki/Quicksort
+[Bubblesort]:     http://en.wikipedia.org/wiki/Bubblesort
+
+Unter dem Begriff *Hashing* wird (u.a.) ein Abspeicherungsverfahren verstanden,
+welches - eine gut streuende Hash-Funktion vorausgesetzt - Suchzeiten in der
+Größenordnung O(1) erlaubt.
+
+.N[
+Die [Big O Notation] wird in der Informatik häufig verwendet, um die Obergrenze
+des Zeitbedarfs eines Algorithmus in Abhängigkeit von der bearbeiteten
+Datenmenge (N) anzugeben.
+]
+
+Die folgende Tabelle soll nur eine grobe Orientierung geben:
+
+| Größenordnung             | und typisches Beispiel                             |
+| ------------------------- | :--------------------------------------------------|
+| O(1)                      | Konstante Zeit unabhängig von der Datenmenge       |
+| O(log<sub>2</sub>(N))     | Suchzeiten in (nicht entartetem) Binärbaum         |
+| O(N)                      | Suchzeiten in linearer Liste                       |
+| O(N × log<sub>2</sub>(N)) | optimaler Sortieralgorithmus (z.B. [Quicksort])    | 
+| O(N<sup>2</sup>)          | primitiver Sortieralgorithmus (z.B. [Bubblesort])  |
+
+---
+template: plain
+header: #### Prinzip des Hashing
+
+[Hashing]: http://en.wikipedia.org/wiki/Hash_function
+
+Diese Verfahren verläuft nach folgendem [Grundprinzip][Hashing]:
+
+1. Ausgehend von abzulegenden Schlüssel._[] wird mittels einer Hash-Funktion ein
+   ganzzahliger Wert berechnet.
+
+2. Die Formel zu dieser Berechnung ist so ausgelegt, dass der Wert in einem
+   vorgegebenen Bereich streut.
+
+3. Dieser Wert dient nun als Index, welcher die Position zur Abspeicherung
+   innerhalb eines Arrays festlegt, dessen Gesamtgröße wiederum dem Streubereich
+   der Hash-Funktion entspricht.
+
+.F[:
+Bei den verschiedenen Varianten des `std::set` gibt es keinen dem Schlüssel
+zugeordneten Datenwert - der Wert ist der Schlüssel.
+]
+
+.N[
+Abhängig von der Anzahl der Datenwerte und der Größe des Streubereichs gibt es
+meist weder theoretisch noch praktisch eine eindeutige Abbildung des Schlüssels
+auf den Streubereichn.
+]
+
+---
+template: plain
+header: #### Entstehung von Überläufern
+
+Gut streuende Hashfunktionen liefern bis zu einer ca. 80%-igen Belegung des zur
+Verfügung stehenden Index-Raumes nur selten Überläufer.
+
+.N[
+Bildet die Hash-Funktion verschiedene Schlüssel auf ein und denselben Index ab,
+spricht man von einem Überläufer.
+]
+
+Prinzipiell können Überläufer aber ab dem zweiten Eintrag immer auftreten.
+
+* Eine Strategie zur Behandlung von Überläufern muss Bestandteil jedes
+  hash-basierten Datenspeicherungsverfahrens sein.
+
+* Übliche ist, für *jeden* per Hash-Funktion errechneten Index die Möglichkeit
+  einer verketteten Liste vorzusehen, die den ersten aufgetretenen Wert zusammen
+  mit allen späteren Überläufern aufnimmt.
+
+---
+template: plain
+header: #### Re-Hashing
+
+Ist der Umfang der Datenmenge unbekannt, muss der Indexraum möglichwerweise zu
+einem späteren Zeitpunkt vergrößert werden, um stets gute Performance zu bieten.
+
+* Eine universell verwendbare Klasse wie `unordered_set` oder `unordered_map`
+  (die jeweiligen `multi`-Varianten eingeschlossen) kann dies vollautomatisch
+  tun.
+
+* Dazu muss die Hash-Funktion angepasst werden, so dass diese künftig in einen
+  dem vergrößerten Datenbereich entsprechend Indexbereich streut.
+
+.N[
+Anschließend müssen alle mit der vorher gültigen Hash-Funktion erzeugten
+Zuordnungen von Schlüssel zu (Streubereichs-) Index mit der neuen Hash-Funktion
+neu berechnet werden.._[]
+]
+
+.F[:
+Mit Hilfe spezieller Techniken, welche die Neuberechnung auf die Hälfte der
+vorhandenen Einträge reduziert, lässt sich der Aufwand für das Re-Hashing
+halbieren.
+]
+
+---
+template: linkinfo
 graphic: STL-IteratorDetails
 name: iterator_details
-header: ## Iteratoren im Detail
+header: ## Weitere Iterator-Details
 
 -------------------------------------------------------------------------------
 
@@ -791,6 +981,95 @@ Indexvariable vermeidet dabei eine eventuelle Warnung beim Vergleich mit dem
 Rückgabewert der `size()`-Member-Funktion, da deren Ergebnis ebenfalls diesen
 Typ hat.
 ]
+
+---
+template: plain
+name: associative_container_iterators
+header: ### Iteratoren für Assoziative Container
+
+Eine Besonderheit bei assoziativen Container ist, dass auch über normale
+Iteratoren – also nicht nur bei `const_iterator` – kann auf **Elemente**
+von
+
+  * `std::set`,
+  * `std::multiset`,
+  * `std::unordered_set` und
+  * `std::unordered_multiset`
+
+sowie auf **Schlüssel** von
+
+  * `std::map`,
+  * `std::multimap`,
+  * `std::unordered_map` und
+  * `std::unordered_multimap`
+
+ausschließlich **lesend** zugegriffen werden.._[]
+
+.F[:
+Der Wert-Zugriff ist bei den diversen Varianten von `map`-s (wie üblich) über
+`…::iterator` lesend und schreibend und über `…::const_iterator` nur lesend
+möglich.
+]
+
+---
+template: plain
+name: key_value_access
+header: ### Iteratoren für Maps
+
+Die Iteratoren für `std::map`, `std::multimap`, `std::unordered_map` und
+`std::unordered_multimap` müssen den separaten Zugriff auf beides,
+**Schlüssel** und **Werte** ermöglichen.
+
+Dies geschieht über ihren speziellen dereferenzierten Typ, ein `std::pair`
+über
+
+* dessen erste Komponente (`first`) der Schlüssel und
+
+* dessen zweite Komponente (`second`) der Wert erreicht wird.
+
+Als Beispiel ein Programmfragment zum Zählen von Worthäufigkeiten:._[]
+```
+std::string word;
+std::map<std::string, int> wfreq;
+while (std::cin >> word)
+    ++wfreq[word];
+for (auto it = wfreq.cbegin(); it != wfreq.cend(); ++it)
+    std::cout << it->first << ": " << it->second << std::endl;
+```
+
+.F[:
+The original "pure C" version in *[K&R: The C Programming Language]* has roughly 100 lines …
+]
+
+  [K&R: The C Programming Language]: http://en.wikipedia.org/wiki/The_C_Programming_Language
+
+---
+template: plain
+name: key_value_access
+header: ### Bereichsbasierte Schleifen für Maps
+
+Die neue, bereichsbasierte `for`-Syntax von C++11 kann ebenfalls über Maps
+iterieren:
+```
+for (auto e : wfreq)
+    std::cout << e.first << ": " << e.second << std::endl;
+```
+Eine Referenz erspart das Kopieren des jeweiligen Elements:
+```
+for (auto &e : wfreq)
+    std::cout << e.first << ": " << e.second << std::endl;
+```
+Eine konstante Referenz erlaubt nur noch den Lesezugriff …
+```
+for (const auto &e : wfreq)
+    std::cout << e.first << ": " << e.second << std::endl;
+```
+… und schützt damit vor unbeabsichtigten Modifikationen, z.B. wenn statt eines
+Vergleichs versehentlich die Zuweisung geschrieben wurde:
+
+```
+if (e.second = 100) … // ERROR
+```
 
 ---
 template: plain

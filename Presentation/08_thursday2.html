@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>C++ For (8) - Thursday Part 2</title>
+    <title>C++ For (8) – Thursday Part 2</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
     <!-- when changing the stylesheet, please also change EACH 'styling-by:' -->
@@ -88,7 +88,7 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
 
 .infographic[
 [![Info-Grafik](InfoGraphics/{{graphic}}.png)](InfoGraphics/{{graphic}}.png
-                "Click to open - add [CTRL+] SHIFT for new [tabbed] window")
+                "Click to open – add [CTRL+] SHIFT for new [tabbed] window")
 ]
 
 .pagefooter[
@@ -142,9 +142,9 @@ template: blank
 
 -------------------------------------------------------------------------------
 
-1. [Richtlinien für den Exception-Einsatz	](#exception_guidelines)
-1. [Ressourcen ohne und mit RAII verwalten	](#resource_management)
-1. [Smart-Pointer 				](#smart_pointers)
+1. [Richtlinien zum Exception-Einsatz		](#exception_guidelines)
+1. [RAII zur Verwaltung von Ressourcen 		](#resource_management)
+1. [Überblick zu Smart-Pointern 		](#smart_pointers)
 1. [Übung					](#exercise_thu2)
 
 -------------------------------------------------------------------------------
@@ -216,54 +216,11 @@ section: (Bad) Order of Handlers
 name: wrong_catch_order
 header: ### (Falsche) Behandlungsblock-Abfolge
 
-Werden die `catch`-Blöcke für Exceptions falsch angeordnet,
+Werden die `catch`-Blöcke für Exceptions falsch angeordnet, wird
 
-* kann ein weiter oben stehender, allgemeiner Block
+* ein weiter oben stehender **allgemeiner** Block
 
-* einen weiter unter stehenden, spezifischeren Block unwirksam machen.
-
----
-template: withinfo
-graphic: ExceptionDetails
-section: Optimal Re-Throwing
-name: correct_rethrow
-header: ### Optimale Weiterleitung
-
-Das Weiterwerfen eines gefangenen Exception-Objekts mit
-```
-…
-catch (SomeException &ex) {
-    …
-    // only partial recovery
-    throw ex;
-}
-```
-
-führt zur Erstellung einer Kopie **im Rahmen der Anweisung `throw ex;`**
-
-.N[
-Mit `throw;` kann das ursprünglich gefangene Exception-Objekt **ohne Kopieren**
-weitergeworfen werden.
-]
-
----
-template: withinfo
-graphic: ExceptionDetails
-section: Sclicing Exception Object
-name: avoidable_copy_slicing
-header: ### (Vermeidbarer) Rückschnitt auf Basisklasse
-
-Durch (vermeidbares) Kopieren des Exception-Objekts können geworfene
-Exceptions einer abgeleiteten Klasse per Slicing auf die Basisklasse
-reduziert werden.
-
-**Dies ist im Allgemenen nicht wünchenswert.**
-
-Daher sollte ein Kopieren vermieden werden:
-
-* Argumente von `catch`-Blöcken als Referenz spezifizieren.
-
-* Bei nur teilweise Auflösung Exception mit `throw;` weiterwerfen.
+* einen nachfolgenden **spezifischeren** Block unwirksam machen.
 
 ---
 template: withinfo
@@ -275,10 +232,90 @@ header: ### Sub-optimale Weiterleitung
 Sub-optimal ist grundsätzlich jede Weiterleitung, bei der das Exception-Objekt
 unnötig kopiert wird.
 
+Durch Kopieren des Exception-Objekts werden geworfene Exceptions einer
+abgeleiteten Klasse per Slicing auf die Basisklasse reduziert.
+
+.N.center[
+**Dies ist im Allgemenen unerwünscht.**
+]
+
+Daher sollte ein Kopieren vermieden werden:
+
+* Argumente von `catch`-Blöcken als Referenz spezifizieren.
+
+* Bei nur teilweiser Auflösung der Fehlersituation das beim Eintritt in den
+  `catch`-Block vorliegende Exception-Objekt mit `throw;` weiterwerfen.
+
 ---
 template: withinfo
 graphic: ExceptionDetails
-section: (No) Throwing from Destructoes
+section: Optimal Re-Throwing
+name: correct_rethrow
+header: #### Optimale Weiterleitung
+
+Nur mit in der folgenden Art und Weise wird das ursprünglich vorliegende
+Exception-Objekt **ohne Kopieren** erneut geworfen.
+```
+try {
+    …
+    … // code that may cause an exception
+    …
+}
+catch (SomeException &ex) {
+    …
+    // only partial recovery
+    throw;
+}
+```
+.N[
+Eine `throw`-Anweisung ohne nachfolgendes Argument kann nicht nur in einem
+`catch`-Block verwendet werden sondern auch in Funktionen, die aus einem
+`catch`-Block direkt oder indirekt aufgerufen werden.._[]
+]
+
+.F[:
+Gemeinsamkeiten mehrerer `catch`-Blöcke können damit auch dann problemlos in
+eine Hilfsfunktion ausgelagert werden, wenn diese eine komplexe Ablaufsteuerung
+benötigt und die gefangene Exception nicht nur am Ende weitergeworfen wird.
+]
+
+---
+template: plain
+header: #### Mögliche Optimierungen durch den Compiler
+
+Beim Eintritt in einen `catch`-Block führt
+```
+catch (SomeException ex) …
+```
+und beim Verlassen
+```
+    throw ex;
+```
+technisch gesehen zum Kopieren des Exception-Objekts:
+
+* Der Compiler darf Optimierungen anwenden – unter Einhaltung der für diese
+  Fälle im C++-Standard spezifizierten Semantik.
+
+* Dazu gehört Slicing und die Beachtung des Zugriffsschutzes für den
+  Kopier-Konstruktors, **nicht** aber dessen tatsächliche Ausführung.
+
+.N[
+Insbesondere ist daher beim Werfen einer Exception [RVO] üblich.._[]
+]
+
+.F[:
+Auch [NRVO] käme in Betracht, dürfte in der Praxis aber selten von Bedeutung
+sein, da Exception-Objekte meist beim ersten Werfen einer Exception als Argument
+der `throw`-Anweisung direkt erzeugt werden.
+]
+
+  [RVO]: http://en.wikipedia.org/wiki/Return_value_optimization
+  [NRVO]: http://stupefydeveloper.blogspot.de/2008/10/c-rvo-and-nrvo.html
+
+---
+template: withinfo
+graphic: ExceptionDetails
+section: (No) Throwing from Destructors
 name: dtor_exception_nogo
 header: ### (Keine) Exceptions aus Destruktoren werfen
 
@@ -314,24 +351,44 @@ template: plain
 name: no_more_throwspec
 header: ## `throw`-Spezifikationen vermeiden
 
-Nachdem über viele Jahre hinweg von C++-Experten praktisch einhellig empfohlen
-worden war, die seinerzeit von C++98 eingeführten `throw`-Spezifikationen zu
-vermeiden, wurden diese nun mit C++11 zum *deprecated feature*.
+Seit vielen Jahre empfehlen von C++-Experten praktisch einhellig die seinerzeit
+von C++98 eingeführten `throw`-Spezifikationen zu vermeiden.
+
+.N.center[
+Mit C++11 wurden `throw`-Spezifikationen zum *Deprecated Feature*.._[]
+]
+
+.F[:
+Dies bedeutet zwar, dass sie in einem künftigen C++-Standard ganz entfallen
+könnten, erfahrungsgemäß bieten Compiler aber selbst dann Aufrufoptionen oder
+`#pragma`-s, mit deren Hilfe sich Rückwärtskompatibilität erzielen lässt.
+Andererseits ist es aber auch denkbar, dass ein C++11 Compiler für jede
+Verwendung eine `throw`-Spezifikationen eine Warnung ausgibt.
+
+]
 
 ---
 template: plain
 name: noexcept
 header: ## Exception-Freiheit mit `noexcept` ankündigen
 
-Neu eingeführt wurde mit C++11 die `noexcept`-Qualifikation für Funktionen,
-welche folgendes bewirkt:
+Neu in C++11 ist die `noexcept`-Qualifikation für Funktionen.
 
-* Wirft eine damit qualifizierte Funktion dennoch eine Exception, kommt es zum
-  unwiderruflichen Prgrammabbruch (nach Durchlaufen eines frei festzulegenden
-  Handlers).
+Sie bewirkt folgendes:
 
-* Andere Funktionen betrachten eine mit `noexcept` qualifzierte Funktion als
-  *aufrufbar ohne Risiko, dass es zu einer Exceptions kommt*.._[]
+* Wirft eine `noexcept`-Funktion direkt oder indirekt eine Exception, wird das
+  Programm **unwiderruflich beendet** (ggf. auch erst nach Durchlaufen eines
+  frei festlegbaren Handlers).
+
+* In anderen Funktionen, welche wiederum `noexcept`-Funktion aufrufen, gelten
+  letztere als **aufrufbar ohne Risiko einer Exceptions**.._[]
+
+.F[:
+Im Kontext des Aufrufers kann das Auftreten von Exceptions bei
+`noexcept`-Funktionen in der Tat unberücksichigt bleiben … aber nicht, weil
+Exceptions in `noexcept`-Funktionen ausgeschlossen sind, sondern weil es ggf.
+**noch vor der Rückkehr** einer solchen Funktion zum Programmabbruch kommt.
+]
 
 .N[
 Insgesamt liegen mit der Umsetzung von `noexcept` durch gängige Compiler noch
@@ -339,50 +396,53 @@ zu wenige Erfahrungen vor, um eindeutige Richtlinien und Empfehlungen zur
 Benutzung dieses Features geben zu können.
 ]
 
-.F[:
-Dies ist insofern richtig, als Exceptions – treten Sie dennoch auf – prakisch
-unmittelbar zum Programmabbruch führen, d.h. im Kontext des Aufrufs muss die
-Möglichkeit von Exceptions bei solchen Funktionen in der Tat nicht berücksichigt
-werden … dennoch wird u.U. das Programm abgebrochen.
-]
-
 ---
 template: plain
 name: noexcept
 header: ## Bedingte Exception-Freiheit mit `noexcept`
 
-Über das auf der vorhergenden Seite gesagte hinaus ist `noxecept` auch eine
-Compilezeit-Funktion, mit welcher – insbesondere in Templates – die **bedingte
-Freiheit Exceptions** deklariert werden kann.
+Über das auf der vorhergenden Seite Dargestellte hinaus ist `noxecept` auch eine
+Compilezeit-Funktion, mit welcher insbesondere in Templates auch die **bedingte
+Freiheit Exceptions** ankündigen können.
 
-* Hiermit kann eine Funktion zum Ausdruck bringen, dass Exceptions nur dann
-  auftreten werden, wenn bestimmte aufgerufene Funktinen solche werfen.
+* Auf diese Weise kann eine Funktion zum Ausdruck bringen, dass Exceptions nur
+  dann auftreten, wenn bestimmte von ihr aufgerufene Funktionen diese werfen.
 
 * Dadurch kann zur Compilezeit bei der Instanziierung von Templates mit
   konkreten Typen entschieden werden, ob bei einer bestimmten Operation das
   Risiko von Exceptions besteht.
 
 * Dies eröffnet letztlich die Möglichkeit, dass Bibliotheksfunktionen über
-  Template-Metaprogrammierung unterschiedliche Implementierungen wählen.
+  Template-Metaprogrammierung unterschiedliche Implementierungen auswählen.
 
 ---
 template: plain
-name: exercise_thu2
-header: ## Übung
+name: noexcept
+header: ## Beispiele zu `noexcept`
 
-Ziel der Aufgabe:
-
-Erweiterung einer Klasse mit einer Fehlerbehandlung unter Nutzung von Exceptions.._[]
-
-.N[
-Weitere Details werden vom Dozenten anhand des Aufgabenblatts sowie der
-vorbereiteten Eclipse-Projekte erläutert.
-]
-
+Eine einfache Berechnung – Exceptions sind völlig ausgeschlossen:
+```
+float fahrenheit_to_centigrade(float temperature) noexcept {
+    return 9.0*temperature/5.0 + 32.0;
+}
+```
+Wenn es zu einer Exception kommt ist der Programmabruch jeglichem Versuch einer
+irgendwie gearteten Fortsetzung vorzuziehen:
+```
+extern void may_fail_catastrophically(int = 42) noexcept;
+```
+Eine Exception wird von `bar` nur geworfen, wenn `T::foo` eine wirft:._[]
+```
+template<class T>
+void bar(const T &arg) noexcept(noexcept(arg.foo())) {
+    … // an exception can neither occur here ...
+    arg.foo();
+    … // ... nor can an exception occur here
+}
+```
 .F[:
-Diese Aufgabe bietet über die Anwendung von Exceptions hinausgehend auch noch
-die Möglichkeit, entweder mit Hilfe virtueller Member-Funktionen oder mit Hilfe
-von Templates eine besonders flexible Lösung zu schaffen.
+The C++11-syntax is that ugly and requires nested `noexcept`-s; for C++14
+some polishing is expected.
 ]
 
 ---
@@ -678,13 +738,13 @@ header: ## Smart-Pointer
 
 -------------------------------------------------------------------------------
 
-* [Problem zyklischer Referenzierung mit …		](#refcount_problem)
-* [… "nur beobachtenden" Zeiger als Ausweg und …	](#weak_ptr_solution)
-* [… "verlorene" Ressourcen				](#weak_ptr_dangling)
+* [Problem der zyklischen Referenzierung	](#refcount_problem)
+* [Lediglich "beobachtende" Zeiger als Lösung	](#weak_ptr_solution)
+* ["Verlorene" Ressourcen			](#weak_ptr_dangling)
 
 -------------------------------------------------------------------------------
 
-* [Varianten der Implementierung		](#implementation_choices)
+* [Implementierungs-Varianten			](#implementation_choices)
 
 .F[:
 Berücksichtigt sind hier nur die Smart-Pointer von C++11, da mit diesem Standard
@@ -701,76 +761,77 @@ header: ### Smart-Pointer von C++11 im Vergleich
 [Smart-Pointer]: http://en.cppreference.com/w/cpp/memory
 
 Die von C++11 bereitgestellten [Smart-Pointer] repräsentieren die beiden
-wichtigsten Beziehungen, die ein Zeiger (evtl. als Bestandteil eines Objekt)
+wichtigsten Beziehungen, die ein Zeiger – evtl. als Bestandteil eines Objekt –
 zu auf dem Heap angelegten (anderen) Objekt haben kann:
 
 * Exklusive Eigentümerschaft: `std::unique_ptr`
 
 * Geteilte Eigentümerschaft: `std::shared_ptr`
 
-* Nutzer ohne Eigentümerschaft: `std::weak_ptr`
+* Beobachter ohne Eigentümerschaft: `std::weak_ptr`
 
 .N[
-Den mit C++98 eingeführte `std::auto_ptr` gibt es in C++11 zwar weiterhin,
-er sollte in neuen Programmen aber nicht mehr verwendet werden.._[]
+Den mit C++98 eingeführten `std::auto_ptr` gibt es zwar weiterhin, langfristig
+und für neue Programme empfiehlt C++11 an dessen Stelle aber die Verwendung von
+`std::unique_ptr`.._[]
 ]
 
 .F[:
 Substituting an `std::auto_ptr` with an `std::unique_ptr` should cause no major
 pains … if any problems occur they may rather indicate sleeping bugs caused by
-the special behavior of an `std::auto_ptr` and will now only become more obvious
-with an `std::unique_ptr`.
+the special behavior of an `std::auto_ptr` that will only become obvious with an
+`std::unique_ptr`.
 ]
 
 ---
 template: plain
 header: #### Exklusive Eigentümerschaft: `std::unique_ptr`
 
-Die Verwendung dieser Art von Smart-Pointer hilft dabei, die exklusive
-Eigentümerschaft für das referenzierte Objekt zu garantieren.
+Die Verwendung dieser Art von Smart-Pointer hilft, die exklusive
+Eigentümerschaft für das referenzierte Objekt sicherzustellen:
 
 .N[
 
-* Es gibt einen *Move-Konstruktor*,
+* Es gibt einen *Move-Konstruktor*
 
 * aber **keinen** *Copy-Konstruktor*.
 
 -------------------------------------
 
-* Es gibt ein *Move-Assignment*,
+* Es gibt ein *Move-Assignment*
 
-* aber **kein** Copy-Assignment.
+* aber **kein** *Copy-Assignment*.
 ]
 
 ---
 template: plain
-header: Geteilte Einegtümerschaft: `std::shared_ptr`
+header: #### Geteilte Einegtümerschaft: `std::shared_ptr`
 
-Die Verwendung dieser Art von Smart-Pointer hilft dabei, die geteilte
-Eigentümerschaft zu garantieren. Ihre Objekte enhalten jeweils *zwei*
-Zeiger:._[]
+Die Verwendung dieser Art von Smart-Pointer hilft, bei geteilter
+Eigentümerschaft die Beseitigung referenzierter Objekte sicherzustellen.
+
+Zur Implementuerung werden üblicherweise *zwei* Zeiger verwendet:._[]
 
   * Einer zeigt auf das referenzierte Objekt,
-  * der andere auf ein Referenzzähler-Hilfsobjekt.
+  * der andere auf ein Hilfsobjekt mit einem Referenzzähler.
 
-Von
+Von der `std::shared_ptr`-Klasse wird in letzterem durch
 
 * Default-Konstruktor,
 * Copy- und Move-Konstruktor,
-* Copy- und Move-Assignment sowie
-* Destruktor
+* Copy- und Move-Assignment
+* sowie Destruktor
 
-der `std::shared_ptr`-Klasse wird der Referenzzähler gemäß der Anzahl der
-Referenzierer des über den Zeiger erreichbaren Objekts verwaltet.
+die Anzahl der Referenzierer eingetragen bzw. aktualisiert.
 
 .N[
-Fällt der Stand des Referenzzählers im Hilfsobjekt von 1 auf 0, wird der
-Destruktur des referenzierten Objekts ausgeführt.
+Fällt der Referenzzähler auf 0, wird der Destruktur des referenzierten
+Objekts ausgeführt und dessen Speicherplatz freigegeben.
 ]
 
 .F[:
-Dies gilt für die typische Implementierung, eine etwa sparsamere Implementierung
-erfordert nur einer Zeiger, hat aber eine schlechtere Performance zur Laufzeit.
+Eine alternative Implementierung benötigt nur einen Zeiger bei schlechterer
+Laufzeit-Performance.
 ]
 
 ---
@@ -813,11 +874,20 @@ der Referenzierer eines Objekts zu prüfen, ob es sich
 
 * um (echte) Ressource-Eigentümer handelt
 
-* oder lediglich um Ressource-Beobachter?
+* oder lediglich um Ressource-Beobachter.._[]
 
 .W[
-Letztere müssen damit klarkommen, dass ihnen die Ressource "entzogen" wird, wenn
-es dafür keine anderen ("echten") Eigentümer mehr gibt.
+Letztere müssen damit rechnen, dass sie die beobachtete Ressource "verlieren".
+]
+
+Das geschieht genau dann, wenn es für die beobachtete Ressource keine
+wirklichen Eigentümer sondern allenfalls noch andere Beobachter gibt.
+
+.F[:
+In der typischen Implementierung des `std::shared_ptr` enthält ein zweiter
+Zähler im Hilfsobjekt die Summe der Anzahl von Eigentümern und Beobachtern.
+Fällt diese auf 0, kann auch der Speicherplatz für das Hilfsobjekt freigegeben
+werden.
 ]
 
 ---
@@ -831,24 +901,24 @@ Da die `std::weak_ptr` lediglich Beobachter sind,  unterstützen sie keinen
 direkten Zugriff zur referenzierten Ressource (mit `*` oder `->`).
 
 Vielmehr muss durch Aufruf der Member-Funktion `lock` zunächst ein
-`std::shared_ptr`._[] geholt werden und ähnlich wie beim `dynamic_cast` werden
-die zwei häufigsten Verwendungen gezielt unterstützt:
+`std::shared_ptr`._[] angefordert werden. Ganz ähnlich wie bei `dynamic_cast`
+werden dabei zwei typische Verwendungen unterstützt:
 
 * Erste Vorgehensweise:
 
-  * Rückgabe eines Zeigers und nachfolgend erforderlicher Test,
+  * Rückgabe eines Zeigers und nachfolgend erforderlicher Test;
   * wenn dieser ergibt, dass der Zeiger ein `nullptr` ist, existiert das
     ursprünglich beobachtete Objekt nicht mehr.
 
 * Zweiten Vorgehensweise:
 
-  * man erhält eine gültige Referenz (die ohne weitere Prüfungen nutzbar ist),
-  * wenn das ursprünglich beobachtete Objekt nicht mehr existiert, wird eine
-    Exception geworfen.
+  * Rückgabe einer Referenz, die ohne weitere Prüfungen nutzbar ist;
+  * wenn das ursprünglich beobachtete Objekt nicht mehr existiert,
+    wird eine Exception geworfen.
 
 .F[:
-Dieser `std::shared_ptr` ist es dann, der das Objekt ggf. am Leben hält, wenn
-die anderen Eigentümer zwischenzeitlich verschwinden sollten.
+Genau dieser `std::shared_ptr` ist es dann, der das referenzierte Objekt ggf.
+am Leben hält, auch wenn die anderen Eigentümer nun verschwinden sollten.
 ]
 
 ---
@@ -858,7 +928,7 @@ section: Implementation Choices
 name: implementing_smart_ptrs
 header: ### Typische Smart-Pointer Implementierungen
 
-#### `std::shared_ptr` - meist verwendete Variante
+#### `std::shared_ptr` – meist verwendete Variante
 
 Hierbei enthält ein `std::shared_ptr` (mindestens._[]) zwei Zeiger, von denen
 einer auf das referenzierte Objekt und der andere auf das Helfer-Objekt zeigt.
@@ -871,9 +941,9 @@ erforderlich werden.
 ]
 
 Das Helfer-Objekt wiederum enthält zwei Zähler, von denen einer typisch nur die
-Eigentümer, der andere beides, Eigentümer **plus** Beobachter zählt.
+Eigentümer, der andere beides zählt, also Eigentümer **plus** Beobachter.
 
-* Der erste Zähler entscheidet daraüber, wann das referenzierte Objekt
+* Der erste Zähler entscheidet darüber, wann das referenzierte Objekt
   freigegeben werden kann,
 
 * der zweite Zähler entscheidet darüber, wann das Hilfsobjekt freigegeben
@@ -884,25 +954,29 @@ template: withinfo
 graphic: SmartPointers
 section: Implementation Choices
 name: alternative_shared_ptr
-header: #### `std::shared_ptr` - alternative Implementierung
+header: #### `std::shared_ptr` – alternative Implementierung
 
 In einer alternativen Implementierung enthält ein `std::shared_ptr` nur
 **einen** Zeiger auf ein Helfer-Objekt, welches außer dem Referenzzählern einen
 Zeiger auf das referenzierte Objekt enthält.
 
-#### `std::weak_ptr` - typische Implementierung
+#### `std::weak_ptr` – typische Implementierung
 
 Die Implementierung entspricht im Wesentlichen dem der `std::smart_ptr`, also
-zwei Zweiger (auf referenziertes Objekt und Helfer-Objekt) oder nur ein Zeiger
-(auf Helfer-Objekt und von dort weiter zum referenzierten Objekt).
 
-#### `std::unique_ptr` - typische Implementierung
+* zwei Zweiger – auf referenziertes Objekt und Helfer-Objekt, oder
+* nur ein Zeiger – auf Helfer-Objekt und von dort aus weiter zum referenzierten
+  Objekt.
 
-Hierfür ist in der Regel ein klassischer Zeiger ausreichend.._[]
+#### `std::unique_ptr` – typische Implementierung
+
+Solange die Implementierung keinen *Stateful Custom Deleter* unterstützt, reicht
+ein klassischer Zeiger – ansonsten ist in zweiter Zeiger erforderlich.._[]
 
 .F[:
-If the `std::unique_ptr` implementation supports a "stateful custom deleter"
-another pointer will be required.
+But then advanced meta-programming techniques can help to save that second
+pointer for any `std::unique_ptr` that makes no use of a custom deleter or
+when one is used but it is not stateful.
 ]
 
 ---
