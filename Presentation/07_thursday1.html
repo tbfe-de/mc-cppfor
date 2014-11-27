@@ -88,7 +88,7 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
 
 .infographic[
 [![Info-Grafik](InfoGraphics/{{graphic}}.png)](InfoGraphics/{{graphic}}.png
-                "Click to open - add [CTRL+] SHIFT for new [tabbed] window")
+                "Click to open – add [CTRL+] SHIFT for new [tabbed] window")
 ]
 
 .pagefooter[
@@ -145,7 +145,7 @@ template: blank
 1. [Templates selbst schreiben			](#writing_templates)
 1. [Optimierung von Templates			](#optimising_templates)
 1. [Templates als Compilezeit-Funktionen	](#compiletime_functions)
-1. [Fortgeschrittene Präprozessor-Verwendung	](#advanced_preprocessor)
+1. [Fortgeschrittene Nutzung des Präprozessors	](#advanced_preprocessor)
 1. [Praktikum					](#exercise_thu1)
 
 -------------------------------------------------------------------------------
@@ -284,7 +284,7 @@ Der wesentliche Schlüssel dazu ist, das folgende zu verstehen:
 
 * Jeglicher "Input" muss aus Datentypen bestehen.._[]
 
-* Jeglicher "Output" betshet aus Datentypen.
+* Jeglicher "Output" besteht aus Datentypen.
 
 .I[
 Anders ausgedrückt:
@@ -294,7 +294,7 @@ Templates sind (auch) Typ-Transformationen zur Compilezeit.
 
 .F[:
 Mit einem kleinen Kunstgriff fallen darunter auch sämtliche zur Compilezeit
-Konstanten Werte von Grundtypen, sowie daraus berechenbaren Werte.
+konstanten Werte von Grundtypen, sowie daraus berechenbaren Werte.
 ]
 
 ---
@@ -312,11 +312,11 @@ aus *Funktionalen Programmierung* ([FP]) greifen:
 
 * jegliche Fallunterscheidung durch Spezialisierung erfolgen.
 
-Ein bisschen muss man das aber vielleicht trainieren …_[]
+Ein bisschen muss man das aber vielleicht trainieren …._[]
 
 .F[:
-… was ganz gut mit einer Einführung in eine "echte" FP-Sprache wie
-beispielsweise [Haskell] geht.
+… was ganz gut mit einer Einführung in eine "echte" FP-Sprache wie etwa
+[Haskell] geht.
 ]
 
 ---
@@ -336,7 +336,7 @@ unsigned long long fakul(unsigned long long n) {
 }
 ```
 
-Oder auch - zur Laufzeit rekursiv - so:
+Oder auch – zur Laufzeit rekursiv – so:
 ```
 unsigned long long fakul(unsigned long long n) {
     return (n == 0) ? 1 : n*fakul(n-1);
@@ -418,7 +418,7 @@ struct remove_pointer<T*> {
 (Denken Sie doch einfach mal selbst kurz nach!)
 
 ???
-Die Lösung lautet - natürlich - so:
+Die Lösung lautet – natürlich – so:
 ```
 template<typename T>
 struct remove_all_pointers {
@@ -434,7 +434,7 @@ struct remove_pointer<T*> {
 template: plain
 header: ### Type-Traits Library
 
-[Type Traits]: http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/boost_typetraits/background.html
+[Type-Traits]: http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/boost_typetraits/background.html
 
 Mit C++11 wurden die zuvor unter Boost entwickelten [Type-Traits] zum Standard.
 
@@ -480,7 +480,7 @@ Der Syntax des Präprozessors ist extrem einfach und erkennt nur:
   (welche die Wirkung enthaltener Kommata als Argumenttrenner aufheben).
 
 .W[
-Makro-Bezeichner liegen außerhalb von Namespaces und ihr Ersatztext wird ohne
+Makro-Bezeichner liegen außerhalb der C++-Namespaces und ihr Ersatztext wird ohne
 Beachtung des syntaktischen Kontexts als einfache Text-Substitution eingesetzt.
 ]
 
@@ -595,9 +595,9 @@ Generell sollten
 * und der Präprozessor nur dann für die systematische Code-Erzeugung
   genutzt werden,
 
-  * wenn sich dadurch wirklich signifikante Vereinfachungen,
+  * wenn sich dadurch wirklich signifikante Vereinfachungen sowie
 
-  * sowie höhere Fehlersicherheit und verbesserte Wartbarkeit ergibt.._[]
+  * höhere Fehlersicherheit und verbesserte Wartbarkeit ergeben.._[]
 
 .N[
 Es kann durchaus sinnvoll sein, im Ersatztext von *Helfer-Makros* wiederum
@@ -633,8 +633,8 @@ class name : public std::runtime_error {            \
 
 .F[:
 Klären Sie aber besser vorab, ob eine solche, auf gute Lesbarkeit getrimmte
-Formatierung beim nächsten Lauf eines "C++-Beautifiers" oder durch automatische
-"Einrückungshilfen" ihrer IDE nicht schon bald wieder zerstört wird.
+Formatierung nicht schon beim nächsten Lauf eines "C++-Beautifiers" oder durch
+automatische "Einrückungshilfen" bald wieder zerstört wird.
 ]
 
 
@@ -677,10 +677,10 @@ beabsichtigten Ersetzungen des Präprozessors resultieren, sind diese:
 
 * Nur über kurze Quelltextabschnitte hinweg nötige Makros zur systematischen
   Erzeugung von Quelltext sollten ggf. direkt nach ihrer letzten Verwendung
-  wieder mit `#undef' gelöscht werden.
+  wieder mit `#undef` gelöscht werden.
 
-* Ferner kann durch einen vorgeschalteten Test mit `#ifdef` ein evtl.
-  unbeabsichtigtes Überschreiben eines gleichnamigen Makros verhindert werden.
+* Ferner kann durch einen vorgeschalteten Test mit `#ifdef` das evtl.
+  unbeabsichtigte Überschreiben eines gleichnamigen Makros verhindert werden.
 
 Wird wie im Beispiel auf der nächsten Seite gezeigt, welches die oft notwendige
 Umwandlung von per `enum` definierten Bezeichnern in entsprechende (druckbare)

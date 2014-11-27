@@ -88,7 +88,7 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
 
 .infographic[
 [![Info-Grafik](InfoGraphics/{{graphic}}.png)](InfoGraphics/{{graphic}}.png
-                "Click to open - add [CTRL+] SHIFT for new [tabbed] window")
+                "Click to open – add [CTRL+] SHIFT for new [tabbed] window")
 ]
 
 .pagefooter[
@@ -431,13 +431,13 @@ Hier ist zu unterscheiden zwischen
 
 * dem Code, der noch vom [Aufrufer des Unterprogramms](#caller_code) (Caller)
   ausgeführt wird,
-* dem eigentlichen [Unterprogramm-**Ein**sprung](#jsr_code) und
+* dem eigentlichen [Unterprogramm-Einsprung](#jsr_code) und
 * demjenigen Code, der im [aufgerufenen Unterprogramm](#callee_code) (Callee)
   ausgeführt wird.
 
 .N[
 Hier bestehen grundsätzlich viele Freiheiten für den Compiler, aber nur
-solange sichergestellt ist, dass *Caller* und *Callee* zusammenpassen._[]
+solange sichergestellt ist, dass *Caller* und *Callee* zusammenpassen.._[]
 ]
 .F[:
 Hierum geht es prinzipiell wenn die Einhaltung bestimmter
@@ -519,10 +519,11 @@ vor dem Unterprogramm-Einsprung gültg war, besteht eine
 
 * leicht zu verfolgende Rückwärtsverkettung
 
-zur Main-Funktion (und von dort weiter ins Runtime-Startup-Modul), mit deren
-Hilfe beim "post-mortem"-Debugging anhand des Speicherabzugs die zum Zeit eines
-Programmabsturzes aktiven Funktionen rekonstruiert werden können.
-]
+zur Main-Funktion (und von dort weiter ins Runtime-Startup-Modul).
+
+Mit deren Hilfe können beim "post-mortem"-Debugging anhand des Speicherabzugs
+die zum Zeitpunkt eines Programmabsturzes aktiven Funktionen rekonstruiert
+werden.
 
 ---
 template: plain
@@ -1116,7 +1117,7 @@ Verschachtelung von Strukturen:
   Struktur.
 
 Zusätzlich gilt das [LSP] (Liskov Substitution Principle), gemäß dem ein ggf.
-erforderlicher Up-Cast (`Derived` => `Base`) vom Compiler automatisch erfolgt.
+erforderlicher Up-Cast (`Derived` → `Base`) vom Compiler automatisch erfolgt.
 
 .N[
 Da die Daten der Basisklasse direkt am Anfang der abgeleiteten Klasse liegen,
@@ -1375,9 +1376,10 @@ bereitstellen, mit der **jeder(!)** den `next`-Zeiger verändern kann.
 .F[:
 Auch in C++-Fachveröffentlichungen gab und gibt es gelegentlich die Tendenz,
 einfach voneinander abzuschreiben, ohne die Sachlage selbst zu überdenken …
-Explizit nicht zur Gruppe solcher Autoren gehört [Jiri Sukoup], der in seinem
-Buch [Taming C++] bereits 1994 den Nutzen von `friend`-Beziehungen ausführlich
-darstellte, obwohl er sich damit in Gegenposition zu anderen Autoren begab.
+Explizit **nicht** zur Gruppe solcher Autoren gehört [Jiri Sukoup], der in
+seinem Buch [Taming C++] bereits 1994 den Nutzen von `friend`-Beziehungen
+ausführlich darstellte, obwohl er sich damit in Gegenposition zu anderen
+Autoren begab.
 ]
 
 ---
@@ -1581,7 +1583,7 @@ ein Thema.
 
 .W[
 In allen vorhergehenden Beispielen, welche Elemente aus dem `Lifo` entnehmen,
-wurde das Thema Speicherverwaltung bislang vernachlässigt - es wird dafür auf
+wurde das Thema Speicherverwaltung bislang vernachlässigt – es wird dafür auf
 den folgenden Seiten im Zentrum stehen.
 ]
 
@@ -1636,8 +1638,8 @@ if (Double_Node *dp = dynamic_cast<Double_Node*>(p)) {
 Nun könnten noch weitere Tests auf andere mögliche Elementtypen, und dann ganz
 am Ende (außerhalb aller bedingten Blöcke):
 ```
-    // release dynamic memory
-    delete p;
+// release dynamic memory
+delete p;
 ```
 
 .W[
@@ -1833,7 +1835,7 @@ graphic: ContainerImplementations
 section: Polymorphic Elements
 name: container_implementations
 header: #### Template-Technik mit explizitem Polymorphismus
-:
+
 Wird bei auf Templates basierenden Container Polymorphismus hinsichtlich der
 Datenelemente benötigt, muss explizit ein Container von Zeigern verwendet
 werden:
@@ -1927,8 +1929,8 @@ Beim gerade gezeignet "Obstkorb" besteht z.B. ein Dilemma:
 * oder sollte er das eher nicht tun?._[]
 
 .F[:
-Do not take this lightly … an inaproriate decision may lead to a memory leak
-or even worsde, cause dangling pointers.
+Do not take this lightly … an inaproriate decision may lead to a memory leak,
+or even worse, cause dangling pointers.
 ]
 
 .N[
@@ -1952,7 +1954,7 @@ header: ## Typ-Bestimmung zur Laufzeit
 
 -----------------------------------------------------------------------
 
-* [Typ-Identifikation zur Laufzeit		](#runtype_typeident)
+* [Typ-Identifikation zur Laufzeit		](#explicit_rtti)
 
 -----------------------------------------------------------------------
 
@@ -2173,11 +2175,8 @@ header: ### Implementierung von explizitem RTTI
 
 [`class std::type_info`]: http://en.cppreference.com/w/cpp/types/type_info
 
-Hierfür ginb es keinen Durchgängigen Standard – welche Datenstrukturen für
-effiziente Entscheidungen notwendig sind, die bei `dynamic_cast` ja auch
-Basisklassen mit einbeziehen, entscheidet jede Implementierung selbst.
-
-Ein klein wenig lässt sich jedoch erahnen:
+Hierfür gibt es keinen durchgängigen Standard – ein klein wenig lässt sich
+jedoch erahnen:
 
 Egal ob im Rahmen von RTTI verwendet oder für eingebaute Typen und
 nicht-polymorphe Klassen:
@@ -2188,7 +2187,7 @@ nicht-polymorphe Klassen:
   **jede** darin verwendete Klasse vorhalten, für den Fall, dass es mit
   `typeid` angesprochen wird.._[]
 
-Um dynamischem Polymorphismus zu unterstützen könnten solche Obkekte mit der
+Um dynamischen Polymorphismus zu unterstützen, könnten solche Obkekte mit der
 Sprungtabelle für die virtuellen Member-Funktionen zusammengefasst werden,
 oder sie liegen an anderen Stelle und die Sprungtabelle verweist darauf.
 

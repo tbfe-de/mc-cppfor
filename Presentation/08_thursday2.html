@@ -169,9 +169,7 @@ header: ## Richtlinien für den Exception-Einsatz
 
 -------------------------------------------------------------------------------
 
-* [Optimale Weiterleitung		](#correct_rethrow)
-  * [(Rückschnitt auf Basisklasse)	](#avoidable_copy_slicing)
-  * [(Sub-optimale Weiterleitung)	](#problematic_rethrow)
+* [Sub-optimale Weiterleitung		](#problematic_rethrow)
 
 -------------------------------------------------------------------------------
 
@@ -744,7 +742,7 @@ header: ## Smart-Pointer
 
 -------------------------------------------------------------------------------
 
-* [Implementierungs-Varianten			](#implementation_choices)
+* [Typische Smart-Pointer Implementierungen	](#implementing_smart_ptrs)
 
 .F[:
 Berücksichtigt sind hier nur die Smart-Pointer von C++11, da mit diesem Standard
@@ -865,7 +863,7 @@ template: withinfo
 graphic: SmartPointers
 section: Breaking Cycles Using Weak Pointers
 name: weak_ptr_solution
-header: #### Nutzer ohne Eigentümerschaft: `std::weak_ptr`
+header: ### Nutzer ohne Eigentümerschaft: `std::weak_ptr`
 
 Mittels `std::weak_ptr` lassen sich zyklische Referenzen vermeiden.
 
