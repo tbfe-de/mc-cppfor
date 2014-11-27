@@ -233,14 +233,14 @@ name: reason_for_codebloat
 header: ### Ursache für "Code-Bloat"
 
 "Unnötig erzeugter" Maschinencode ergibt sich oft aus einer ungeschickten
-Strukturierung von Templates, bei denen erhebliche Vermischung existiert
-zwischen:
+Strukturierung von Templates.
 
-* Abschnitten, welche tatsächlich von den Instanziierungsparametern abhängigen
-  Maschinencode erzeugen, und
+Problematisch ist eine erhebliche Vermischung von
 
-* anderen Abschnitten, welche immer auf ein und denselben Maschinencode
-  hinauslaufen.
+* Abschnitten, welche abhängig von den Instanziierungsparametern stets
+  **unterschiedlichen** Maschinencode erzeugen, und
+
+* Abschnitten, die stets **ein und denselben** Maschinencode erzeugen.
 
 ---
 template: withinfo
@@ -249,28 +249,30 @@ section: Intermediate Step
 name: intermediate_step
 header: ### Vorbereitender Zwischenschritt
 
-Die Vorbereitung für die Reduzierung von Code-Bloat besteht darin,
+Die Vorbereitung für die Reduzierung von Code-Bloat sieht wie folgt aus:
 
-* möglichst große, zusammenhängende Abschnitte in einer Template-Klasse oder
-  Template-Funktion zu schaffen, die **tatsächlich** von den Instanziierungs-
-  (Typ und Wert) -argumenten abhängigen, und
+In einer Template-Klasse oder -Funktion sind möglichst große, zusammenhängende
+Abschnitte zu schaffen,
 
-* andere möglichst große Abschnitte, die immer auf ein und denselben
-  Maschinencode hinauslaufen.
+* die Maschinencode erzeugen, der tatsächlich von den Instanziierungsparametern
+  abhängt, und
+
+* diese damit zu trennen von anderen, immer auf ein und denselben Maschinencode
+  hinauslaufenden.
 
 ---
 template: withinfo
 graphic: ReducingCodeBloat
 section: Optimised Template
 name: optimised_template
-header: ### Optimierten Template
+header: ### Optimierte Template
 
-Abschnitte einer Template, die immer den selben Maschinencode hinauslaufen,
-können anschließend ausgelagert werden, und zwar:
+Abschnitte einer Template, die auf ein und denselben Maschinencode hinauslaufen,
+können ausgelagert werden, und zwar
 
-* für eine Template-Klasse in eine eine **Nicht-Template** Basisklasse, und
+* für eine Template-Klasse in eine **Nicht-Template** Basisklasse, und
 
-* für eine Template-Funktion in **Nicht-Template** Hilfsfunktionen.
+* für eine Template-Funktion in eine **Nicht-Template** Hilfsfunktionen.
 
 ---
 template: plain
@@ -278,17 +280,16 @@ name: compiletime_functions
 header: ## Templates als Compilezeit-Funktionen
 
 Eine weitere Sicht auf Templates ist es, sie als zur Compilezeit ausgeführte
-Funtionen zu verstehen.
+Funktionen zu verstehen.
 
 Der wesentliche Schlüssel dazu ist, das folgende zu verstehen:
 
-* Jeglicher "Input" muss aus Datentypen bestehen.._[]
+* Jeglicher "Input" besteht aus Datentypen.._[]
 
 * Jeglicher "Output" besteht aus Datentypen.
 
 .I[
-Anders ausgedrückt:
-
+**Anders ausgedrückt:**  
 Templates sind (auch) Typ-Transformationen zur Compilezeit.
 ]
 
@@ -304,15 +305,26 @@ header: ### Wiederholung und Verzweigung
 [FP]:      http://en.wikipedia.org/wiki/Functional_programming
 [Haskell]: http://tryhaskell.org/ "hier ein interaktives Tutorial"
 
-Da sich zur Compilezeit keine Schleifen mit `while` und keine Verzweigungen
-mit `if` programmieren lassen, muss man zu den entsprechenden Alternativen
-aus *Funktionalen Programmierung* ([FP]) greifen:
+Allerdings gibt es kein Konstrukt für zur Compilezeit ausgeführte
 
-* Jegliche Wiederholung muss per Rekursion und
+* Schleifen (analog `while` zur Laufzeit) und
 
-* jegliche Fallunterscheidung durch Spezialisierung erfolgen.
+* Verzweigungen (analog `if` zur Laufzeit).
 
-Ein bisschen muss man das aber vielleicht trainieren …._[]
+.N[
+Verwendbar sind dagegen die entsprechenden Alternativen der *Funktionalen
+Programmierung* ([FP]).
+]
+
+Es muss vielmehr
+
+* Wiederholung durch **Rekursion** und
+
+* Fallunterscheidung durch **Spezialisierung**
+
+ausgedrückt werden.
+
+Ein bisschen sollte man das vielleicht zunächst trainieren …._[]
 
 .F[:
 … was ganz gut mit einer Einführung in eine "echte" FP-Sprache wie etwa
@@ -372,11 +384,13 @@ header: ### Fakultäts-Berechnung zur Compilezeit
 
 Das folgende aber **ist** gültiges C++ …
 ```
+// the primary template (internally recursive) ...
 template<unsigned long long n>
 struct fakul {
-    static const
-    unsigned long long result = n*fakul<n-1>::result;
+    static const unsigned long long result = n*fakul<n-1>::result;
 };
+
+// ... and its specialisation (stops recursion)
 template<>
 struct fakul<0uLL> {
     static const unsigned long long result = 1;
@@ -401,7 +415,7 @@ header: ### Weitere Typ-Transformationen in Beispielen
 template<typename T>
 struct add_pointer {
     typedef T* result;
-}
+};
 ```
 
 #### Eine Zeigerstufe wegnehmen
@@ -411,7 +425,7 @@ struct remove_pointer;
 template<typename T>
 struct remove_pointer<T*> {
     typedef T result;
-}
+};
 ```
 #### Alle Zeigerstufen wegnehmen
 
@@ -423,11 +437,11 @@ Die Lösung lautet – natürlich – so:
 template<typename T>
 struct remove_all_pointers {
     typedef T result;
-}
+};
 template<typename T>
 struct remove_pointer<T*> {
     typedef remove_all_pointers<T> result;
-}
+};
 ```
 
 ---
@@ -540,11 +554,11 @@ template: plain
 name: cpp_code_generation
 header: ### Systematischen Quelltext erzeugen
 
-Hierfür könnte z.B. eine Liste von Bezeichnern vorliegen, für die ggf. an
-unterschiedlichen Stellen eines Quelltextes, unterschiedlicher Code zu erzeugen
-ist.
+Hierfür könnte z.B. eine Liste von Bezeichnern vorliegen, für die – eventuell
+auch an unterschiedlichen Stellen eines Quelltextes – unterschiedlicher Code
+zu erzeugen ist.
 
-Der Trick dabei ist, den Namen des zu expandierenden Makro einem anderen Makro
+Der Trick dabei ist, den Namen eines zu expandierenden Makros einem anderen Makro
 als Parameter zu übergeben:
 ```
 #define FOR_ALL_ERRORS(m)\
@@ -554,10 +568,13 @@ als Parameter zu übergeben:
     … // usw.
 ```
 
-Dieser Makro könnte dann mit den beiden auf der nächsten Seite gezeigten Makros
-als Parameter aufgerufen werden:
+Dieser Makro könnte jetzt z.B. mit den beiden auf der nächsten Seite gezeigten
+Makros als Parameter aufgerufen werden:
 ```
+// somewhere
 FOR_ALL_ERRORS(DEF_ERROR_CLASS)
+…
+// usually somewhere else
 FOR_ALL_ERRORS(DEF_THROW_HELPER)
 ```
 
@@ -590,14 +607,14 @@ header: ### Einige weitere Präprozessor-Tipps
 
 Generell sollten
 
-* Makros zur systematischen Quelltext-Erzeugung einfach gehalten werden,
+* Makros zur systematischen Quelltext-Erzeugung einfach gehalten werden, und
 
-* und der Präprozessor nur dann für die systematische Code-Erzeugung
-  genutzt werden,
+* der Präprozessor nur dann für die systematische Code-Erzeugung genutzt werden, 
+  wenn es im Sinne der folgenden Ziele geschieht:
 
-  * wenn sich dadurch wirklich signifikante Vereinfachungen sowie
-
-  * höhere Fehlersicherheit und verbesserte Wartbarkeit ergeben.._[]
+  * Signifikante Vereinfachungen
+  * Höhere Fehlersicherheit
+  * Verbesserte Wartbarkeit._[]
 
 .N[
 Es kann durchaus sinnvoll sein, im Ersatztext von *Helfer-Makros* wiederum
@@ -606,9 +623,9 @@ deren Argumentlisten systematische Ähnlichkeiten und Wiederholungen aufweisen.
 ]
 
 .F[:
-Z.B. weil absehbar ist, dass **weitere** (ähnlich gelagerte) Fälle nach und nach
-zu ergänzen sind und/oder der erzeugte Quelltext für **alle** bisherigen Fälle
-gemeinsame Anpassungen erfordern könnte.
+Z.B. weil absehbar ist, dass weitere, ähnlich gelagerte Fälle nach und nach zu
+ergänzen sind und/oder künftig für alle bisherigen Fälle gemeinsame Anpassungen
+erforderlich werden könnten.
 ]
 
 ---
@@ -622,8 +639,8 @@ Ggf. kann zusätzlich auch erwogen werden,._[]
 * den Gegenschrägstrich für die Fortsetzungszeilen immer in ein und dieselbe
   Spalte zu setzen,
 
-* und das Ende der Makro-Definition durch einen Kommentar explizit sichtbar zu
-  machen.
+* und das Ende der Makro-Definition durch einen Kommentar expliziter sichtbar
+  zu machen.
 ```
 #define DEF_ERROR_CLASS(name, desc)                 \
 class name : public std::runtime_error {            \
@@ -632,9 +649,11 @@ class name : public std::runtime_error {            \
 ```
 
 .F[:
-Klären Sie aber besser vorab, ob eine solche, auf gute Lesbarkeit getrimmte
-Formatierung nicht schon beim nächsten Lauf eines "C++-Beautifiers" oder durch
-automatische "Einrückungshilfen" bald wieder zerstört wird.
+Probieren Sie aber besser vorab aus, ob eine solche, auf gute Lesbarkeit
+zielende Formatierung nicht schon beim nächsten Lauf eines "C++-Beautifiers"
+wieder zerstört wird … und auch nicht durch die gutgemeinte "Einrückungshilfe"
+des syntaxbewussten Editors Ihres Kollegen, der damit Ihre Quelltexte ab und
+zu bearbeitet.
 ]
 
 
@@ -642,56 +661,59 @@ automatische "Einrückungshilfen" bald wieder zerstört wird.
 template: plain
 header: #### Namenskonventionen für Makros
 
-Da die Namen von Makros nicht mit C++ Namespaces verbunden sind, sollte jedes
-Projekt verbindliche Regeln aufstellen, welche Namen für Makros verwendet werden
+Da Makronamen nicht mit C++ Namespaces verbunden sind, sollte jedes Projekt
+verbindliche Regeln aufstellen, welche Namen für Makros verwendet werden
 dürfen.._[]
 
 Diese könnten z.B. sein:
 
 * Erstes Zeichen Großbuchstabe,
 * gefolgt von zwei oder mehr weiteren Zeichen,
-* die Großbuchstaben, Ziffern oder Tiefstrich sein dürfen,
+  * die Großbuchstaben, Ziffern oder Tiefstrich sein dürfen,
 * Ende mit `_H` aber nur bei Makros, die Include-Guards steuern.
 
 .N[
-Die "Mindestens-drei-Zeichen"-Regel beugt Komplikationen vor, die durch die oft
-noch übliche Konvention entstehen, Typ-Parameter in Templates `T1`, `T2`, `T3`,
-… zu nennen.
+Die "Mindestens-drei-Zeichen"-Regel beugt Komplikationen vor, die andernfalls
+durch die verbreitete Praxis entstehen könnten, für Typ-Parameter von Templates
+`T` (oder `T1`, `T2`, `T3`, …) und für Wert-Parameter `N` (oder `MIN`, `MAX` …)
+zu verwenden.
 ]
 
 .F[:
-Oftmals unbekannt ist auch, dass nicht nur der C89-Standard alle Makronamen für
-die Zwecke der Implementierung reserviert, welche mit einem Tiefstrich beginnen,
-sondern andere, evtl. in einem Projekt relevante Standards weitergehende Regeln
-enthalten können. So reserviert z.B. POSIX alle Makro-Namen für interne Zwecke,
-die mit `LC`, `E`, `SIG` oder `SIG_` beginnen, sofern ein Großbuchstabe oder
-eine Ziffer folgt.
+Oftmals weniger bekannt ist auch, dass nicht nur der C89-Standard alle
+Makronamen, welche mit einem Tiefstrich beginnen, für Zwecke der Implementierung
+reserviert, sondern andere, evtl. in einem Projekt relevante Standards mitunter
+deutlich weitergehende Regeln enthalten. So reserviert z.B. POSIX alle Makros
+für interne Zwecke, deren Namen die mit `LC`, `E`, `SIG` oder `SIG_` beginnen,
+sofern ein Großbuchstabe oder eine Ziffer folgt.
 ]
 
 ---
 template: plain
 header: #### Makros nur lokal definieren
 
-Weitere vorbeugende Maßnahmen gegen Überraschungen, welche aus nicht
-beabsichtigten Ersetzungen des Präprozessors resultieren, sind diese:
+Abschließend noch zwei weitere vorbeugende Maßnahmen gegen Überraschungen,
+welche nicht beabsichtigten Ersetzungen des Präprozessors vermeiden helfen:
 
 * Nur über kurze Quelltextabschnitte hinweg nötige Makros zur systematischen
   Erzeugung von Quelltext sollten ggf. direkt nach ihrer letzten Verwendung
-  wieder mit `#undef` gelöscht werden.
+  mit `#undef` wieder gelöscht werden.
 
-* Ferner kann durch einen vorgeschalteten Test mit `#ifdef` das evtl.
-  unbeabsichtigte Überschreiben eines gleichnamigen Makros verhindert werden.
+* Ferner kann durch einen vorgeschalteten Test mit `#ifdef` das unbeabsichtigte
+  Überschreiben eines (anderen) Makros verhindert werden, der eine weiter
+  ausgedehnte Sichtbarkeit hat und diese auch gezielt haben soll.
 
-Wird wie im Beispiel auf der nächsten Seite gezeigt, welches die oft notwendige
+Beides zeigt das Beispiel auf der nächsten Seite, welches die oft notwendige
 Umwandlung von per `enum` definierten Bezeichnern in entsprechende (druckbare)
 Zeichenketten demonstriert.._[]
 
 .F[:
-Tatsächlich setzt dieses Beispiel die in C++11 eingeführten *Enum Klassen* ein,
-bei welchen die einzelnen Bezeichner qualifiziert zu verwenden sind. Damit zeigt
-sich aber zugleich eine Stärke der Quelltext-Erzeugung durch Makros: um auf die
-klassischen Aufzählungstypen (zurück) zu wechseln, muss lediglich der Makro
-`MAP_COLOUR_TO_STRING` angepasst werden, nicht aber dessen Verwendungen.
+Dieses Beispiel verwendet noch zwei weitere, mit C++11 eingeführte Neuerungen,
+nämlich die neue Syntax zur *Typ-Definition mit `using`* und *`enum` Klassen*.
+Bei letzteren sind die einzelnen Bezeichner qualifiziert zu verwenden. Somit
+zeigt sich zugleich eine Stärke der Quelltext-Erzeugung durch Makros: um wieder
+auf die klassischen Aufzählungstypen (zurück) zu wechseln, müsste lediglich der
+Makro `MAP_COLOUR_TO_STRING` angepasst werden, nicht aber dessen Verwendungen.
 ]
 
 ---
@@ -704,22 +726,25 @@ enum class Colour : unsigned char { Red, Blue, Green };
 #ifdef MAP_COLOUR_TO_STRING
 #error "macro 'MAP_COLOUR_TO_STRING' already defined"
 #endif
-#define MAP_COLOUR_TO_STRING(c)\
-    case Colour::c: return "Colour::" #c
 std::string colour2string(Colour c) {
     switch (c) {
-        MAP_COLOUR_TO_STRING(Red);
-        MAP_COLOUR_TO_STRING(Blue);
-        MAP_COLOUR_TO_STRING(Green);
-        … // maybe map more colours
+       #define MAP_COLOUR_TO_STRING(c)\
+        case Colour::c: return "Colour::" #c;
+           // ----------------------------
+              MAP_COLOUR_TO_STRING(Red)
+              MAP_COLOUR_TO_STRING(Blue)
+              MAP_COLOUR_TO_STRING(Green)
+           // add more colours to map here
+           // ----------------------------
+       #undef MAP_COLOUR_TO_STRING
         default: {
-            using UC = unsigned char;
-            return "Colour::0x"
-                  + std::to_string(static_cast<UC>(c), 16);
+            using ULL = unsigned long long;
+            return "Colour::#"
+                 + std::to_string(static_cast<ULL>(c))
+                 + " (not mapped to a name)"
         }
     }
 }
-#undef MAP_COLOUR_TO_STRING
 ```
 
 ---
