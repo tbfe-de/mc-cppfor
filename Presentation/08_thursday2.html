@@ -234,7 +234,7 @@ Durch Kopieren des Exception-Objekts werden geworfene Exceptions einer
 abgeleiteten Klasse per Slicing auf die Basisklasse reduziert.
 
 .N.center[
-**Dies ist im Allgemenen unerwünscht.**
+**Dies ist im Allgemeinen unerwünscht.**
 ]
 
 Daher sollte ein Kopieren vermieden werden:
@@ -349,7 +349,7 @@ template: plain
 name: no_more_throwspec
 header: ## `throw`-Spezifikationen vermeiden
 
-Seit vielen Jahre empfehlen von C++-Experten praktisch einhellig die seinerzeit
+Seit vielen Jahre empfehlen von C++-Experten praktisch einhellig, die seinerzeit
 von C++98 eingeführten `throw`-Spezifikationen zu vermeiden.
 
 .N.center[
@@ -361,7 +361,7 @@ Dies bedeutet zwar, dass sie in einem künftigen C++-Standard ganz entfallen
 könnten, erfahrungsgemäß bieten Compiler aber selbst dann Aufrufoptionen oder
 `#pragma`-s, mit deren Hilfe sich Rückwärtskompatibilität erzielen lässt.
 Andererseits ist es aber auch denkbar, dass ein C++11 Compiler für jede
-Verwendung eine `throw`-Spezifikationen eine Warnung ausgibt.
+Verwendung einer `throw`-Spezifikationen eine Warnung ausgibt.
 
 ]
 
@@ -375,17 +375,17 @@ Neu in C++11 ist die `noexcept`-Qualifikation für Funktionen.
 Sie bewirkt folgendes:
 
 * Wirft eine `noexcept`-Funktion direkt oder indirekt eine Exception, wird das
-  Programm **unwiderruflich beendet** (ggf. auch erst nach Durchlaufen eines
-  frei festlegbaren Handlers).
+  Programm **unwiderruflich beendet** – wenn auch ggf. erst nach Durchlaufen
+  eines frei festlegbaren, zentralen Handlers.
 
 * In anderen Funktionen, welche wiederum `noexcept`-Funktion aufrufen, gelten
-  letztere als **aufrufbar ohne Risiko einer Exceptions**.._[]
+  letztere als **aufrufbar ohne Risiko einer Exception**.._[]
 
 .F[:
 Im Kontext des Aufrufers kann das Auftreten von Exceptions bei
 `noexcept`-Funktionen in der Tat unberücksichigt bleiben … aber nicht, weil
 Exceptions in `noexcept`-Funktionen ausgeschlossen sind, sondern weil es ggf.
-**noch vor der Rückkehr** einer solchen Funktion zum Programmabbruch kommt.
+**statt zur Rückkehr** einer solchen Funktion zum Programmabbruch kommt.
 ]
 
 .N[
@@ -400,8 +400,8 @@ name: noexcept
 header: ## Bedingte Exception-Freiheit mit `noexcept`
 
 Über das auf der vorhergenden Seite Dargestellte hinaus ist `noxecept` auch eine
-Compilezeit-Funktion, mit welcher insbesondere in Templates auch die **bedingte
-Freiheit Exceptions** ankündigen können.
+Compilezeit-Funktion, mit welcher insbesondere Templates auch die **bedingte
+Freiheit von Exceptions** ankündigen können.
 
 * Auf diese Weise kann eine Funktion zum Ausdruck bringen, dass Exceptions nur
   dann auftreten, wenn bestimmte von ihr aufgerufene Funktionen diese werfen.
@@ -410,8 +410,9 @@ Freiheit Exceptions** ankündigen können.
   konkreten Typen entschieden werden, ob bei einer bestimmten Operation das
   Risiko von Exceptions besteht.
 
-* Dies eröffnet letztlich die Möglichkeit, dass Bibliotheksfunktionen über
-  Template-Metaprogrammierung unterschiedliche Implementierungen auswählen.
+* Dies eröffnet letztlich die Möglichkeit, dass Bibliotheksfunktionen mittels
+  Techniken der Meta-Programmierung unter verschiedenen Implementierungen
+  wählen.
 
 ---
 template: plain
@@ -482,7 +483,7 @@ könnte.._[]
 Zum falschen Zeitpunkt ausgeführte Operationen sind oft einer zu komplexen
 Programmlogik anzulasten. Die vorwiegend genutzten und daher relativ gut
 getesteten Ausführungspfade sind dann zwar ohne Probleme, Schwierigkeiten
-treten aber bei seltenen Konstellationen auf, deren Vorgeschichte – zwecks
+treten aber bei selteneren Konstellationen auf, deren Vorgeschichte – zwecks
 Nachvollziehung des Fehlers – zudem oft schwer reproduzierbar ist.
 ]
 
@@ -490,8 +491,12 @@ Nachvollziehung des Fehlers – zudem oft schwer reproduzierbar ist.
 template: plain
 header: #### Um welche Ressourcen geht es?
 
-Grundsätzlich werden unter dem Begriff hier alle "knappen Betriebsmittel" verstanden,
-über die ein Programm nicht während seiner gesamten Ausführungszeit verfügen kann.
+Grundsätzlich werden unter dem Begriff hier alle
+
+* **"knappen" Betriebsmittel**
+
+verstanden, über die ein Programm nicht beliebig während seiner gesamten
+Ausführungszeit verfügen kann oder sollte:
 
 Die folgende Liste ist nur beispielhaft zu sehen und keineswegs erschöpfend:
 
@@ -514,12 +519,16 @@ header: #### Wie werden Ressourcen repräsentiert?
 In C/C++ gibt es zwei besonders häufig verwendete Abstraktionen, die eine
 Ressource repräsentieren:
 
-* **Zeiger** – eine Speicheradresse, an der wesentliche Informationen zur
-  Ressource stehen, oftmals repräsentiert durch eine Struktur, deren Inhalt im
-  Detail aber nicht von Interesse ist.
+* **Zeiger** – eine Speicheradresse,
 
-* **Handles** – in der Regel eine Ganzzahl, die einer Service-Schnittstelle zu
-  übergeben ist und dieser gegenüber die Ressource repräsentiert.._[]
+  * an der wesentliche Informationen zur Ressource stehen,
+  * oftmals repräsentiert durch eine Struktur,
+  * deren Inhalt im Detail aber nicht von Interesse ist.
+
+* **Handles** – in der Regel eine Ganzzahl,
+
+  * die einer Service-Schnittstelle zu übergeben ist,
+  * der gegenüber sie die Ressource repräsentiert.._[]
 
 .F[:
 Mitunter – aber nicht grundsätzlich – sind Handles Indizes, mit welchen Einträge
@@ -535,14 +544,15 @@ header: ### Mit RAII verwaltete Ressourcen
 
 [RAII]: http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization
 
-Bei [RAII] handelt es sich um die Ablürzung der von Bjarne Stroustrup
+Bei [RAII] handelt es sich um die Abkürzung der von Bjarne Stroustrup
 empfohlenen Technik, klassische Ressourcen zu verpacken:
 
 .N.center[
-Ressource Acquisition Is Initialisation
+**R**essource **A**cquisition **I**s **I**nitialisation
 ]
 
-In der Regel ist dazu eine kleine Hilfsklasse erforderlich, welche
+In der Regel ist dafür eine – meist sehr einfache – Hilfsklasse erforderlich,
+welche
 
 * die Ressource-Anforderung im Konstruktor und
 
@@ -573,9 +583,11 @@ Fall zuverlässig freigegeben.
 ]
 
 Insbesondere spielt es keine Rolle, wie und warum der Kontrollfluss den
-betreffenden Code-Block verlässt – also egal ob nach Ausführung der letzen
-Anweisung, vorzeitiges `return`, `break`, `continue` oder `throw`, letzteres
-auch in indirekt in einer aufgerufenen Funktion.
+betreffenden Code-Block verlässt, also egal ob
+
+* nach Ausführung der letzen Anweisung …
+* … durch vorzeitiges `return`, `break`, `continue` …
+* …  oder `throw` – auch wenn indirekt in einer aufgerufenen Funktion.
   
 ---
 template: withinfo
@@ -617,7 +629,6 @@ public:
 Offensichtlich benötigt die Klasse `Choice` zwei Sorten von Ressourcen:
 
 * ein `Window` (optional, also Multiplizität 0..1);
-
 * eine mehr oder weniger große Zahl von `MenuItem`-s (Multiplizität 1..*).
 
 ---
@@ -630,13 +641,13 @@ angefordert:
 Choice::Choice( … )
     : w(nullptr), m(nullptr) {
     try {
-    	w = new Window( … );
-    	m = new MenuItem[…];
+        w = new Window( … );
+        m = new MenuItem[…];
     } 
     catch( … ) {
-    	delete w;   // delete is nullptr-safe, so no problem if
-    	delete[] m; // either of first or second new above threw
-    	throw;
+        delete w;   // delete is nullptr-safe, so no problem if
+        delete[] m; // either of first or second new above threw
+        throw;
     }
 };
 ```
@@ -652,6 +663,7 @@ template: plain
 header: ##### Beispiel-Code `Choice`-Destruktor – kein RAII
 
 Nach erfolgreichem Durchlaufen des Konstruktors wird der Destruktor aktiviert.
+
 Dieser muss dann so aussehen:
 ```
 Choice::~Choice() {
@@ -757,10 +769,12 @@ name: unique_vs_shared
 header: ### Smart-Pointer von C++11 im Vergleich
 
 [Smart-Pointer]: http://en.cppreference.com/w/cpp/memory
+[Boost.Smart_ptr]: http://www.boost.org/doc/libs/release/libs/smart_ptr/smart_ptr.htm
 
-Die von C++11 bereitgestellten [Smart-Pointer] repräsentieren die beiden
-wichtigsten Beziehungen, die ein Zeiger – evtl. als Bestandteil eines Objekt –
-zu auf dem Heap angelegten (anderen) Objekt haben kann:
+Die von C++11 bereitgestellten [Smart-Pointer] repräsentieren (im Wesentlichen
+dem Vorbild von [Boost.Smart_ptr] folgend) die wichtigsten Beziehungen, die ein
+Zeiger zu einem anderen – i.d.R. aber nicht zwingend auf dem Heap angelegten –
+Objekt ausdrücken kann:
 
 * Exklusive Eigentümerschaft: `std::unique_ptr`
 
@@ -769,16 +783,15 @@ zu auf dem Heap angelegten (anderen) Objekt haben kann:
 * Beobachter ohne Eigentümerschaft: `std::weak_ptr`
 
 .N[
-Den mit C++98 eingeführten `std::auto_ptr` gibt es zwar weiterhin, langfristig
-und für neue Programme empfiehlt C++11 an dessen Stelle aber die Verwendung von
+Den mit C++98 eingeführten `std::auto_ptr` gibt es weiterhin, langfristig und
+für neue Programme empfiehlt C++11 an dessen Stelle aber die Verwendung von
 `std::unique_ptr`.._[]
 ]
 
 .F[:
 Substituting an `std::auto_ptr` with an `std::unique_ptr` should cause no major
-pains … if any problems occur they may rather indicate sleeping bugs caused by
-the special behavior of an `std::auto_ptr` that will only become obvious with an
-`std::unique_ptr`.
+pains. If problems occur they often rather indicate sleeping bugs caused by the
+special semantics of an `std::auto_ptr`, that now will only become more obvious.
 ]
 
 ---
@@ -808,7 +821,7 @@ header: #### Geteilte Einegtümerschaft: `std::shared_ptr`
 Die Verwendung dieser Art von Smart-Pointer hilft, bei geteilter
 Eigentümerschaft die Beseitigung referenzierter Objekte sicherzustellen.
 
-Zur Implementuerung werden üblicherweise *zwei* Zeiger verwendet:._[]
+Intern verendet die übliche Implementierung zwei Zeiger:._[]
 
   * Einer zeigt auf das referenzierte Objekt,
   * der andere auf ein Hilfsobjekt mit einem Referenzzähler.
@@ -843,8 +856,8 @@ Mitunter kann es notwendig werden, dass
 
 * ein Objekt, auf das per `std::shared_ptr` verwiesen wird,
 
-* selbst wiederum einen `std::shared_ptr` enthält, der auf Objekte der eigenen
-  Art zeigen kann.._[]
+* selbst wiederum einen `std::shared_ptr` enthält, der direkt oder indirekt._[]
+  auf Objekte der eigenen Art zeigt.
 
 .W[
 Dies vorausgesetzt, kann es zyklische Ketten von Referenzen geben, die einen
@@ -853,9 +866,10 @@ dessen Teile nur noch untereinander über `std::shared_ptr` verbunden sind.
 ]
 
 .F[:
-Es müssen nicht zwingend Objekte der eigenen Art sein, auch bei der Konstellation
-*"A zeigt auf B und B auf A"* oder *"A zeigt auf B, B zeigt auf C und C zeigt auf
-A"* kann das beschriebene Problem auftreten.
+Die Kernproblematik besteht also nicht nur, wenn ein `std::shared_ptr` **exakt**
+auf die Art von Objekten zeigt, die ihn enhtalten. Auch bei der Konstellation
+*"A zeigt auf B und B auf A"* oder *"A zeigt auf B, B zeigt auf C und C zeigt
+auf A"* kann das beschriebene Problem auftreten.
 ]
 
 ---
@@ -879,7 +893,7 @@ Letztere müssen damit rechnen, dass sie die beobachtete Ressource "verlieren".
 ]
 
 Das geschieht genau dann, wenn es für die beobachtete Ressource keine
-wirklichen Eigentümer sondern allenfalls noch andere Beobachter gibt.
+wirklichen Eigentümer mehr gibt sondern nur noch Beobachter.
 
 .F[:
 In der typischen Implementierung des `std::shared_ptr` enthält ein zweiter
@@ -895,24 +909,26 @@ section: Dangling Weak Pointer
 name: weak_ptr_dangling
 header: ### "Verlorene" Ressourcen
 
-Da die `std::weak_ptr` lediglich Beobachter sind,  unterstützen sie keinen
-direkten Zugriff zur referenzierten Ressource (mit `*` oder `->`).
+Da die `std::weak_ptr` die beobachtete Ressource verlieren können, unterstützen
+sie keinen direkten Zugriff darauf mit `*` oder `->`.
 
-Vielmehr muss durch Aufruf der Member-Funktion `lock` zunächst ein
-`std::shared_ptr`._[] angefordert werden. Ganz ähnlich wie bei `dynamic_cast`
-werden dabei zwei typische Verwendungen unterstützt:
+.N[
+Zunächst ist aus dem `std::weak_ptr` ein `std::shared_ptr` zu erstellen.._[]
+]
+
+Analog zum `dynamic_cast` werden zwei Vorgehensweisen unterstützt:
 
 * Erste Vorgehensweise:
 
-  * Rückgabe eines Zeigers und nachfolgend erforderlicher Test;
-  * wenn dieser ergibt, dass der Zeiger ein `nullptr` ist, existiert das
-    ursprünglich beobachtete Objekt nicht mehr.
+  * Initialisieren eines `std::shared_ptr` und nachfolgender Test;
+  * ergibt dieser, dass der Zeiger auf kein Objekt gültiges Objekt zeigt,
+    existiert das beobachtete Objekt nicht mehr.
 
-* Zweiten Vorgehensweise:
+* Zweite Vorgehensweise:
 
-  * Rückgabe einer Referenz, die ohne weitere Prüfungen nutzbar ist;
-  * wenn das ursprünglich beobachtete Objekt nicht mehr existiert,
-    wird eine Exception geworfen.
+  * Rückgabe eines ohne Prüfung benutzbaren `std::shared_ptr`;
+  * wenn das ursprünglich beobachtete Objekt nicht mehr existiert, wird
+    stattdessen eine Exception geworfen.
 
 .F[:
 Genau dieser `std::shared_ptr` ist es dann, der das referenzierte Objekt ggf.
@@ -928,8 +944,9 @@ header: ### Typische Smart-Pointer Implementierungen
 
 #### `std::shared_ptr` – meist verwendete Variante
 
-Hierbei enthält ein `std::shared_ptr` (mindestens._[]) zwei Zeiger, von denen
-einer auf das referenzierte Objekt und der andere auf das Helfer-Objekt zeigt.
+Hierbei enthält ein `std::shared_ptr` (mindestens._[]) **zwei Zeiger**, von
+denen einer auf das referenzierte Objekt und der andere auf ein Helfer-Objekt
+zeigt.
 
 .F[:
 Wenn ein `std::shared_ptr` über einen Basisklassen-Zeiger auf eine virtuelle
@@ -938,14 +955,16 @@ zum effizienten Zugriff auf das referenzierte Objekt noch ein weiterer Zeiger
 erforderlich werden.
 ]
 
-Das Helfer-Objekt wiederum enthält zwei Zähler, von denen einer typisch nur die
-Eigentümer, der andere beides zählt, also Eigentümer **plus** Beobachter.
+Das Helfer-Objekt wiederum enthält **zwei Zähler**, von denen einer die
+Eigentümer, der andere (typisch) beides, Eigentümer *plus* Beobachter.
 
-* Der erste Zähler entscheidet darüber, wann das referenzierte Objekt
-  freigegeben werden kann,
+Damit entscheidet der
 
-* der zweite Zähler entscheidet darüber, wann das Hilfsobjekt freigegeben
-  werden kann.
+* erste Zähler darüber, wann das **referenzierte Objekt** und
+
+* der zweite Zähler darüber, wann das **Hilfsobjekt**
+
+freigegeben wird.
 
 ---
 template: withinfo
@@ -955,26 +974,25 @@ name: alternative_shared_ptr
 header: #### `std::shared_ptr` – alternative Implementierung
 
 In einer alternativen Implementierung enthält ein `std::shared_ptr` nur
-**einen** Zeiger auf ein Helfer-Objekt, welches außer dem Referenzzählern einen
-Zeiger auf das referenzierte Objekt enthält.
+**einen** Zeiger auf ein Helfer-Objekt, das neben den Referenzzählern nun
+auch einen Zeiger auf das referenzierte Objekt enthält.
 
 #### `std::weak_ptr` – typische Implementierung
 
-Die Implementierung entspricht im Wesentlichen dem der `std::smart_ptr`, also
+Die Implementierung entspricht im Wesentlichen dem der `std::shared_ptr`, also
 
-* zwei Zweiger – auf referenziertes Objekt und Helfer-Objekt, oder
-* nur ein Zeiger – auf Helfer-Objekt und von dort aus weiter zum referenzierten
-  Objekt.
+* zwei Zweiger – auf referenziertes Objekt und Helfer-Objekt, **oder**
+* ein Zeiger – auf Helfer-Objekt und von dort weiter zum referenzierten Objekt.
 
 #### `std::unique_ptr` – typische Implementierung
 
-Solange die Implementierung keinen *Stateful Custom Deleter* unterstützt, reicht
-ein klassischer Zeiger – ansonsten ist in zweiter Zeiger erforderlich.._[]
+Solange die Implementierung keinen *Stateful Custom Deleter* unterstützt reicht
+**ein** klassischer Zeiger – sonst sind u.U. **zwei** Zeiger erforderlich.._[]
 
 .F[:
 But then advanced meta-programming techniques can help to save that second
-pointer for any `std::unique_ptr` that makes no use of a custom deleter or
-when one is used but it is not stateful.
+pointer for any `std::unique_ptr` that **makes no use** of a custom deleter or
+when the one used **is not stateful**.
 ]
 
 ---
