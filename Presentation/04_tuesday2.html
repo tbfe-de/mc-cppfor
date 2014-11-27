@@ -151,22 +151,21 @@ template: blank
 
 Kürzere Pausen werden jeweils nach Bedarf eingelegt.
 
-Die Besprechung der Musterlösung(en) erfolgt im direkten Anschluss an die
-Mittagspause.
+Die Besprechung der Musterlösung(en) erfolgt zu Beginn des folgenden Vormittags.
 
 ---
 template: linkinfo
 graphic: STL-IteratorCategories
 name: iterator_categories
-header: ## Iteratoren-Kategorien
+header: ## Iterator-Kategorien
 
 ------------------------------------------------------------------------
 
-* [Unidirektional-Iteratoren		](#unidirectional_iterators)
+* [Unidirektionale Iteratoren		](#unidirectional_iterators)
 
 ------------------------------------------------------------------------
 
-* [Bidirektional-Iteratoren		](#bidirectional_iterators)
+* [Bidirektionale Iteratoren		](#bidirectional_iterators)
 
 ------------------------------------------------------------------------
 
@@ -179,17 +178,17 @@ template: withinfo
 graphic: STL-IteratorCategories
 section: Unidirectional Iterators
 name: unidirectional_iterators
-header: ### Unidirektional-Iteratoren
+header: ### Unidirektionale Iteratoren
 
-Iteratoren, welche der Kategorie der Unidirektional-Iteratoren angehören, können
+Iteratoren, welche der Kategorie *Unidirectional-Iterator* angehören, können
 sich – ihrem Namen entsprechend – nur in eine Richtung bewegen, nämlich vom
 Anfang eines Containers zu dessen Ende hin.
 
-Um pure Unidirektional-Iteratoren handelt es sich bei
+Um pure Unidirektionale Iteratoren handelt es sich bei
 
 * `std::forward_list<T>::iterator`
 
-die `const_`-Variante eingeschlossen.
+inklusive der zugehörigen `const_`-Variante.
 
 
 ---
@@ -197,19 +196,23 @@ template: withinfo
 graphic: STL-IteratorCategories
 section: Bidirectional Iterators
 name: bidirectional_iterators
-header: ### Bidirektional-Iteratoren
+header: ### Bidirektionale Iteratoren
 
-Iteratoren, die der Kategorie der Bidirektional-Iteratoren angehören, können
-sich – ihrem Namen entsprechend – in zwei Richtung bewegen, nämlich vom Anfang
-eines Containers zu dessen Ende hin und umgekehrt.
+Iteratoren, die der Kategorie *Bidirectional-Iterator* angehören, können sich –
+ihrem Namen entsprechend – in zwei Richtung bewegen, nämlich vom Anfang eines
+Containers zu dessen Ende hin und umgekehrt.
 
-Um Bidirektional-Iteratoren handelt es sich bei
+.N[
+Die Kategorie *Bidirectional-Iterator* schließt die Fähigkeiten der Kategorie
+*Unidirectional-Iterator* ein.
+]
+
+Um Bidirektionale Iteratoren handelt es sich bei
 
 * `std::list<T>::iterator`
 * sowie den Iteratoren der assoziativen Container,
 
-die jeweiligen `const_`, `reverse_` und `const_reverse_`-Varianten
-eingeschlossen.
+inklusive der jeweiligen `const_`, `reverse_` und `const_reverse_`-Varianten.
 
 ---
 template: withinfo
@@ -218,30 +221,34 @@ section: Random Access Iterators
 name: random_access_iterators
 header: ### Iteratoren mit wahlfreiem Zugriff
 
-Iteratoren, die der Kategorie der Random-Access-Iteratoren angehören, können –
+Iteratoren, die der Kategorie *Random-Access-Iterator* angehören, können –
 ihrem Namen entsprechend – innerhalb des zugehörigen Containers effizient
 wahlfrei zugreifen.
+
+.N[
+Die Kategorie *Random-Access-Iterator* schließt die Fähigkeiten der Kategorie
+*Bidirectional-Iterator* ein.
+]
 
 Neben der Addition und Subtraktion von Ganzzahlen (womit der Iterator über
 größere Distanzen weitergschaltet wird) kann über Differenzbildung auch die
 Anzahl der Elemente bestimmt werden, die sich zwischen zwei Iteratorpositionen
 befinden.
 
-Um Random-Access-Iteratoren handelt es sich bei
+Um Iteratoren mit wahlfreiem Zugriff handelt es sich bei
 
 * `std::array<T, N>::iterator`,
 * `std::vector<T>::iterator` und
 * `std::deque<T>::iterator`
 
-die jeweiligen `const_`, `reverse_` und `const_reverse_`-Varianten
-eingeschlossen.
+inklusive der jeweiligen `const_`, `reverse_` und `const_reverse_`-Varianten.
 
 ---
 template: plain
-header: ### Grenzprüfung bei Random-Access-Iteratoren
+header: ### Grenzprüfung Iteratoren mit wahlfreiem Zugriff
 
 Hier ist zu beachten, dass die Minimal-Anforderungen des C++-Standards so
-gefasst sind, dass eine hoch-effiziente Implementierung möglich ist, auch
+gefasst sind, dass eine sehr effiziente Implementierung möglich ist, auch
 wenn dies auf Kosten der Sicherheit geht.
 
 .W[
@@ -261,13 +268,13 @@ haben.
 ]
 
 Sichergestellt ist aber, dass zwei Iteratoren, die in verschiedene Container
-zeigen, niemals als "gleich" angesehen werden.
+zeigen, niemals als *gleich* angesehen werden.
 
 ---
 template: linkinfo
 graphic: STL-IteratorUsages
 name: iterator_conventions
-header: ## Iterator-Konventionen
+header: ## Konventionen der Iterator-Schnittstelle
 
 ----------------------------------------------------------------------------
 
@@ -308,21 +315,21 @@ Mit Iteratoren als Bindeglied zwischen Containern und Algorithmen sind bei
 keine 480 (= 12 × 40) Implementierungen notwendig.._[]
 
 .F[:
-Unter Berücksichtigung der Tatsache, dass nicht alle Algorithmen für alle
-Container sinnvoll sind, wird die Zahl der erforderlichen Implementierungen
-um die hundert sein.
+Selbst unter Berücksichtigung der Tatsache, dass nicht alle Algorithmen für alle
+Container sinnvoll sind, würde die Zahl der erforderlichen Implementierungen
+immer noch bei mehreren hundert liegen.
 ]
 
 ---
 template: withinfo
 graphic: STL-IteratorUsages
 section: Container Dimension
-name: cont_algo_axis
-header: ### Container- und Algorithmen-Achse
+name: container_axis
+header: ### Container-Achse
 
 In C++98 wurden drei sequenzielle und vier assoiative Container standardisiert.
 
-Mit C++11 sind es nun insgesamt vier sequenzielle und acht assoziative Container.
+Mit C++11 sind es nun insgesamt fünf sequenzielle und acht assoziative Container.
 
 (C++14 hat keine weiteren Container hinzugefügt.)
 
@@ -336,14 +343,12 @@ header: ### Algorithmen-Achse
 Hier gibt es – je nach zählweise – im Rahmen des ISO&ANSI-Standards gut drei
 Dutzend Einträge.
 
-.N[
 Viele Algorithmen kommen in "Familien" wie etwa:
 
 * Grundlegende Variante
 * Variante endend mit `_if` für flexible Bedingungsprüfung
 * Variante endend mit `_copy` für Ergebnisablage in neuem Container
 * Soweit sinnvoll die Kombination von Obigem
-]
 
 
 ---
@@ -351,7 +356,7 @@ template: withinfo
 graphic: STL-IteratorUsages
 section: Input Iterators
 name: input_iterators
-header: ### Input-Iterator-Kategorie
+header: ### Input-Iterator
 
 Input-Iteratoren sind *abwechselnd*
 
@@ -370,7 +375,7 @@ template: withinfo
 graphic: STL-IteratorUsages
 section: Output Iterators
 name: output_iterators
-header: ### Output-Iterator-Kategorie
+header: ### Output-Iterator
 
 Output-Iteratoren sind *abwechselnd*
 
@@ -399,7 +404,9 @@ angezeigt, dass der als Rückgabewert gelieferte Iterator
 im zur Bearbeitung übergebenen Daten-Bereich zeigt.
 
 .W[
-Beim Suchen in einem leeren Container wird stets die Endposition geliefert.
+Wird nur ein Teilbereich eines Containers `c` übergeben, der sich nicht bis zu
+dessen Ende erstreckt, darf zur Prüfung auf Erfolg oder Misserfolg nicht mit
+`c.end()` verglichen werden.
 ]
 
 ---
@@ -407,7 +414,7 @@ template: withinfo
 graphic: STL-IteratorUsages
 section: Return Failure from Search
 name: failure_from_searching
-header: ### Fehlgeschlagene Suche
+header: ### Gescheiterte Suche
 
 Beim Suchen wird der Misserfolg damit angezeigt, dass der als Rückgabewert
 gelieferte Iterator
@@ -415,6 +422,11 @@ gelieferte Iterator
 * immer auf die Endposition
 
 des zur Bearbeitung übergebenen Bereichs zeigt.
+
+.W[
+Beim Suchen in einem leeren Container oder Bereich wird stets die Endposition
+des Containers bzw. des Bereichs geliefert.
+]
 
 ---
 template: withinfo
@@ -429,6 +441,11 @@ Beim Füllen eines Containers ist es üblich, dass Algorithmen
 
 durch einen entsprechenden Iterator als Rückgabewert anzeigen.
 
+.I[
+Dies ist sinnvoll und praktisch, um den Container ab dieser Stelle später weiter
+füllen zu können.
+]
+
 ---
 template: withinfo
 graphic: STL-IteratorUsages
@@ -437,27 +454,21 @@ section: Return "New End" when "Removing" Elements
 header: ### Löschanzeige durch neues (logisches) Ende
 
 Da die Algorithmen für eine große Zahl von Containern funktionieren sollen,
-finden gibt es einige aus pragmatischen Sicht sinnvolle aber dennoch
-"merkwürdige"._[] Besonderheiten.
+finden gibt es einige aus pragmatischer Sicht sinnvolle aber Besonderheiten.
 
-.F[:
-… des Merkens würdige …
+Eine davon betrifft die Tatsache, dass "löschende" Algorithmen nicht davon
+ausgehen, den bearbeiteten Container verkleinern zu können.
+
+.I[
+Dadurch funtionieren diese Algorithmen auch für die eingebauten Arrays und
+die STL-Klasse `std::array`.
 ]
 
-Eine davon betrifft die Frage, wie mit aus einem Container gelöschten ELementen
-grundsätzlich zu verfahen ist, wenn der "löschende" Algorithmus den Container
-nicht physisch verkleinern kann.
+Beim Löschen von Elementen aus Containern wird nur "logisch gelöscht", d.h.
 
-Beim "logischen Löschen" von Elementen aus Containern
+* die enthaltenen Elemente erden ggf. anders angeordnet, und
 
-* werden die enthaltenen Elemente lediglich anders angeordnet, und
-
-* ein Iterator, welcher das "neue Ende" bezeichnet, wird als Rückgabewert
-  geliefert.
-
-.N[
-In den späteren Code-Fragmenten dieses Kapitels folgen konkrete Beispiele.
-]
+* als Rückgabewert ein Iterator geliefert, der das "neue Ende" bezeichnet.
 
 ---
 template: plain
@@ -467,7 +478,7 @@ header: ## Iteratoren und Algorithmen
 Die konsequente Verwendung von Iteratoren bei der Implementierung aller
 STL-Algorithmen verschafft eine besondere Flexibilität.
 
-Iteratoren sind in der Regel einfache (Helfer-) Klassen, welche gemäß dem
+Iteratoren sind in der Regel einfache (Helfer-) Klassen, welche abhängig vom
 Container, für den sie jeweils zuständig sind, eine vollkommen unerschiedliche
 Implementierung besitzen können.
 
@@ -482,8 +493,8 @@ template: plain
 header: ### Beispiel: Implementierung des `copy`-Algorithmus
 
 Zum besseren Verständnis, wie mittels Iteratoren die Algorithmen eine besondere
-Flexibilität erzielt wird, ist ein Blick auf eine mögliche Implementierung des
-`copy`-Algorithmus hilfreich:.._[]
+Flexibilität erzielen, ist ein Blick auf eine mögliche Implementierung des
+`copy`-Algorithmus hilfreich:._[]
 ```
 template<typename T1, typename T2>
 T2 my_copy(T1 from, T1 upto, T2 dest) {
@@ -512,10 +523,10 @@ std::set<int> s;
 v.resize(s.size());
 std::copy(s.begin(), s.end(), v.begin());
 ```
-Da über einen normalen Iterator – wie von `v.begin()` geliefert – nur bereits
+Da von einen normalen Iterator – wie von `v.begin()` geliefert – nur bereits
 vorhandene Elemente überschrieben aber keine neuen Elemente angefügt werden
-können, ist es wichtig, den Vector vor dem Kopieren auf die notwendige (Mindest-)
-Größe zu bringen.
+können, ist es wichtig, den Ziel-Container vor dem Kopieren auf die notwendige
+(Mindest-) Größe zu bringen.
 
 ---
 template: plain
@@ -523,19 +534,27 @@ header: #### Anhängen an Vektoren
 
 ##### Hilfsklasse: `back_insert_iterator`
 
-Ohne den aufnehmenden Vektor zuvor auf eine passende Größe zu bringen, lässt
-sich eine sichere Variante des Kopierens erreichen, indem man die neuen Elemente
-stets mit `push_back` anfügt:._[]
+Ohne den Ziel-Container zuvor auf eine passende Größe zu bringen, lässt sich
+eine sichere Variante des Kopierens auch erreichen, indem neue Elemente mit
+`push_back` angefügt werden:._[]
 ```
 std::copy(s.begin(), s.end(),
           std::back_insert_iterator<std::vector<int>>(v)
 );
 ```
+
+.N[
+Da die in diesem und vielen folgenden Beispielen an Algorithmen übergebenen
+Argumentlisten recht lang sind, erfolgt ein Umbruch innerhalb der
+Argument-Liste, um die Lesbarkeit zu verbessern.
+]
+
+Dabei werden auch unterschiedliche Formatierungs-Stile demonstriert.._[]
+
 .F[:
-Das Umbrechen längerer Zeilen bei der Argumentübergabe erscheint sinnvoll, um
-die Argumente nach ihrer Bedeutung zu gruppieren. Die dabei verwendete
-asymmetrische Klammernsetzung ist sicher Geschmackssache, entspricht aber dem
-oft auch bei geschweiften (Block-) Klammern angewandten Stil.
+Die oben verwendete asymmetrische Klammerung der Argumentliste ist sicher
+Geschmackssache, dupliziert aber den oft auch bei geschweiften Klammern
+üblichen Stil.
 ]
 
 ---
@@ -576,7 +595,7 @@ Hilfsfunktion `std::back_inserter` auch für die Klassen
 * `std::deque`
 
 und es existiert auch ein `std::front_insert_iterator` sowie eine Hilfsfunktion
-`std::front_inserter` welche mit den Klassen
+`std::front_inserter`, welche mit den Klassen
 
 * `std::list`,
 * `std::deque` und
@@ -598,7 +617,7 @@ header: #### In assoziative Container einfügen
 ##### Hilfsklasse: `insert_iterator`
 
 Hiermit können z.B. alle Elemente einer Liste wie folgt in ein `std::set`
-übertragen werden (wobei Duplikate natürlich nicht übernommen werden._[]):
+übertragen werden – wobei Duplikate natürlich nicht übernommen werden:._[]
 
 ```
 std::list<MyClass> li;
@@ -627,10 +646,13 @@ std::copy(li.begin(), li.end(),
 ```
 
 Etwas ungewöhnlich ist hier das zusätzliche Argument. Dessen Zweck ist es, einen
-Optimierungshinweis zu geben, den der Insert-Iterator ggf. verwendet, um die
-Suche nach der Einfügeposition abzukürzen. Üblicherweise wird – wenn kein
-wirklicher Hinweis gegeben werden kann – der Beginn-Iterator des jeweiligen Sets
-verwendet.._[]
+Optimierungshinweis._[] zu geben, den der Insert-Iterator ggf. verwendet, um die
+Suche nach der Einfügeposition abzukürzen.
+
+.N[
+Üblicherweise wird – wenn kein wirklicher Hinweis gegeben werden kann – der
+Beginn-Iterator des jeweiligen Sets verwendet.
+]
 
 .F[:
 Da es sich nur um einen Hinweis handelt, ist die Angabe unkritisch, auch wenn
@@ -682,9 +704,9 @@ Offensichtlich gibt es zwei Konstruktoren, von denen einer ein
 Input-Stream-Iterator liefert im Vergleich mit einem per Default-Konstrukor
 erzeugten Gegenstück zunächst `false`.  
 Die Operationen `*` und `++` werden auf eine Eingabe mit `operator>>`
-abgebildet, wobei die eingelesene Variable genau Typ hat, der zur
+abgebildet, wobei die eingelesene Variable genau den Typ hat, der zur
 Instanziierung der Template verwendet wurde. Sobald der Eingabestrom den
-"good"-Zustand verlässt, liefert der damit verbundene Istream-Iterator beim
+*good*-Zustand verlässt, liefert der damit verbundene Istream-Iterator beim
 erneuten Vergleich mit dem per Default-Konstruktor erstellten `true`.
 ]
 
@@ -737,10 +759,8 @@ könnten **dahinter** (= an größeren Adressen im Speicher) liegende Variablen
 
 ---
 template: plain
-header: #### Kopieren zwischen unterschiedlichen Container-Typen
+header: #### Kopieren zwischen unterschiedlichen Container-Typen._[]
 
-Beim Kopieren zwischen ganz unterschiedlichen Containern erfolgen auch
-ggf. notwendige Anpassungen des Elementtyps:
 ```
 using namespace std;
 vector<double> v;
@@ -764,6 +784,11 @@ set<int> s; copy(data, endp, inserter(s, s.begin()));
 // ... to stdout with semicolon and space after each value
 copy(s.begin(), s.end(), ostream_iterator<int>(cout, "; "));
 ```
+
+.F[:
+Im Rahmen der Zuweisungskompatibilität erfolgt beim Kopieren zwischen
+unterschiedlichen Containern auch die Typ-Konvertierung des Elementtyps.
+]
 
 ---
 template: plain
@@ -855,8 +880,24 @@ Spezialisierung erfolgen.
 template: plain
 header: ## Callbacks aus Algorithmen
 
+---------------------------------------------------------------------------------
+
+* [Generelle Möglichkeiten für Callbacks		](#callbacks_general)
+* [Callback mit Funktor 				](#callback_with_functor)
+* [Callback mit Lambda					](#callback_with_lambda)
+* [Prädikate für Algorithmen (generell)			](#predicates_general)
+* [Prädikate für Algorithmen (Beispielserie)		](#predicate_examples))
+* [Algorithmen vs. spezifische Member-Funktionen	](#generic_vs_specific)
+
+---------------------------------------------------------------------------------
+
+---
+template: plain
+name: callbacks_general
+header: ### Generelle Möglichkeiten für Callbacks 
+
 Prinzipiell sind Algorithmen zwar Code aus einer Bibliothek, nicht selten enthält dieser
-aber "Rückrufe" an die Applikation.
+aber "*Callbacks*" an die Applikation.
 
 Dafür existieren drei Möglichkeiten:
 
@@ -874,11 +915,12 @@ Dafür existieren drei Möglichkeiten:
 
 ---
 template: plain
-header: ### Callback-Beispiel mit Funktor
+name: callback_with_functor
+header: ### Callback mit Funktor
 
 Ein typisches Beispiel für die Notwendigkeit eines Call-Backs besteht im Fall
 des Algorithmus `std::for_each`, wobei einer Schleife über alle Elemente eines
-Containers übergeben wird, was mit jedem Element zu tun ist, z.B. ausgeben.
+Containers übergeben wird, was mit jedem Element zu tun ist, z.B. es ausgeben.
 
 Zunächst ein Funktor, der dies leistet:
 ```
@@ -994,7 +1036,7 @@ Diese richten sich nach der gewünschten Zugriffsart:
 |direkt, nur lesend|konstante Referenz|(konstante) Referenz          |
 |auch schreibend   |Referenz          |Referenz                      |
 
-Referenzen für Datenmember dürfen keinesfalls mit Wertübergabe im Konstrutor
+Referenzen für Datenmember dürfen keinesfalls mit Wertübergabe im Konstruktor
 kombiniert werden:
 ```
 class SomeFunctor {
@@ -1012,13 +1054,14 @@ public:
 
 ---
 template: plain
-header: ### Callback-Beispiel mit Lambda
+name: callback_with_lambda
+header: ### Callback mit Lambda
 
 Die in C++ neu eingeführte Lambdas haben gegenüber Funktoren den Vorteil, dass
 der ausgeführte Code direkt als Parameter des aufgerufenen Algorithmus zu sehen
 ist und nicht an einer mehr oder weniger weit davon entfernten Stelle steht.._[]
 
-##### Grundlegendes Beispiel mit Lambda
+#### Grundlegendes Beispiel mit Lambda
 
 Im einfachsten Fall greift das Lambda nur auf das vom Aufrufer übergebene
 Argument und evtl. globale Variable bzw. Objekte zu:
@@ -1057,10 +1100,10 @@ Darin werden die übergebenen Bezeichner aufgelistet, ggf. mit vorangestelltem
 
 ---
 template: plain
-header: #### Lambda mit "privaten Daten"
+header: #### Lambda mit privaten Daten
 
-Ein Funktor kann der problemlos private Daten besitzen, welche ausschließlich
-dem überladenen Funktionsaufruf zur Verfügung stehen.
+Ein Funktor kann problemlos private Daten besitzen, welche ausschließlich dem
+überladenen Funktionsaufruf zur Verfügung stehen.
 
 Die Möglichkeiten zur Kapselung sind in dieser Hinsicht für ein Lambda etwas
 eingeschränkt: lokale Daten können nicht wirklich privat sein sondern sind
@@ -1082,7 +1125,8 @@ Aufrufumgebung nicht nur lesend sondern auch modifizierend einwirken kann.
 
 ---
 template: plain
-header: ### Prädikate für Algorithmen
+name: predicates_general
+header: ### Prädikate für Algorithmen (generell)
 
 Viele STL-Algorithmen haben eine Variante, in der man ein Auswahlkriterium
 (Prädikat) flexibel angeben kann. Es handelt sich dabei typischerweise um die
@@ -1111,32 +1155,29 @@ Zweck, wenn man das Prädikat invertiert angibt.
 
 ---
 template: plain
-header: ### Möglichkeiten zur Übergabe von Prädikaten
+header: #### Möglichkeiten zur Übergabe von Prädikaten
 
 Da es sich um eine Template handelt, gilt für das Prädikat `pred` lediglich,
 dass als aktuelles Argument etwas "Aufrufbares" (callable) anzugeben ist.
 
-.N[
 Damit kommen
 
-* Funktionszeiger,
-* Funktoren und
-* Lambdas
+* [Funktionszeiger](#predicate_fptr),
+* [Funktoren](#predicate_functor) und
+* [C++11-Lambdas](#predicate_lambda)
 
 in Frage, sofern diese als Rückgabewert ein `bool` liefern.._[]
-]
 
 .F[:
 Oder präziser: einen Typ, der ggf. in `bool` umgewandelt wird.
 ]
 
-Die folgenden Beispiele arbeiten jeweils mit einen Container, der
-Ganzzahlen enthält:
-
-* In diesem werden alle Werte gezählt, welche kleiner als 42 sind.
+Im folgenden werden in einem Container mit Ganzzahlen alle Elemente mit einem
+Wert kleiner als 42 gezählt.
 
 ---
 template: plain
+name: predicate_fptr
 header: #### Prädikat mit Funktionszeiger übergeben
 
 Zunächst muss die Funktion definiert werden:
@@ -1161,6 +1202,7 @@ selbst wenn die Funktion `lt42` nicht mit `inline` markiert wurde.
 
 ---
 template: plain
+name: predicate_functor
 header: #### Prädikat mit Funktor übergeben
 
 Zunächst muss die Funktor-Klasse definiert werden:
@@ -1187,6 +1229,7 @@ umgesetzt wird.
 
 ---
 template: plain
+name: predicate_lambda
 header: #### Prädikat mit C++11-Lambda übergeben
 
 Hier ist das Prädikat unmittelbar bei der Übergabe zu sehen:
@@ -1204,7 +1247,32 @@ auch aus diesem Grund nur selten benutzt:
 
 ---
 template: plain
-header: ### Callback mit Zeiger auf spezifische Funktion
+name: predicate_examples
+header: ### Prädikate für Algorithmen (Beispielserie)
+
+Abschließend eine weitere Beispielserie zum Vergleich der verschiedenen
+Möglichkeiten, Algorithmen mit Prädikaten als Bedingungstests zu versorgen:
+
+In der ersten Gruppe geschieht dies ohne jegliche Flexibilität – alles ist
+für den jeweiligen Einzelfall "hart kodiert".
+
+* [Funktionszeiger			](#predicate_specific_fptr)
+* [Funktor				](#predicate_specific_functor)
+* [Lambda				](#predicate_specific_lambda)
+
+In der zweiten Gruppe (für welche Funktionszeiger bereits nicht mehr mächtig
+genug sind), besteht mehr Flexibilität – wobei teilweise ähnliche Techniken
+aus einem unterschiedlichen Grund zur Anwendung kommen.
+
+* [Parametrisierter Funktor		](#predicate_parametrized_functor)
+* [Zugriff auf loale Daten mit Funktor	](#predicate_capturing_functor)
+* [Zugriff auf loale Daten mit Lambda	](#predicate_capturing_lambda)
+
+
+---
+template: plain
+name: predicate_specific_fptr
+header: #### Prädikat mit spezifischem Funktionszeiger
 
 Dies ist die aus der C-Programmierung bekannte Technik.
 
@@ -1224,7 +1292,8 @@ void foo(const std::vector<int> &v) {
 
 ---
 template: plain
-header: ### Callback mit spezifischem Funktor
+name: predicate_specific_functor
+header: #### Prädikat mit spezifischem Funktor
 
 Dies ist eine für C++-typische Technik.
 
@@ -1245,11 +1314,28 @@ void foo(const std::vector<int> &v) {
 
 ---
 template: plain
-header: #### Funktoren mit Member-Daten
+name: predicate_specific_lambda
+header: #### Prädikat mit spezifischem Lambda
+
+```
+void foo(const std::vector &v) {
+    …
+    std::copy_if(v.begin(), v.end(),
+                 std::ostream_iterator<int>(std::cout, " "),
+                 [](int n) { return n != 524; }
+    );
+    …
+}
+```
+
+---
+template: plain
+name: predicate_parametrized_functor
+header: #### Prädikat mit allgemeiner verwendbarem Funktor
 
 Der im folgenden verwendete Funktor kann in allen Vergleichen benutzt werden,
-welche auf die Prüfung hinauslaufen, ob eine Ganzzahl **ungleich zu einem
-gegebenen Wert** ist:
+welche auf die Prüfung hinauslaufen, ob eine Ganzzahl ungleich zu einem
+gegebenen Wert ist:
 ```
 class NotEq {
     const int cmp;
@@ -1270,10 +1356,11 @@ void foo(const std::vector &v) {
 
 ---
 template: plain
-header: #### Übergabe lokaler Variablen
+name: predicate_capturing_functor
+header: #### Prädikat mit Funktor und Zugriff auf lokalen Kontext
 
 Um auf lokale Variablen oder Parameter._[] einer aufrufenden Funktion zugreifen
-zu können, muss ein Funktor entsprechende Daten-Member besitzen, und sein
+zu können, muss ein Funktor entsprechende Daten-Member besitzen und sein
 Konstruktor muss diese initialisieren:
 ```
 void foo(const std::vector &v, int hide) {
@@ -1291,64 +1378,61 @@ Es kommt lediglich die (garantierte) Initialisierung mit vom Aufrufer
 angegebenden Werten hinzu.
 ]
 
-
 ---
 template: plain
-header: ### Callback mit C++11-Lambda
+name: predicate_capturing_lambda
+header: #### Prädikat mit Lambda und Zugriff auf lokalen Kontext
 
-#### Ohne Nutzung der Capture-List
-
-```
-void foo(const std::vector &v) {
-    …
-    std::copy_if(v.begin(), v.end(),
-                 std::ostream_iterator<int>(std::cout, " "),
-                 [](int n) { n != 524; }
-    );
-    …
-}
-```
-
----
-template: plain
-header: #### Mit Nutzung der Capture-List
+Um auf lokale Variablen oder Parameter._[] einer aufrufenden Funktion zugreifen
+zu können, muss ein Lambda die Capture-List verwenden:
 
 ```
 void foo(const std::vector &v, int hide) {
     …
     std::copy_if(v.begin(), v.end(),
     	         std::ostream_iterator<int>(std::cout, " "),
-                 [hide](int n) { n != hide; }
+                 [hide](int n) { return n != hide; }
     );
     …
 }
 ```
 
----
-template: plain
-header: ### Generische Algorithmen vs. spezifische Member-Funktionen
-
-Bei löschenden Algorithmen wird manchmal vergessen, dass der Container damit
-nicht tatsächlich verkleinert wird. Vielmehr werden nur Elemente umkopiert oder
-getauscht und als Ergebnis wird ein Iterator zurückgegeben, der das neue
-logische Ende markiert.
-
 .N[
-Ist die Klasse des Containers genau festgelegt, steht alternativ zu einem
-generischen Algorithmus mitunter eine spezifische Member-Funktion zur
-Verfügung. Deren Verwendung ist dann in aller Regel effizienter.
+Lambdas in Member-Funktionen einer Klasse können hier auch `this` angeben. Damit
+besteht innerhalb des Lambdas Zugriff auf alle Member (Daten und Funktionen)
+desjenigen Objekts, für welches die das Lambda enthaltende Member-Funktion
+ausgeführt wird.
 ]
 
-Mit `std::list<std::string> li` beispielsweise statt
+---
+template: plain
+name: generic_vs_specific
+header: ### STL Algorithmen vs. spezifische Member-Funktionen
+
+Ist die Klasse des Containers genau festgelegt, steht alternativ zu einem
+generischen Algorithmus eventuell eine spezifische Member-Funktion zur
+Verfügung, deren Verwendung in der Regel einfacher und effizienter ist.
+
+Beispielsweise wird bei löschenden Algorithmen gerne vergessen, dass der
+Container dadurch nicht tatsächlich kleiner wird.._[] Zwar könnte man das
+Problem so lösen
 ```
+std::list<std::string> li;
+…
 auto end = std::remove(li.begin(), li.end(), 542);
 li.erase(end, li.end());
 ```
 
-besser folgendes:
+aber kompakter und effizienter geht es so:
 ```
 	li.remove(542);
 ```
+
+.F[:
+Vielmehr werden – [wie bereits dargestellt](#removing_logically_only) – nur
+Elemente umkopiert oder getauscht und als Ergebnis wird ein Iterator
+zurückgegeben, der das neue logische Ende anzeigt.
+]
 
 ---
 name: exercise_tue2

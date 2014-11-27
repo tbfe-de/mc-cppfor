@@ -88,7 +88,7 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
 
 .infographic[
 [![Info-Grafik](InfoGraphics/{{graphic}}.png)](InfoGraphics/{{graphic}}.png
-                "Click to open - add [CTRL+] SHIFT for new [tabbed] window")
+                "Click to open – add [CTRL+] SHIFT for new [tabbed] window")
 ]
 
 .pagefooter[
@@ -142,11 +142,11 @@ template: blank
 
 -------------------------------------------------------------------------------
 
-1. [Sequenzielle Container		](#sequence_containers)
-1. [Grundlagen zu Iteratoren 		](#iterator_basics)
-1. [Assoziative Container		](#associative_containers)
-1. [Weitere Details Iteratoren 		](#iterator_details)
-1. [Praktikum				](#exercise_tue1)
+1. [Sequenzielle Container	](#sequence_containers)
+1. [Iterator-Grundlagen 	](#iterator_basics)
+1. [Assoziative Container	](#associative_containers)
+1. [Iterator-Details 		](#iterator_details)
+1. [Praktikum			](#exercise_tue1)
 
 -------------------------------------------------------------------------------
 
@@ -158,7 +158,7 @@ Die Besprechung der Musterlösung(en) erfolgt zu Beginn des folgenden Vormittags
 template: linkinfo
 graphic: STL-SequenceContainers
 name: sequence_containers
-header: ## Sequenzielle Container der STL
+header: ## Sequenzielle Container
 
 -------------------------------------------------------------------------------
 
@@ -352,7 +352,7 @@ Compilers auszuschließen.
 template: linkinfo
 graphic: STL-ContainerIterators
 name: iterator_basics
-header: ## Grundlegendes zu Iteratoren
+header: ## Iteratoren-Grundlagen
 
 -------------------------------------------------------------------------------
 
@@ -385,9 +385,17 @@ name: iterator_principle
 header: ### Prinzip des Iterators
 
 Iteratoren sind spezifisch für ihren jeweiligen Container-Typ als geschachtelte
-(Helfer-) Klassen definiert. Sie kommen vorwiegend dann zur Anwendung, wenn auf
-die Elemente eines Containers oder eines Teilbereichs sequenziell nacheinander
-zugegriffen werden soll.
+(Helfer-) Klassen definiert.
+
+Sie kommen vorwiegend dann zur Anwendung,
+
+* wenn auf die Elemente eines Containers oder eines Teilbereichs sequenziell
+  nacheinander zugegriffen werden soll,
+
+* werden aber auch verwendet, um Grenzen anzugeben (gesamter Container oder
+  Teilbereich),
+
+* oder weisen auf spezifische Elemente, z.B. das Ergebnis einer Suche.
 
 ---
 template: withinfo
@@ -396,14 +404,16 @@ section: Essentials (top left)
 name: pointing_to_iterator
 header: #### Iterator *auf* Elemente zeigend
 
-Man kann Iteratoren grafisch als *auf Elemente zeigend* veranschaulichen,
-bekommt dann allerdings ein Erklärungsproblem mit der Iterator-Endposition und
-auch der Erklärung, wohin der Iterator im Falle eines leeren Containers zeigt.
+Man kann Iteratoren grafisch als *auf Elemente zeigend* veranschaulichen.
+
+Dann bekommt man allerdings ein Erklärungsproblem mit der Iterator-Endposition
+und auch mit der Erklärung, wohin der Iterator im Falle eines leeren Containers
+zeigt.
 
 .N[
 Als Ausweg wird häufig ein – nicht wirklich vorhandenes – Element hinter dem
 letzten Container-Element angenommen, zusammen mit der Einschränkungen, dass ein
-Iterator in dieser Position **nicht mehr derefenziert** werden darf.
+Iterator in dieser Position **nicht mehr dereferenziert** werden darf.
 ]
 
 ---
@@ -413,20 +423,24 @@ section: Essentials (top right)
 name: pointing_between_iterator
 header: #### Iterator *zwischen* Elemente zeigend
 
-In dieser grafischen Veranschaulichung werden die zuvor beschriebenen Probleme
-zwar vermieden, dafür taucht dann die Frage auf, was die Iteratoren bei der
-Dereferenzierung liefern.
+Mit dieser grafischen Veranschaulichung werden die zuvor beschriebenen Probleme
+vermieden.
+
+Dafür stellt sich die Frage, was ein Iterator bei der Dereferenzierung
+liefert – er zeigt ja nicht auf Elemente sondern dazwischen.
 
 .N[
 Veranschaulicht man Iteratoren als zwischen Elemente zeigend, ist die
 Bewegungsrichtung des Iterators wichtig, also in wohin er bei Anwendung des
-`operator++` verschoben wird. Genau das Element, über das hinweg er dann
-weitergesetzt würde, wird bei der Derefenzierung geliefert.
+`operator++` verschoben wird.
+
+Genau das Element, über das hinweg der Iterator damit weitergesetzt würde,
+wird bei der Derefenzierung geliefert.
 ]
 
-Damit wird zugleich klar, dass ein Iterator in End-Position nicht derefenziert
-werden darf, denn es gibt ja auch keine Position, zu der er mit `++`
-weitergesetzt werden könnte.
+Damit wird zugleich klar, dass ein Iterator in End-Position nicht dereferenziert
+werden darf, denn es gibt ja auch keine Position, zu der er weitergesetzt werden
+könnte.
 
 ---
 template: withinfo
@@ -552,7 +566,7 @@ for (auto it = li.begin(); it != li.end(); ++it)
 ```
 Mit C++98 muss statt `auto` der exakte Iterator-Typ angegeben werden, wozu sich
 der Übersichtlichkeit und Wartungsfreundlichkeit wegen eine Typdefinition für
-den Container anbietet:..[]
+den Container anbietet:._[]
 ```
 typedef std::list<int> INTLIST;
 ```
@@ -579,7 +593,7 @@ die Grenzen mit zwei Iteratoren angegeben, die
 * *hinter den Anfang* und/oder
 * *vor das Ende* zeigen,
 
-hier gezeigt am Beispiel eines `std::vector<std::string>`:._[]
+hier demonstriert am Beispiel eines `std::vector<std::string>`:._[]
 ```
 std::vector<std::string> sv;
 …
@@ -591,14 +605,15 @@ for (auto it = sv.begin()+3; it != sv.end()-2; ++it)
 .F[:
 Die Korrektheit des Beispiel beruht wesentlich auf der Tatsache, dass die
 Iteratoren eines `std::vector` zur Kategorie der Random-Access-Iteratoren
-gehören. Andernfalls ist die Addition einer Ganzzahl ein Compile-Fehler.
+gehören. Andernfalls ist die Addition oder Subtraktion einer Ganzzahl ein
+Compile-Fehler.
 ]
 
 ---
 template: linkinfo
 graphic: STL-AssociativeContainers
 name: associative_containers
-header: ## Assoziative Container der STL
+header: ## Assoziative Container
 
 -------------------------------------------------------------------------------
 
@@ -647,7 +662,7 @@ acht (2<sup>3</sup>) Kombinationen.
 template: withinfo
 graphic: STL-AssociativeContainers
 section: RB-Tree-based Storage
-name: associative_combinations
+name: associative_rb_tree
 header: ### Speicherverfahren Red-Black-Tree
 
 Hierbei handelt es sich um eine permanent balancierte._[] Variante des
@@ -661,8 +676,8 @@ verketteten Liste.
 
 Die folgende Tabelle verdeutlicht den Zusammenhang zwischen der Tiefe eines
 balancierten Binärbaums und der Anzahl enthaltener Einträge. Die Tiefe bestimmt
-vor allem auch die (maximal) nötige Anzahl von Vergleiche, mit der ein gegebener
-Schlüssel gefunden werden kann.
+vor allem auch die (maximal) nötige Anzahl von Vergleichen, mit der ein
+gegebener Schlüssel gefunden werden kann.
 
 | Tiefe | und minimale .. maximale Zahl der Einträge              |
 | :---- | :------------------------------------------------------ |
@@ -680,7 +695,7 @@ Schlüssel gefunden werden kann.
 template: withinfo
 graphic: STL-AssociativeContainers
 section: Hash-based Storage
-name: associative_combinations
+name: associative_hashing
 header: ### Speicherverfahren Hashing
 
 [Big O Notation]: http://en.wikipedia.org/wiki/Big_O_notation
@@ -688,7 +703,7 @@ header: ### Speicherverfahren Hashing
 [Bubblesort]:     http://en.wikipedia.org/wiki/Bubblesort
 
 Unter dem Begriff *Hashing* wird (u.a.) ein Abspeicherungsverfahren verstanden,
-welches - eine gut streuende Hash-Funktion vorausgesetzt - Suchzeiten in der
+welches – eine gut streuende Hash-Funktion vorausgesetzt – Suchzeiten in der
 Größenordnung O(1) erlaubt.
 
 .N[
@@ -701,7 +716,7 @@ Die folgende Tabelle soll nur eine grobe Orientierung geben:
 
 | Größenordnung             | und typisches Beispiel                             |
 | ------------------------- | :--------------------------------------------------|
-| O(1)                      | Konstante Zeit unabhängig von der Datenmenge       |
+| O(1)                      | konstante Zeit unabhängig von der Datenmenge       |
 | O(log<sub>2</sub>(N))     | Suchzeiten in (nicht entartetem) Binärbaum         |
 | O(N)                      | Suchzeiten in linearer Liste                       |
 | O(N × log<sub>2</sub>(N)) | optimaler Sortieralgorithmus (z.B. [Quicksort])    | 
@@ -727,35 +742,36 @@ Diese Verfahren verläuft nach folgendem [Grundprinzip][Hashing]:
 
 .F[:
 Bei den verschiedenen Varianten des `std::set` gibt es keinen dem Schlüssel
-zugeordneten Datenwert - der Wert ist der Schlüssel.
+zugeordneten Datenwert – der Wert ist der Schlüssel.
 ]
 
 .N[
 Abhängig von der Anzahl der Datenwerte und der Größe des Streubereichs gibt es
 meist weder theoretisch noch praktisch eine eindeutige Abbildung des Schlüssels
-auf den Streubereichn.
+auf den Streubereich.
 ]
 
 ---
 template: plain
-header: #### Entstehung von Überläufern
+header: #### Entstehung von Kollisionen
 
-Gut streuende Hashfunktionen liefern bis zu einer ca. 80%-igen Belegung des zur
-Verfügung stehenden Index-Raumes nur selten Überläufer.
+Bildet die Hash-Funktion verschiedene Schlüssel auf ein und denselben Index ab,
+spricht man von einer Kollission und das betreffende Element muss wird nun als
+*Überläufer* behandelt.
 
 .N[
-Bildet die Hash-Funktion verschiedene Schlüssel auf ein und denselben Index ab,
-spricht man von einem Überläufer.
+Gut streuende Hashfunktionen liefern bis zu einer ca. 80%-igen Belegung des zur
+Verfügung stehenden Indexraums nur selten Kollisionen.
 ]
 
-Prinzipiell können Überläufer aber ab dem zweiten Eintrag immer auftreten.
+Prinzipiell können Kollisionen aber ab dem zweiten Eintrag immer auftreten.
 
-* Eine Strategie zur Behandlung von Überläufern muss Bestandteil jedes
-  hash-basierten Datenspeicherungsverfahrens sein.
+* Eine Technik zur Speicherung von Überläufern muss Bestandteil jedes
+  hash-basierten Speicherverfahrens sein.
 
 * Übliche ist, für *jeden* per Hash-Funktion errechneten Index die Möglichkeit
-  einer verketteten Liste vorzusehen, die den ersten aufgetretenen Wert zusammen
-  mit allen späteren Überläufern aufnimmt.
+  einer verketteten Liste vorzusehen, die nach dem ersten aufgetretenen Wert
+  auch alle späteren Überläufer aufnimmt.
 
 ---
 template: plain
@@ -768,26 +784,27 @@ einem späteren Zeitpunkt vergrößert werden, um stets gute Performance zu biet
   (die jeweiligen `multi`-Varianten eingeschlossen) kann dies vollautomatisch
   tun.
 
-* Dazu muss die Hash-Funktion angepasst werden, so dass diese künftig in einen
-  dem vergrößerten Datenbereich entsprechend Indexbereich streut.
+* Zusammen mit der Erweiterung des Indexraums muss die Hash-Funktion angepasst
+  werden, so dass sie die Schlüssel auf einen entsprechend größeren Bereich
+  verteilt.
 
 .N[
-Anschließend müssen alle mit der vorher gültigen Hash-Funktion erzeugten
-Zuordnungen von Schlüssel zu (Streubereichs-) Index mit der neuen Hash-Funktion
-neu berechnet werden.._[]
+Anschließend müssen alle mit der vorher gültigen Hash-Funktion im alten,
+kleineren Indexraum verteilten Schlüssel mit der neuen Hash-Funktion wieder
+im neuen, größeren Indexraum verteilt werden.
 ]
 
 .F[:
-Mit Hilfe spezieller Techniken, welche die Neuberechnung auf die Hälfte der
-vorhandenen Einträge reduziert, lässt sich der Aufwand für das Re-Hashing
-halbieren.
+Mit Hilfe spezieller Techniken lässt sich die Neuberechnung auf die Hälfte
+der bereits vorhandenen Einträge reduzieren und somit der Aufwand im Rahmen
+des Re-Hashings halbieren.
 ]
 
 ---
 template: linkinfo
 graphic: STL-IteratorDetails
 name: iterator_details
-header: ## Weitere Iterator-Details
+header: ## Iterator-Details
 
 -------------------------------------------------------------------------------
 
@@ -816,9 +833,9 @@ section: Read-only Iterators
 name: readonly_iterator
 header: ### Iteratoren für nur lesenden Zugriff
 
-Diese Seite zeigt einige typische Schleifenkonstrukte mit Iterator für
-nicht-modifizierenden Zugriff am Beispiel einer Container-Klasse `C` und eines
-entsprechenden Container-Objekts `c`:
+Diese Seite zeigt einige typische Schleifenkonstrukte mit einem Iterator für
+den nicht-modifizierenden Zugriff, am Beispiel einer Container-Klasse `C` und
+eines entsprechenden Container-Objekts `c`:
 
 In C++11 mit neuer Bedeutung von `auto` und neuer Initialisierungssyntax:
 ```
@@ -831,8 +848,8 @@ for (C::const_iterator cit = c.begin(); cit != c.end(); ++it)
     … *cit …
 ```
 .W[
-Den derefenzierten Iterator zur Modifikation eines Container-Elements zu
-verwenden – also in der Form `*cit = …` – wird als Compilezeit-Fehler bewertet.
+Den dereferenzierten Iterator zur Modifikation eines Container-Elements zu
+verwenden – also in der Form `*cit = …` – ist ein Compilezeit-Fehler.
 ]
 
 ---
@@ -842,9 +859,9 @@ section: Non-Modifiable STL-Container
 name: readwrite_iterator
 header: ### Iterator für modifzierenden Zugriff
 
-Diese Seite zeigt einige typische Schleifenkonstrukte mit Iterator für
-(potenziell) modifizierenden Zugriff am Beispiel einer Container-Klasse `C` und
-eines entsprechenden Container-Objekts `c`:
+Diese Seite zeigt einige typische Schleifenkonstrukte mit einem Iterator für
+den potenziell modifizierenden Zugriff, am Beispiel einer Container-Klasse `C`
+und eines entsprechenden Container-Objekts `c`:
 
 In C++11 mit neuer Bedeutung von `auto` und neuer Initialisierungssyntax:
 ```
@@ -868,7 +885,7 @@ section: Forward Iterator
 name: fwd_iterator
 header: ### Vorwärts laufender Iterator
 
-Diese Seite zeigt typische Schleifenkonstrukte für (potenziell)
+Diese Seite zeigt weitere typische Schleifenkonstrukte für den potenziell
 modifizierenden Zugriff am Beispiel einer Container-Klasse `C` und eines
 entsprechenden Container-Objekts `c`:
 
@@ -888,9 +905,9 @@ for (auto &v : c) {
 ```
 
 .F[:
-Hierbei gibt es zwar keinen explizit sichtbaren Iterator, die bereichsbasierte
-Schleife stützt sich jedoch in ihrer internen Implementierung auf die
-Iterator-Schnitstelle der Klasse des angegebenen Container-Objekts.
+Auch wenn es hier keinen explizit sichtbaren Iterator gibt, verwendet die
+bereichsbasierte Schleife in ihrer internen Implementierung die
+Iterator-Schnitstelle der Klasse des beteiligten Container-Objekts.
 ]
 
 ---
@@ -901,9 +918,9 @@ section: Reverse Iterator
 name: reverse_iterator
 header: ### Rückwärts laufender Iterator
 
-Diese Seite zeigt das typische Schleifenkonstrukt für (potenziell)
+Diese Seite zeigt das typische Schleifenkonstrukt für den potenziell
 modifizierenden Zugriff am Beispiel einer Container-Klasse `C` und eines
-entsprechenden Containet-Objekts `c`:
+entsprechenden Container-Objekts `c`:
 
 In C++98 mit expliziter Angabe des Iteratortyps:
 ```
@@ -912,9 +929,11 @@ for (C::reverse_iterator it = c.rbegin(); it != c.rend(); ++it) {
     *it = … // auch modfizierend erlaubt
 }
 ```
-Die einzige Vereinfachung in C+11 ist die Verwendung von `auto` für den Typ des
-Iterators.
-
+Die einzige, in C++11 mögliche Vereinfachung ist hier die Verwendung von `auto`
+für den Typ des Iterators.
+```
+for (auto it = c.rbegin(); it != c.rend(); ++it) …
+```
 .I[
 Eine spezielle, rückwärts laufende Form der bereichsbasierten Schleife
 ist in C++11 nicht verfügbar.
@@ -947,9 +966,9 @@ for (auto it = c.crbegin(); it != c.crend(); ++it) …
 
 .N[
 Da die diversen Iterator-Typen, die von den verschiedenen Varianten der
-`begin()`-Funktion geliefert werden, jeweils unterschiedlichen sind, muss der
-Vergleich auf die Endposition mit derjenigen `end()`-Funktion erfolgen, welche
-denselben Iterator-Typ liefert.
+`begin()`-Funktion geliefert werden, unterschiedlich sind, muss der Vergleich
+auf die Endposition mit derjenigen `end()`-Funktion erfolgen, welche denselben
+Iterator-Typ liefert.
 ]
 
 ---
@@ -966,18 +985,19 @@ Für die Container
 * `std::deque`
 
 besteht alternativ zum Durchlaufen mittels Iterator auch die Möglichkeit des
-indexbasierten Zugriffs. Die Basis-Variante sieht wie folgt aus – wieder
-dargestellt am Beispiel eines Containers der Klasse `C` und einem
-entsprechenden Container-Objekt `c`:
+indexbasierten Zugriffs. Die Basis-Variante – wieder dargestellt am Beispiel
+eines Containers der Klasse `C` und einem entsprechenden Container-Objekt `c` -
+sieht wie folgt aus :
 ```
 for (C::size_type i = 0; i &lt; c.size(); ++i) {
     … c[i] …    // Zugriff ohne Index-Pruefung
     … c.at(i) … // Zugriff mit Index-Pruefung
 }
 ```
-.N[
+
+.I[
 Die Verwendung des in allen STL-Containern definierten Typs `size_type` für die
-Indexvariable vermeidet dabei eine eventuelle Warnung beim Vergleich mit dem
+Indexvariable vermeidet eine eventuelle Warnung beim Vergleich mit dem
 Rückgabewert der `size()`-Member-Funktion, da deren Ergebnis ebenfalls diesen
 Typ hat.
 ]
@@ -988,8 +1008,7 @@ name: associative_container_iterators
 header: ### Iteratoren für Assoziative Container
 
 Eine Besonderheit bei assoziativen Container ist, dass auch über normale
-Iteratoren – also nicht nur bei `const_iterator` – kann auf **Elemente**
-von
+Iteratoren – also nicht nur bei `const_iterator` – auf **Elemente** von
 
   * `std::set`,
   * `std::multiset`,
@@ -1003,12 +1022,12 @@ sowie auf **Schlüssel** von
   * `std::unordered_map` und
   * `std::unordered_multimap`
 
-ausschließlich **lesend** zugegriffen werden.._[]
+ausschließlich **lesend** zugegriffen werden kann.._[]
 
 .F[:
-Der Wert-Zugriff ist bei den diversen Varianten von `map`-s (wie üblich) über
-`…::iterator` lesend und schreibend und über `…::const_iterator` nur lesend
-möglich.
+Der Zugriff auf den **Wert** ist bei den diversen Varianten von `map`-s (wie
+üblich) über `…::iterator` lesend und schreibend und über `…::const_iterator`
+nur lesend möglich.
 ]
 
 ---
@@ -1065,7 +1084,7 @@ for (const auto &e : wfreq)
     std::cout << e.first << ": " << e.second << std::endl;
 ```
 … und schützt damit vor unbeabsichtigten Modifikationen, z.B. wenn statt eines
-Vergleichs versehentlich die Zuweisung geschrieben wurde:
+Vergleichs versehentlich die Zuweisung geschrieben würde:
 
 ```
 if (e.second = 100) … // ERROR
