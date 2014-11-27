@@ -164,11 +164,11 @@ header: ## Pragmatische Leitgedanken zur Software-Entwicklung
 
 -------------------------------------------------------------------------------
 
-* ["Open-Close"			](#oc_principle)
+* ["Open-Close"-Principle		](#oc_principle)
 
 -------------------------------------------------------------------------------
 
-* ["Don't Repeat Yourself"	](#dry_principle)
+* [Don't Repeat Yourself	](#dry_principle)
 
 -------------------------------------------------------------------------------
 
@@ -177,7 +177,7 @@ template: withinfo
 graphic: GuidingPrinciples
 section: OC Principle
 name: oc_principle
-header: ### Open Close-Prinzip
+header: ### "Open Close"-Prinziple
 
 Gemäß diesem Prinzip sollte jede Software-Architektur einen gesunden Ausgleich
 zwischen zwei gegeneinander stehende Zielen gewährleisten:
@@ -213,7 +213,7 @@ hinunter zu kleinen, einfach überschau- und testbaren Einheiten.
 
 ##### Bibliotheken
 
-Bilbliotheken sind Sammlungen wiederverwendbarer Komponenten, die für sich
+Bibliotheken sind Sammlungen wiederverwendbarer Komponenten, die für sich
 betrachtet kein "Eigenleben" führen sondern erst "von außen" zum Leben erweckt
 werden.
 
@@ -226,8 +226,8 @@ header: #### Mechanismen zur Strukturierung (2)
 Frameworks folgen dem *"Hollywood-Principle"*: Don't call us, we call you.
 
 Sie stellen eine oft eine relativ komplexe Gesamtfunktionalität zur Verfügung
-und enthalten *Erweiterungspunkte*, an denen spezifische Anpassungen
-"eingehängt" werden.
+und enthalten *Erweiterungspunkte*, an denen individuelle Anpassungen erfolgen
+können.
 
 ##### Geplante Erweiterbarkeit
 
@@ -259,7 +259,7 @@ Computer"* ist:
 **Menschen**
 
 * besitzen oft ein hohes Maß an Kreativität,
-* sind aber in aler Regel schlecht darin, Dinge präzise zu wiederholen,
+* sind aber in aller Regel schlecht darin, Dinge präzise zu wiederholen,
   * sei es in immer wieder ein- und derselben Weise,
   * oder auch mit kleinen, systematischen Variationen.
 
@@ -276,7 +276,7 @@ Ergebnisse" erzielt werden können – etwa in der Art, dass ein Computer ein
 Musikstück komponieren könnte, welches es vielleicht sogar in die Hitparade
 schafft. Interessanter ist die Frage nach einem Programm, mit welchem ein
 Computer im Dialog mit einem menschlichen Partner von diesem nicht schon
-sehr bald als Maschine enttarnt würde, wie es im Fall der [Turing-Tests]
+sehr bald als Maschine enttarnt wird, wie es im Fall der [Turing-Tests]
 letzten Endes doch immer wieder geschieht.
 ]
 
@@ -321,7 +321,7 @@ This is correct, but only part of the truth, because C++ also._[]
 * … with many compilers allowing to actually **mix in Assembler Code**,
 * on the other hand supports **Generic Programming**
 * and **Meta-Programming** via **Templates**,
-* with C++11 even adopted elements of **Functional Programming**,
+* C++11 even adopted elements of **Functional Programming**,
 * and sometimes its **Preprocessor** comes in handy as last resort.
 
 .N[
@@ -380,9 +380,9 @@ See the first section of this chapter for the favourable deeper
 
 If you observe increasing failure to reach these goals, you might have chosen
 
-* **the wrong combination of C++ paradigm(s)** or
+* **the wrong** (combination of) **C++ paradigm**(s) or
 
-* **C++ is an inadequate programming language**._[]
+* C++ is an inadequate programming language._[]
 
 for the problem at hand.
 
@@ -431,7 +431,7 @@ While this book surely filled a gap that had already been open far too long at
 that time, it should not be overestimated:
 
 * At the time the GoF book was published many C++ compilers already supported
-  templates. But templates were by far not in that widespread use as after they
+  templates. But templates were not in that widespread use as later, after they
   became part of the C++98 standard.
 
 * Therefore most any abstraction in the Gof book is via base classes and virtual
@@ -462,7 +462,7 @@ understood in two different ways:
    * when it might be especially appropriate,
    * when not, where are its limits, pitfalls,
    * what are the alternatives,
-   * how some pattern relates to other patterns,
+   * how some pattern relates to other patterns, …
 
 2. **Implement the pattern in a specific way**:._[]
    * No doubt, the implementation style shown and discussed is best practice in
@@ -470,7 +470,8 @@ understood in two different ways:
    * It may also be appropriate for *Java* (therefore *Scala* too), *C#*, …
      maybe *Python* … *Objective-C++* …
    * … but it needs to be taken with the proverbial "grain of salt" for C++,
-     mostly because its [multi-paradigm nature](#multi_paradigm_cpp).
+     mostly because of [multi-paradigm nature](#multi_paradigm_cpp) of that
+     language.
 
 .F[:
 Or what I call *GoF book style* on the pages following – and what is the
@@ -484,6 +485,11 @@ header: #### Shortcomings of the GoF Book Implementations
 The implementation style for the patterns discussed in the GoF-Book tends to
 shift type-safety from compile-time to run-time.._[]
 
+.N[
+If you happen to be a GoF book fan and think the word "shortcoming" sounds
+depreciating, feel free to replace it by something more neutral.
+]
+
 * **There is a – sometimes small, sometimes big – gain:**
 
   * It may help to susbstantially reduce the modules to recompile in a large
@@ -495,17 +501,12 @@ shift type-safety from compile-time to run-time.._[]
     obvious implementation errors may only show when the software runs, not
     yet when it is compiled.
 
-.N[
-If you happen to be a GoF book fan and think the word "shortcoming" sounds
-depreciating, feel free to replace it by something more neutral.
-]
-
 .F[:
 In all fairness and not to lift the burden to give better error messages for
 problems when compiling C++ templates, chose from the following two scenarios:
 **1.** You sit for hours and are close to desperation because of an error
-message the compiler throws to you for a template and you will probably have
-to call your boss now, telling him the major release planned for tomorrow will
+message the compiler throws at you for a template and you will probably have
+to call your boss now, telling her the major release planned for tomorrow will
 be delayed.
 **2.** You come in in the morning and everybody is already impatiently waiting
 for you because production came to a grinding halt two hours ago … and all you
@@ -550,18 +551,21 @@ In the following a small subset of classical design patterns is discussed with
 respect to how they relate to the multi-paradigm nature of C++.
 
 .N[
-A more complete and detailed discussion is far beyond what can be covered in
-this course.
+A complete and detailed discussion is far beyond this presentation –
+there are other courses with more in-depth coverage of the topic.
 ]
 
-Be aware that the pattern examples following have **not** been selected because
+The DP examples following have **not** been selected because they are
 
-* they are the ones "most typically"
-* or "most frequently"  used,
-* or as they make particularly "good"
-* or particularly "bad" examples
+* the ones "most typically" or
+* "most frequently" used,
 
-for applying design patterns in C++.
+nor do they represent
+
+* particularly "good" or
+* particularly "bad" examples
+
+for design patterns in C++.
 
 ---
 template: plain
@@ -639,8 +643,10 @@ header: #### DP-Example: Composite
 The composite in GoF book style ties together its various leaf types with a
 common base class – including a collection that enables recursive nesting.
 
+.N[
 This puts restrictions on the types that can be used – or at least requires
 wrappers for unrelated classes, so they can have a common parent.
+]
 
 [Boost.Variant] offers an elegant alternative:
 
@@ -653,8 +659,8 @@ For recursive nesting any STL container may be added, e.g. an `std::map`
 * holding the variant as its value part,
 * keyed with an `std::string` for access.._[]
 
-(Another ready-to-use library solution to consider is [Boost.Property_Tree],
-especially for a composite to hold persistant state or configuration data.)
+(A ready-to-use library solution to consider, especially for composites
+holding persistant state or configuration data, is [Boost.Property_Tree].)
 
 .F[:
 In other words: more or less mimicking the core of Python's object modell. For
@@ -670,8 +676,8 @@ From the general perspective the design pattern called *Template-Methode* is
 an ideal example for the [Open-Close Principle](#oc_principle).
 
 .W[
-Do not confuse the name chosen for this pattern with C++-Templates – the
-similarity is purely accidental.._[]
+Be careful not to confuse the name given to this pattern with C++-Templates –
+the similarity is purely accidental.._[]
 ]
 
 .F[:
@@ -746,8 +752,8 @@ When implemented with C++-Templates._[]
 
 * specified only later through a type parameter,
 
-  * attaching different functionality through instantiation with different base
-    classes.
+  * therefore attaching different functionality through instantiation with
+    different base classes.
 
 With respect to the [Open-Close-Principle](#oc_principle) the derived class is
 in the role of the closed part and the various base classes contribute the open
@@ -768,7 +774,11 @@ See
 template: plain
 header: #### DP-Example: State
 
-There are many ways to implement state machines, with 
+  [Quantum Framework]: http://www.state-machine.com/psicc/PSiCC_excerpts.pdf
+  [Boost.Fsm]: http://www.boost.org/doc/libs/current/libs/statechart/doc/index.html
+  [Boost.Msm]: http://www.boost.org/doc/libs/release/libs/msm/doc/HTML/index.html
+
+There are many ways to implement state machines, e.g.
 
 * in "pure C" with nested `switch`-statements (outer for states and inner for
   events or vice versa) as the most straight-forward approach,
@@ -786,35 +796,31 @@ out chances to improve and enhance the GoF book style by using C++-Templates.
 ]
 
 .F[:
-Of special interest for C++ developers may also be [Boost.Fsm] and [Boost.MSM],
+Of special interest for C++ developers may also be [Boost.Fsm] and [Boost.Msm],
 which both implement state machines applying C++ meta programming techniques.
-The architecture of the latter even allows to chose among several "front-ends"
-and "back-ends", i.e. *DSL-s* to specifiy the states and transitions and
-*drivers* to execute the machine according to incoming events. The default
-front-end is a tabular layout similar to the one achievable with a "pure C"
+The architecture of the latter even allows to chose among several *front-ends*
+(i.e. *DSL-s* to specifiy the states and transitions) and *back-ends* (i.e.
+drivers to execute the machine according to incoming events). The default
+front-end uses a tabular layout similar to the one achievable with a pure C
 approach using tables of function pointers.
 ]
-
-  [Quantum Framework]: http://www.state-machine.com/psicc/PSiCC_excerpts.pdf
-  [Boost.Fsm]: http://www.boost.org/doc/libs/current/libs/statechart/doc/index.html
-  [Boost.Msm]: http://www.boost.org/doc/libs/release/libs/msm/doc/HTML/index.html
 
 ---
 template: plain
 header: #### DP-Example: Singleton
 
-The singleton pattern seems easy to understand, but – or maybe because of that -
-is probably the design patther most often misused or at least used despite much
-too "heavy weight" to just solve the problem at hand.
+The singleton pattern seems easy to understand and apply, but (or maybe because
+of that) is also the one most often misused or at least used as a much too heavy
+weight approach to just solve the problem at hand.
 
-In C/C++ `static` local variables provide an easy alternative:
+In C/C++ `static` local variables provide a compact alternative:._[]
 ```
 MySingleton &getMySingletonInstance() {
    static MySingleton instance;
    return instance;
 }
 ```
-The above and some variations are avaliable as a small series of examples in
+The above and some variations are available as a small series of examples in
 [Examples/Singleton](../Examples/Singleton).
 
 .N[
@@ -844,12 +850,17 @@ To end with:
 
 * … within the appropriate context …
 
-**but probably not so**
+* … implemented in "the C++ way" …
 
-* if following Gof book style radically limits the freedom to chose the most
-  appropriate from the set of paradigms C++ supports,
+**… but probably not so**
 
-* or vastly over-engineered solution to a trivial problem.
+* as vastly over-engineered solution to a trivial problem,
+
+* if some ready-to-use libary solution is thrown overboard because it doesn't
+  follow (seemingly) "best practice" of the GoF book style, or
+
+* if pointing to the latter is used as an argument to radically limit the
+  freedom to chose from the set of paradigms C++ supports.
 
 ---
 template: plain
@@ -868,7 +879,7 @@ header: ## Summary and Epilogue
 
 * Follow best practices, but be aware of the context in which they apply.
 
-* And don't repeat yourself (oops :-))
+* And don't repeat yourself (oops).
 
 .N.center[
 &#9786; Have fun with C++ &#9786;
