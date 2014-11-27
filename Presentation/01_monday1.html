@@ -88,7 +88,7 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
 
 .infographic[
 [![Info-Grafik](InfoGraphics/{{graphic}}.png)](InfoGraphics/{{graphic}}.png
-                "Click to open - add [CTRL+] SHIFT for new [tabbed] window")
+                "Click to open – add [CTRL+] SHIFT for new [tabbed] window")
 ]
 
 .pagefooter[
@@ -202,7 +202,7 @@ so dass sich die Verwendung eines [Build-System]s empfiehlt.._[]
 ]
 
 .F[:
-Unter den heute verwendeten Build-Systemen hat das 1976 an den [Bell-Labs] von
+Unter den heute verwendeten Build-Systemen hat das 1976 an den [Bell Labs] von
 Stuart Feldman entwickelte [Unix `make`] weitaus mehr als eine nur historische
 Bedeutung, in der Kernsyntax sind auch moderne Derivate wie [GNU make] und
 [CMake] immer noch identisch zu ihrem Vorbild.
@@ -213,12 +213,15 @@ template: plain
 header: #### Abhängigkeiten zwischen Header-Files
 
 Nicht selten kommt es auch zu Abhängigkeiten von Header-Files untereinander,
-wenn z.B. in einem Header-File ein Datentyp oder eine Klasse verwendet wird,
-die in einem anderen Header-File definiert ist.
+z.B. wenn
+
+* in einem Header-File ein Datentyp oder eine Klasse **verwendet** wird,
+
+* die in einem anderen Header-File **definiert** ist.
 
 .N[
-In solchen Fällen ist es üblich, im abhängigen Header-File den als Voraussetzung
-erforderlichen zweiten Header-File direkt zu inkludieren.
+In solchen Fällen ist es meist üblich, im abhängigen Header-File den als
+Voraussetzung erforderlichen zweiten Header-File direkt zu inkludieren.
 ]
 .pull-left[
 ```
@@ -380,26 +383,27 @@ Definition geben (mit möglicherweise vielen Bezugnahmen).
 
 * Bei der Bezugnahme aus einer anderen Übersetzungseinheit muss diese eine
   `extern`-Deklaration vornehmen.
-
 * Die tatsächliche Definition **darf** das Wort `extern` enthalten, auch
   wenn sie mit einer Initialisierung verbunden ist.
-
-* Sie **muss** dies u.U. sogar, wenn zugleich eine `const`-Qualifizierung
+* Sie **muss** dies eventuell._[] sogar, wenn eine `const`-Qualifizierung
   verwendet wird und keine `extern`-Deklaration vorausgeht.
 
 .W[
-Die Verwendung von `const` auf globaler Ebene impliziert ansonsten den
-Sichbarkeitsschutz gegenüber dem Linker.._[]
+Die Verwendung von `const` auf globaler Ebene **ohne** `extern` impliziert
+den Sichbarkeitsschutz gegenüber dem Linker.
 ]
 
 .F[:
-Einstmals wurde von Bjarne Stroustrup damit das Ziel verfolgt, eine möglichst
-unproblematische Umstellung von `#define`-s auf `const` zu unterstützen. Das
-Risiko von Name Clashes in der Link-Phase wurde damit ausgeschlossen auf Kosten
-von evtl. mehrfach für den selben Zweck reservierten Speicher im globalen
-Bereich (der bei einfachen Datentypen von optimierenden Compilern vermieden
-werden kann, sofern kein Zugriff auf die Adresse der jeweiligen Variablen
-erfolgte.
+"Eventuell" bedeutet hier, dass die Definition in einer Implementierungsdatei
+(`*.cpp`) vorgenommen wurde, aber **für andere Übersetzungseinheiten sichtbar**
+sein soll. Zum Hintergrund: Einstmals wurde von Bjarne Stroustrup damit das Ziel
+verfolgt, in Header-Files(!) eine möglichst unproblematische Umstellung von
+`#define`-s auf `const` zu unterstützen. Das Risiko von Name Clashes in der
+Link-Phase wurde mit der Regel ausgeschlossen, dass "`const` quasi `static`
+impliziert … mit dem Nachteil, dass globale Konstanten evtl. mehrfach im
+Speicher gehalten werden. (Bei einfachen Datentypen können optimierende
+Compiler dies wiederum vermeiden, indem sie für solche Konstanten – solange
+deren Addresse nicht verwendet wird – überhaupt keinen Speicherplatz anlegen.)
 ]
 
 ---
@@ -409,7 +413,7 @@ header: ### Schreibschutz durch den Compiler (`const`)
 
 Mittels `const`-Qualifizierung wird die Zuweisung eines (neuen) Werts an eine
 Variable verboten. Es ist nur noch die Initialisierung bei der Definition
-möglich.
+möglich bzw. ohne `extern` auch erforderlich.
 
 ```
 const int x = 42;              // Initialisierung notwendig
@@ -419,7 +423,9 @@ extern const unsigned VERSION; // nur Bezugnahme
 Folgendes führt nun zu einem Compile-Fehler:._[]
 ```
 ++x;
-…
+```
+Oder auch:
+```
 if (VERSION = 3014u) {
     // special case for version 3.14
     …
@@ -451,18 +457,18 @@ template: plain
 name: const_pointers
 header: ### Zeiger allgemein und `const`-qualifiziert
 
-Bei Zeigern ist zu beachten, dass sich die Konstantheit auf den Zeiger selbst
-beziehen kann
 ```
 int *p1;       // pointer and pointed-to memory are modifiable
-…
-*p1 = …;       // OK (assuming valid initialisation)
-const int *p2; // same as: int const *p;
-               // only pointer is still modifiable, but ...
-*p2 = …;       // ERROR at compile-time
+p1 = …;        // OK
+*p1 = …;       // OK (assuming p1 points to valid memory now)
 ```
-
-oder auf das, was über den Zeiger erreichbar ist:._[]
+Bei Zeigern kann sich `const` **auf den Zeiger selbst** beziehen …
+```
+const int *p2; // same as: int const *p2;
+p2 = …;        // pointer is still modifiable, but ...
+*p2 = …;       // ... ERROR at compile-time!
+```
+… oder auf das, was **über den Zeiger erreichbar** ist:._[]
 ```
 int *const p3 = …; // must be initialized (with address of an int)
 p3 = …;            // ERROR (would modify pointer itself)
@@ -473,8 +479,8 @@ p3 = …;            // ERROR (would modify pointer itself)
 
 .F[:
 Of course, both kinds of `const`-qualification may be combined if it makes sense
-for a given purpose, e.g. `const int *const p4 = …;` (or - switching the
-positions the qualification and the type to which it is applied:
+for a given purpose, e.g. `const int *const p4 = …;` (or – switching positionsd
+of the qualification and the type to which it is applied:
 `int const *const p4 = …;`).
 ]
 
@@ -518,7 +524,7 @@ if (a > b) swap(a, b);
 
 In der linken Version werden Zeigerargumente verwendet und explizit Adressen
 übergeben, in der rechten sind die Argumente Referenzen. Der Unterschied besteht
-aber nur in der sparsameren Notation im Quelltext (mit Referenzen) - es kann
+aber nur in der sparsameren Notation im Quelltext (mit Referenzen) – es kann
 identischer Maschinencode erzeugt werden.._[]
 
 .F[:
@@ -533,32 +539,31 @@ name: reference_initialisation
 header: #### Initialisierung von Referenzen
 
 Da Referenzen konzeptionell stets vorhandenen Speicherplatz bezeichnen,._[]
-müssen sie zwingend intialsiert werden.
+müssen sie zwingend initialisiert werden.
 
 .N[
-It is not possible to modify a reference after initialisation so that it
-refers to a different memory location.
+Eine Referenz kann nach Definition und Intialisierung nicht mehr so verändert
+werden, dass sie auf eine andere Speicherstelle verweist.
 ]
 
 Insofern entsprechen Referenzen den konstanten Zeigern, die selbst nicht
 veränderbar sind, wohl aber der über sie erreichbare Speicherplatz.
 
 ```
-int v1, v2;
+int v1, v2;  // some variables ...
 int &r = v1; // rerefence is intialized
-…
 ```
-Das folgende führt **nicht** zu einem Fehler bei der Kompilierung, führt aber
-nicht dazu, dass `r` nun die Variable `v2` referenziert sondern kopiert den
-Inhalt von `v2` in `v1`:
+Das folgende führt **nicht** zu einem Fehler bei der Kompilierung, es führt aber
+auch nicht dazu, dass `r` nun die Variable `v2` referenziert:
 ```
-r = v2;
+r = v2;  // copies current content of v2 to v1 (referenced by r)
 ```
 
 .F[:
-Not further considering some artistic ways of initialisation here which
-deliberately subvert this:  
-`T &r = *reinterpret_cast<T*>(0);`
+Not considering some artistic ways of initialisation to deliberately subvert
+this property of a reference (like `T &r = *reinterpret_cast<T*>(0);`), an
+invalid reference might be created by accident when a dereferenced pointer is
+used to initialize a reference without prior checking: `T *p = 0; … T &r = *p`;
 ]
 
 ---
@@ -590,7 +595,7 @@ Lesender Zugriff ist natürlich sowohl über `r1` wie auch über `r2` möglich..
 .F[:
 It should be obvious that in the light of references a value-tracking compiler
 must be careful not to optimise-out *read* memory access with no intervening
-*write*: the content of some location might still have been modified on a
+*write*: the content of some location might still have been modified through a
 different access path.
 ]
 
@@ -630,8 +635,9 @@ memory (`p`).
 ]
 
 .F[:
-In fact: both fragments will typically compile into the same machine
-instructions.
+GCC usually emits the same machine code for references and pointers, as long as
+both are used correctly and semantically equivalent. (To try some examples
+easily you may want to go to the following site: http://gcc.godbolt.org)
 ]
 
 ---
@@ -641,17 +647,19 @@ header: #### Reference Arguments
 
 It should be noticed that in the most cases reference initialisation occurs
 when handing arguments to functions, hence all the peculiarities and special
-cases will be mostly observed there:
+cases shown so far will be mostly observed there:
 
 Forgotten `const`-qualification, `arg` is actually not modified in `foo`:
 ```
 void foo(double &arg) {
+    …
     … // all access to arg is read-only
+    …
 }
 ```
 
 .pull-left[
-Cannot call `foo` now with literal constant or `const`-qualified variable
+Not callable with literal constant or `const`-qualified variable:
 ```
 foo(0.0); // ERROR
 double const PI = 3.14;
@@ -662,14 +670,17 @@ foo(PI);  // ERROR
 .pull-right[
 No temporaries are silently created:._[]
 ```
-const int x 42;
+int x = 42;
 foo(x);
 foo(2*PI);
 ```
 ]
 
 .F[:
-The reason here is …
+The reason is to avoid surprising effects that would occur especially if
+temporaries were created for type coercion and modifications applied to the
+temporary only but not to the variable used as argument though "obviously"
+handed over by reference.
 ]
 
 ---
