@@ -88,7 +88,7 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
 
 .infographic[
 [![Info-Grafik](InfoGraphics/{{graphic}}.png)](InfoGraphics/{{graphic}}.png
-                "Click to open - add [CTRL+] SHIFT for new [tabbed] window")
+                "Click to open – add [CTRL+] SHIFT for new [tabbed] window")
 ]
 
 .pagefooter[
@@ -144,7 +144,7 @@ template: blank
 
 1. [Beziehungen zwischen Klassen	](#classes_and_relations)
 1. [Unterstützung der Mehrfachvererbung	](#multiple_inheritance)
-1. [Überlappende Basisklassen		](#diamond_inheritance)
+1. [Rautenförmige Ableitungshierarchien	](#diamond_shapes)
 1. [Beispiele zu Klassenbeziehungen	](#example_relations)
 1. [Praktikum				](#exercise_wed1)
 
@@ -176,8 +176,8 @@ header: ## Beziehungen zwischen Klassen
 
 ----------------------------------------------------------------------
 
-* [(Mehrfach-)](#multi_based) [Vererbung](#inheritance)
-* [Interface				](#interfaces)
+* [(Mehrfach-)](#multibased) [Vererbung](#inheritance)
+* [Interface				](#interface)
 * [Abstrakte Basisklasse		](#abstract_base)
 
 ----------------------------------------------------------------------
@@ -248,7 +248,7 @@ template: withinfo
 graphic: UML-ClassesAndRelations
 section: Instantiated Objects
 name: class_instantiated
-header: #### Klassen vs. Objekte
+header: ### Klassen vs. Objekte
 
 Hierfür benutzt die UML im Wesentlichen die selbe Symbolik – der Unterschied
 besteht lediglich darin, dass
@@ -256,11 +256,11 @@ besteht lediglich darin, dass
 * bei Objekten der Name unterstrichen ist und
 * der Klassenname auch entfallen kann.._[]
 
-##### Klassen
+#### Klassen
 Diese kommen einem *Bauplan* gleich und beschreiben in der UML-Darstellung alle
 *Gemeinsamkeiten* der Objekte, die gemäß diesem Bauplan erstellt werden.
 
-##### Objekte
+#### Objekte
 Diese sind *instanzierte Klassen* und beinhalten in der UML-Darstellung die
 *Unterschiede* aus, welche trotz des gemeinsamen Bauplans bestehen.
 
@@ -275,10 +275,10 @@ können (beispielsweise wenn sie sich aus dem Kontext ergeben).
 template: plain
 header: #### Klassen und Objekte in C++
 
-In kompilierten Sprachem, d.h. wenn die Unterstützung der Objektorientierten
-Programmierung, quasi einen Interpreter für ein Objekt-System zur Laufzeit
-anzubieten, gibt es in der Regel einen weiteren, charakteristischen Unterschied
-zwischen Klassen und Objekten:
+In kompilierten Sprachen wie C++, in denen die Unterstützung der
+Objektorientierten Programmierung nict darin besteht, quasi einen Interpreter
+für ein Objekt-System zur Laufzeit anzubieten, gibt es in der Regel einen
+weiteren charakteristischen Unterschied zwischen Klassen und Objekten:
 
 .I[
 Klassen sind in C++ **statisch** in dem Sinne, dass sie
@@ -291,28 +291,27 @@ Klassen sind in C++ **statisch** in dem Sinne, dass sie
 template: plain
 header: #### C++-Klassen als Compilezeit-Konstrukt
 
-[ITcl]:      http://incrtcl.sourceforge.net/itcl/
+[Itcl]:      http://incrtcl.sourceforge.net/itcl/
 [Smalltalk]: http://www.smalltalk.org/smalltalk/whatissmalltalk.html
 [Python]:    http://www.python.org/
 [Java]:      https://www.java.com/en/download/whatis_java.jsp
 [C Sharp]:   http://www.techopedia.com/definition/26272/c-sharp
 
 Die vollständige Festlegung einer Klasse zur Compilezeit ist ein wesentlicher
-Unterschied zu deutlich dynamischeren OOP-Sprachen, wie
-etwa
+Unterschied zu deutlich dynamischeren OOP-Sprachen, wie etwa
 
 * [Smalltalk]
 
 * [Python] oder
 
-* [ITcl]
+* [Itcl]
 
-deren Klassen und Objekte - auch und gerade hinsichtlich ihrer Member-Daten und
+deren Klassen und Objekte – auch und gerade hinsichtlich ihrer Member-Daten und
 -Funktionen zur Laufzeit völlig dynamisch erzeugt werden können, und somit z.B.
 auch datenabhängig erstellt werden können.._[]
 
 .F[:
-[Java] und C# [C Sharp] sind in dieser Hinsicht wiederum eher ähnlich zu C++,
+[Java] und [C Sharp] sind in dieser Hinsicht wiederum eher ähnlich zu C++,
 besitzen allerdings mehr standardisierte Möglichkeiten zur Introspektion und
 können mit Hilfe kleiner Kunstgriffe in großen Teilen den Eindruck eines zur
 Laufzeit dynamischen Verhaltens bieten.
@@ -773,7 +772,7 @@ the LSP only to a very limited degree!
 template: withinfo
 graphic: UML-ClassesAndRelations
 section: Multiple Inheritance
-name: multiple_bases
+name: multibased
 header: ### Mehrfachvererbung
 
 Diese liegt vor, wenn eine Klasse zwei Basisklassen hat, also zwei allgemeine
@@ -827,7 +826,7 @@ Zudem bieten sie Flexibilität zur Laufzeit, indem aus mehreren verfügbaren
 Implemetierungen u.U. die für eine Situation am passende gewählt werden kann.
 
 .N[
-Interfaces haben vor allem durch *Objektorientierten Entwurfsmuster ([OO-DP])*
+Interfaces haben vor allem durch *Objektorientierte Entwurfsmuster ([OO-DP])*
 eine gewisse Bekanntheit erlangt und spielen auch im *[GoF]-Buch* eine wichtige
 Rolle.
 ]
@@ -836,12 +835,17 @@ Rolle.
 template: plain
 header: #### Interfaces vs. Klassen
 
-Technisch gesehen sind Interfaces in C++ in einer bestimmten Form eingeschränkte
-Klassen:
+Technisch gesehen sind Interfaces in C++ einfach in bestimmter Form Weise
+eingeschränkte Klassen:
 
-* Sie besitzen **keine Member-Daten** und
+* Sie besitzen keine Member-Daten und
 
-* **ausschließlich rein virtuellen Member-Funktionen**.
+* ausschließlich rein virtuelle Member-Funktionen.
+
+.N[
+Ein spezielles Schlüsselwort, das diese Einschränkungen **erzwingt**, gibt es
+in C++ nicht.
+]
 
 ---
 template: withinfo
@@ -857,9 +861,13 @@ Die Bezeichnung *abstrakt* wird für Klassen verwendet, die mindestens eine
 In der UML-Darstellung wird der Name einer abstrakten Klasse kursiv geschrieben.
 ]
 
-Abstrakte Klassen können nur als Basisklassen verwendet werden. Die abgeleitete
-Klasse wird dann typischerweise die rein virtuelle(n) Member-Funktion(en)
-implementieren.
+Abstrakte Klassen können nur als Basisklassen verwendet werden.
+
+Davon abgeleitete Klassen werden dann
+
+* die rein virtuelle(n) Member-Funktion(en) implementieren,
+
+* oder sind selbst (weiterhin) abstrakte Basisklassen.
 
 .W[
 Der Versuch, Objekte einer abstrakten Klasse zu erzeugen scheitert in C++ mit
@@ -870,7 +878,7 @@ einem Kompilierfehler.
 template: withinfo
 graphic: UML-ClassesAndRelations
 section: "Diamond Shaped" Inheritance Graph
-name: diamond_inheritance
+name: diamond_shaped_inheritance
 header: ### "Rautenförmige" Vererbungsstruktur
 
 Eine solche entsteht, wenn sich bei Mehrfachvererbung auf der mittleren Ebene
@@ -878,7 +886,7 @@ Klassen befinden, die wiederum eine gemeinsame Basisklasse besitzen.
 
 Es ist bezüglich der gemeinsamen Basisklasse dann in der UML-Darstellung eine
 Unterscheidung zwischen zwei Fällen erforderlich, welche die Daten-Member der
-(gemeinsamen) Basisklasse betreffen:
+gemeinsamen Basisklasse betreffen:
 
 * `«overlapping»` – die Daten-Member sind nur einmal vorhanden;
 
@@ -899,12 +907,12 @@ header: ### Mehrstufige Vererbung allgemein gesehen
 
 Im Allgemeinen gehen Vererbungs-Hierarchien
 
-* sowohl *in die Breite*, d.h. eine Basisklasse wird oft viele (direkt)
+* sowohl *in die Breite*, d.h. eine Basisklasse wird oft mehrere direkt
   abgeleitete Klassen haben,
 
-* wie auch *in die Tiefe*, d.h. es gibt mehrere Stufen (sieht man die direkt
+* wie auch *in die Tiefe*, d.h. es gibt mehrere Stufen – sieht man die direkt
   abgeleiteten Klassen als "Kinder", gibt es somit auch "Enkel", "Ur-Enkel"
-  usw.).
+  usw.
 
 .I[
 Rautenförmige Hierarchien mit gemeinsamen `«disjoint»` Basisklassen ausgenommen,
@@ -979,8 +987,8 @@ Im konkreten Fall einer rautenförmigen Hierarchie werden
   Daten-Member verweisen.
 
 Da alle Bezugnahmen darauf – wie gerade beschrieben – über diese Zeiger laufen,
-werden die Klassen der mittleren Ebene **ein und dasselbe** Basisklassen-Objekt
-ansprechen.
+sprechen die Klassen der mittleren Ebene **ein und dasselbe**
+Basisklassen-Objekt an.
 
 ---
 template: linkinfo
@@ -1016,10 +1024,6 @@ Die zusammengefasste Darstellung des Falls `«overlapping»` in Bezug auf
 
 * die UML-Darstellung,
 
-* das Speicherlayouts und
-
-* die Typumwandlungen im Rahmen des LSP
-
 erlaubt den direkten Vergleich zum Fall `«disjoint»`.
 
 ---
@@ -1033,9 +1037,31 @@ Die zusammengefasste Darstellung des Falls `«disjoint»` in Bezug auf
 
 * die UML-Darstellung,
 
-* das Speicherlayouts und
+erlaubt den direkten Vergleich zum Fall `«overlapping»`.
 
-* die Typumwandlungen im Rahmen des LSP
+---
+template: withinfo
+graphic: DiamondShapedInheritance
+section: Class to Memory Mapping («overlapping»)
+name: overlapping_memory
+header: ### Abbildung auf Speicher `«overlapping»`
+
+Die zusammengefasste Darstellung des Falls `«overlapping»` in Bezug auf
+
+* die Speicherabbildung
+
+erlaubt den drekten Vergleich zum Fall `«disjoint»`.
+
+---
+template: withinfo
+graphic: DiamondShapedInheritance
+section: Class to Memory Mapping («overlapping»)
+name: disjoint_memory
+header: ### Abbildung auf Speicher `«disjoint»`
+
+Die zusammengefasste Darstellung des Falls `«disjoint»` in Bezug auf
+
+* die Speicherabbildung
 
 erlaubt den direkten Vergleich zum Fall `«overlapping»`.
 
@@ -1043,28 +1069,24 @@ erlaubt den direkten Vergleich zum Fall `«overlapping»`.
 template: withinfo
 graphic: DiamondShapedInheritance
 section: Class to Memory Mapping («overlapping»)
-name: overlapping_implementation
+name: overlapping_ctordtor
 header: ### Abbildung auf Speicher `«overlapping»`
 
 Die zusammengefasste Darstellung des Falls `«overlapping»` in Bezug auf
 
 * den Quelltext,
 
-* den Konstruktor-._[] sowie
+* den Konstruktor- sowie
 
 * den Destruktor-Ablauf
 
 erlaubt den drekten Vergleich zum Fall `«disjoint»`.
 
-.F[:
-Siehe auch [Aufgabe von Dienstagvormittag (Teil 1)](../Examples/03_tuesday1_x1).
-]
-
 ---
 template: withinfo
 graphic: DiamondShapedInheritance
 section: Class to Memory Mapping («overlapping»)
-name: disjoint_implementation
+name: disjoint_ctordtor
 header: ### Abbildung auf Speicher `«disjoint»`
 
 Die zusammengefasste Darstellung des Falls `«disjoint»` in Bezug auf
@@ -1110,7 +1132,7 @@ header: ## Beispiele zu Klassenbeziehungen
 template: withinfo
 graphic: Example-ClassDesign
 section: Reusable Component
-name: with_existing_component
+name: an_adaptable_component
 header: ### Eine (anpassbare) Komponente
 
 Anpassbare Komponenten entstehen normalerweise entweder
@@ -1128,7 +1150,7 @@ In den konkreten Beispielen._[] zu diesem Abschnitt ist die Template-Version der
 
 .F[:
 Sieha auch
-[Aufgabe Dienstagvormittag (Teil 2)](../Examples/03_tuesday1_x2) und
+[Aufgabe Mittwochvormittag (Teil 2)](../Examples/05_wednesday1_x2) und
 [Examples/ClassDesigns/ReusableComponent](../Examples/ClassDesigns/ReusableComponent)
 ]
 
@@ -1136,7 +1158,7 @@ Sieha auch
 template: withinfo
 graphic: Example-ClassDesign
 section: Reusable Adapted Component
-name: with_existing_component
+name: using_existing_component
 header: ### Nutzung der (angepassten) Komponente
 
 Die Nutzung einer (angepassten) Komponente reduziert den Aufwand an immer wieder
@@ -1166,8 +1188,8 @@ name: with_multiple_inheritance
 header: ### Rautenförmige (Mehrfach-) Vererbung
 
 Besteht die Bereitschaft den Preis für die dann oft notwendigen, virtuellen
-Basisklassen zu zahlen, lassen sich ggf. flexible Kombinationsmöglichkeiten
-mit einem guten Grad an Wiederverwendung durch Mehrfachverarbung erreichen.
+Basisklassen zu zahlen, lassen sich flexible Kombinationsmöglichkeiten mit einem
+guten Grad an Wiederverwendung durch Mehrfachverarbung erreichen.
 
 .N[
 In den konkreten Beispielen._[] zu diesem Abschnitt werden aus den Klassen `Average`
@@ -1215,8 +1237,8 @@ section: Improved Reuse with Mixin Classes
 name: with_extensibilty
 header: ### Inkrementale Erweiterbarkeit durch Mix-Ins
 
-Über Mixin-Klassen lässt sich ggf. flexible Kombinierbarkeit schaffen auch ohne
-das virtuelle Basisklassen notwendig werden.
+Über Mixin-Klassen lässt sich ggf. flexible Kombinierbarkeit schaffen, auch ohne
+dass virtuelle Basisklassen notwendig werden.
 
 .N[
 In den konkreten Beispielen._[] zu diesem Abschnitt werden
@@ -1229,7 +1251,7 @@ In den konkreten Beispielen._[] zu diesem Abschnitt werden
 
 .F[:
 Leicht vereinfacht (ohne `RingBuffer`-Komponente) in
-[Aufgabe von Dienstagvormittag (Teil 3, Variante 1)](../Examples/03_tuesday1_x3)
+[Aufgabe von Mittwochvormittag (Teil 3, Variante 1)](../Examples/05_wednesday1_x3)
 ]
 
 ---
@@ -1263,7 +1285,7 @@ wobei Abhänggkeiten gering gehalten werden
 
 .F[:
 Leicht vereinfacht (ohne `RingBuffer`-Komponente) in
-[Aufgabe von Dienstagvormittag (Teil 3, Variante 2)](../Examples/03_tuesday1_x3)
+[Aufgabe von Mittwochvormittag (Teil 3, Variante 2)](../Examples/05_wednesday1_x3)
 ]
 
 ---
