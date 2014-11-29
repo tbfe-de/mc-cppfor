@@ -645,15 +645,15 @@ template: plain
 name: const_ref_args
 header: #### Reference Arguments
 
-It should be noticed that in the most cases reference initialisation occurs
-when handing arguments to functions, hence all the peculiarities and special
-cases shown so far will be mostly observed there:
+As reference initialisation occurs when handing arguments to functions, all the
+peculiarities and special cases discussed so far will be mostly likely observed
+there.
 
-Forgotten `const`-qualification, `arg` is actually not modified in `foo`:
+A typical lapse is to forget to add `const` to read-only reference arguments:
 ```
 void foo(double &arg) {
     …
-    … // all access to arg is read-only
+    … // all access to arg is non-modifying
     …
 }
 ```
@@ -677,10 +677,10 @@ foo(2*PI);
 ]
 
 .F[:
-The reason is to avoid surprising effects that would occur especially if
-temporaries were created for type coercion and modifications applied to the
-temporary only but not to the variable used as argument though "obviously"
-handed over by reference.
+The reason is to avoid surprising effects that would occur especially if a
+temporary were created for type coercion, and modifications were then applied to
+the temporary only but not to the variable actually used as argument (though it
+was "obviously" handed over by reference). 
 ]
 
 ---
@@ -692,11 +692,11 @@ C++ Referenzen können auf zwei Arten betrachtet werden:
 
 * Eine alternative Syntax für Zeiger, welche
 
-  * die Dereferezierung bei der Verwendung impliziert (`*` automatisch
-    vorangestellt);
+  * die Dereferenzierung bei der Verwendung impliziert  
+    (also "`*`" automatisch vorangestellt);
 
-  * bzw. den Adress-Operator bei der Initialisierung (`&` automatisch
-    vorangestellt).
+  * bzw. den Adress-Operator bei der Initialisierung  
+    (also "`&`" automatisch vorangestellt).
 
 * Oder aber einen Alias-Name für bereits (an anderer Stelle) existierenden,
   typisierten Speicherplatz.
@@ -708,11 +708,9 @@ beim Zugriff auf das, was referenziert wird.._[]
 ]
 
 .F[:
-Der Nachweis ist beim `g++` leicht durch die Erzeugung des Assembler-Codes
-möglich, wozu die Option `-S` (Großbuchstabe) anzugeben ist und das Ergebnis in
-einer Datei mit Suffix `.s` (Kleinbuchstabe) landet. Für noch schnellere,
-praktische Experimente zu Fragen der Code-Erzeugung sei auf den folgenden Online
-Compiler hingewiesen: http://gcc.godbolt.org/
+Der Nachweis ist bei `g++` durch Erzeugung des Assembler-Codes möglich, wozu die
+Option "`-S`" (Großbuchstabe) anzugeben und das Resultat dann in einer Datei mit
+Suffix "`.s`" (Kleinbuchstabe) zu finden ist.
 ]
 
 ---
@@ -723,7 +721,7 @@ header: ### Rvalue-Referenzen
 [Rvalue-Referenzen]: http://en.cppreference.com/w/cpp/language/reference
 
 Mit C+11 neu eingeführt wurde das Konzept der [Rvalue-Referenzen]. Sie lassen
-sich nur mit Audrücken initialisieren, also *temporären Werten*, auf die dann
+sich nur mit Ausdrücken initialisieren, also *temporären Werten*, auf die dann
 kein anderer Zugriff als über die Referenz besteht.
 
 Nachfolgend zusammengefasst die wichtigsten Regeln:._[]
@@ -743,10 +741,11 @@ Herkunft von Argumenten, und dort wiederum insbesondere bei
 ]
 
 .F[:
-In dem für obige Szenarien typischen Fall von Funktionsargumenten könnte im Fall
-der Rvalue-Referenz – anders als bei klassischen `const`-Referenzen – das
-übergebene `T` nun modifiziert werden, allerdings nur so weit, dass der
-Destruktor nach wie vor seine Arbeit verreichten kann.
+In dem für die obige Szenarien typischen Fall von Funktionsargumenten kann bei
+einer Rvalue-Referenz – anders als bei einer klassischen `const`-Referenz – das
+übergebene Argument modifiziert werden. Die Freiheit, dies zu tun, reicht
+allerdings nur so weit, dass der Destruktor nach wie vor korrekt funktionieren
+muss!
 ]
 
 ---
@@ -783,11 +782,11 @@ das heißt:
 * müssen alle rechts davon stehenden ebenfalls einen haben.
 
 .N[
-Der Defaultwert muss beim Funktionsaufruf bekannt sein, also im Header-File
-stehen als Bestandteil des Funktions-Prototyps.
+Der Defaultwert muss beim Funktionsaufruf bekannt sein, ist also Bestandteil des
+Funktions-Prototyps und steht ggf. zusammen mit diesem in einem Header-File.
 ]
 
-Die Namen für die formalen Argumente sind aber auch hier optional:._[]
+Die Namen für die formalen Argumente sind auch in diesem Fall optional:._[]
 ```
 // the following function can be called with 1..3 arguments:
 double foo(int &count, int minsize = 0, char separator = 'z');
@@ -830,39 +829,53 @@ foo(x, y);             /*calls ?*/
 ```
 
 .F[:
-If one argument list is from left to right an exact subset of another one, this
-is similar to default values for arguments. But with overloading there are as
-many separate entry points as there are functions with the same name, while for
-default argument values there is just one entry point and missing argument
-values are automatically supplied.
+If one argument list is from left to right an exact subset of another one, the
+overall effect is similar to default values for arguments. But with overloading
+there are as many separate entry points as there are functions, while with
+default arguments there is just one entry point and missing argument values are
+automatically supplied.
 ]
 
 ---
 template: plain
-header: #### Überladen von Funktionen (2)
+header: #### Überladen bei Parametern mit ohne `const`
 
-Die `const`-Qualifizierung eines Parameters macht ebenfalls einen Unterschied:
+Auch die `const`-Qualifizierung eines Parameters macht einen Unterschied:
+.pull-left[
+In Fortsetzung des Beispiels von der vorhergehenden Seite:
 ```
-void foo(char *); /*4*/
 char data[100];
 …
-foo(data); /*4*/
-foo("hi"); /*1*/
+foo(data); /*1*/
 ```
+]
 
-Es ist allerdings nicht zwingend notwendig, dass immer zwei Funktionen
-existieren, je eine für den konstanten und den nicht-konstanten Fall:
+.pull-right[
+Mit **Erweiterung** dieses Beispiels:
+```
+void foo(char *); /*4*/
+extern const char greet[]; 
+…
+foo(data); /*4*/
+foo(greet); /1*/
+```
+]
 
-* Ohne die Funktion für den **nicht**-konstanten Fall wird die Funktion für den
-  konstanten Fall für alle Aufrufe verwendet.._[]
+Existiert nur eine der beiden Funktionen (die sich voneinander nur in der
+`const`-Qualifizierung eines Parameters unterscheiden), so gilt:
 
-* Ohne die Funktion für den **konstanten** Fall wird der Aufruf mit `"hi"` zum
-  Compile-Fehler, da String-Literale den Typ `const char *` haben.
+* Existiert allein die Funktion für den konstanten Fall, wird sie auch für
+  modifizierbare Argumente verwendet.._[]
+
+* **Ohne** die Funktion für den konstanten Fall führt der Aufruf mit einem
+  **nicht-modifizierbaren** Argument zum Compile-Fehler (im Beispiel etwa
+  `foo("hi")`, wenn nur Version `/*4'/` aber nicht `/*1*/` existiert).
 
 .F[:
-Generell ist es kein Problem, wenn eine Funktion, welche über ein Zeiger- oder
-Referenz-Argument erreichbaren Speicherplatz nicht verändern wird, die Adresse
-von prinzipiell schreibbarem Speicher bekommt – **wohl aber umgekehrt!**
+Es ist kein Problem einer Funktion, die verspricht, den Inhalt einer über ein
+Zeiger- oder Referenz-Argument erreichbaren Variablen nicht zu verändern,
+Zugriff auf (prinzipiell) veränderbaren Speicherplatz zu geben – **wohl aber
+umgekehrt!**
 ]
 
 ---
@@ -872,17 +885,30 @@ header: ### Überladen von Operatoren
 
 [Boost.Operators]: http://www.boost.org/doc/libs/1_55_0/libs/utility/operators.htm
 
-Operatoren können überladen werden mit Funktionen, deren Name mit dem Wort
+Operatoren._[] können überladen werden mit Funktionen, deren Name mit dem Wort
 `operator` beginnt.
 
 * Die meisten Operatoren können wahlweise mit freistehenden Funktionen oder mit
   Member-Funktionen überladen werden.
 
-* Einige Operatoren sind auf Member-Funktionen eingeschränkt.
+* An der Überladung muss aber mindestens eine Klasse beteiligt sein.._[]
 
-.N[
-Zur konsistenten Überladung ganzer Operatorgruppen kann [Boost.Operators]
-hilfreich sein.
+* Einige Operatoren sind hinsichtlich der Überladung auf Member-Funktionen
+  eingeschränkt.
+
+* Zur konsistenten Überladung ganzer Operatorgruppen kann [Boost.Operators]
+  hilfreich sein.
+
+Weiterführende Links:
+
+* http://en.cppreference.com/w/cpp/language/operators
+* http://www.tutorialspoint.com/cplusplus/cpp_overloading.htm
+
+.F[:
+Therefore the meaning of operators for builtin-types cannot be changed. If you
+want to come close to the behaviour of a given builtin types but change or
+remove some predefine operations, you will typically have to **add** a new class
+and implement all the operations it should support.
 ]
 
 ---
@@ -898,8 +924,13 @@ MyClass operator+(const MyClass &lhs, const MyClass &rhs) {
 ```
 
 Der Rückgabetyp ist dabei beliebig, die `return`-Anweisung muss natürlich vom
-Typ her passend sein, genauer gesagt: Der Ausdruck hinter `return` muss exakt
-den Rückgabetyp haben oder in diesen umwandelbar sein.
+Typ her passend sein.
+
+Genauer gesagt, der Ausdruck hinter `return` muss
+
+* entweder exakt den Rückgabetyp haben (`MyClass` im Beispiel)
+
+* oder in diesen umwandelbar sein.
 
 ---
 template: plain
@@ -913,9 +944,24 @@ MyClass &MyClass::operator+=(const MyClass &rhs) {
 }
 ```
 
-Auch hier ist der Rückgabetyp grundsätzlich frei wählbar. Gemäß den Konventionen
-bei den Standardtypen wird in der Regel das durch die Operation gerade
-veränderte Objekt selbst zurückgegeben.
+Auch hier ist der Rückgabetyp grundsätzlich frei wählbar.
+
+.N[
+Gemäß den Konventionen bei eingebauten Typen wird in der Regel das durch die
+Operation gerade veränderte Objekt selbst zurückgegeben.
+]
+
+Die Rückgabe erfolgt typischerweise als Referenz (sonst wäre es auch nicht das
+Objekt selbst sondern nur eine identische Kopie).
+
+Da dies technisch gesehen nur Weitergabe einer Adresse bedeutet, ist es
+
+* performant (z.B. Rückgabe in Register) und
+* nahezu frei von Overhead bei Nichtbenutzung._[]
+
+.F[:
+Also, for an optimizing compiler there is a fair chance to remove any remaining overhead …
+]
 
 ---
 template: plain
@@ -924,8 +970,8 @@ header: #### Überladung von Kopier-Konstruktor und -Zuweisung
 
 [Rule Of Three]: http://en.cppreference.com/w/cpp/language/rule_of_three
 
-Für einige Arten von Objekten muss die Zuweisungs-Operation überladen werden, da
-der Default – elementweise Zuweisung – ungeeignet ist.._[]
+Für einige Arten von Objekten müssen diese Operationen überladen werden, da
+der Default – elementweises Initialisieren bzw. Zuweisung – ungeeignet ist.._[]
 ```
 class MyClass {
     T *some_ptr;
@@ -956,14 +1002,14 @@ header: #### Überladung von Move-Konstruktor und -Zuweisung
 [Rule Of Five]: http://en.cppreference.com/w/cpp/language/rule_of_three
 
 In C++11 können die [Rvalue-Referenzen](#rvalue_ref) dazu verwendet werden,
-Initialisierung und die Zuweisung unterschiedlich zu implementieren,._[]
-abhängig davon ob
+abhängig davon, ob der dabei als Operand auftretende Ausdruck
 
-* der dazu verwendete Ausdruck direkt ein Objekt repräsentiert, das danach
-  unverändert im Speicher weiter existiert, oder
+* direkt ein Objekt repräsentiert, das danach unverändert im Speicher weiter
+  existiert, oder
+* temporären Speicherplatz, der ohnehin im Anschluss verworfen wird (z.B. für
+  einen berechneten Ausdruck oder ein Funktionsergebnis),
 
-* temporären Speicherplatz (für einen berechneten Ausdruck oder ein
-  Funktionsergebnis), der ohnehin bald verworfen wird.
+Initialisierung wie auch Zuweisung unterschiedlich zu implementieren.._[]
 
 ```
 class MyClass {
@@ -1018,20 +1064,31 @@ to be properly de-constructed first.
 template: plain
 header: #### Unterscheidung Copy- und Move-Versionen
 
-Existieren beide Fassungen (Copy und Move), ergibt sich folgendes Verhalten:
+Existieren beide Fassungen (Copy und Move), ergibt sich folgendes Verhalten:._[]
 
 ```
 MyClass foo() { return …; }  // … must be an expression of
                              // type MyClass (or something
                              // convertible to MyClass)
+// constructor use:
 MyClass a;        // (expects c'tor with no argumens)
-MyClass b(a);     // copy c'tor (does not alter a)
-MyClass c(foo()); // move c'tor (may alter temporary)
-a = c;            // copy assignment (does not alter c)
-b = foo();        // move assignment (may alter temporary)
-c = a + b;        // move assignment provided operator+ is
-                  // defined for MyClass (may alter temporary)
+MyClass b(a);     // copy c'tor (does not modify a)
+MyClass c(foo()); // move c'tor (may modify temporary)
+
+// assignment use:
+a = c;            // copy assignment (does not modify c)
+b = foo();        // move assignment (may modify temporary)
+c = a + b;        // move assignment (may modify temporary
+                  //                  returned from operator+)
 ```
+
+.F[:
+Of course, adding operands of type `MyClass` in the last line of the example
+also assumes `operator+` exists and returns by value, as is the usual behaviour.
+In the (unusual) case that operator were defined but returns something that C++
+considers to be "more persistant" (like a reference), copy assignment would be
+used instead, though a move could be enforced then: `c = std::move( … );`
+]
 
 ---
 template: plain
@@ -1061,18 +1118,19 @@ Typ-Konvertierungen sind hier:
 
 * Ansonsten finden bei Bedarf folgende Umwandlungen statt:
 
-  * Aufzählungstypen in arithmetische Typen;
-  * Zeiger in Wahrheitswerte (alles außer `nullptr` ist `true`);
-  * typisierter Zeiger in allgemeine Zeiger (`void *`).
+  * Aufzählungstypen (`enum`) **→** arithmetische Typen;
+  * Zeiger **→** Wahrheitswerte (alles außer `nullptr` ist `true`);
+  * typisierter Zeiger **→** allgemeine Zeiger (`void *`).
 
 .I[
-Innerhalb der arithmetischen Typen erfolgt die Umwandlung nach Möglichkeit
-**wert-erhaltend** und wird oft mit auszuführenden Maschinenbefehlen verbunden
-sein.
+Innerhalb der arithmetischen Typen erfolgt die Umwandlung soweit möglich
+**wert-erhaltend** und wird eventuell mit auszuführenden Maschinenbefehlen
+verbunden sein.
 ]
 
-Inwieweit dies auch für die anderen Fälle gilt, hängt von Hardware-Details ab,
-insbesondere der Repräsentation von Aufzählungstypen und Zeigern.
+Inwieweit dies auch für die anderen, oben aufgezählten Fälle gilt, hängt von
+Hardware-Details ab, insbesondere der Repräsentation von Aufzählungstypen und
+Zeigern.
 
 .F[:
 Dies schließt auch `char` (mitunter verwendet für kleine Ganzzahlen) und `bool`
@@ -1086,24 +1144,25 @@ header: #### Typ-Kompatibilität bei grundlegenden Typen (2)
 * Außerhalb der Umwandlungen zwischen arithmetischen Typen handelt es sich um
   **einseitig gerichtete** Umwandlungen.
 
-* D.h. es gibt **keine** automatische Umwandlung in den folgenden Fällen:
+* D.h. es gibt **keine automatische Umwandlung** in den folgenden Fällen:
 
-  * von arithmetischen Typen in Aufzählungstypens;
+  * von arithmetischen Typen in Aufzählungstypen (`enum`);
   * von Wahrheitswerten in Zeiger;
-  * von allgemeinen Zeigern in typisierte Zeiger.
+  * **von allgemeinen Zeigern in typisierte Zeiger**.
+
+Mit dem letzten Punkt wurde die [Typ-Sicherheit von C++](#general_typesafety)
+gegenüber C an einer kritischen Stelle verbessert.._[]
 
 .I[
-Im letzten Punkt unterscheiden sich C und C++, was zu deutlich **größerer
-Typ-Sicherheit in C++** führt.
+Anders als in C kann in C++ auf dem Umweg über allgemeine Zeiger (`void *`)
+keine "stille" Typ-Konvertierung typisierter Zeiger erfolgen.
 ]
 
-Anders als in C kann in C++ auf dem Umweg über allgemeine Zeiger (`void *`)
-keine "stille" Typ-Konvertierung typisierter Zeiger erfolgen.._[]
-
 .F[:
-Der Grund für das andere Verhalten liegt bei der `malloc`-Funktionsfamilie in
-der C-Bibliothek, die gemäß dem C89-Standard den Ergebnistyp `void *` hat,
-und für welche die Notwendigkeit von Cast-Operationen vermieden werden sollte.
+Der Grund für das andere Verhalten in C liegt bei der `malloc`-Funktionsfamilie
+in der C-Bibliothek, die gemäß dem C89-Standard den Ergebnistyp `void *` hat.
+In C wollte man so die die Notwendigkeit von Cast-Operationen für `malloc`
+etc. vermeiden. Da in C++ `new` ein Operator ist, entfällt diese Problematik.
 ]
 
 ---
@@ -1129,9 +1188,9 @@ mit auszuführenden Maschinenbefehlen verbunden.
 ]
 
 .F[:
-Ausgenommen sind jeweils indirekte nicht-virtuelle Basisklassen im Fall von
-Mehrfachvererbung und rautenförmigen Klassenbeziehungen (in der UML als
-"«disjoint»" annotiert).
+Für indirekte nicht-virtuelle Basisklassen im Fall von Mehrfachvererbung mit
+rautenförmigen Klassenbeziehungen (in der UML als "«disjoint»" annotiert) gilt
+dies nicht, da in diesem Fall die automatische Konvertierung mehrdeutig wäre.
 ]
 
 ---
@@ -1149,14 +1208,22 @@ was Barbara Liskov seinerzeit als
 für die Objekt-Orientierte Programmierung als forderte und was seitdem oft als
 LSP abgekürzt wird.
 
-.N[
-**Das LSP gilt in C++ nur im Fall öffentlicher Basisklassen** und nur hier
-liegt Vererbung im Sinne der OOP vor.
+.N.center[
+Das LSP gilt in C++ nur im Fall öffentlicher Basisklassen.
+
+**Nur nur hier liegt Vererbung im Sinne der OOP vor.**
 ]
 
-Diese wird auch *Generalisierung-Spezialisierung* genannt und in der
-UML-Darstellung durch Verbindungslinie mit kleinem, nicht ausgefülltem Dreieck
-an der Basisklasse spezifiziert.
+Vererbung._[] wird auch *Generalisierung-Spezialisierung* genannt und in der
+UML-Darstellung durch eine Verbindungslinie mit nicht ausgefülltem Dreieck am
+auf die Basisklasse weisenden Ende spezifiziert.
+
+.F[:
+To be clear once more: what is discussed here is a class relation that implies
+substitutibility according to the LSP. As inheritance is at the heart of
+object-oriented modelling and programming, it will be covered in more depth
+later ([see Wednesday Part 1 Inheritance](05_wednesday1.html#inheritance)).
+]
 
 ---
 template: plain
@@ -1171,15 +1238,18 @@ header: #### Private Basisklassen (kein LSP)
 
 .N[
 Im Sine der OOP handelt es sich bei letzteren somit nicht um Vererbung sondern
-um Komposition.._[]
+um Komposition.
 ]
 
-In der UML-Darstellung wird die Komposition durch eine Verbindungslinie mit
-kleiner, ausgefüllter Raute an der Klasse des Aggregats spezifziert.
+Komposition ist ein Sonderfall der Aggregation._[] und wird in der
+UML-Darstellung durch eine Verbindungslinie mit ausgefüllter Raute am auf die
+Klasse des Aggregats weisenden Ende spezifiziert.
 
 .F[:
-This topic and especially the various forms of composition receive substantially
-deeper coverage in a later chapter.
+The special case is that the lifetime of the *part* is coupled to that of the
+aggregate. As composition is very important in object-oriented modelling and
+there are various ways to implement it in C++, it will be covered in more depth
+later ([see Wednesday Part 1 Aggregation](05_wednesday1.html#aggregation)).
 ]
 
 ---
@@ -1189,7 +1259,7 @@ header: ### Typ-Konvertierung mittels *Cast*
 
 [Cast-Operation]: http://www.cplusplus.com/doc/tutorial/typecasting/
 
-Mittels sogenannter [Cast-Operation]en lassen sich weitere Typ-Umwandlungen
+Mittels sogenannter [Cast-Operation]en lassen sich weitere Typ-Konvertierungen
 erzwingen.
 
 .W[
@@ -1223,24 +1293,24 @@ template: plain
 name: static_cast_typeconv
 header: #### Typ-Konvertierung mit `static_cast`
 
-Hiermit lassen sich alle Typ-Umwandlungen explizit hervorheben, welche der
-Compiler auch automatisch vorgenommen hätte.._[]
+Hiermit lassen sich zum einen Typ-Konvertierungen explizit hervorheben, welche
+der Compiler auch automatisch vorgenommen hätte.._[]
 
-Darüberhinaus funktioniert der `static_cast` in **beide** Richtungen für alle
-Umwandlungen, welche als **automatische** Umwandlung nur in einer Richtung
+Darüberhinaus funktioniert der `static_cast` in **beide** Richtungen für
+diejenigen Typ-Konvertierungen, welche **automatisch** nur in einer Richtung
 eingesetzt werden:
 
-* Arithmetische Wert in Aufzählungstypen (`enum`)
+* Arithmetische Wert **→** Aufzählungstypen (`enum`)
 
   * automatisch nur Aufzählungstypen in arithmetische Werte
 
-* Generische Zeiger (`void *`) in typisierte Zeigern
+* Generische Zeiger (`void *`) **→** typisierte Zeigern
 
   * automatisch nur typisierte in generische Zeiger
 
 * Basisklassen in abgeleitete Klassen (Downcast)
 
-  * automatisch nur abgeleitete Klassen in Basisklassen (Upcast)
+  * automatisch nur abgeleitete Klassen **→** Basisklassen (Upcast)
 
 .F[:
 The most typical reason for this is that many compilers will issue a warning
@@ -1257,7 +1327,7 @@ header: #### Typ-Konvertierung mit `dynamic_cast`
 [`std::bad_cast`]:     http://en.cppreference.com/w/cpp/types/bad_cast
 [Laufzeit-Typprüfung]: 04_wednesday2.html#dynamic_cast
 
-Hiermit lassen sich ausschließlich Typ-Umwandlungen innerhalb von
+Hiermit lassen sich ausschließlich Typ-Konvertierungen innerhalb von
 Klassenhierarchien vornehmen.
 
 .N[
@@ -1267,19 +1337,22 @@ statt, wenn der Cast nicht durchführbar ist.._[]
 
 Die Fehleranzeige besteht
 
-* bei Casts auf Zeigerbasis in der Rückgabe eines Nullzeigers;
+* bei **Casts auf Zeigerbasis** in der Rückgabe eines Nullzeigers;
 
-* bei Casts auf Referenzbasis in einer [`std::bad_cast`]-Exception.
+* bei **Casts auf Referenzbasis** in einer [`std::bad_cast`]-Exception.
 
 Weiteres wird später im Rahmen der [Laufzeit-Typprüfung] (RTTI) behandelt.
 
 .F[:
-Der Grund für die mögliche Undurchführbarkeit muss zusammen mit der
+Der Grund für die eventuelle Undurchführbarkeit muss zusammen mit der
 Typ-Kompatibilität zwischen Basisklassen und abgeleiteten Klassen gesehen
-werden: Ein Zeiger, der als Zeiger auf eine Basisklasse definiert ist, könnte
-stets auch auf ein Objekt einer davon abgeleiteten Klasse zeigen. Genau dies
-wird bei dem Versuch überprüft, mittels `dynamic_cast` den Basisklassenzeiger
-in einen Zeiger auf die abgeleitete Klasse umzuwandeln.
+werden: Gemäß [LSP](#public_base_lsp) kann ein Zeiger oder eine Referenz, der
+bzw. die als Zeiger oder Referenz für eine Basisklasse definiert ist, auch ein
+Objekt einer davon abgeleiteten Klasse referenzieren. Ob dies der Fall ist,
+lässt sich mit `dynamic_cast` überprüfen und mittels des auf diese Weise ggf.
+erhaltenen Zeigers (bzw. der so erhaltenen Referenz) besteht schließlich
+Zugriff auf die von der abgeleiteten Klasse hinzugefügten Member-Daten und
+-Funktionen.
 ]
 
 ---
@@ -1287,7 +1360,7 @@ template: plain
 name: const_cast
 header: #### Typ-Konvertierung mit `const_cast`
 
-Die hiermit möglichen Typ-Umwandlungen beschränken sich auf das
+Die hiermit möglichen Typ-Konvertierungen beschränken sich auf das
 
 * Hinzufügen oder
 * Wegnehmen
@@ -1298,9 +1371,11 @@ Alle anderen Unterschiede zwischen dem Zieltyp und dem Typ des umzuwandelnden
 Ausdrucks führen zu einem Compile-Fehler.
 
 .W[
-Ein `const_cast` hat gemäß dem C++-ISO/ANSI-Standard undefiniertes Verhalten,
-wenn auf eine mit Schreibschutz definierte Adresse schreibend zugegriffen wird.
+Ein `const_cast` hat gemäß dem C++-Standard undefiniertes Verhalten, wenn er
+dazu führt, dass auf eine mit Schreibschutz definierte Speicher-Adresse
+schreibend zugegriffen wird.
 ]
+
 
 Das typische Fehlerbild reicht von der inkonsistenten Wertverwendung (teilweise
 alter Wert, teilweise neuer Wert) bis zum Programmabsturz …._[]
@@ -1315,32 +1390,36 @@ template: plain
 name: reinterpret_cast
 header: #### Typ-Konvertierung mit `reinterpret_cast`
 
+  [Boost.Variant]: http://www.boost.org/doc/libs/1_57_0/doc/html/variant.html
+
 Dieses Konstrukt wird vor allem dazu eingesetzt, Zeiger auf (bekannte)
 Hardware-Adressen zu setzen, wie das u.a. im Bereich der Embedded Progammierung
 und bei Gerätetreibern notwendig sein kann.._[]
 
 .F[:
-Die per `reinterpret_cast` gebotene Möglichkeit, quasi jedes Bitmuster im
-Speicher gemäß einem beliebigen Typ zu interpretieren, veranlassen C++-Kritiker
-mitunter zu der Aussage, die C++ sei unsicher da nicht vollständig typgeprüft.
-Diese Kritik muss dann aber ebenso für Sprachen gelten, welche ein zur C/C++
-`union` vergleichbares Konstrukt bieten, so etwa das gemeinhin als typsicher
-geltende Pascal.
+Dass es per `reinterpret_cast` möglich ist, quasi jedes Bitmuster im Speicher
+gemäß jedem beliebigen Typ zu interpretieren, führt mitunter zu der Kritik, C++
+sei keine "sichere" Programmiersprache. Diese Kritik müsste dann aber für alle
+Sprachen gelten, die ein zur C/C++ `union` vergleichbares Konstrukt besitzen …
+(zumindest solange kein automatisches "type-tagging" wie bei [Boost.Variant]
+erfolgt).
 ]
 
 Darüber hinaus kann man mit einem `reinterpret_cast`
 
-* **wie auch** per `static_cast` generische Zeiger (`void *`) in typisierte Zeiger
+* **wie auch per `static_cast`** generische Zeiger (`void *`) in typisierte Zeiger
   umwandeln, und
 
-* **anders als** per `static_cast` einen typisierten Zeiger direkt in einen anders
-  typisierten Zeiger umwandeln.
+* **anders als per `static_cast`** typisierte Zeiger **direkt** in anders
+  typisierte Zeiger umwandeln.
 
 .N[
 Es ist dagegen auch mit `reinterpret_cast` nicht möglich, die `const`- und
-`volatile`-Qualifizierung zu ändern – dies erlaubt ausschließlich der
-`const_cast`.
+`volatile`-Qualifizierung zu ändern – dies erlaubt nur der `const_cast`.
 ]
+
+Um beide Konvertierungen zu kombinieren, müssen die jeweiligen Cast-Konstrukte
+ggf. nacheinander (oder geschachtelt) verwendet werden.
 
 ---
 template: plain
@@ -1377,44 +1456,53 @@ template: plain
 name: reinterpret_cast_examples2
 header: #### Typ-Konvertierung mit `reinterpret_cast` (Beispiel 2)
 
+  [C++ Calling Conventions]: 06_wednesday2.html#calling_conventions
+
 Das folgende Beispiel nimmt an, dass an der Adresse `0xCAFE` im Code-Segment
-ein gemäß den C++-Calling Conaufrufbares Unterprogramm beginnt, welches ein
-Argument vom Typ `bool` erwartet und keinen Rückgabewert liefert:
+
+* ein Unterprogramm (gemäß [C++ Calling Conventions]) steht,
+* welches ein Argument vom Typ `bool` erwartet und
+* keinen Rückgabewert liefert.
+
 ```
 void (*xcall)(int) = reinterpret_cast<void (*)(int)>(0xCAFE);
 
 ```
-Der tatsächliche Aufruf kann nun mit
+Der tatsächliche Aufruf kann nun so erfolgen:
 ```
 xcall(true);
-```
-bzw.
-```
+…
 xcall(false);
 ```
-erfolgen.
+erfolgen.._[]
+
+.F[:
+Of course, if there is a value returned supplied (according to the C++ calling
+conventions) and specified in the declaration, it could be accessed in the usual
+way.
+]
 
 ---
 template: plain
 name: specified_typeconv
 header: ### Klassenspezifische Typ-Konvertierungen
 
-Eine Klasse kann auch selbst festlegen, wie man sie aus einem anderen Typ erzeugt
-oder wie sie in einen anderen Typ umgewandelt wird, was man sich bildlich so
-vorstellen kann:
+Eine Klasse kann auch festlegen, wie sie aus einem eingebauten Typ oder einer
+anderen Klasse erzeugbar bzw. in einen eingebauten Typ oder eine andere Klasse
+konvertierbar ist, was man sich bildlich so vorstellen kann:
 
-* Jede Klasse und jeder eingebaute Typ verfügt über eine Art *charakteristische
-  Steckverbindung*, die nur "zu sich selbst" passt.._[]
+* Jede Klasse und jeder eingebaute Typ hat eine spezifische Art von *Ein- und
+  Ausgangs-Steckverbindern*, die nur "zu sich selbst" passt.._[]
 
   * In Initialisierungen und Zuweisungen sind daher zunächst nur Objekte von
     genau dieser Klasse bzw. diesem Typ verwendbar.
 
 * **Konstruktoren mit exakt einem Argument** – sofern nicht als `explicit`
-  markiert – sind weitere *Eingänge*.
+  markiert – sind weitere *Eingangs*-Steckverbinder.
 
   * Sie passen zum *Ausgangs*-Steckverbinder des Argument-Typs.
 
-* **Typ-Cast-Operatoren** sind weitere *Ausgänge*.
+* **Typ-Cast-Operatoren** sind weitere *Ausgangs*-Steckverbinder.
 
   * Sie passen zum *Eingangs*-Steckverbinder des Ziel-Typs.
 
