@@ -1487,15 +1487,15 @@ template: plain
 name: specified_typeconv
 header: ### Klassenspezifische Typ-Konvertierungen
 
-Eine Klasse kann auch festlegen, wie sie aus einem eingebauten Typ oder einer
-anderen Klasse erzeugbar bzw. in einen eingebauten Typ oder eine andere Klasse
-konvertierbar ist, was man sich bildlich so vorstellen kann:
+Eine Klasse kann auch festlegen, wie ihre Objekte bei Bedarf automatisch **aus**
+eingebauten Typen und anderen Klassen erzeugt bzw. **in** solche konvertiert
+werden können. Dazu folgende Analogie:
 
 * Jede Klasse und jeder eingebaute Typ hat eine spezifische Art von *Ein- und
-  Ausgangs-Steckverbindern*, die nur "zu sich selbst" passt.._[]
+  Ausgangs-Steckverbindern*, die nur "zu sich selbst" passt.
 
   * In Initialisierungen und Zuweisungen sind daher zunächst nur Objekte von
-    genau dieser Klasse bzw. diesem Typ verwendbar.
+    genau dieser Klasse bzw. diesem Typ verwendbar.._[]
 
 * **Konstruktoren mit exakt einem Argument** – sofern nicht als `explicit`
   markiert – sind weitere *Eingangs*-Steckverbinder.
@@ -1548,10 +1548,27 @@ foo(33);            // OK (automatic conversion by c'tor)
 foo(3.3)            // ERROR, c'tor is explict
 foo(MyClass(3.3));  // OK (c'tor is used explicitly)
 …
+MyClass x(-1);      // this also work with explicit c'tor but ...
+x = 33;             // ... here an automatic conversion is necessary ...
+x = 3.3;            // ... so this will fail if there is none
 ```
+.I[
+Die Notwendigkeit einer Typ-Konvertierung bei der Zuweisung hängt auch davon
+ab, welche zusätzlichen Zuweisung-Operatoren eine Klasse ggf. definiert._[]
+]
+
+.F[:
+An assignment operator taking **exactly** type of the expression on its right
+hand side as argument will be always be preferred (and of course applied without
+any need for a conversion). In case the assignment operator takes a
+`const MyClass&` argument – as the automatically defined assignment does–, a
+temporary will be if there is a non-explicit c'tor or a type-cast operator
+applicable as automatic conversion.
+]
+
 ---
 template: plain
-header: #### Temporärer Objekte im Rahmen der Typ-Konvertierung
+header: #### Temporäre Objekte im Rahmen der Typ-Konvertierung
 
 Bei Referenzübergabe ist zusätzlich zu beachten, dass bei der
 Konvertierung ein temporäres Objekt notwendig wird:
@@ -1574,9 +1591,9 @@ bar(42);                       // OK (automatic temporary)
 
 ---
 template: plain
-header: #### Typ-Konvertierungen durch Type-Cast Operationen
+header: #### Typ-Konvertierung durch Type-Cast Operatoren
 
-Type-Cast Operationen benutzen eine spezielle Syntax, bei der **nach** dem
+Type-Cast Operatoren benutzen eine spezielle Syntax, bei der **nach** dem
 Schlüsselwort `operator` der Zieltyp folgt:._[]
 ```
 class MyClass {
@@ -1601,7 +1618,7 @@ muss.
 
 ---
 template: plain
-header: #### Anwendung von Type-Cast Operationen zur Typ-Konvertierung
+header: #### Automatische Anwendung von Type-Cast Operatoren
 
 Die Typ-Konvertierungen von der vorhergehenden Seite kommen wie folgt zur Anwendung:
 ```
@@ -1626,7 +1643,7 @@ Sonderfall dar:
 
 * **jedoch bei bool'schen Operationen und Bedingungstests.**
 
-Die beispiele auf der nächsten Seite setzen folgendes voraus:
+Die Beispiele auf der nächsten Seite setzen folgendes voraus:
 
 ```
 class MyClass {
@@ -1646,7 +1663,7 @@ extern void foo(bool);
 template: plain
 header: #### Beispiele: `explicit operator bool()`
 
-Die folgenen Code-Fragmente setzten das begonnene Beispiel fort:
+Die folgenen Code-Fragmente setzen das begonnene Beispiel fort:
 
 * `#1` zeigt eine etwas ungewöhnliche aber erlaubte Form des Aufrufs der
   Typ-Konvertierung in `bool`.
@@ -1695,15 +1712,15 @@ header: ### Typ-Sicherheit in C++
 
 Die praktische Konsequenz aus den Risiken, welche die Konstrukte zur
 expliziten Typ-Konvertierung – also die vier neuen Cast-Formen von C++
-sowie die von C übernommene Cast-Syntax – einbringen, ist diese:
+sowie die von C übernommene Cast-Syntax – mit sich bringen, ist diese:
 
 .W[
 Alle Formen expliziter Typ-Konvertierung (mit Cast) sollten auf das
 unvermeidliche Minimum beschränkt bleiben.
 ]
 
-Darüberhinaus werden *klassenspezifische Typ-Konvertierungen* manchmal in
-"unerwarteter Weise" angewendet:._[]
+Ferner werden [klassenspezifische Typ-Konvertierungen](#specified_typeconv)
+manchmal in "unerwarteter Weise" angewendet:._[]
 
 .F[:
 Or to put it slightly different: Experience showed there are scenarios of
@@ -1713,8 +1730,8 @@ constructor or type-cast operator.
 ]
 
 .I[
-Eine klassenspezifische Typ-Konvertierung sollte nur dort verwendet werden,
-wo der stillschweigende Wechsel zwischen den beteiligten Typen als "natürlich"
+Eine klassenspezifische Typ-Konvertierung sollte nur dort definiert werden, wo
+der stillschweigende Wechsel zwischen den beteiligten Typen als "natürlich"
 empfunden wird.
 ]
 
