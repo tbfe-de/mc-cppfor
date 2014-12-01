@@ -191,8 +191,19 @@ Die grundlegende Datenstruktur ist hier ein Stück zusammenhängender Speicher.
 
 Dieser wird – typischerweise zuzüglich etwas Reserve – auf dem Heap angelegt.
 
-Ein Object der Klasse `std::vector` besteht in der typischen Implementierung aus
-drei Zeigern.
+Ein Objekt der Klasse `std::vector` besitzt in der typischen Implementierung drei
+(private) Daten-Member:._[]
+
+.F[:
+As the implementation is not dictated by the C++ standard, it is free to chose
+whatever it sees fit, but usually an `std::vector` uses three pointers, holding
+the address of the whole storage area, the begin of free space after elements
+contained in the vector, and the next address after the allocated space.
+]
+
+* Anfangsadresse im Heap-Speicher
+* Größe des benutzten Bereichs
+* Größe der Gesamt-Reservierung
 
 Links zur ausführlichen Online-Dokumentation:
 
@@ -205,14 +216,22 @@ header: #### Vorteile eines `std::vector`
 
 Effizient unterstützt werden:
 
-* Elemente einfügen und entnehmen *am selben* Ende
+* Elemente einfügen und entnehmen **am Ende**
 * Wahlfreier Zugriff (mit oder ohne Indexprüfung)
 * Move-Konstruktor und -Assignment
+* Vertauschung (*swap*) zweier `std::vector`-Inhalte
 
 .N[
-Durch die Speicheranforderung auf Vorrat ist auch der inkrementelle Aufbau eines
-`std:vector` durch wiederholtes Anfügen neuer Elemente eine relativ effiziente
-Operation.
+Die Speicheranforderung auf Vorrat macht den inkrementellen Aufbau eines
+`std::vector` durch vielfaches Anfügen ebenfalls relativ effizient.._[]
+]
+
+.F[:
+Crucial here is to increase space proportionally, i.e. if the pre-allocated size
+is filled completely, the next element to store will extend memory allocation by
+some constant factor, not a constant number of elements. In the latter case
+runtime behaviour would have O(N<sup>2</sup>) performance, while the former
+gives amortized O(1).
 ]
 
 #### Einschränkungen eines `std::vector`
@@ -234,9 +253,17 @@ Die grundlegende Datenstruktur sind einzelne Abschnitte im Heap-Speicher
 (typisch einer pro Element), welche untereinander durch Vor- und Rückwärtszeiger
 verbunden sind.
 
-Ein Object der Klasse `std::list` besteht in der typischen Implementierung aus
-zwei Zeigern (erstes und letztes Element) und einer Ganzzahl (Anzahl der
-Elemente).
+Ein Objekt der Klasse `std::list` besitzt in der typischen Implementierung drei
+(private) Daten-Member:
+
+* je ein Zeiger auf das erste und …
+* … das letzte enthaltene Element,._[] sowie
+* eine Ganzzahl welche die Anzahl der Elemente angibt.
+
+.F[:
+An empty `std::list` can simply use `nullptr`-s for both (or might leave the
+pointers uninitialised and check the list's size member before each access).
+]
 
 Links zur ausführlichen Online-Dokumentation:
 
@@ -249,14 +276,15 @@ header: #### Vorteile einer `std::list`
 
 Effizient unterstützt werden:
 
-* Elemente einfügen und entnehmen, *auch an unterschiedlichen* Enden
+* Elemente einfügen und entnehmen **am Anfang und am Ende**
 * Einfügen und Entnehmen auch in der Mitte._[]
 * Move-Konstruktor und -Assignment
+* Vertauschung (*swap*) zweier `std::list`-Inhalte
 
 .F[:
-Vorausgesetzt es gibt bereits einen Iterator, der auf ein Element zeigt, in
-dessen näherer Umgebung etwas eingefügt oder entnommen werden soll – davor oder
-dahinter.
+Vorausgesetzt wird dabei, dass per Iterator bereits die Position bestimmt wurde,
+in deren näherer Umgebung Elemente oder komplette Listen eingefügt oder entnommen
+werden sollen.
 ]
 
 #### Einschränkungen einer `std::list`
@@ -266,9 +294,10 @@ dahinter.
 * Aufwändige Weitergabe als Wert (bzw. Wertkopie)
 
 .N[
-Durch die beiden pro Element notwendigen Zeiger hat die doppelt verkettete Liste
-einen vergleichsweisen hohen Overhead in Bezug auf den Speicherbedarf, um so
-mehr, je kleiner Nutzdatentyp ist (Extremfall `char`).
+Die doppelt verkettete Liste tendiert zu einem hohen Overhead für den
+**Speicherbedarf pro Element** – um so mehr, je weniger Platz die Nutzdaten
+benötigen (wegen typischerweise notwendigem Alignment bis hin zum 24-fachen bei
+`char`-Elementen und einer 64-Bit-Hardware).
 ]
 
 ---
@@ -278,13 +307,24 @@ section: Singly Linked List
 name: stl_forward_list
 header: ### Einfach verkettete Listen
 
-Ein im Rahmen von C++11 hinzugefügter, auf minimalen Overhead getrimmter
+Ein im Rahmen von C++11 hinzugefügter, auf minimalen Overhead ausgelegter
 Container mit der grundlegenden Datenstruktur einer einfach verketteten Liste,
 deren Elemente wiederum auf dem Heap angelegt werden.
 
-Ein Object der Klasse `std::forward_list` besteht in der typischen
-Implementierung aus genau einem Zeiger – **die Anzahl der Elemente wird nicht
-gezählt** (anders als bei der `std::list`).
+Ein Objekt der Klasse `std::forward_list` besitzt in der typischen
+Implementierung genau ein (privates) Daten-Member:
+
+* Zeiger auf das erste enthaltene Element._[]
+
+.F[:
+An empty `std::forward_list` needs to use a `nullptr` (or maybe some other address
+that can be unmistakeably recognized as not being a list member address).
+]
+
+.N[
+Die Anzahl der Elemente einer `std::forward_list` wird nicht gezählt (anders als
+bei der `std::list`).
+]
 
 Links zur ausführlichen Online-Dokumentation:
 
@@ -297,20 +337,21 @@ header: #### Vorteile einer `std::forward_list`
 
 Effizient unterstützt werden:
 
-* Elemente einfügen und entnehmen *am selben* Ende
+* Elemente einfügen und entnehmen **am Anfang**
 * Einfügen und Entnehmen auch in der Mitte._[]
 * Move-Konstruktor und -Assignment
+* Vertauschung (*swap*) zweier `std::forward_list`-Inhalte
 
 .F[:
-Vorausgesetzt es gibt bereits einen Iterator, der auf ein Element zeigt, in
-dessen näherer Umgebung in etwas eingefügt oder entnommen werden soll – **nur
-dahinter**.
+Vorausgesetzt wird dabei, dass per Iterator bereits die Position bestimmt wurde,
+hinter der (direkt oder in näherer Umgebung) Elemente eingefügt oder entnommen
+werden sollen.
 ]
 
 .N[
-Das Einfügen und Entnehmen in der Mitte besitzt allerdings eine – im Vergleich
-mit den anderen sequenziellen Containern – ungewöhnliche Semantik, die am Namen
-der betreffenden Operation deutlich wird: `insert_after`.
+Das Einfügen und Entnehmen in der Mitte hat eine im Vergleich mit den anderen
+sequenziellen Containern ungewöhnliche Semantik, die am Namen der Operationen
+deutlich wird: `insert_after` und `erase_after`
 ]
 
 #### Einschränkungen einer `std::forward_list`
@@ -338,22 +379,25 @@ welcher grob zusammengefasst sich wie folgt vom `std::vector` unterscheidet:
 
 * Wahlfreier Zugriff ist möglich und nur geringfügig weniger performant.
 
-Anders als der `std::vector` ist die `std::deque` eine gute Basis für eine
-FIFO-Speicherung (Warteschlange).
+.N[
+Anders als ein `std::vector` kann eine `std::deque` Basis für eine
+FIFO-Speicherung (Warteschlange) sein, ist aber nicht als Schnittstelle
+zu Legacy-Code nutzbar, der ein klassisches (eingebautes) Array erwartet.
+]
 
 .F[:
-Ein diesbezüglicher Anwendungsfehler wäre es, die Adresse des ersten Elements zu
-bestimmen. Da `std::deque::operator[]()` und `std::deque::at()` technisch
-gesehen eine Referenz liefern, ist die Anwendung des Adress-Operators
-syntaktisch zulässig und leider nicht durch eine entsprechende Fehlermeldung des
-Compilers auszuschließen.
+Sofern `std::deque::operator[]()` und `std::deque::at()` eine Referenz auf den
+Elementtyp liefern, ist die anschließende Anwendung des Adress-Operator nicht
+auszuschließen, um so die Speicheradresse des Elements zu bestimmen. Damit in
+Schnittstellen zu Legacy-Code die Verwendung von `std::vector` sichergestellt
+ist, empfiehlt sich die Benutzung von dessen Member-Funktion `vector::data()`.
 ]
 
 ---
 template: linkinfo
 graphic: STL-ContainerIterators
 name: iterator_basics
-header: ## Iteratoren-Grundlagen
+header: ## Iterator-Grundlagen
 
 -------------------------------------------------------------------------------
 
@@ -556,9 +600,8 @@ section: Full Container Processing
 name: container_complete
 header: ### *Alle* Elemente im Container
 
-Um über alle Elemente in einem Container zu iterieren, wird typischerweise
-folgende Konstruktion verwendet (hier demonstriert am Beispiel einer
-`std::list`):
+Um **über alle Elemente** eines Containers zu iterieren, wird oft folgende
+Konstruktion verwendet (hier demonstriert am Beispiel einer `std::list`):
 ```
 std::list<int> li;
 …
@@ -588,8 +631,8 @@ section: Partial Container Processing
 name: container_subrange
 header: ### *Teilbereich* eines Containers
 
-Um über die Elemente in einem Teilbereich eines Container zu iterieren, werden
-die Grenzen mit zwei Iteratoren angegeben, die
+Um über die **Elemente in einem Teilbereich** eines Container zu iterieren,
+werden die Grenzen mit zwei Iteratoren angegeben, die
 
 * *hinter den Anfang* und/oder
 * *vor das Ende* zeigen,
@@ -605,9 +648,10 @@ for (auto it = sv.begin()+3; it != sv.end()-2; ++it)
 
 .F[:
 Die Korrektheit des Beispiel beruht wesentlich auf der Tatsache, dass die
-Iteratoren eines `std::vector` zur Kategorie der Random-Access-Iteratoren
-gehören. Andernfalls ist die Addition oder Subtraktion einer Ganzzahl ein
-Compile-Fehler.
+Iteratoren eines `std::vector` zur Kategorie der
+[Random-Access-Iteratoren](04_tuesday2.html#random_access_iterators)
+gehören. Andernfalls liefert die Addition oder Subtraktion einer Ganzzahl bei
+Anwendung auf einen Iterator ein Compile-Fehler.
 ]
 
 ---
@@ -702,26 +746,34 @@ header: ### Speicherverfahren Hashing
 [Big O Notation]: http://en.wikipedia.org/wiki/Big_O_notation
 [Quicksort]:      http://en.wikipedia.org/wiki/Quicksort
 [Bubblesort]:     http://en.wikipedia.org/wiki/Bubblesort
+[TSP]:            http://en.wikipedia.org/wiki/Travelling_salesman_problem
 
 Unter dem Begriff *Hashing* wird (u.a.) ein Abspeicherungsverfahren verstanden,
 welches – eine gut streuende Hash-Funktion vorausgesetzt – Suchzeiten in der
 Größenordnung O(1) erlaubt.
 
 .N[
-Die [Big O Notation] wird in der Informatik häufig verwendet, um die Obergrenze
-des Zeitbedarfs eines Algorithmus in Abhängigkeit von der bearbeiteten
-Datenmenge (N) anzugeben.
+Die [Big O Notation] wird in der Informatik häufig verwendet, um die
+(theoretische) Effizienz eines Algorithmus anzugeben.
 ]
 
-Die folgende Tabelle soll nur eine grobe Orientierung geben:
+Es ist die Obergrenze des Zeitbedarfs abhängig von der Datenmenge (N):
 
-| Größenordnung             | und typisches Beispiel                             |
-| ------------------------- | :--------------------------------------------------|
-| O(1)                      | konstante Zeit unabhängig von der Datenmenge       |
-| O(log<sub>2</sub>(N))     | Suchzeiten in (nicht entartetem) Binärbaum         |
-| O(N)                      | Suchzeiten in linearer Liste                       |
-| O(N × log<sub>2</sub>(N)) | optimaler Sortieralgorithmus (z.B. [Quicksort])    | 
-| O(N<sup>2</sup>)          | primitiver Sortieralgorithmus (z.B. [Bubblesort])  |
+| Größenordnung             | und typisches Beispiel                            |
+| ------------------------- | :------------------------------------------------ |
+| O(1)                      | Suchzeiten bei Hashing                            |
+| O(log<sub>2</sub>(N))     | Suchzeiten in (balanciertem) Binärbaum            |
+| O(N)                      | Suchzeiten in linearer Liste                      |
+| O(N × log<sub>2</sub>(N)) | optimaler Sortieralgorithmus (z.B. [Quicksort])   | 
+| O(N<sup>2</sup>)          | primitiver Sortieralgorithmus (z.B. [Bubblesort]) |
+| O(n!)                     | Lösung des "Handlungsreisenden Problems"._[]      |
+
+.F[:
+The [TSP] or "Traveling Salesman Problem" is infamous for its combinatoric
+explosion of possibilities to check, when trying a brute force solution.
+]
+
+
 
 ---
 template: plain
@@ -731,48 +783,59 @@ header: #### Prinzip des Hashing
 
 Diese Verfahren verläuft nach folgendem [Grundprinzip][Hashing]:
 
-1. Ausgehend von abzulegenden Schlüssel._[] wird mittels einer Hash-Funktion ein
+1. Zu jedem abzulegenden Schlüssel._[] wird mittels einer Hash-Funktion ein
    ganzzahliger Wert berechnet.
 
 2. Die Formel zu dieser Berechnung ist so ausgelegt, dass der Wert in einem
    vorgegebenen Bereich streut.
 
-3. Dieser Wert dient nun als Index, welcher die Position zur Abspeicherung
-   innerhalb eines Arrays festlegt, dessen Gesamtgröße wiederum dem Streubereich
-   der Hash-Funktion entspricht.
+3. Dieser Wert dient als Index, welcher (für Schlüssel und Datenwert)
+
+   * die Position zur Abspeicherung innerhalb eines Arrays festlegt,
+
+   * dessen Größe dem Streubereich der Hash-Funktion entspricht.
 
 .F[:
 Bei den verschiedenen Varianten des `std::set` gibt es keinen dem Schlüssel
-zugeordneten Datenwert – der Wert ist der Schlüssel.
+zugeordneten Datenwert – oder anders gesagt: der Datenwert ist in diesem Fall
+auch der Schlüssel.
 ]
 
 .N[
-Abhängig von der Anzahl der Datenwerte und der Größe des Streubereichs gibt es
-meist weder theoretisch noch praktisch eine eindeutige Abbildung des Schlüssels
-auf den Streubereich.
+Abhängig von der Anzahl der Schlüssel und Datenwerte (im Verhältnis zur Größe
+des Arrays) wird es dabei zu Mehrdeutigkeiten kommen:
+**Früher oder später werden verschiedene Schlüssel auf ein und denselben Index
+abgebildet.**
 ]
 
 ---
 template: plain
-header: #### Entstehung von Kollisionen
+header: #### Behandlung von Kollisionen
 
 Bildet die Hash-Funktion verschiedene Schlüssel auf ein und denselben Index ab,
-spricht man von einer Kollission und das betreffende Element muss wird nun als
-*Überläufer* behandelt.
+spricht man von einer Kollission und das auslösende Element wird nun auch
+*Überläufer* genannt.
 
 .N[
-Gut streuende Hashfunktionen liefern bis zu einer ca. 80%-igen Belegung des zur
-Verfügung stehenden Indexraums nur selten Kollisionen.
+Gut streuende Hashfunktionen liefern bis zu einer ca. 70 .. 80%-igen Belegung
+des zur Verfügung stehenden Indexraums nur relativ selten Kollisionen.
 ]
 
-Prinzipiell können Kollisionen aber ab dem zweiten Eintrag immer auftreten.
+Prinzipiell können Kollisionen aber ab dem zweiten Eintrag immer auftreten!
 
 * Eine Technik zur Speicherung von Überläufern muss Bestandteil jedes
   hash-basierten Speicherverfahrens sein.
 
 * Übliche ist, für *jeden* per Hash-Funktion errechneten Index die Möglichkeit
   einer verketteten Liste vorzusehen, die nach dem ersten aufgetretenen Wert
-  auch alle späteren Überläufer aufnimmt.
+  auch alle späteren Überläufer aufnimmt.._[]
+
+.F[:
+There are variations, like simply using the next (available) empty slot in the
+array. Though this simplifies data structures, it may lead to complications (or
+at least bad performance) if the array gets close to full, especially if many
+entries may be inserted and removed over time.
+]
 
 ---
 template: plain
@@ -787,7 +850,7 @@ einem späteren Zeitpunkt vergrößert werden, um stets gute Performance zu biet
 
 * Zusammen mit der Erweiterung des Indexraums muss die Hash-Funktion angepasst
   werden, so dass sie die Schlüssel auf einen entsprechend größeren Bereich
-  verteilt.
+  verteilt.._[]
 
 .N[
 Anschließend müssen alle mit der vorher gültigen Hash-Funktion im alten,
@@ -796,9 +859,10 @@ im neuen, größeren Indexraum verteilt werden.
 ]
 
 .F[:
-Mit Hilfe spezieller Techniken lässt sich die Neuberechnung auf die Hälfte
-der bereits vorhandenen Einträge reduzieren und somit der Aufwand im Rahmen
-des Re-Hashings halbieren.
+Für diesen auch Re-Hahing genannten Vorgang gibt es spezielle Techniken, welche
+die erforderlichen Neuberechnungen hinauszögern (und damit besser über die Zeit
+verteilen) oder von der Anzahl her reduzieren (und damit den Rechenaufwand
+insgesamt vermindern).
 ]
 
 ---
@@ -966,9 +1030,9 @@ for (auto it = c.crbegin(); it != c.crend(); ++it) …
 ```
 
 .N[
-Da die diversen Iterator-Typen, die von den verschiedenen Varianten der
-`begin()`-Funktion geliefert werden, unterschiedlich sind, muss der Vergleich
-auf die Endposition mit derjenigen `end()`-Funktion erfolgen, welche denselben
+Da die von den verschiedenen Varianten der `begin()`-Funktion gelieferten
+Iterator-Typen unterschiedlich sind, muss der Vergleich auf die Endposition
+mit derjenigen Variante der `end()`-Funktion erfolgen, die den selben
 Iterator-Typ liefert.
 ]
 
@@ -987,7 +1051,7 @@ Für die Container
 
 besteht alternativ zum Durchlaufen mittels Iterator auch die Möglichkeit des
 indexbasierten Zugriffs. Die Basis-Variante – wieder dargestellt am Beispiel
-eines Containers der Klasse `C` und einem entsprechenden Container-Objekt `c` -
+eines Containers der Klasse `C` und einem entsprechenden Container-Objekt `c` –
 sieht wie folgt aus :
 ```
 for (C::size_type i = 0; i &lt; c.size(); ++i) {
@@ -1026,9 +1090,9 @@ sowie auf **Schlüssel** von
 ausschließlich **lesend** zugegriffen werden kann.._[]
 
 .F[:
-Der Zugriff auf den **Wert** ist bei den diversen Varianten von `map`-s (wie
-üblich) über `…::iterator` lesend und schreibend und über `…::const_iterator`
-nur lesend möglich.
+Der Zugriff auf den **Wert** (gemäß nächster Seite) ist bei den diversen
+`map`-Varianten wie üblich über `…::const_iterator` nur lesend und über
+`…::iterator` sowohl lesend wie auch schreibend möglich.
 ]
 
 ---
@@ -1044,7 +1108,6 @@ Dies geschieht über ihren speziellen dereferenzierten Typ, ein `std::pair`
 über
 
 * dessen erste Komponente (`first`) der Schlüssel und
-
 * dessen zweite Komponente (`second`) der Wert erreicht wird.
 
 Als Beispiel ein Programmfragment zum Zählen von Worthäufigkeiten:._[]
