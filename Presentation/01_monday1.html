@@ -464,22 +464,22 @@ p1 = …;        // OK
 ```
 Bei Zeigern kann sich `const` **auf den Zeiger selbst** beziehen …
 ```
-const int *p2; // same as: int const *p2;
-p2 = …;        // pointer is still modifiable, but ...
-*p2 = …;       // ... ERROR at compile-time!
-```
-… oder auf das, was **über den Zeiger erreichbar** ist:._[]
-```
 int *const p3 = …; // must be initialized (with address of an int)
 p3 = …;            // ERROR (would modify pointer itself)
 *p3 = …;           // OK (modifies pointed-to memory location)
 ++*p3;             // OK (increments pointed-to memory location)
-++p3;              // ERROR (would modify pointer itself!) 
+++p3;              // ERROR (would increment pointer itself!) 
+```
+… oder auf das, was **über den Zeiger erreichbar** ist:._[]
+```
+const int *p2; // same as: int const *p2;
+p2 = …;        // pointer is still modifiable, but ...
+*p2 = …;       // ... ERROR at compile-time!
 ```
 
 .F[:
 Of course, both kinds of `const`-qualification may be combined if it makes sense
-for a given purpose, e.g. `const int *const p4 = …;` (or – switching positionsd
+for a given purpose, e.g. `const int *const p4 = …;` (or – switching positions
 of the qualification and the type to which it is applied:
 `int const *const p4 = …;`).
 ]
@@ -671,8 +671,8 @@ foo(PI);  // ERROR
 No temporaries are silently created:._[]
 ```
 int x = 42;
-foo(x);
-foo(2*PI);
+foo(x);    // ERROR
+foo(2*PI); // ERROR
 ```
 ]
 
@@ -856,19 +856,19 @@ Mit **Erweiterung** dieses Beispiels:
 void foo(char *); /*4*/
 extern const char greet[]; 
 …
-foo(data); /*4*/
-foo(greet); /1*/
+foo(data);  /*4*/
+foo(greet); /*1*/
 ```
 ]
 
 Existiert nur eine der beiden Funktionen (die sich voneinander nur in der
 `const`-Qualifizierung eines Parameters unterscheiden), so gilt:
 
-* Existiert allein die Funktion für den konstanten Fall, wird sie auch für
-  modifizierbare Argumente verwendet.._[]
+* Existiert **allein** die Funktion für den konstanten Fall, wird sie **auch**
+  für modifizierbare Argumente verwendet.._[]
 
 * **Ohne** die Funktion für den konstanten Fall führt der Aufruf mit einem
-  **nicht-modifizierbaren** Argument zum Compile-Fehler (im Beispiel etwa
+  nicht-modifizierbaren Argument zum **Compile-Fehler** (im Beispiel etwa
   `foo("hi")`, wenn nur Version `/*4'/` aber nicht `/*1*/` existiert).
 
 .F[:
