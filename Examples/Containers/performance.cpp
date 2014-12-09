@@ -53,7 +53,7 @@ int main() {
 		MyRandom r(1, N);
 		std::cout << "... overhead of random number generator: " << std::flush;
 		for (long long i = 0; i < N; ++i)
-			static_cast<void>(r());
+			static_cast<void>(*r++);
 	});
 
 	static std::vector<int> data1;
