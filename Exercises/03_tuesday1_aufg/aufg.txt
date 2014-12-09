@@ -1,0 +1,68 @@
+﻿Aufgabe Dienstagvormittag
+-------------------------
+
+(1) Schreiben Sie ein Programm, das eine Eingabe aus einzelnen Wörtern zuerst
+    VOLLSTÄNDIG einliest und anschließend
+    - ALLE Worte SORTIERT wieder ausgibt (eines pro Zeile) und
+    - HINTER jdem Wort die Liste der Positionen, die es in der Eingabe hatte.
+    (Die Positionszählung soll mit 1 beginnen, nicht mit 0 wie ansonsten in
+    C/C++ für Indizes üblich.)
+ 
+    Als Datenstruktur sollen Sie eine map verwenden (keine multimap !) und in
+    dieser für jedes als Schlüssel verwendete Wort einen vector<int> speichern:
+  	typedef map<string, vector<int>> WORDLIST;
+ 	...
+        WORDLIST words;
+    Das "Befüllen" des Objekts words soll unter Verwendung der Indizierung
+    (words[...]) sowie des Methodenaufrufs erfolgen, der an einen vector<int>
+    ein neues Element anhängt (push_back(int)). Anschließend oder im Rahmen
+    dieser Operation muss der Positionszähler inkrementiert werden muss (++pos).
+ 
+(2) Wenn Sie sich die Eingabe und die Ausgabe des in Teil (1) erstellten
+    Programms näher ansehen, werden Sie feststellen, dass es auch möglich ist,
+    die Sache umzudrehen, also ein Programm zu schreiben, dass aus der AUSGABE
+    des Programms aus Schritt (1) dessen EINGABE wiederherstellt - zumindest
+    zumindest von der Reihenfolge der Worte her (Leerraum und Zeilenwechsel
+    brauchen - und können - nicht gemäß dem Original rekonstruiert werden.)
+    
+    Schreiben Sie ein Programm mit dieser "umgekehrten" Wirkung.
+    
+    Hinweis: Sie brauchen eine Datenstruktur um während des Einlesens die Worte
+    zwischenzuspeichern, bis Sie den vollständigen Satz schließlich ausgeben
+    können. Am einfachsten ist es, hierzu folgende Datenstruktur zu verwenden:
+    	map<int, string> words;
+    (Weg der map braucht man sich keine Gedanken zu machen, wie die Reihenfolge
+    der Wortpositionen bei der Eingabe aussieht, beim Durchlaufen mit Iterator
+    kommen die Wort aber in der richtigen, aufsteigenden Reihenfolge.)
+    
+    Eine wesentlliche Schwierigkeit liegt bei dieser Aufgabe oft beim Einlesen,
+    denn Sie müssen
+     - jeweils am Anfang einer Zeile ein WORT (string) lesen,
+     - bis zum Doppelpunkt (den aus der Eingabe entfernen) und
+     - dann eine Folge von Ganzzahlen, bis zum Zeilenende.
+    Wieviele Ganzzahlen noch folgen, wissen Sie dabei aber nicht im Voraus.
+    Diese Einlese-Problematik ist im Programm-Fragment aufg2.cpp, das sie an
+    den mit TO-DO gekennzeichneten Stellen nur noch ergänzen sollen, bereits
+    gelöst.
+    
+    Die Lösung beruht darauf, zunächst gesamte Zeilen mit "getline" zu lesen,
+    diese wiederum zu einem "istringstream" zu machen, aus dem erneut gelesen
+    werden kann, und zwar das erste Wort wieder mit "getline" aber dieses Mal
+    mit einem Doppelpunkt als Separator (drittes Argument) und anschließend
+    bis zum Ende des Strings (also der Zeile) Zahlenwerte mit operator>>.
+    
+-- Zusatzaufgabe für besonders Schnelle
+
+(3) In der einfachsten Lösung gemäß Aufgabenteil (2) wird kein großer Wert auf
+    die effiziente Speichernutzung gelegt: kommen in einem Text gleiche Worte
+    immer wieder vor, werden die stets erneut in voller Länge in der
+    Datenstruktur abgelegt. Dies lässt sich aber relativ einfach ändern, indem
+    man beim Einlesen die Wortein einem std::set ablegt.
+
+    Zur Verbindung der Position eines Wortes im Text mit dem betreffenden
+    Wort im Set ist dann eine "map<int, set<string>::const_iterator>" zu
+    verwenden.
+    
+    Tipp: Schauen Sie sich in der Dokumentation bevor Sie beginnen einmal an,
+    welchen Rückgabe-Wert die insert-Methode für ein set liefert ...
+

@@ -371,6 +371,28 @@ table td, table th {
 	color: blue;
 	content: "*";
 }
+@media screen {
+        .F {
+		color: lightgray;
+	}
+	.F a, a > code {
+		color: lightblue;
+	}
+	.F:hover {
+		color: black;
+	}
+	.F:hover a {
+		color: blue;
+	}
+}
+@media print {
+	.F {
+        	color: darkgray;
+	}
+	.F a {
+        	color: blue;
+	}
+}
 /* ---- GRAPHIC ------------------------------- small preview of Info-Grapic */
 div.infographic {
 	float: right;

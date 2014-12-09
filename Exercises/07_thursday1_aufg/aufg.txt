@@ -1,0 +1,171 @@
+﻿Aufgabe Donnerstagvormittag
+---------------------------
+
+(1) Schreiben Sie einen Algorithmus (Funktion) "real_unique_copy".
+
+    Genau wie beim STL-Algorithmus "unique_copy" soll die ursprüngliche
+    Reihenfolge nicht verändert werden - nur die Duplikate sollen NICHT
+    kopiert werden, ANDERS als beim STL-Algorithmus "unique_copy" sollen
+    Duplikate aber in JEDEM Fall entfernt werden, also insbesondere auch
+    dann, wenn sie NICHT DIREKT aufeinander folgen.
+
+    (Das Ergebnis im Rahmen dieses Schritts erstellte Programm ist noch nicht
+    "perfekt", bildet aber die Basis für die nachfolgenden Schritte, mit denen
+    die noch vorhandenen Einschränkungen (Stream-Iteratoren für std::string
+    als Schnittstelle zum Container) nach und nach aufgehoben werden.
+
+    Vorerst soll die Funktion gemäß dem folgenden Prototyp parametrisiert
+    werden:
+
+	#include <iterator>
+	#include <string>
+
+	void real_unique_copy(
+		std::istream_iterator<std::string> in,
+         	std::istream_iterator<std::string> end,
+		std::ostream_iterator<std::string> out
+	);
+
+    Tipp: Die erstellte Funktion benötigt ein "Gedächtnis", welches alle
+    Strings speichert, die schon einmal aufgetreten sind. Hierfür ist ein
+    set<string> gut geeignet. Schauen Sie sich einmal dessen insert-Methode an,
+    insbesondere wie diese, beim Versuch in ein set einen neuen Wert einzufügen
+    über ihren Rückgabe-Wert anzeigt, ob dieser Wert bereits im set enthalten
+    war (und somit nicht eingefügt wurde).
+
+    Die "normale" Verwendung in einem Hauptprogramm könnte z.B. wie folgt
+    aussehen:
+
+	#include <iostream>
+
+	int main() {
+		using namespace std;
+		real_unique_copy(
+			istream_iterator<string>(cin),
+			istream_iterator<string>(),
+			ostream_iterator<string>(cout, "\n")
+		);
+	}
+
+    Testdaten könnten damit über "cin" (Tastatur) versorgt werden und das
+    Ergebnis erscheint direkt auf "cout" (Bildschirm).
+        
+    Der vorbereitete Quelltext enthält automatisierte Tests mit IODrive und
+    ruft "real_unique_copy" in der Funktionen "aufg1_demo" auf. (Da in den
+    folgenden Ausbausschritten überwiegend nur NEUE Möglichkeiten hinzu kommen
+    und das Bestehende weiterhin funktionieren soll, kommen dort typischerweise
+    einfach neue Tests hinzu, also aufg2_demo, aufg3_demo usw.).
+
+(2) Machen Sie aus "real_unique_copy" eine Template, über die der verarbeitete
+    Datentyp offen gehalten wird, d.h. ZUSÄTZLICH zu dem, was die erste Version
+    bereits kann (und was bereits getestet ist) sollten Aufrufe wie die
+    folgenden ebenfalls funktionieren:
+
+	real_unique_copy(
+		istream_iterator<double>(cin),
+		istream_iterator<double>(),
+		ostream_iterator<double>(cout, "\n")
+	);
+
+    Oder:
+
+	real_unique_copy(
+		istream_iterator<int>(cin),
+		istream_iterator<int>(),
+		ostream_iterator<int>(cout, "\n")
+	);
+	
+(3) Ändern Sie den Funktions-Prototyp von "real_unique_copy" wie folgt ab und
+    füllen sie die noch offen gelassenen Teile (... TO-DO ...):
+
+	template<class ElementType, class InIt, class OutIt>
+	OutIt real_unique_copy(InIt in, InIt end, OutIt out) {
+		std::set<ElementType> known;
+
+		while ( ... TO-DO ... ) {
+			... TO-DO ...
+		}
+		
+		return out;
+	}
+
+    Mit dieser Version muss allerdings bei jedem Aufruf als explizites
+    Template-Argument der Typ der Container-Elemente angeben werden, z.B.:
+
+	istringstream some_doubles("5.6 3.5 7.0 3.5 4 7");
+	real_unique_copy<double>(
+		istream_iterator<double>(some_doubles),
+		istream_iterator<double>(),
+		ostream_iterator<double>(cout, "\n")
+	);
+
+   Dafür ist die neue Version nun in der Lage sein, sich die Daten über
+   BELIEBIGE Iteratoren zu holen, also z.B. auch aus einen C-Array:
+
+	double data[] = { 5.6, 3.5, 7.0, 3.5, 4, 7 };
+	const size_t N = sizeof data / sizeof data[0];
+	real_unique_copy<double>(
+		&data[0], &data[N];
+		ostream_iterator<double>(cout, "\n")
+	);
+
+    Ebenso kann das Ergebnis über bliebige Iteratoren abgelegt werden, z.B. am
+    Anfang eines vector<double> eingefügt ...
+
+	vector<double> v;
+	real_unique_copy<double>(
+		&data[0], &data[N],
+		front_inserter(v)
+	);
+	
+    
+        oder am Ende eines C-Arrays (das aber groß genug sein muss!!)
+        angehängt:
+
+	double result[100];
+	real_unique_copy<double>(&data[0], &data[N], &result[0]);
+        
+    Die vorbereiteten, automatisierten Tests enthalten bereits alle obigen
+    Fälle.
+    
+    Hinweis: Für EINEN dieser Tests ist es auch wichtig, dass diese neue Version
+    von 'real_unique_copy' als Rückgabewert ihr drittes Aufrufargument liefert.
+    Welcher Test ist das und warum wird diese Information dort benötigt?
+
+--  Zusatzaufgabe für Teilnehmer mit besonderen Vorkenntnissen
+
+(4) Bei allen STL-Containern gilt die Konvention, dass sie einen geschachtelt
+    definierten Typ "value_type" bereitstellen, der stets dem ELEMENT-TYP des
+    Containers entspricht.
+
+    Wie kann man unter Nutzung dises Typs die Funktion "real_unique_copy" so
+    verbessern, dass man diesen Typ Nicht mehr beim Aufruf angeben muss - also
+    wenn z.B. einfach
+
+	real_unique_copy( ... weitere Parameter ... );
+
+    wo bisher
+
+	real_unique_copy<int>( ... weitere Parameter ... );
+	real_unique_copy<double>( ... weitere Parameter ... );
+	real_unique_copy<string>( ... weitere Parameter ... );
+	...
+
+    notwendig war?
+
+    Für welche Art von Aufruf-Argumente wird die Funktion dann aber NICHT mehr
+    funktionieren?
+
+(5) Finden Sie einen Weg, wie sich das Problem, dass die in Schritt 5 erstellte
+    Funktion nicht mehr mit C-Zeigern als Iteratoren zurecht kommt, mit den
+    folgenden Mitteln lösen ließe.
+
+    (a) zusätzliche real_unique_copy-Funktion mit expliziter
+        Template-Spezialisierung für den Fall (beliebiger) Zeiger.
+    (b) wie zuvor aber mit einer Hilfsfunktion, um "unnötige Code-Duplizierung"
+        so gering wie möglich zu halten.
+    (c) "Type-Mapping" mit einer Hilfs-Template, die für Zeiger den
+        zugrundeliegenden Datentyp liefert, und ansonsten den (in Iteratoren
+        definierten) value_type;
+    (d) Verwendung der iterator_traits-Template aus der Standard-Bibliothek.
+

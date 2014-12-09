@@ -1,0 +1,125 @@
+﻿Aufgabe Mittwochnachmittag
+--------------------------
+
+Bei der folgenden Aufgabe geht es darum, ein Programm in dem zur Laufzeit gemäß
+einen Datentyp Verzweigungen vorgesehen sind, bei Erhaltung der Funktionalität
+so umzubauen, dass virtuelle Funktionen an Stelle von RTTI genutzt werden.
+
+Es gibt verschiedene Lösungsvarianten und entsprechend ist die Aufgabe in
+mehrere Schritte unterteilt.
+
+TDD (Test-Driven Development):
+   Die Musterlösung enthält automatisierte Tests mit Hilfe eines kleinen
+   Frameworks (IODrive) das speziell für die Verwendung in Kursen wie diesem
+   erstellt wurde. Dessen Verwendung ist OPTIONAL, prinzipiell können Sie es
+   bereits auch in der von Ihnen erstellten Lösung verwenden, wenn Sie das dort
+   enthaltene, minimale Hauptprogramm entfernen und stattdessen den bedingt
+   kompilierten Abschnitt aktivieren. 
+
+(1) Ziel: keine Notwendigkeit von typeid und dynamic_cast im Hauptprogramm.
+
+    Folgende Anpassungen sind dazu erforderlich:
+
+   (a) Virtuelle print()-Methode in Basisklasse Stack::Node aufnehmen
+
+       Diese Methode kann dort noch NICHT implementiert werden, sie
+       ist also "rein virtuell" (nachgestelltes =0 bei der Deklaration)
+	   
+   (b) Im Demo-Programm BEIDE if-Anweisungen entfernen und durch EINEN
+       Aufruf np->print() ersetzen
+
+   (c) In den beiden abgeleiteten Klassen String_Node und Double_Node
+       print-Methode implementieren
+
+       Die Implementierung dieser beiden Methoden muss jeweils GENAU DAS tun,
+       was bislang (im Demo-Programm) als Teil der Ausgabeschleife jeweils im
+       Körper der if-Anweisungen stand - natürlich entsprechend angepasst!
+       (Z.B. sind die get-Methoden jetzt überflüssig, da in den print-Methoden
+       schon direkter Zugriff auf das Attribut data besteht.)
+       
+    Tipp: Um schnell zu einem ersten, lauffähigen Programm zu kommen können
+    Sie zunächst auf das Markieren der Maxima verzichten.  
+
+    Wenn Ihr Programm dann ohne Markieren der Maxima läuft, ist der schnellste
+    Weg, es einzubauen, die bisher im Hauptprogramm LOKALEN Variablen smax und
+    dmax zu GLOBALEN Variablen zu machen und den print-Methoden mittels einer
+    extern-Deklarationen Zugriff auf die jeweils benötigte Maximums-Variable
+    zu ermöglichen.
+ 
+(2) Ziel: globale Variable vermeiden / Einsatzmöglichkeiten verbessern
+
+    Hinweis: Wenn Sie in Schritt 1 NICHT den dort im "Tip" nach Schritt (c)
+    nahegelegten Weg gegangen sind, die Variablen smax und dmax gobal zu
+    machen, haben Sie damit evtl. schon eine der nachfolgend nahegelegten
+    Lösungen vorweggenommen ... oder etwas völlig Neues kreiert!
+
+    Abhängig davon, wie der "zukünftige Bedarf" der Anwender dieser Klasse
+    aussieht, können mehrere der folgenden Lösungs-Ansätze sinnvoll sein, die
+    hier nur in Stichworten dargestellt werden. Beachten Sie dabei: es handelt
+    sich bei den Vorschlägen (a), (c) und (d) um ALTERNATIVEN, die NICHT alle
+    zugleich (in ein und demselben Programm) umgesetzt werden können.
+    
+    Nur Vorschlag (b) lässt sich mit allen anderen kombinieren.
+
+   (a) Die globalen Variablen smax und dmax zu static-Attribute von String_Node
+       und Double_Node machen.
+	   
+   (b) Wie (a) und zusätzlich noch den Vergleich aus der Eingabeschleife des 
+       Hauptprogramms in den Konstruktor verlagern.
+	   
+   (c) Ähnlich (b) aber REFERENZEN auf die zugehörige Maximums-Variablen in den
+       von Stack::Node abgeleiteten Klassen (String_Node und Double_Node)
+       mitführen. Zur Initialisierung dieser Referenzen wird ein (weiteres)
+       Konstruktor-Argument vorgesehen, so dass die "eigentliche" Variablen zur
+       Speicherung der Maxima wieder im Hauptprogramm liegen können.
+
+--- Ab hier Zusatzaufgabe für besonders Schnelle
+
+   (d) Die Variablen für die Maxima zu einer Struktur zusammenfassen und diese
+       mittels eines Parameters an die print-Methode übergeben.
+
+       Hinweis: Letzteres muss bereits die Basisklasse Data::Node vorbereiten!
+       Abgeleitete Klassen können beim Überschreiben von Methoden Typ und
+       Anzahl von deren Parametern NICHT verändern!
+	   
+    Bewerten Sie die unterschiedlichen Lösungen gemäß Schritt 1 sowie die
+    Varianten gemäß 2a, 2b, 2c nach den in der folgenden Tabelle aufgestellten
+    Kriterien. Verwenden Sie Schulnoten oder z.B. die aus Warentests bekannten
+    Abkürzungen "++", "+", "o", "-" und "--" um darzustellen, wie gut bzw. wie
+    schlecht die betreffende Lösung das genannte Kriterium erfüllt.
+
+    ---------------------------------------------------|--------------------
+    Kriterium                  Bewertung (++,+,o,-,--) | 1   2a  2b  2c  2d
+    ---------------------------------------------------|--------------------
+    Geringer Änderungsaufwand gegenüber URSPRÜNGLICHEM |   |   |   |   |   |
+    Programm, wenn es ALLEIN darum geht, typeid und    |   |   |   |   |   |
+    static_cast zu vermeiden.                          |   |   |   |   |   |
+    ---------------------------------------------------|--------------------
+    Modularität (unberechtigter bzw. unbeabsichtigter  |   |   |   |   |   |
+    Zugriff auf "fremde" Variable aus anderen,         |   |   |   |   |   |
+    unabhängigen Modulen wird erschwert).              |   |   |   |   |   |
+    ---------------------------------------------------|--------------------
+    Späterer Umbau zwecks Einsatz in einer             |   |   |   |   |   |
+    "Multi-Threaded" Umgebung.                         |   |   |   |   |   |
+    ---------------------------------------------------|--------------------
+    Spätere Erweiterung um neue Typen von Node-s       |   |   |   |   |   |
+    (z.B. Int_Node) OHNE zahlreiche andere Anpassungen |   |   |   |   |   |
+    (z.B. Änderungen an der der Basisklasse).          |   |   |   |   |   |
+    ---------------------------------------------------|--------------------
+    Spätere Erweiterung um die Möglichkeit, zwei oder  |   |   |   |   |   |
+    mehr Eingabespalten zu verarbeiten und diese       |   |   |   |   |   |
+    wahlweise mit gemeinsamen oder unterschiedlichen   |   |   |   |   |   |
+    Maxima auszurüsten.                                |   |   |   |   |   |
+    ---------------------------------------------------|--------------------
+    Speicherplatz-Effizienz bei SEHR VIELEN Nodes.     |   |   |   |   |   |
+    ---------------------------------------------------|--------------------
+
+--- Ab hier bei Interesse evtl. Forführung in einem späteren Praktikum
+
+(3) Zeigen Sie an einer geeigneten Variante aus Aufgabe (2) wie hoch der
+    Aufwand ist für die Einführung eines neuen Node-Typs (z.B. Int_Node).
+
+(4) Zeigen Sie an einer geeigneten Variante aus Aufgabe (2) wie hoch der
+    aufwand ist für die Einführung einer weiteren Spalte bei der Verarbeitung,
+    mit spaltenweiser Markierung der Maxima (= jede Spalte soll ihre eigenen
+    Maxima mitführen, unabhängig von denen anderer Spalten).
