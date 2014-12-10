@@ -51,7 +51,7 @@ void aufg1_demo(istream &in, ostream &out) {
 #endif
 }
 
-#define TDD
+//#define TDD
 #ifndef TDD
 int main() {
 	aufg1_demo(cin, cout);

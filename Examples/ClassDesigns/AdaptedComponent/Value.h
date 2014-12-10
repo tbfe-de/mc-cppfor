@@ -8,7 +8,7 @@
 
 #include <cassert>
 
-#include "RingBuffer.h"
+#include "../ReusableComponent/RingBuffer.h"
 
 class Value : private RingBuffer<double, 6> {
               typedef RingBuffer<double, 6> HelperContainer;

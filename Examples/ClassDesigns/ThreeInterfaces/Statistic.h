@@ -8,7 +8,7 @@
 
 #include <cassert>
 
-#include "RingBuffer.h"
+#include "../ReusableComponent/RingBuffer.h"
 #include "IValue.h"
 #include "IAverage.h"
 #include "IExtrema.h"

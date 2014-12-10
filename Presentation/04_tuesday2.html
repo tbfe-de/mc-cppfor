@@ -327,7 +327,7 @@ section: Container Dimension
 name: container_axis
 header: ### Container-Achse
 
-In C++98 wurden drei sequenzielle und vier assoiative Container standardisiert.
+In C++98 wurden drei sequenzielle und vier assoziative Container standardisiert.
 
 Mit C++11 sind es nun insgesamt fünf sequenzielle und acht assoziative Container.
 
@@ -640,9 +640,7 @@ Auch hier gibt es eine Hilfsfunktion zur Vermeidung der (eigentlich redundanten)
 Angabe des Container-Typs:
 ```
 std::set<MyClass> s;
-std::copy(li.begin(), li.end(),
-          std::inserter<std::set<MyClass>>(s, s.begin())
-);
+std::copy(li.begin(), li.end(), std::inserter(s, s.begin()));
 ```
 
 Etwas ungewöhnlich ist hier das zusätzliche Argument. Dessen Zweck ist es, einen
@@ -759,7 +757,7 @@ könnten **dahinter** (= an größeren Adressen im Speicher) liegende Variablen
 
 ---
 template: plain
-header: #### Kopieren zwischen unterschiedlichen Container-Typen._[]
+header: #### Kopieren zwischen unterschiedlichen Container-Typen
 
 ```
 using namespace std;

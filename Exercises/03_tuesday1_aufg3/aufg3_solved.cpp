@@ -33,7 +33,7 @@ void aufg3_demo(istream &in, ostream &out) {
 		if (getline(iss, w, ':')) {
 #if 1
 			seen.insert(w);
-			WORDSET::const_iterator wp = seen.find(wp);
+			WORDSET::const_iterator wp = seen.find(w);
 			assert(wp != seen.end());
 #else
 			const WORDSET::const_iterator wp(seen.insert(w).first);
@@ -48,7 +48,7 @@ void aufg3_demo(istream &in, ostream &out) {
 	out << endl;
 }
 
-#define TDD
+// #define TDD
 #ifndef TDD
 int main() {
 	aufg3_demo(cin, cout);

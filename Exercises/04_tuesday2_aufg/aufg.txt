@@ -46,7 +46,7 @@
     Speicherzelle HINTER dem Array data und damit genau das, was ein typischer
     STL-Algorithmus als "End-Punkt" (Iterator) erwartet.
 
-(3) Schreiben Sie das Programm aus Teil (1) so um, dass es statt der Zahlen 1..4
+(3) Schreiben Sie das Programm aus Teil (2) so um, dass es statt der Zahlen 1..4
     alle Permutationen der Worte im Satz "das ist mein haus" ausgibt. Sie können
     weiterhin ein fest initialisiertes Array verwenden:
 	std::string data[4] = { "das", "ist", "mein", "haus" };

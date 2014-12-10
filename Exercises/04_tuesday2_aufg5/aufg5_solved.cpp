@@ -56,6 +56,14 @@ void aufg5_demo(istream &in, ostream &out) {
 	}
 }
 
+#ifndef TDD
+
+int main() {
+	aufg5_demo(std::cin, std::cout);
+}
+
+#else
+
 #include "IODrive.h"
 
 int main(int argc, char* argv[]) {
@@ -105,3 +113,5 @@ int main(int argc, char* argv[]) {
 		;
 
 }
+
+#endif

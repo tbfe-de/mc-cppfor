@@ -14,15 +14,15 @@ Extrema.test: Extrema_test
 Extrema-SOHO.test: Extrema-SOHO_test
 	@echo -n "Testing class Extrema (history only)... " && ./Extrema-SOHO_test
 
-Value_test: Value_test.cpp Value.h RingBuffer.h
+Value_test: Value_test.cpp Value.h
 	g++ -std=c++0x Value_test.cpp -o $@
-Average_test: Average_test.cpp Average.h Value.h RingBuffer.h
+Average_test: Average_test.cpp Average.h Value.h
 	g++ -std=c++0x Average_test.cpp -o $@
-Average-SOHO_test: Average_test.cpp Average.h Value.h RingBuffer.h
+Average-SOHO_test: Average_test.cpp Average.h Value.h
 	g++ -std=c++0x -DSTATISTIC_OF_HISTORY_ONLY Average_test.cpp -o $@
-Extrema_test: Extrema_test.cpp Extrema.h Average.h Value.h RingBuffer.h
+Extrema_test: Extrema_test.cpp Extrema.h Average.h Value.h
 	g++ -std=c++0x Extrema_test.cpp -o $@
-Extrema-SOHO_test: Extrema_test.cpp Extrema.h Average.h Value.h RingBuffer.h
+Extrema-SOHO_test: Extrema_test.cpp Extrema.h Average.h Value.h
 	g++ -std=c++0x -DSTATISTIC_OF_HISTORY_ONLY Extrema_test.cpp -o $@
 
 clean:

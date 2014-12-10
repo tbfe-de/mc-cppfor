@@ -66,7 +66,9 @@ d) Was ist zu verändern, damit in der Ausgabe am Beginn der vierten Zeile der
 3. Schauen Sie sich die drei Varianten einer Lösung mit Mixin-Klassen an, in
    welchen durch flexible (unterschiedliche) Kombinationen die Klasse "Value"
    mit zusätzlicher Funktionalität ausgestattet werden kann, nämlich:
-   Durchschnitt berechnen, Minimum und Maximum festhalten oder beides zusammen.
+   - (nur) den Durchschnitt berechnen
+   - (nur) Minimum und Maximum festhalten
+   - oder beides (Durchschnitt und Extrema)
 
    HINWEIS: Da hier immer ein und dasselbe Hauptprogramm verwendet wird, sind
    die drei Varianten über unterschiedliche Header-Files realisiert, welche
@@ -76,9 +78,8 @@ d) Was ist zu verändern, damit in der Ausgabe am Beginn der vierten Zeile der
    Zu Variante 2 gehören: Value2.h, Average2.h, Extrema2.h und Statistic2.h
    Zu Variante 3 gehören: Value3.h, Average3.h, Extrema3.h und Statistic3.h
    
-   (Ferner wird der Header-File Mixin-IO.h in BEIDEN Varianten 1 und 2
-   inkludiert, der Header "Mixin-IO3.h" dagegen wird NUR in Variante 3
-   inkludiert.)
+   Ferner wird der Header-File Mixin-IO.h in den beiden Varianten 1 und 2
+   inkludiert, der Header "Mixin-IO3.h" dagegen wird NUR in Variante 3.
    
    Um eine der drei Varianten zu kompilieren, müssen Sie den Makro MIXIN_VERSION
    entsprechend definieren, wofür folgende Möglichkeiten bestehen:
@@ -96,20 +97,22 @@ d) Was ist zu verändern, damit in der Ausgabe am Beginn der vierten Zeile der
    - Wie wird in den einzelnen Varianten jeweils der Aufruf von "setValue" an
      die beteiligten Klassen und Mixin-s "durchgereicht", so dass jede ihre
      notwendige Funktionalität realisieren kann, also
-     - den Wert zu speichern bei "Value",
-     - zusätzlich den Durchschnitt zu berechnen bei "Average", bzw,
-     - zusätzlich das Minimum und Maximum festzuhalten bei "Extrema", und
+     - (nur) den Wert zu speichern bei "Value",
+     - ZUSÄTZLICH den Durchschnitt zu berechnen bei "Average", bzw,
+     - ZUSÄTZLICH das Minimum und Maximum festzuhalten bei "Extrema", und
      - alles zusammen bei "Statistic"?
       
    - Warum sind in dieser Lösung keine virtuellen Basisklassen erforderlich?
    
-   - Welcher Punkt der Variante 1 muss als "etwas problematisch" angesehen
-     werden? (Momentan entsteht dadurch nur ein kleiner Performance-Nachteil,
-     da lediglich unter bestimmten Umständen eine Operation unnötiger Weise
+   - Wo gibt es in Variante 1 ein "etwas problematisches" Vorgehen?
+     (Momentan entsteht dadurch nur ein kleiner Performance-Nachteil, da
+     lediglich unter bestimmten Umständen eine Operation unnötiger Weise
      doppelt erfolgt; dieser Punkt müsste aber spätestens dann sauber gelöst
      werden, wenn die Klasse "Value" - so wie die "Value"-Klasse aus dem
-     vorherigen Aufgabenteil (2) - auch "historische Werte" speichern würde.)
-     
+     vorhergehenden Aufgabenteil - auch "historische Werte" speichern würde.)
+     [Falls Sie noch einen Hinweis wünschen, lesen Sie DIES "eulaVtes::eulaV"
+     rückwärts.]
+
    - Warum sind an einigen Stellen Cast-Operationen erforderlich und was wird
      passieren, wenn man diese weglässt?
      

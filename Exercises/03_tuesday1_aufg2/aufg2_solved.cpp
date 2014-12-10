@@ -33,12 +33,18 @@ void aufg2_demo(istream &in, ostream &out) {
 				// words[pos] = w;
 		}
 	}
+#if 0
 	for (auto it = words.begin(); it != words.end(); ++it)
 		out << it->second << ' ';
+#else
+	for (auto &e : words)
+		out << e.second << ' ';
+		// out << (&e)->second << ' ';
+#endif
 	out << endl;
 }
 
-#define TDD
+// #define TDD
 #ifndef TDD
 int main() {
 	aufg2_demo(cin, cout);

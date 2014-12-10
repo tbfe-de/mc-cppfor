@@ -217,9 +217,7 @@ weniger wichtig – bis auf zwei Bestandteile:
 
 ---
 template: plain
-header: #### CPU-Aufbau (2)
-
-##### Ausdehnung des Stack-Bereichs
+header: ##### Ausdehnung des Stack-Bereichs
 
 Da der SP nur die *Grenzadresse* angibt, könnte man meinen, es sei lediglich
 eine Definitionssache, ob der Stack *darüber* beginnt oder *darunter*.
@@ -262,9 +260,7 @@ Im einzelnen geht es um:
 ---
 template: plain
 name: alu
-header: #### CPU-Aufbau (Details 2)
-
-##### ALU (Arithmetic Logic Unit)
+header: ##### ALU (Arithmetic Logic Unit)
   
 Hier werden Daten miteinander verknüpft.
 
@@ -291,9 +287,7 @@ Oder auch mehrere davon.
 ---
 template: plain
 name: register
-header: #### CPU-Aufbau (Details 3)
-
-##### (Weitere) Register
+header: ##### (Weitere) Register
   
 Je nach CPU-Architektur gibt es eine mehr oder weniger große Zahl universell
 verwendbarer Register.
@@ -315,9 +309,7 @@ Bereich dynamisch verwalteter und globaler Daten.
 
 ---
 template: plain
-header: #### CPU-Aufbau (Details 3)
-
-##### Datenpfad-Steuerung
+header: ##### Datenpfad-Steuerung
 
 Die verbleibenden Teile._[] einer typischen CPU sind im wesentlichen:
 
@@ -447,9 +439,7 @@ Hierum geht es prinzipiell wenn die Einhaltung bestimmter
 ---
 template: plain
 name: caller_code
-header: #### Detailablauf beim Unterprogramm-Aufruf (2)
-
-##### Argumente bereitstellen
+header: ##### Argumente bereitstellen
 
 Noch an der Aufrufstelle wird i.d.R. Code zum Ablauf kommen,
 
@@ -467,9 +457,7 @@ Noch an der Aufrufstelle wird i.d.R. Code zum Ablauf kommen,
 ---
 template: plain
 name: jsr_code
-header: #### Detailablauf beim Unterprogramm-Aufruf (3)
-
-##### Maschinenbefehl zum Unterprogrammsprung
+header: ##### Maschinenbefehl zum Unterprogrammsprung
 
 Im Rahmen des Unterprogramm-Einsprungs wird mindestens der Program-Counter
 auf den Stack gelegt:
@@ -489,9 +477,7 @@ Zum Abschluss wird die Startadresse des Unterprogramms in den Program-Counter
 ---
 template: plain
 name: calling_conventions
-header: #### Detailablauf beim Unterprogramm-Aufruf (4)
-
-##### Aufrufkonventionen (Calling Conventions)
+header: ##### Aufrufkonventionen (Calling Conventions)
 
 Hierbei handelt es sich um eine Reihe von Festlegungen, die letzten Endes
 sicherstellen sollen, dass die Kommunikation zwischen Aufrufer und aufgerufenem
@@ -512,7 +498,7 @@ Register ggf. die Werte von Aufrufargumenten enthalten.
 ---
 template: plain
 name: calling_conventions
-header: #### Detailablauf beim Unterprogramm-Aufruf (5)
+header: ##### Erzeugen von Stack-Backtraces
 
 Mit einem auf dem Stack selbst gesicherten Stack-Pointer – so wie er unmittelbar
 vor dem Unterprogramm-Einsprung gültg war, besteht eine
@@ -915,9 +901,7 @@ Elemente der Struktur an unterschiedlichen Indizes unterschiedlichen Offset.
 ---
 template: plain
 name: intra_padding
-header: #### Padding und Alignment (2)
-
-##### Padding zwischen Strukturelementen
+header: ##### Padding zwischen Strukturelementen
 
 Die Garantie, dass die Elemente einer Struktur gemäß ihrer Reihenfolge im Quelltext an
 aufsteigenden Adressen abgelegt werden, erfordert bei
@@ -934,9 +918,7 @@ Die Größe der Struktur (`sizeof (struct s)`) ist damit 16 (4+4+8) Bytes.
 ---
 template: plain
 name: end_padding
-header: #### Padding und Alignment (3)
-
-##### Padding nach dem letzten Strukturelement (Trugschluss)
+header: ##### Padding nach dem letzten Strukturelement (Trugschluss)
 
 Bei der umgekehrten Anordnung
 ```
@@ -951,9 +933,7 @@ nichts eingefügt werden muss …
 ---
 template: plain
 name: end_padding
-header: #### Padding und Alignment (4)
-
-##### Padding nach dem letzten Strukturelement (Nowendigkeit)
+header: ##### Padding nach dem letzten Strukturelement (Nowendigkeit)
 
 … allerdings würde ohne Padding am Ende gegen eine seit den Anfängen von C
 gültige Regel verstoßen, die besagt dass für jedes Array
@@ -1519,9 +1499,7 @@ Welten dazwischen!
 
 ---
 template: plain
-header: #### Datenelemente entnehmen (2)
-
-##### Datenelemente verwendbar machen mit `dynamic_cast` auf Zeigerbasis
+header: ##### Datenelemente verwendbar machen mit `dynamic_cast` auf Zeigerbasis
 
 Die sichere Variante verwendet einen Down-Cast mit Prüfung des Laufzeit-Typs:
 ```
@@ -1549,9 +1527,7 @@ In C++11 weiter verkürzbar zu:
 
 ---
 template: plain
-header: #### Datenelemente entnehmen (3)
-
-##### Datenelemente verwendbar machen mit `dynamic_cast` auf Referenzbasis
+header: ##### Datenelemente verwendbar machen mit `dynamic_cast` auf Referenzbasis
 
 Wenn im Fehlerfall ohnehin ein Abbruch erfolgen müsste, da die falsche Datenart
 völlig unerwartet vorgefunden wurde und nicht weiterverarbeitet werden kann,
@@ -1834,7 +1810,7 @@ template: withinfo
 graphic: ContainerImplementations
 section: Polymorphic Elements
 name: container_implementations
-header: #### Template-Technik mit explizitem Polymorphismus
+header: ### Template-Technik mit explizitem Polymorphismus
 
 Wird bei auf Templates basierenden Container Polymorphismus hinsichtlich der
 Datenelemente benötigt, muss explizit ein Container von Zeigern verwendet
@@ -1856,7 +1832,7 @@ allMyFruits.push(new Apple( … ));
 
 ---
 template: plain
-header: #### Template-Technik mit explizitem Polymorphismus (2)
+header: ##### Entnahme von Basisklassen-Zeigern
 
 Die Entnahme sieht prinzipiell so aus:
 ```
@@ -1888,7 +1864,7 @@ at design time: What knowledge about the class hierarchy is available where the
 
 ---
 template: plain
-header: #### Template-Technik mit explizitem Polymorphismus (3)
+header: ##### Ermittlung der abgeleiteten Klasse
 
 Schließlich muss im Anschluss an die Entnahme einer Frucht geprüft werden, was
 man eigentlich bekommen hat:
