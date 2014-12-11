@@ -9,33 +9,34 @@ Es gibt verschiedene Lösungsvarianten und entsprechend ist die Aufgabe in
 mehrere Schritte unterteilt.
 
 TDD (Test-Driven Development):
-   Die Musterlösung enthält automatisierte Tests mit Hilfe eines kleinen
-   Frameworks (IODrive) das speziell für die Verwendung in Kursen wie diesem
-   erstellt wurde. Dessen Verwendung ist OPTIONAL, prinzipiell können Sie es
-   bereits auch in der von Ihnen erstellten Lösung verwenden, wenn Sie das dort
-   enthaltene, minimale Hauptprogramm entfernen und stattdessen den bedingt
-   kompilierten Abschnitt aktivieren. 
+
+Die Musterlösung enthält automatisierte Tests mit Hilfe eines kleinen
+Frameworks (IODrive) das speziell für die Verwendung in Kursen wie diesem
+erstellt wurde. Dessen Verwendung ist OPTIONAL, prinzipiell können Sie es
+bereits auch in der von Ihnen erstellten Lösung verwenden, wenn Sie das dort
+enthaltene, minimale Hauptprogramm entfernen und stattdessen den bedingt
+kompilierten Abschnitt aktivieren. 
 
 (1) Ziel: keine Notwendigkeit von typeid und dynamic_cast im Hauptprogramm.
 
     Folgende Anpassungen sind dazu erforderlich:
 
-   (a) Virtuelle print()-Methode in Basisklasse Stack::Node aufnehmen
+    (a) Virtuelle print()-Methode in Basisklasse Stack::Node aufnehmen
 
-       Diese Methode kann dort noch NICHT implementiert werden, sie
-       ist also "rein virtuell" (nachgestelltes =0 bei der Deklaration)
+        Diese Methode kann dort noch NICHT implementiert werden, sie
+        ist also "rein virtuell" (nachgestelltes =0 bei der Deklaration)
 	   
-   (b) Im Demo-Programm BEIDE if-Anweisungen entfernen und durch EINEN
-       Aufruf np->print() ersetzen
+    (b) Im Demo-Programm BEIDE if-Anweisungen entfernen und durch EINEN
+        Aufruf np->print() ersetzen
 
-   (c) In den beiden abgeleiteten Klassen String_Node und Double_Node
-       print-Methode implementieren
+    (c) In den beiden abgeleiteten Klassen String_Node und Double_Node
+        print-Methode implementieren
 
-       Die Implementierung dieser beiden Methoden muss jeweils GENAU DAS tun,
-       was bislang (im Demo-Programm) als Teil der Ausgabeschleife jeweils im
-       Körper der if-Anweisungen stand - natürlich entsprechend angepasst!
-       (Z.B. sind die get-Methoden jetzt überflüssig, da in den print-Methoden
-       schon direkter Zugriff auf das Attribut data besteht.)
+        Die Implementierung dieser beiden Methoden muss jeweils GENAU DAS tun,
+        was bislang (im Demo-Programm) als Teil der Ausgabeschleife jeweils im
+        Körper der if-Anweisungen stand - natürlich entsprechend angepasst!
+        (Z.B. sind die get-Methoden jetzt überflüssig, da in den print-Methoden
+        schon direkter Zugriff auf das Attribut data besteht.)
        
     Tipp: Um schnell zu einem ersten, lauffähigen Programm zu kommen können
     Sie zunächst auf das Markieren der Maxima verzichten.  
@@ -61,26 +62,26 @@ TDD (Test-Driven Development):
     
     Nur Vorschlag (b) lässt sich mit allen anderen kombinieren.
 
-   (a) Die globalen Variablen smax und dmax zu static-Attribute von String_Node
-       und Double_Node machen.
+    (a) Die globalen Variablen smax und dmax zu static-Attribute von String_Node
+        und Double_Node machen.
 	   
-   (b) Wie (a) und zusätzlich noch den Vergleich aus der Eingabeschleife des 
-       Hauptprogramms in den Konstruktor verlagern.
+    (b) Wie (a) und zusätzlich noch den Vergleich aus der Eingabeschleife des 
+        Hauptprogramms in den Konstruktor verlagern.
 	   
-   (c) Ähnlich (b) aber REFERENZEN auf die zugehörige Maximums-Variablen in den
-       von Stack::Node abgeleiteten Klassen (String_Node und Double_Node)
-       mitführen. Zur Initialisierung dieser Referenzen wird ein (weiteres)
-       Konstruktor-Argument vorgesehen, so dass die "eigentliche" Variablen zur
-       Speicherung der Maxima wieder im Hauptprogramm liegen können.
+    (c) Ähnlich (b) aber REFERENZEN auf die zugehörige Maximums-Variablen in den
+        von Stack::Node abgeleiteten Klassen (String_Node und Double_Node)
+        mitführen. Zur Initialisierung dieser Referenzen wird ein (weiteres)
+        Konstruktor-Argument vorgesehen, so dass die "eigentliche" Variablen zur
+        Speicherung der Maxima wieder im Hauptprogramm liegen können.
 
 --- Ab hier Zusatzaufgabe für besonders Schnelle
 
-   (d) Die Variablen für die Maxima zu einer Struktur zusammenfassen und diese
-       mittels eines Parameters an die print-Methode übergeben.
+    (d) Die Variablen für die Maxima zu einer Struktur zusammenfassen und diese
+        mittels eines Parameters an die print-Methode übergeben.
 
-       Hinweis: Letzteres muss bereits die Basisklasse Data::Node vorbereiten!
-       Abgeleitete Klassen können beim Überschreiben von Methoden Typ und
-       Anzahl von deren Parametern NICHT verändern!
+        Hinweis: Letzteres muss bereits die Basisklasse Data::Node vorbereiten!
+        Abgeleitete Klassen können beim Überschreiben von Methoden Typ und
+        Anzahl von deren Parametern NICHT verändern!
 	   
     Bewerten Sie die unterschiedlichen Lösungen gemäß Schritt 1 sowie die
     Varianten gemäß 2a, 2b, 2c nach den in der folgenden Tabelle aufgestellten

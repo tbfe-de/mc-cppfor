@@ -1,0 +1,514 @@
+=== 00_content.html ===
+
+  2 | Agenda
+  3 | Zur Kursunterlage
+  4 |    Aktuelle C++-Implementierungen
+  5 |    Struktur der Schulungsunterlagen
+  6 |       Online-Referenzen
+  7 |       Präsentations-Seiten
+  8 |       Fußnoten
+  9 |       Beispiel-Code
+ 10 |          Code-Fragmente
+ 11 |          Code-Fragmente (2)
+ 12 |          Kompilierbarer Code
+ 13 |          Projekt-Dateien für IDEs
+ 14 |       Externe Ergänzungen
+ 15 |    Online-Version
+ 16 |       HTML-Präsentation
+ 16 |       Ansicht
+ 17 |       Ausdruck
+ 18 |       PDF-Erstellung
+ 19 |    Info-Grafiken
+ 20 |       Betrachten von Info-Grafiken
+ 21 |       Ausdruck von Info-Grafiken
+ 21 |       Sonstige Verwendung der Info-Grafiken
+ 22 |    Kursdurchführung in Englisch
+ 22 |       Unterlagen in Englisch
+ 23 |       Automatische Übersetzung
+ 24 |    Private Annotations
+ 24 |       Annotations to Print Version
+ 25 |       Annotations to HTML Version
+
+
+
+=== 01_monday1.html ===
+
+  2 | Auffrischung einiger wichtiger Grundlagen
+  3 |    Getrennte Kompilierung
+  3 |       Grundlagen der getrennten Kompilierung
+  4 |       Abhängigkeiten zwischen Header-Files
+  5 |       Include-Guards
+  6 |       Namespaces
+  7 |       Zyklische Abhängigkeiten
+  8 |    Definition/Reference-Modell
+  9 |    Schreibschutz durch den Compiler (`const`)
+ 10 | Zeiger und Referenzen
+ 11 |    Zeiger allgemein und `const`-qualifiziert
+ 12 |    Klassische Referenzen (Lvalue-Referenzen)
+ 13 |       Initialisierung von Referenzen
+ 14 |       Konstante Referenzen
+ 15 |       Achieving the Const-Correctness
+ 16 |       Reference Arguments
+ 17 |    Zeiger versus Referenzen
+ 18 |    Rvalue-Referenzen
+ 19 | Statischer Polymorphismus
+ 20 |    Defaultwerte für Argumente
+ 21 |    Überladen von Funktionen
+ 22 |       Überladen bei Parametern mit ohne `const`
+ 23 |    Überladen von Operatoren
+ 24 |       Operator-Überladung mit freistehender Funktion
+ 25 |       Operator-Überladung mit Member-Funktion
+ 26 |       Überladung von Kopier-Konstruktor und -Zuweisung
+ 27 |       Überladung von Move-Konstruktor und -Zuweisung
+ 28 |       Implementierung von Move-Konstruktor/Zuweisung
+ 29 |       Unterscheidung Copy- und Move-Versionen
+ 30 | Typ-Kompatibilität und -Konvertierungen
+ 31 |    Typ-Kompatibilität bei grundlegenden Typen
+ 32 |       Typ-Kompatibilität bei grundlegenden Typen (2)
+ 33 |    Typ-Kompatibilität und Vererbung
+ 34 |       Öffentliche Basisklassen und LSP
+ 35 |       Private Basisklassen (kein LSP)
+ 36 |    Typ-Konvertierung mittels *Cast*
+ 37 |       Typ-Konvertierung mit `static_cast`
+ 38 |       Typ-Konvertierung mit `dynamic_cast`
+ 39 |       Typ-Konvertierung mit `const_cast`
+ 40 |       Typ-Konvertierung mit `reinterpret_cast`
+ 41 |       Typ-Konvertierung mit `reinterpret_cast` (Beispiel 1)
+ 42 |       Typ-Konvertierung mit `reinterpret_cast` (Beispiel 2)
+ 43 |    Klassenspezifische Typ-Konvertierungen
+ 44 |       Typ-Konvertierungen durch Konstruktoren
+ 45 |       Anwendung von Konstruktoren zur Typ-Konvertierung
+ 46 |       Temporäre Objekte im Rahmen der Typ-Konvertierung
+ 47 |       Typ-Konvertierung durch Type-Cast Operatoren
+ 48 |       Automatische Anwendung von Type-Cast Operatoren
+ 49 |       Sonderfall: `explicit operator bool()`
+ 50 |       Beispiele: `explicit operator bool()`
+ 51 |    Typ-Sicherheit in C++
+ 52 | Praktikum
+
+
+
+=== 02_monday2.html ===
+
+  2 | Template Basics
+  3 |    Parametrisierte Typen
+  4 |    Parametrisierte Compilezeit-Konstanten
+  5 |    Beispiel `RingBuffer`
+  6 | Exception Basics
+  7 |    Hierarchien von Exception-Klassen
+  8 |    Kontrollfluss mit und ohne Exception
+  9 |    Exception Klassen als Label verstanden
+ 10 |    Gruppieren ähnlicher Exceptions
+ 11 |    Aktivieren der Wiedereintrittspunkte
+ 12 |    Unvollständig behandelte Exceptions
+ 13 |    Fangen aller Exceptions
+ 14 | Library-Basics – Strings
+ 15 |    Klassen (Übersicht)
+ 16 |    Kompatibilität zu C
+ 17 |       `std::string` als `const char *` verwenden
+ 18 |       Risiken von `c_str()`
+ 19 |       `const char *` als `std::string` verwenden
+ 20 |    Effizienz-Betrachtungen
+ 21 |    Optionales "Copy On Write"
+ 22 |    Grundlegende Operationen
+ 23 |    Weitere Operationen im Überblick
+ 24 |    Umwandlung von/in arithmetische Werte
+ 25 |       `std::string` in numerischen Wert umwandeln
+ 26 |       Numerischen Wert in `std::string` umwandeln
+ 27 |    Ein- und Ausgabe
+ 28 |       Lesen mit `operator>>`
+ 29 |       Lesen mit `std::getline`
+ 30 | Library-Basics – IO-Streams
+ 31 |    Front-End der I/O-Streams
+ 32 |       Gemeinsame Schnittstelle
+ 33 |       Filestreams
+ 34 |       Stringstreams
+ 35 |    Back-End der I/O-Streams
+ 36 |    Zustands-Bits der I/O-Streams
+ 37 |       Verhalten der I/O-Streams abhängig vom Zustand
+ 38 |       Exceptions bei Zustandswechsel
+ 39 | Praktikum
+
+
+
+=== 03_tuesday1.html ===
+
+  2 | Sequenzielle Container
+  3 |    Zusammenhängender Speicher
+  4 |       Vorteile eines `std::vector`
+  4 |       Einschränkungen eines `std::vector`
+  5 |    Doppelt verkettete Listen
+  6 |       Vorteile einer `std::list`
+  6 |       Einschränkungen einer `std::list`
+  7 |    Einfach verkettete Listen
+  8 |       Vorteile einer `std::forward_list`
+  8 |       Einschränkungen einer `std::forward_list`
+  9 |    Deque
+ 10 | Iterator-Grundlagen
+ 11 |    Prinzip des Iterators
+ 12 |       Iterator *auf* Elemente zeigend
+ 13 |       Iterator *zwischen* Elemente zeigend
+ 14 |    Vorwärts-Iterator *auf* Elemente zeigend
+ 15 |    Vorwärts-Iterator *zwischen* Elemente zeigend
+ 16 |    Rückwärts-Iterator *auf* Elemente zeigend
+ 17 |    Rückwärts-Iterator *zwischen* Elemente zeigend
+ 18 |    *Alle* Elemente im Container
+ 19 |    *Teilbereich* eines Containers
+ 20 | Assoziative Container
+ 21 |    Kombination der Varianten
+ 22 |    Speicherverfahren Red-Black-Tree
+ 23 |    Speicherverfahren Hashing
+ 24 |       Prinzip des Hashing
+ 25 |       Behandlung von Kollisionen
+ 26 |       Re-Hashing
+ 27 | Iterator-Details
+ 28 |    Iterator für nur lesenden Zugriff
+ 29 |    Iterator für modifzierenden Zugriff
+ 30 |    Vorwärts laufender Iterator
+ 31 |    Rückwärts laufender Iterator
+ 32 |    Iterator-Position im leeren Container
+ 33 |    Index-basierter Zugriff
+ 34 |    Iteratoren für Assoziative Container
+ 35 |    Iteratoren für Maps
+ 36 |    Bereichsbasierte Schleifen für Maps
+ 37 | Praktikum
+
+
+
+=== 04_tuesday2.html ===
+
+  2 | Iterator-Kategorien
+  3 |    Unidirektionale Iteratoren
+  4 |    Bidirektionale Iteratoren
+  5 |    Iteratoren mit wahlfreiem Zugriff
+  6 |    Grenzprüfung Iteratoren mit wahlfreiem Zugriff
+  7 | Konventionen der Iterator-Schnittstelle
+  8 |    Iteratoren als verbindendes Element
+  9 |    Container-Achse
+ 10 |    Algorithmen-Achse
+ 11 |    Input-Iterator
+ 12 |    Output-Iterator
+ 13 |    Erfolgreiche Suche
+ 14 |    Gescheiterte Suche
+ 15 |    Zustandsanzeige nach Füllen
+ 16 |    Löschanzeige durch neues (logisches) Ende
+ 17 | Iteratoren und Algorithmen
+ 18 |    Beispiel: Implementierung des `copy`-Algorithmus
+ 19 |       Kopieren der Elemente eines `std::set` in einen `std::vector`
+ 20 |       Anhängen an Vektoren
+ 20 |          Hilfsklasse: `back_insert_iterator`
+ 21 |          Hilfsfunktion: `back_inserter`
+ 22 |       Am Anfang oder Ende sequenzieller Container einfügen
+ 23 |       In assoziative Container einfügen
+ 23 |          Hilfsklasse: `insert_iterator`
+ 24 |          Hilfsfunktion: `inserter`
+ 25 |       Stream-Iteratoren
+ 25 |          In Stream schreiben mit `std::ostream_iterator`:
+ 26 |          Aus Stream lesen mit `std::istream_iterator`:
+ 27 |       Zeiger als Iteratoren
+ 27 |          Kopieren AUS klassischem Array
+ 28 |          Kopieren IN klassisches Array
+ 29 |       Kopieren zwischen unterschiedlichen Container-Typen
+ 30 |       Kopieren zwischen gleichartigen Container-Typen
+ 31 |    Einige typische Algorithmen in Beispielen
+ 31 |       Zählen der Elemente mit dem Wert 542
+ 32 |       Suchen des ersten Elements mit dem Wert 542
+ 33 |       Löschen aller Elemente mit dem Wert 542
+ 34 | Callbacks aus Algorithmen
+ 35 |    Generelle Möglichkeiten für Callbacks
+ 36 |    Callback mit Funktor
+ 37 |       Vergleich mit Funktion
+ 38 |       Lokale Daten in Funktoren
+ 39 |       Parameterübergabe an Funktor
+ 40 |       Parameter aus Aufrufumgebung
+ 41 |       Datentypen in Funktoren
+ 42 |    Callback mit Lambda
+ 42 |       Grundlegendes Beispiel mit Lambda
+ 43 |       Lambda mit Capture List
+ 44 |       Lambda mit privaten Daten
+ 45 |    Prädikate für Algorithmen (generell)
+ 46 |       Möglichkeiten zur Übergabe von Prädikaten
+ 47 |       Prädikat mit Funktionszeiger übergeben
+ 48 |       Prädikat mit Funktor übergeben
+ 49 |       Prädikat mit C++11-Lambda übergeben
+ 49 |       Alternative mit Standard-Bibliotheksfunktion
+ 50 |    Prädikate für Algorithmen (Beispielserie)
+ 51 |       Prädikat mit spezifischem Funktionszeiger
+ 52 |       Prädikat mit spezifischem Funktor
+ 53 |       Prädikat mit spezifischem Lambda
+ 54 |       Prädikat mit allgemeiner verwendbarem Funktor
+ 55 |       Prädikat mit Funktor und Zugriff auf lokalen Kontext
+ 56 |       Prädikat mit Lambda und Zugriff auf lokalen Kontext
+ 57 |    STL Algorithmen vs. spezifische Member-Funktionen
+ 58 | Praktikum
+
+
+
+=== 05_wednesday1.html ===
+
+  2 | Beziehungen zwischen Klassen
+  3 |    Klasse (minimal)
+  4 |       Objektorientierte Vorgehensweise
+  5 |    Klassen vs. Objekte
+  5 |       Klassen
+  5 |       Objekte
+  6 |       Klassen und Objekte in C++
+  7 |       C++-Klassen als Compilezeit-Konstrukt
+  8 |    Klasse (detailiert)
+  9 |       Attribute
+ 10 |       Methoden
+ 11 |       Zugriffsschutz
+ 12 |       C++ Zugriffschutz: `class` vs. `struct`
+ 13 |       Klassen-Attribute und -Methoden
+ 13 |          Klassen-Attribute
+ 13 |          Klassen-Methoden
+ 14 |    Parametrisierte Klasse
+ 15 |    Assoziation
+ 16 |    Ungerichtete Assoziation in C++
+ 16 |       Beispiel-Code zur ungerichteten Assoziation
+ 17 |    Gerichtete Assoziation
+ 17 |       Beispiel-Code zur gerichteten Assoziation
+ 18 |    Komposition
+ 18 |       Beispiel-Code zur Komposition
+ 19 |    Aggregation
+ 20 |       Beispiel-Code zur Aggregation
+ 21 |    Vererbung
+ 22 |    Mehrfachvererbung
+ 23 |    Interface (Schnittstelle)
+ 24 |       Anwendung von Interfaces
+ 25 |       Interfaces vs. Klassen
+ 26 |    Abstrakte Basisklasse
+ 27 |    "Rautenförmige" Vererbungsstruktur
+ 28 |    Mehrstufige Vererbung allgemein gesehen
+ 29 | Mehrfachvererbung und virtuelle Basisklassen
+ 30 |    Prinzip der Mehrfachvererbung
+ 31 |    Virtuelle Basisklassen
+ 32 |    Überlappende Basisklassen
+ 33 |    Rautenförmige Ableitungshierarchien
+ 34 |       UML-Darstellung «overlapping»
+ 35 |       UML-Darstellung «disjoint»
+ 36 |       Abbildung auf Speicher `«overlapping»`
+ 37 |       Abbildung auf Speicher `«disjoint»`
+ 38 |    Quelltext und C'tor-/D'tor-Ablauf bei `«overlapping»`
+ 39 |    Quelltext und C'tor-/D'tor-Ablauf bei `«disjoint»`
+ 40 | Beispiele zu Klassenbeziehungen
+ 41 |    Eine (anpassbare) Komponente
+ 42 |    Nutzung der (angepassten) Komponente
+ 43 |    Rautenförmige (Mehrfach-) Vererbung
+ 44 |    Drei Interfaces
+ 45 |    Inkrementale Erweiterbarkeit durch Mix-Ins
+ 46 |    Orientiert am GoF *Observer Muster*
+ 47 | Praktikum
+
+
+
+=== 06_wednesday2.html ===
+
+  2 | Generalisiertes Ausführungsmodell
+  3 |    CPU und Speicher
+  4 |       CPU-Aufbau (Grundlegendes)
+  4 |          Program Counter und Stack Pointer
+  5 |          Ausdehnung des Stack-Bereichs
+  6 |       CPU-Aufbau (Details)
+  7 |          ALU (Arithmetic Logic Unit)
+  8 |          (Weitere) Register
+  9 |          Datenpfad-Steuerung
+ 10 |       Stack-Daten
+ 11 |       Globale Daten
+ 12 |       Dynamisch verwaltete Daten
+ 13 |    Stack-Frames
+ 14 |       Detailablauf beim Unterprogramm-Aufruf
+ 15 |          Argumente bereitstellen
+ 16 |          Maschinenbefehl zum Unterprogrammsprung
+ 17 |          Aufrufkonventionen (Calling Conventions)
+ 18 |          Erzeugen von Stack-Backtraces
+ 19 |          Platz für lokale Variable schaffen
+ 20 |          Aufrufargumente und lokale Variable
+ 21 |       Details bei der Unterprogramm-Rückkehr
+ 22 |          Bereitstellung des Rückgabewertes
+ 23 |          Rücksprung zum Aufrufer
+ 24 |    Dynamische Speicherverwaltung
+ 24 |       Speicheranforderung
+ 25 |       Dynamische Speicherfreigabe
+ 26 |       Typische Fehlerquellen bei dynamischem Speicher
+ 27 |    Stack-Limit
+ 28 |       Stacklimit mit speziellen CPU-Registern überwachen
+ 29 |       Stacklimit mit nicht zugeordneter Speicherseite überwachen
+ 30 |       Stacklimit-Probleme durch sicheren Code vermeiden
+ 31 |       Stacklimit durch statische Analyse ausschließen
+ 32 | Abbildung von Klassen
+ 33 |    Abbildung von Member-Daten
+ 34 |       Padding und Alignment
+ 35 |          Padding zwischen Strukturelementen
+ 36 |          Padding nach dem letzten Strukturelement (Trugschluss)
+ 37 |          Padding nach dem letzten Strukturelement (Nowendigkeit)
+ 38 |    Abbildung von Member-Funktionen
+ 39 |       Reguläre vs. Inline-Member-Funktionen
+ 40 |       Inline Member-Funktionen
+ 41 |       Nicht-Inline Member-Funktionen
+ 42 |       Nachteile von Inline-Funktionen
+ 43 |    Öffentliche Basisklassen
+ 44 |    Private Basisklassen
+ 45 |    Komposition über Member-Daten
+ 46 |       Vergleich: Komposition über Member-Daten
+ 47 |       Vergleich: Komposition über private Basisklasse
+ 48 |          Erweiterungspunkte in Basisklassen
+ 49 |          Nutzung der Erweiterungspunkte
+ 50 | Techniken zur Implementierung von Containern
+ 51 |    Auf Vererbung basierende Technik
+ 52 |       "Freundschaft" eng gekoppelter Klassen
+ 53 |       Container-Elemente mit Daten
+ 54 |       Daten-Elemente als Templates
+ 55 |       Datenelemente erzeugen und einfügen
+ 56 |       Template-Helfer-Funktionen
+ 57 |       Datenelemente entnehmen
+ 58 |          Datenelemente verwendbar machen mit `dynamic_cast` auf Zeigerbasis
+ 59 |          Datenelemente verwendbar machen mit `dynamic_cast` auf Referenzbasis
+ 60 |    Memory Leaks
+ 61 |       Verantwortlichkeit für die Speicherverwaltung
+ 62 |       Speicherfreigabe über Zeiger auf Basisklassen
+ 63 |    Auf Templates basierende Technik
+ 64 |       Template für Klasse der Datenelemente
+ 65 |       Operation zum Einfügen neuer Datenelemente
+ 66 |       Operation zur Entnahme von Datenelemente
+ 67 |       Destruktor der Container-Klasse
+ 68 |       Typsicherheit beim Einfügen
+ 69 |       Typsicherheit beim Entnehmen
+ 70 |       Slicing als Nachteil der Templates
+ 71 |    Template-Technik mit explizitem Polymorphismus
+ 72 |          Entnahme von Basisklassen-Zeigern
+ 73 |          Ermittlung der abgeleiteten Klasse
+ 74 |       Pointer in auf Templates basierenden Containern
+ 75 | Typ-Bestimmung zur Laufzeit
+ 76 |    RTTI-Voraussetzungen
+ 77 |    Dynamischer Polymorphismus
+ 78 |       Zweck des dynamischen Polymorphismus
+ 79 |       Implementierung des dynamischen Polymorphismus
+ 80 |       Kombination von `virtual` und `inline`
+ 81 |    Explizites RTTI
+ 82 |       RTTI mit dynamischem Cast
+ 82 |          `dynamic_cast` auf Zeigerbasis
+ 83 |       RTTI mit dynamischem Cast (2)
+ 83 |          `dynamic_cast` auf Referenzbasis
+ 84 |    Implementierung von explizitem RTTI
+ 85 | Typbasierte Verzweigungen
+ 86 |    Typgesteuerter Kontrollfluss
+ 87 |    Alternative mit virtuellen Funktionen
+ 88 | Praktikum
+
+
+
+=== 07_thursday1.html ===
+
+  2 | Templates selbst schreiben
+  3 |    Template-Klassen
+  4 |    Template-Funktionen
+  5 | Optimierung von Templates
+  6 |    Ursache für "Code-Bloat"
+  7 |    Vorbereitender Zwischenschritt
+  8 |    Optimierte Template
+  9 | Templates als Compilezeit-Funktionen
+ 10 |    Wiederholung und Verzweigung
+ 11 |    Fakultäts-Funktion als Beispiel
+ 11 |       Der übliche Ansatz …
+ 12 |       … und der im "Haskell-Stil"
+ 13 |       Berechnung mit C++-Template
+ 14 |    Beispiele für Typ-Transformationen
+ 14 |       Eine Zeigerstufe hinzufügen
+ 14 |       Eine Zeigerstufe wegnehmen
+ 14 |       Alle Zeigerstufen wegnehmen
+ 15 |    Type-Traits Library
+ 16 | Fortgeschrittene Nutzung des Präprozessors
+ 17 |    Der Präprozessor kennt kein C(++)
+ 18 |    Stringizing
+ 19 |    Token Pasting
+ 20 |    Systematische Quelltexterzeugung
+ 20 |       "Tabelle" als Vorbereitung
+ 21 |       Eigentliche Quelltexterzeugung
+ 22 |    Einige weitere Präprozessor-Tipps
+ 23 |       Fortsetzungszeilen fördern die Lesbarkeit
+ 24 |       Namenskonventionen für Makros
+ 25 |       Makros nur lokal definieren
+ 26 |          Beispiel für lokalen Makro
+ 27 | Praktikum
+
+
+
+=== 08_thursday2.html ===
+
+  2 | Richtlinien für den Exception-Einsatz
+  3 |    (Keine) isolierte Klassenhierarchie
+  4 |    (Falsche) Behandlungsblock-Abfolge
+  5 |    Sub-optimale Weiterleitung
+  6 |       Optimale Weiterleitung
+  7 |       Mögliche Optimierungen durch den Compiler
+  8 |    (Keine) Exceptions aus Destruktoren werfen
+  9 | c++98 `throw`-Spezifikationen
+ 10 | C++11 `noexcept`-Spezifikation
+ 11 |    Bedingte Exception-Freiheit
+ 12 |    Beispiele zu `noexcept`
+ 13 | Ressourcen ohne und mit RAII
+ 14 |    Klassische APIs
+ 15 |       Um welche Ressourcen geht es?
+ 16 |       Wie werden Ressourcen repräsentiert?
+ 17 |    Mit RAII verwaltete Ressourcen
+ 18 |    RAII-Ressource für Anweisungsfolge belegen
+ 19 |    RAII-Ressource für Objekt-Lebensspanne belegen
+ 20 |       Explizite Anforderung mehrerer Ressourcen ohne RAII
+ 20 |          Beispiel-Code für Klasse – kein RAII
+ 21 |          Beispiel-Code `Choice`-Konstruktor – kein RAII
+ 22 |          Beispiel-Code `Choice`-Destruktor – kein RAII
+ 23 |       Anforderung mehrerer Ressourcen mit RAII
+ 24 |          Beispiel-Code Vereinfachung `Choice`-Klasse – mit RAI
+ 25 | Smart-Pointer
+ 26 |    Smart-Pointer von C++11 im Vergleich
+ 27 |       Exklusive Eigentümerschaft: `std::unique_ptr`
+ 28 |       Geteilte Einegtümerschaft: `std::shared_ptr`
+ 29 |    Problem der zyklischen Referenzierung
+ 30 |       Nutzer ohne Eigentümerschaft: `std::weak_ptr`
+ 31 |       "Verlorene" Ressourcen
+ 32 |    Typische Smart-Pointer Implementierungen
+ 32 |       `std::shared_ptr` – meist verwendete Variante
+ 33 |       `std::shared_ptr` – alternative Implementierung
+ 33 |       `std::weak_ptr` – typische Implementierung
+ 33 |       `std::unique_ptr` – typische Implementierung
+ 34 | Praktikum
+
+
+
+=== 09_friday1.html ===
+
+  2 | Pragmatische Leitgedanken zur Software-Entwicklung
+  3 |    "Open Close"-Prinziple
+  4 |       Mechanismen zur Strukturierung
+  4 |          Klassen
+  4 |          Unterprogramme
+  4 |          Bibliotheken
+  5 |       Mechanismen zur Strukturierung (2)
+  5 |          Frameworks
+  5 |          Geplante Erweiterbarkeit
+  6 |    Don't Repeat Yourself
+  7 |       Mechanismen zur Wiederverwendung
+  7 |          Klassen
+  7 |          Unterprogramme
+  7 |          Datenstrukturen
+  8 | C++ as Multi-Paradigm Language
+  9 |    Choosing the Right Paradigm
+ 10 |    How to Recognize that Things Start to Go Wrong?
+ 11 | Design Patterns – Critically Reviewed
+ 12 |    The GoF Book
+ 13 |       Design Patterns and the GoF Book – A Personal Opinion
+ 14 |       Shortcomings of the GoF Book Implementations
+ 15 |    Design Patterns and OOP-Languages
+ 16 |    DP-Examples
+ 17 |       DP-Example: Iterator
+ 18 |       DP-Example: Observer
+ 19 |       DP-Example: Composite
+ 20 |       DP-Example: Template-Methode
+ 21 |       DP Template-Methode Implementation Alternatives
+ 22 |          DP Template Methode Pattern Based on virtual Member Functions
+ 23 |          DP Template Methode Pattern Based on C++-Templates
+ 24 |       DP-Example: State
+ 25 |       DP-Example: Singleton
+ 26 |    Design Patterns – Closing Remark
+ 27 | Summary and Epilogue

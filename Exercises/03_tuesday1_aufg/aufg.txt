@@ -51,7 +51,7 @@
     mit einem Doppelpunkt als Separator (drittes Argument) und anschließend
     bis zum Ende des Strings (also der Zeile) Zahlenwerte mit operator>>.
     
--- Zusatzaufgabe für besonders Schnelle
+--- Zusatzaufgabe für besonders Schnelle
 
 (3) In der einfachsten Lösung gemäß Aufgabenteil (2) wird kein großer Wert auf
     die effiziente Speichernutzung gelegt: kommen in einem Text gleiche Worte

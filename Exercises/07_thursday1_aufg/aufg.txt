@@ -132,7 +132,7 @@
     von 'real_unique_copy' als Rückgabewert ihr drittes Aufrufargument liefert.
     Welcher Test ist das und warum wird diese Information dort benötigt?
 
---  Zusatzaufgabe für Teilnehmer mit besonderen Vorkenntnissen
+--- Ab hier Zusatzaufgabe für Teilnehmer mit besonderen Vorkenntnissen
 
 (4) Bei allen STL-Containern gilt die Konvention, dass sie einen geschachtelt
     definierten Typ "value_type" bereitstellen, der stets dem ELEMENT-TYP des

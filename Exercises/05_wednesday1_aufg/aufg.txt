@@ -1,121 +1,122 @@
 ﻿Aufgabe Mittwochvormittag
 -------------------------
 
-1. In der vorbereiteten Datei aufg1.cpp finden Sie ein Beispiel, in welchem
-   vier Klassen in einer "rautenförmigen Vererbungsbeziehung" stehen.
+(1) In der vorbereiteten Datei aufg1.cpp finden Sie ein Beispiel, in welchem
+    vier Klassen in einer "rautenförmigen Vererbungsbeziehung" stehen.
    
-a) Zeichnen Sie zunächst ein Klassendiagramm und vergessen Sie dabei nicht, die
-   Verbindung zur obersten Basisklasse gemäß der UML mit «overlapping» oder
-   «disjoint» zu beschriften, je nach dem, was Sie für angemessen halten.
+   (a) Zeichnen Sie zunächst ein Klassendiagramm und vergessen Sie dabei nicht,
+       die Verbindung zur obersten Basisklasse gemäß der UML mit «overlapping»
+       oder «disjoint» zu beschriften, je nach dem, was Sie für angemessen
+       halten.
 
-b) Warum erscheint bei unveränderter Kompilierung dieses Beispiels in der
-   vierten Zeile der Ausgabe am Anfang ein unerwarteter Wert?
+   (b) Warum erscheint bei unveränderter Kompilierung dieses Beispiels in der
+       vierten Zeile der Ausgabe am Anfang ein unerwarteter Wert?
    
-c) Was passiert, wenn Sie in diesem - ansonsten unveränderten - Quelltext den
-   Default-Konstruktor der Klasse "Value" komplett entfernen?
+   (c) Was passiert, wenn Sie in diesem - ansonsten unveränderten - Quelltext
+       den Default-Konstruktor der Klasse "Value" komplett entfernen?
    
-d) Was ist zu verändern, damit in der Ausgabe am Beginn der vierten Zeile der
-   korrekte Wert "4.4" erscheint?
+   (d) Was ist zu verändern, damit in der Ausgabe am Beginn der vierten Zeile
+       der korrekte Wert "4.4" erscheint?
 
-2. Wie kann eine in Element-Typ und -Anzahl parametrisierte Klasse RingBuffer
-   (zu finden in der Datei aufg2.cpp) als "konfigurierbares Teil" hilfreich
-   sein, um eine Klasse Value gemäß den unten beschriebenen Anforderungen zu
-   implementieren.
+(2) Wie kann eine in Element-Typ und -Anzahl parametrisierte Klasse RingBuffer
+    (zu finden in der Datei aufg2.cpp) als "konfigurierbares Teil" hilfreich
+    sein, um eine Klasse Value gemäß den unten beschriebenen Anforderungen zu
+    implementieren.
 
-   Hinweis: die hier verwendete Klasse RingBuffer hat ein anderes "Overflow"-
-   Verhalten als die am ersten Kurstag verwendete: wenn mehr Werte als die
-   maximal mögliche Zahl von Einträgen gespeichert werden, wird der jeweils
-   älteste Eintrag überschrieben. (Sehen Sie sich zum besseren Verständnis
-   auch die vorhandenen Tests an.)
+    Hinweis: die hier verwendete Klasse RingBuffer hat ein anderes "Overflow"-
+    Verhalten als die am ersten Kurstag verwendete: wenn mehr Werte als die
+    maximal mögliche Zahl von Einträgen gespeichert werden, wird der jeweils
+    älteste Eintrag überschrieben. (Sehen Sie sich zum besseren Verständnis
+    auch die vorhandenen Tests an.)
 
-   Die Klasse Value soll die folgenden Möglichkeiten bieten:
+    Die Klasse Value soll die folgenden Möglichkeiten bieten:
+    
+    - setValue(double) speichert einen Wert vom Typ double
+    - getValue() liefert diesen Wert zurück OHNE ihn jedoch zu entfernen
+    - getHistoricValue(int n) liefert bis zu 5 "historische" Werte, wobei "n"
+      wie folgt interpretiert wird:
+      n == 0 --> selbes Ergebnis wie getValue()
+      n == 1 --> der VOR dem letzten setValue() gültige Wert
+      n == 2 --> der ZWEI setValues() zuvor gültige Wert
+      ... usw. ...
+      n == 5 --> der FÜNF setValues() zuvor gültige Wert
+    - size() liefert die Anzahl der historischen Werte
+    - clearHistory() löscht die historischen Werte und behält nur den zuletzt
+      gesetzen Wert.
    
-   - setValue(double) speichert einen Wert vom Typ double
-   - getValue() liefert diesen Wert zurück OHNE ihn jedoch zu entfernen
-   - getHistoricValue(int n) liefert bis zu 5 "historische" Werte, wobei "n"
-     wie folgt interpretiert wird:
-     n == 0 --> selbes Ergebnis wie getValue()
-     n == 1 --> der VOR dem letzten setValue() gültige Wert
-     n == 2 --> der ZWEI setValues() zuvor gültige Wert
-     ... usw. ...
-     n == 5 --> der FÜNF setValues() zuvor gültige Wert
-   - size() liefert die Anzahl der historischen Werte
-   - clearHistory() löscht die historischen Werte und behält nur den zuletzt
-     gesetzen Wert.
+    Überlegen Sie sich nun - OHNE es sofort zu programmieren - wie die Benutzung
+    der Klasse RingBuffer innerhalb von Value aussehen müsste, wenn
+    (a) Value einen ZEIGER auf ein RingBuffer-Objekt hält;
+    (b) Value ein RingBuffer-Objekt als Daten-Member enthält;
+    (c) Value ein RingBuffer-Objekt als private Basisklasse hat;
+    (d) Value ein RingBuffer-Objekt als öffentliche Basisklasse.
    
-   Überlegen Sie sich nun - OHNE es sofort zu programmieren - wie die Benutzung
-   der Klasse RingBuffer innerhalb von Value aussehen müsste, wenn
-   (a) Value einen ZEIGER auf ein RingBuffer-Objekt hält;
-   (b) Value ein RingBuffer-Objekt als Daten-Member enthält;
-   (c) Value ein RingBuffer-Objekt als private Basisklasse hat;
-   (d) Value ein RingBuffer-Objekt als öffentliche Basisklasse.
-   
-   Schätzen Sie ab, bei welcher der Varianten besonders viel Programmierarbeit
-   nötig sein wird und welche vermutlich recht einfach zu realisieren ist. 
-   
-   Wenn Sie möchten, können Sie nun eine oder zwei dieser Varianten tatsächlich
-   implementieren (z.B. die beiden einfachsten). In diesem Fall sollten Sie
-   natürlich auch - analog wie es für die RingBuffer-Klasse geschehen ist -
-   Tests schreiben, welche die korrekte Funktion Ihrer Lösung nachweisen.
-   
-   Verwenden Sie aber insgesamt nicht zu viel Zeit auf eine Realisierung einer
-   der vier Varianten (oder gar von allen), sehen Sie sich alternativ besser die
-   Musterlösungen an und vergleichen Sie deren Umfang mit Ihrer ursprünglichen
-   Einschätzung, welchen Aufwand die Realisierung verursacht.
-   
-3. Schauen Sie sich die drei Varianten einer Lösung mit Mixin-Klassen an, in
-   welchen durch flexible (unterschiedliche) Kombinationen die Klasse "Value"
-   mit zusätzlicher Funktionalität ausgestattet werden kann, nämlich:
-   - (nur) den Durchschnitt berechnen
-   - (nur) Minimum und Maximum festhalten
-   - oder beides (Durchschnitt und Extrema)
+    Schätzen Sie ab, bei welcher der Varianten besonders viel Programmierarbeit
+    nötig sein wird und welche vermutlich recht einfach zu realisieren ist. 
 
-   HINWEIS: Da hier immer ein und dasselbe Hauptprogramm verwendet wird, sind
-   die drei Varianten über unterschiedliche Header-Files realisiert, welche
-   abhängig vom Makro MIXIN_VERSION von "mixin_demo.cpp" inkludiert werden.
+    Wenn Sie möchten, können Sie nun eine oder zwei dieser Varianten tatsächlich
+    implementieren (z.B. die beiden einfachsten). In diesem Fall sollten Sie
+    natürlich auch - analog wie es für die RingBuffer-Klasse geschehen ist -
+    Tests schreiben, welche die korrekte Funktion Ihrer Lösung nachweisen.
    
-   Zu Variante 1 gehören: Value1.h, Average1.h, Extrema1.h und Statistic1.h
-   Zu Variante 2 gehören: Value2.h, Average2.h, Extrema2.h und Statistic2.h
-   Zu Variante 3 gehören: Value3.h, Average3.h, Extrema3.h und Statistic3.h
+    Verwenden Sie aber insgesamt nicht zu viel Zeit auf eine Realisierung einer
+    der vier Varianten (oder gar von allen), sehen Sie sich alternativ besser die
+    Musterlösungen an und vergleichen Sie deren Umfang mit Ihrer ursprünglichen
+    Einschätzung, welchen Aufwand die Realisierung verursacht.
    
-   Ferner wird der Header-File Mixin-IO.h in den beiden Varianten 1 und 2
-   inkludiert, der Header "Mixin-IO3.h" dagegen wird NUR in Variante 3.
+(3) Schauen Sie sich die drei Varianten einer Lösung mit Mixin-Klassen an, in
+    welchen durch flexible (unterschiedliche) Kombinationen die Klasse "Value"
+    mit zusätzlicher Funktionalität ausgestattet werden kann, nämlich:
+    - (nur) den Durchschnitt berechnen
+    - (nur) Minimum und Maximum festhalten
+    - oder beides (Durchschnitt und Extrema)
+
+    HINWEIS: Da hier immer ein und dasselbe Hauptprogramm verwendet wird, sind
+    die drei Varianten über unterschiedliche Header-Files realisiert, welche
+    abhängig vom Makro MIXIN_VERSION von "mixin_demo.cpp" inkludiert werden.
    
-   Um eine der drei Varianten zu kompilieren, müssen Sie den Makro MIXIN_VERSION
-   entsprechend definieren, wofür folgende Möglichkeiten bestehen:
-   - entweder direkt im Quelltext der Datei "mixin_demo.cpp, oder alternativ
-   - ohne den Quelltext zu verändern in den Projekteinstellungen von Eclipse
-   - oder an der Kommandozeile mit g++ -DMIXIN_VERSION=1 ... (oder 2 oder 3).
+    Zu Variante 1 gehören: Value1.h, Average1.h, Extrema1.h und Statistic1.h
+    Zu Variante 2 gehören: Value2.h, Average2.h, Extrema2.h und Statistic2.h
+    Zu Variante 3 gehören: Value3.h, Average3.h, Extrema3.h und Statistic3.h
    
-   Erstellen Sie ein Klassendiagramme zu jeder Variante. (Da Variante 2 und 3
-   relativ ähnlich sind, reicht für diese auch ein gemeinsames Klassendiagramm,
-   wenn Sie sich die Unterschiede der Varianten anders verdeutlichen.)
+    Ferner wird der Header-File Mixin-IO.h in den beiden Varianten 1 und 2
+    inkludiert, der Header "Mixin-IO3.h" dagegen wird NUR in Variante 3.
    
-   Sie sollten anschließend (mindestens) in der Lage sein, die folgenden Fragen
-   zu beantworten:
+    Um eine der drei Varianten zu kompilieren, müssen Sie den Makro MIXIN_VERSION
+    entsprechend definieren, wofür folgende Möglichkeiten bestehen:
+    - entweder direkt im Quelltext der Datei "mixin_demo.cpp, oder alternativ
+    - ohne den Quelltext zu verändern in den Projekteinstellungen von Eclipse
+    - oder an der Kommandozeile mit g++ -DMIXIN_VERSION=1 ... (oder 2 oder 3).
    
-   - Wie wird in den einzelnen Varianten jeweils der Aufruf von "setValue" an
-     die beteiligten Klassen und Mixin-s "durchgereicht", so dass jede ihre
-     notwendige Funktionalität realisieren kann, also
-     - (nur) den Wert zu speichern bei "Value",
-     - ZUSÄTZLICH den Durchschnitt zu berechnen bei "Average", bzw,
-     - ZUSÄTZLICH das Minimum und Maximum festzuhalten bei "Extrema", und
-     - alles zusammen bei "Statistic"?
+    Erstellen Sie ein Klassendiagramme zu jeder Variante. (Da Variante 2 und 3
+    relativ ähnlich sind, reicht für diese auch ein gemeinsames Klassendiagramm,
+    wenn Sie sich die Unterschiede der Varianten anders verdeutlichen.)
+   
+    Sie sollten anschließend (mindestens) in der Lage sein, die folgenden Fragen
+    zu beantworten:
+   
+    - Wie wird in den einzelnen Varianten jeweils der Aufruf von "setValue" an
+      die beteiligten Klassen und Mixin-s "durchgereicht", so dass jede ihre
+      notwendige Funktionalität realisieren kann, also
+      - (nur) den Wert zu speichern bei "Value",
+      - ZUSÄTZLICH den Durchschnitt zu berechnen bei "Average", bzw,
+      - ZUSÄTZLICH das Minimum und Maximum festzuhalten bei "Extrema", und
+      - alles zusammen bei "Statistic"?
       
-   - Warum sind in dieser Lösung keine virtuellen Basisklassen erforderlich?
+    - Warum sind in dieser Lösung keine virtuellen Basisklassen erforderlich?
    
-   - Wo gibt es in Variante 1 ein "etwas problematisches" Vorgehen?
-     (Momentan entsteht dadurch nur ein kleiner Performance-Nachteil, da
-     lediglich unter bestimmten Umständen eine Operation unnötiger Weise
-     doppelt erfolgt; dieser Punkt müsste aber spätestens dann sauber gelöst
-     werden, wenn die Klasse "Value" - so wie die "Value"-Klasse aus dem
-     vorhergehenden Aufgabenteil - auch "historische Werte" speichern würde.)
-     [Falls Sie noch einen Hinweis wünschen, lesen Sie DIES "eulaVtes::eulaV"
-     rückwärts.]
+    - Wo gibt es in Variante 1 ein "etwas problematisches" Vorgehen?
+      (Momentan entsteht dadurch nur ein kleiner Performance-Nachteil, da
+      lediglich unter bestimmten Umständen eine Operation unnötiger Weise
+      doppelt erfolgt; dieser Punkt müsste aber spätestens dann sauber gelöst
+      werden, wenn die Klasse "Value" - so wie die "Value"-Klasse aus dem
+      vorhergehenden Aufgabenteil - auch "historische Werte" speichern würde.)
+      [Falls Sie noch einen Hinweis wünschen, lesen Sie DIES "eulaVtes::eulaV"
+      rückwärts.]
 
-   - Warum sind an einigen Stellen Cast-Operationen erforderlich und was wird
-     passieren, wenn man diese weglässt?
+    - Warum sind an einigen Stellen Cast-Operationen erforderlich und was wird
+      passieren, wenn man diese weglässt?
      
-   - Wie wird in der Variante 3 erreicht, dass der Ausgabe-Operator nicht für
-     jede der beteiligten Klassen getrennt überladen werden muss?
-     
+    - Wie wird in der Variante 3 erreicht, dass der Ausgabe-Operator nicht für
+      jede der beteiligten Klassen getrennt überladen werden muss?
+ 
