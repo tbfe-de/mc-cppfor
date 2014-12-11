@@ -1,0 +1,14 @@
+Aufgabe Freitagvormittag
+------------------------
+
+Hinweis: diese Aufgabe entfällt bei nur 4,5 Tagen Kursdauer
+
+1. Bieten Sie die Möglichkeit zur flexiblen Anpassung der 'RingBuffer'-Klasse
+   aus der Übung von Donnerstagnachmittag nicht durch abgeleitete Klassen sondern
+   mittels einer per Template-Argument übergebenen Basisklasse.
+
+--- Optionale Zusatzfrage/-Aufgabe
+
+2. Wo ist der Quelltext so systematisch, dass man evtl. über den Einsatz des
+   Präprozessors zur Quelltexterzeugung nachdenken sollte.
+

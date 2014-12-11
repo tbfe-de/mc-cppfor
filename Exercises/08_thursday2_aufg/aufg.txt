@@ -1,0 +1,87 @@
+Aufgabe Donnerstagnachmittag
+----------------------------
+
+Hinweis: Die folgenden beiden Aufgabenteile 1 und 2 beschäftigen sich erneut mit
+der 'RingBuffer'-Klasse, die schon mehrfach als Beispiel diente. Beide Teile
+bauen jedoch NICHT aufeinander auf.
+
+Insofern steht Ihnen die Reihenfolge der Bearbeitung frei:
+
+- Wenn Sie sich eher mit dem Thema Ressource-Management beschäftigen wollen,
+  beginnen Sie mit dem ersten Teil.
+
+- Wenn Sie dagegen das Thema Exceptions für interessanter halten, beginnen Sie
+  mit zweiten Teil. (Der dritte und alle weiteren Teile realisieren nur
+  alternative bzw. erweiterte Lösungen zur Aufgabenstellung gemäß dem zweiten
+  Teil und sind somit nur dann sinnvoll zu bearbeiten, wenn Sie zumindest die
+  Aufgabenstellung des zweiten Teils gelesen haben.)
+
+(1) In Rahmen der Musterlösung zur Aufgabe von Mittwochvormittag wurde gezeigt,
+    wie man die RingBuffer-Klasse in die Value-Klasse über einen Zeiger einbauen
+    kann. Die Empfehlung lautete dabei, das NICHT zu tun, vor allem wegen des
+    Aufwands für die Speicherverwaltung, die nun außerhalb der Klasse erfolgen
+    muss.
+
+    Ein Grund diese Empfehlung zu ignorieren, könnte darin bestehen, dass nur
+    relativ wenig Speicherplatz auf dem Stack zur Verfügung steht und man daher
+    "große Datenmengen" eher auf dem Heap ablegen möchte.
+
+    (a) Wie kann der std::unique_ptr dabei helfen, den Speicherplatz für das
+        RingBuffer-Objekt auf den Heap zu verlegen?
+    (b) Welche Operationen, die in der Lösung zur Aufgabe von Mittwochvormittag
+        der Einfachheit halber für die 'RingBuffer'-Klasse ausgeschlossen wurden,
+        würden damit ohne Mehraufwand unterstützt?
+    (c) Welche Operationen müssten (wenn erforderlich) dennoch implementiert
+        werden?
+    (d) Wäre ggf. auch der 'std::shared_ptr' hilfreich oder steht er eher dem
+        Konzept der 'Value'-Klasse entgegen (insbesondere der Tatsache, dass
+        deren Objekte jeweils ein "individuelles Gedächtnis" haben, mit dem sich
+        jedes dieser Objekte getrennt won jedem anderen die historischen Werte
+        merkt).
+ 
+(2) Bislang haben Sie zwei Versionen der RingBuffer-Klasse gesehen:
+
+    - die erste Version (vorgestellt im Rahmen der Template-Einführung von
+      Montagnachmittag) hat den Fall "leer" (bei 'get') und "voll" (bei 'put')
+      durch den Rückgabe-Wert der 'get' und 'put Member-Funktionen angezeigt;
+    - die zweite Version (verwendet im Rahmen der Aufgabe von Dienstagvormittag)
+      hat im Fall "voll" stillwschweigend den ältesten Wert überschrieben.
+
+    Führen Sie ein Re-Design der Klasse RingBuffer vor, das die Anpassung des
+    Verhaltens im Fall "leer" und "voll" durch virtuelle Member-Funktionen
+    erlaubt, welche von ABGELEITETEN Klassen implementiert werden. Dieses
+    Re-Design sollte es erlauben, drei unterschiedliche Verhaltensweisen zu
+    implementieren:
+
+    (a) im Fall "leer" und "voll" ist der Rückgabewert von 'get' und 'put'
+        'false', ansonsten aber bleibt der RingBuffer unverändert;
+    (b) im Fall "leer" und "voll" wird eine Exception geworfen, wenn dennoch
+        ein 'get' oder ein 'put' versucht wird;
+    (c) im Fall "leer" liefert 'get' einen Default-Wert zurück und im Fall
+        "voll" überschreibt 'put' stillschweigend den ältesten Wert.
+
+    Anmerkung: Ihr Re-Design betrifft die Klasse "RingBuffer", die davon
+    abgeleiteten Klassen gemäß (a), (b) und (c) sind dagegen eher im Sinne
+    eines "Proof of Concept" zu verstehen, d.h. mit diesen wird tatsächlich
+    BEWIESEN, dass Ihr Re-Design die gestellten Anforderungen erfüllt. Sie
+    müssen nicht unbedingt alle drei abgeleiteten Klassen tatsächlich auch
+    IMPLEMENTIEREN, wenn Sie der Meinung sind, dass sie die Aufgabe im Sinne
+    des Re-Designs korrekt gelöst haben.
+
+--- Ab hier optionale Zusatzaufgabe
+
+(3) Planen Sie auch eine flexible Behandlung ein für den Fall, dass der bei der
+    'peek' Member Funktion ein Index übergeben wird, der außerhalb des erlaubten
+    Wertebereichs liegt. Die Reaktionen darauf könnten (über abgeleitete Klassen
+    konfigurierbar) die folgenden sein:
+
+    - Throwing:
+      - bei einem unerlaubten Index wird eine Exception werfen;
+    - Overwriting:
+      - bei 'put' in Fall "voll" den ältesten Wert stillschweigend wegwerfen;
+      - bei 'get' im Fall "leer" einen Default-Wert zurückliefern
+    - NonThrowing:
+      - bei 'put' im Fall "voll" über den Rückgabewert anzeigen, dass kein neuer
+        Wert IN den 'RingBuffer' eingefügt werden konnte;
+      - bei 'get' im Fall "leer" durch den Rückgabewert anzeigen, dass kein Wert
+        AUS dem 'RingBuffer' entnommen werden konnte wurde.
