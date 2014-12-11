@@ -199,7 +199,7 @@ template: withinfo
 graphic: ExecutionModel
 section: Essentials
 name: pc_sp
-header: #### CPU-Aufbau (1)
+header: #### CPU-Aufbau (Grundlegendes)
 
 ##### Program Counter und Stack Pointer
 
@@ -514,9 +514,7 @@ werden.
 ---
 template: plain
 name: callee_code
-header: #### Detailablauf beim Unterprogramm-Aufruf (6)
-
-##### Platz für lokale Variable schaffen
+header: ##### Platz für lokale Variable schaffen
 
 Im aufgerufenen Unterprogramm wird
 
@@ -543,9 +541,7 @@ CPUs in effizienter Form unterstützt.
 ---
 template: plain
 name: local_data
-header: #### Detailablauf beim Unterprogramm-Aufruf (7)
-
-##### Aufrufargumente und lokale Variable
+header: ##### Aufrufargumente und lokale Variable
 
 Der Unterschied zwischen beiden besteht bei genauer Betrachtung nur in der
 Tatsache
@@ -594,9 +590,7 @@ einen solchen putativ erstellen kann.
 ---
 template: plain
 name: return_value
-header: #### Details bei der Unterprogramm-Rückkehr (2)
-
-##### Bereitstellung des Rückgabewertes
+header: ##### Bereitstellung des Rückgabewertes
 
 Die wesentlichen Details hängen hier davon ab, ob es sich um einen Grundtyp
 handelt oder um eine größere Datenstruktur.._[]
@@ -625,9 +619,7 @@ eingeführt, beliebige Strukturen als Rückgabewert einer Funktion zu verwenden.
 ---
 template: plain
 name: code_rts
-header: #### Details bei der Unterprogramm-Rückkehr (3)
-
-##### Rücksprung zum Aufrufer
+header: ##### Rücksprung zum Aufrufer
 
 Symmetrisch zum Aufruf sind hierbei zwei Schritte notwendig:._[]
 
@@ -652,21 +644,25 @@ zusammenzufassen.
 ---
 template: plain
 name: heap_alloc
-header: #### Dynamische Speicheranforderung
+header: ### Dynamische Speicherverwaltung
 
-Grundsätzlich ist dies eine Operation, die vom ablaufenden Programm explizit angestoßen werden muss:
+#### Speicheranforderung
+
+Grundsätzlich muss dies Operation explizit angestoßen werden. Rückgabewert
+ist ein Zeiger auf den dynamisch bereitgestellten Speicher.
 
 * In C mit:._[]
   * `malloc` – angegeben wird die Speichergröße in Byte
   * `calloc` – ähnlich wie zuvor aber Multiplikator.
   * `realloc` – spätere Änderung der Größe.
-
 * In C++ mit:
   * `new T` – Größe wird daraus als `sizeof T` bestimmt
   * `new T[N]` – ähnlich wie zuvor aber mit Multiplikator `N`
 
-Rückgabewert ist jeweils ein Zeiger auf den dynamisch bereitgestellten Speicher.
-In C++ läuft dabei automatisch der `T`-Konstruktor ab, bzw. `N` solcher Konstruktoren.
+.I[
+In C++ wird von der `new`-Operation automatisch der `T`-Konstruktor aufgerufen,
+bzw. `N` solcher Konstruktoren.
+]
 
 
 .F[:
@@ -683,24 +679,26 @@ template: plain
 name: heap_release
 header: #### Dynamische Speicherfreigabe
 
-Grundsätzlich ist dies eine Operation, die vom ablaufenden Programm explizit
-angestoßen werden muss:
+Grundsätzlich ist dies eine Operation, die explizit angestoßen werden muss:
 
 * In C mit:
   * `free` – anzugeben ist dabei der bei der Anforderung erhaltene Zeiger
-
 * In C++ mit:
   * `delete` – anzugeben ist ein von `new T` erhaltener Zeiger
-  * `delete[N]` – anzugeben ist ein von `new T[N]` erhaltener Zeiger
+  * `delete[]` – anzugeben ist ein von `new T[N]` erhaltener Zeiger
 
-In C++ läuft dabei automatisch der `T`-Destruktor ab.
+.I[
+In C++ wird von der `delete`-Operation automatisch der `T`-Destruktor
+aufgerufen, bzw. `N` solcher Destruktoren.
+]
 
 ---
 template: plain
 name: heap_release
-header: #### Fehlerquellen bei Verwendung von dynamischem Speicher
+header: #### Typische Fehlerquellen bei dynamischem Speicher
 
-Folgende Fehlerquellen sind im Umgang mit dynamischen Speicher zu beachten:
+Folgende Sitituationen erfordern im Umgang mit dynamischen Speicher besondere
+Beachtung:
 
 * Es kann kein weiterer Speicher verfügbar gemacht werden.
 
@@ -1231,7 +1229,7 @@ public:
 ---
 template: plain
 name: composition_example_3
-header: #### Vergleich: Komposition mit Überschreiben (1)
+header: ##### Erweiterungspunkte in Basisklassen
 
 Nur mit Hilfe einer privaten Basisklasse läßt sich die folgende Form des
 Zusammenspiels von Auto und Motor erreichen, bei welcher der Motor für die
@@ -1260,7 +1258,7 @@ Oder wo immer der Motor später einmal als Komponente eingebaut wird …
 ---
 template: plain
 name: composition_example_4
-header: #### Vergleich: Komposition mit Überschreiben (4)
+header: ##### Nutzung der Erweiterungspunkte
 
 Das Auto nutzt nun lediglich die vom Motor zur Verfügung gestellten
 Erweiterungspunkte, **überschreibt aber nicht die Member-Funktion** zum Starten

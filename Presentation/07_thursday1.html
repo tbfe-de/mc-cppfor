@@ -357,9 +357,7 @@ unsigned long long fakul(unsigned long long n) {
 
 ---
 template: plain
-header: ### Fakultäts-Funktion als Beispiel (2)
-
-#### … und der im "Haskell-Stil"
+header: #### … und der im "Haskell-Stil"
 
 ```
 unsigned long long fakul(unsigned long long n) {
@@ -380,7 +378,7 @@ erfolgt durch Spezialisierung von `fakul` für den Argumentwert `0uLL`
 
 ---
 template: plain
-header: ### Fakultäts-Berechnung zur Compilezeit
+header: #### Berechnung mit C++-Template
 
 Das folgende aber **ist** gültiges C++ …
 ```
@@ -408,7 +406,7 @@ int main() {
 
 ---
 template: plain
-header: ### Weitere Typ-Transformationen in Beispielen
+header: ### Beispiele für Typ-Transformationen
 
 #### Eine Zeigerstufe hinzufügen
 ```
@@ -552,14 +550,14 @@ DEFINE_ERROR_THROWER(MyParser, InvalidExpression)
 ---
 template: plain
 name: cpp_code_generation
-header: ### Systematischen Quelltext erzeugen
+header: ### Systematische Quelltexterzeugung
 
-Hierfür könnte z.B. eine Liste von Bezeichnern vorliegen, für die – eventuell
-auch an unterschiedlichen Stellen eines Quelltextes – unterschiedlicher Code
-zu erzeugen ist.
+#### "Tabelle" als Vorbereitung
 
-Der Trick dabei ist, den Namen eines zu expandierenden Makros einem anderen Makro
-als Parameter zu übergeben:
+Hierfür könnte z.B. eine Liste von Bezeichnern und Texten vorliegen, für die –
+evtl. an ganz unterschiedlichen Stellen eines Programms – unterschiedlicher
+Quelltext systematisch erzeugt werden soll:
+
 ```
 #define FOR_ALL_ERRORS(m)\
     m(PrematureEndOfFile, "file ends prematurely")\
@@ -568,20 +566,27 @@ als Parameter zu übergeben:
     … // usw.
 ```
 
-Dieser Makro könnte jetzt z.B. mit den beiden auf der nächsten Seite gezeigten
-Makros als Parameter aufgerufen werden:
+Die Grundlage dieser Technik besteht darin, den Namen eines zu expandierenden
+Makros einem anderen Makro als Parameter zu übergeben. Dieser Makro könnte nun
+mit den beiden auf der nächsten Seite gezeigten Makros aufgerufen werden:
+.pull-left[
 ```
-// somewhere
+// somewhere ...
 FOR_ALL_ERRORS(DEF_ERROR_CLASS)
-…
-// usually somewhere else
+```
+]
+
+.pull-right[
+```
+// ... somewhere else
 FOR_ALL_ERRORS(DEF_THROW_HELPER)
 ```
+]
 
 ---
 template: plain
 name: cpp_code_generation
-header: ### Systematischen Quelltext erzeugen (2)
+header: #### Eigentliche Quelltexterzeugung
 
 Die einzige Regel ist, dass die an `FOR_ALL_ERRORS` zu übergebenden Makros
 genau zwei Argumente entgegennehmen müssen:
@@ -718,7 +723,7 @@ Makro `MAP_COLOUR_TO_STRING` angepasst werden, nicht aber dessen Verwendungen.
 
 ---
 template: plain
-header: #### Makros nur lokal definieren (Beispiel)
+header: ##### Beispiel für lokalen Makro
 
 ```
 enum class Colour : unsigned char { Red, Blue, Green };

@@ -99,7 +99,7 @@
 		ostream_iterator<double>(cout, "\n")
 	);
 
-   Dafür ist die neue Version nun in der Lage sein, sich die Daten über
+   Dafür ist die neue Version nun in der Lage, sich die Daten über
    BELIEBIGE Iteratoren zu holen, also z.B. auch aus einen C-Array:
 
 	double data[] = { 5.6, 3.5, 7.0, 3.5, 4, 7 };

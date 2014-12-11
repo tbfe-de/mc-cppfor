@@ -347,7 +347,7 @@ nach Sachlage individuell entschieden werden.
 ---
 template: plain
 name: no_more_throwspec
-header: ## `throw`-Spezifikationen vermeiden
+header: ## c++98 `throw`-Spezifikationen
 
 Seit vielen Jahre empfehlen von C++-Experten praktisch einhellig, die seinerzeit
 von C++98 eingeführten `throw`-Spezifikationen zu vermeiden.
@@ -368,11 +368,9 @@ Verwendung einer `throw`-Spezifikationen eine Warnung ausgibt.
 ---
 template: plain
 name: noexcept
-header: ## Exception-Freiheit mit `noexcept` ankündigen
+header: ## C++11 `noexcept`-Spezifikation
 
-Neu in C++11 ist die `noexcept`-Qualifikation für Funktionen.
-
-Sie bewirkt folgendes:
+Diese bewirkt folgendes:
 
 * Wirft eine `noexcept`-Funktion direkt oder indirekt eine Exception, wird das
   Programm **unwiderruflich beendet** – wenn auch ggf. erst nach Durchlaufen
@@ -397,7 +395,7 @@ Benutzung dieses Features geben zu können.
 ---
 template: plain
 name: noexcept
-header: ## Bedingte Exception-Freiheit mit `noexcept`
+header: ### Bedingte Exception-Freiheit
 
 Über das auf der vorhergenden Seite Dargestellte hinaus ist `noxecept` auch eine
 Compilezeit-Funktion, mit welcher insbesondere Templates auch die **bedingte
@@ -417,7 +415,7 @@ Freiheit von Exceptions** ankündigen können.
 ---
 template: plain
 name: noexcept
-header: ## Beispiele zu `noexcept`
+header: ### Beispiele zu `noexcept`
 
 Eine einfache Berechnung – Exceptions sind völlig ausgeschlossen:
 ```
@@ -877,7 +875,7 @@ template: withinfo
 graphic: SmartPointers
 section: Breaking Cycles Using Weak Pointers
 name: weak_ptr_solution
-header: ### Nutzer ohne Eigentümerschaft: `std::weak_ptr`
+header: #### Nutzer ohne Eigentümerschaft: `std::weak_ptr`
 
 Mittels `std::weak_ptr` lassen sich zyklische Referenzen vermeiden.
 
@@ -907,7 +905,7 @@ template: withinfo
 graphic: SmartPointers
 section: Dangling Weak Pointer
 name: weak_ptr_dangling
-header: ### "Verlorene" Ressourcen
+header: #### "Verlorene" Ressourcen
 
 Da die `std::weak_ptr` die beobachtete Ressource verlieren können, unterstützen
 sie keinen direkten Zugriff darauf mit `*` oder `->`.

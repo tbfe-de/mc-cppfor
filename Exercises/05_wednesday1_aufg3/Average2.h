@@ -11,7 +11,7 @@ class AverageMixin
 		sum += v;
 		++cnt;
 	}
-	AverageMixin(const AverageMixin& v);
+	//AverageMixin(const AverageMixin& v);
 public:
 	AverageMixin(Value& v)
 		: sum(0.0), cnt(0) {

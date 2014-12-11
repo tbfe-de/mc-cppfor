@@ -25,8 +25,8 @@ d) Was ist zu verändern, damit in der Ausgabe am Beginn der vierten Zeile der
    Hinweis: die hier verwendete Klasse RingBuffer hat ein anderes "Overflow"-
    Verhalten als die am ersten Kurstag verwendete: wenn mehr Werte als die
    maximal mögliche Zahl von Einträgen gespeichert werden, wird der jeweils
-   älteste Eintrag überschrieben. (Sehen Sie sich zum besseren Verständnis auch
-   die vorhandenen Tests an.)
+   älteste Eintrag überschrieben. (Sehen Sie sich zum besseren Verständnis
+   auch die vorhandenen Tests an.)
 
    Die Klasse Value soll die folgenden Möglichkeiten bieten:
    
