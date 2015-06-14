@@ -250,7 +250,7 @@ name: stl_list
 header: ### Doppelt verkettete Listen
 
 Die grundlegende Datenstruktur sind einzelne Abschnitte im Heap-Speicher
-(typisch einer pro Element), welche untereinander durch Vor- und Rückwärtszeiger
+(typisch einer pro Element), welche untereinander durch Vor- und Rückwärts-Zeiger
 verbunden sind.
 
 Ein Objekt der Klasse `std::list` besitzt in der typischen Implementierung drei
@@ -479,12 +479,12 @@ Veranschaulicht man Iteratoren als zwischen Elemente zeigend, ist die
 Bewegungsrichtung des Iterators wichtig, also in wohin er bei Anwendung des
 `operator++` verschoben wird.
 
-Genau das Element, über das hinweg der Iterator damit weitergesetzt würde,
-wird bei der Derefenzierung geliefert.
+Genau das Element, über das hinweg der Iterator damit weiter gesetzt würde,
+wird bei der Dereferenzierung geliefert.
 ]
 
 Damit wird zugleich klar, dass ein Iterator in End-Position nicht dereferenziert
-werden darf, denn es gibt ja auch keine Position, zu der er weitergesetzt werden
+werden darf, denn es gibt ja auch keine Position, zu der er weiter gesetzt werden
 könnte.
 
 ---
@@ -494,7 +494,7 @@ section: Forward Iterator (left)
 name: pointing_to_fwd_iterator
 header: ### Vorwärts-Iterator *auf* Elemente zeigend
 
-Bei Dereferenzierung liefern Vorwärts-Iteratoren eine Refererenz auf dasjenige
+Bei Dereferenzierung liefern Vorwärts-Iteratoren eine Referenz auf dasjenige
 Element im Container, auf das sie gerade zeigen.
 
 * Mit `++` bewegen sich Vorwärts-Iteratoren *vom Container-Anfang zu dessen
@@ -521,9 +521,9 @@ section: Forward Iterator (right)
 name: pointing_between_fwd_iterator
 header: ### Vorwärts-Iterator *zwischen* Elemente zeigend
 
-Bei Dereferenzierung liefern Vorwärts-Iteratoren eine Refererenz auf dasjenige
+Bei Dereferenzierung liefern Vorwärts-Iteratoren eine Referenz auf dasjenige
 Element im Container, über das sie mit der nächsten `++`-Operation
-weitergeschaltet würden.
+weiter geschaltet würden.
 
 * Mit `++` bewegen sich Vorwärts-Iteratoren vom Container-Anfang zu dessen
   Ende.._[]
@@ -574,9 +574,9 @@ section: Reverse Iterator (right)
 name: pointing_between_reverse_iterator
 header: ### Rückwärts-Iterator *zwischen* Elemente zeigend
 
-Bei Dereferenzierung liefern Rückwärts-Iteratoren eine Refererenz auf dasjenige
-Element im Container, über das sie mit der nächsten `++`-Operation weitergeschaltet
-würden.
+Bei Dereferenzierung liefern Rückwärts-Iteratoren eine Referenz auf dasjenige
+Element im Container, über das sie mit der nächsten `++`-Operation weiter
+geschaltet würden.
 
 * Mit `++` bewegen sich Rückwärts-Iteratoren vom Container-Ende zu dessen
   Anfang.._[]
@@ -609,7 +609,7 @@ for (auto it = li.begin(); it != li.end(); ++it)
     … *it …
 ```
 Mit C++98 muss statt `auto` der exakte Iterator-Typ angegeben werden, wozu sich
-der Übersichtlichkeit und Wartungsfreundlichkeit wegen eine Typdefinition für
+der Übersichtlichkeit und Wartungsfreundlichkeit wegen eine Typ-Definition für
 den Container anbietet:._[]
 ```
 typedef std::list<int> INTLIST;
@@ -715,7 +715,7 @@ Binärbaums.
 
 .F[:
 Ein Binärbaum ist balanciert, wenn alle Zweige eine möglichst gleichmäßige Tiefe
-haben. Ein unbalancierter Binärbaum entspricht im Extremfall einer einfach
+haben. Ein nicht balancierter Binärbaum entspricht im Extremfall einer einfach
 verketteten Liste.
 ]
 
@@ -841,7 +841,7 @@ entries may be inserted and removed over time.
 template: plain
 header: #### Re-Hashing
 
-Ist der Umfang der Datenmenge unbekannt, muss der Indexraum möglichwerweise zu
+Ist der Umfang der Datenmenge unbekannt, muss der Indexraum möglicherweise zu
 einem späteren Zeitpunkt vergrößert werden, um stets gute Performance zu bieten.
 
 * Eine universell verwendbare Klasse wie `unordered_set` oder `unordered_map`
@@ -859,7 +859,7 @@ im neuen, größeren Indexraum verteilt werden.
 ]
 
 .F[:
-Für diesen auch Re-Hahing genannten Vorgang gibt es spezielle Techniken, welche
+Für diesen auch Re-Hashing genannten Vorgang gibt es spezielle Techniken, welche
 die erforderlichen Neuberechnungen hinauszögern (und damit besser über die Zeit
 verteilen) oder von der Anzahl her reduzieren (und damit den Rechenaufwand
 insgesamt vermindern).
@@ -874,7 +874,7 @@ header: ## Iterator-Details
 -------------------------------------------------------------------------------
 
 * [Iterator nur für lesenden vs. …	](#readonly_iterator)
-* [… modifzierenden Zugriff		](#readwrite_iterator)
+* [… modifizierenden Zugriff		](#readwrite_iterator)
 
 -------------------------------------------------------------------------------
 
@@ -907,7 +907,7 @@ In C++11 mit neuer Bedeutung von `auto` und neuer Initialisierungssyntax:
 for (auto cit{c.cbegin()}; cit != c.cend(); ++cit)
     … *cit …
 ```
-In C++98 mit expliziter Angabe des Iteratortyps:
+In C++98 mit expliziter Angabe des Iterator-Typs:
 ```
 for (C::const_iterator cit = c.begin(); cit != c.end(); ++it)
     … *cit …
@@ -922,7 +922,7 @@ template: withinfo
 graphic: STL-IteratorDetails
 section: Non-Modifiable STL-Container
 name: readwrite_iterator
-header: ### Iterator für modifzierenden Zugriff
+header: ### Iterator für modifizierenden Zugriff
 
 Diese Seite zeigt einige typische Schleifenkonstrukte mit einem Iterator für
 den potenziell modifizierenden Zugriff, am Beispiel einer Container-Klasse `C`
@@ -932,14 +932,14 @@ In C++11 mit neuer Bedeutung von `auto` und neuer Initialisierungssyntax:
 ```
 for (auto it{c.begin()}; it != c.end(); ++cit) {
     … *it … // Zugriff sowohl lesend als
-    *it = … // auch modfizierend erlaubt
+    *it = … // auch modifizierend erlaubt
 }
 ```
-In C++98 mit expliziter Angabe des Iteratortyps:
+In C++98 mit expliziter Angabe des Iterator-Typs:
 ```
 for (C::iterator it = c.begin(); it != c.end(); ++it) {
     … *it … // Zugriff sowohl lesend als
-    *it = … // auch modfizierend erlaubt
+    *it = … // auch modifizierend erlaubt
 }
 ```
 
@@ -954,25 +954,25 @@ Diese Seite zeigt weitere typische Schleifenkonstrukte für den potenziell
 modifizierenden Zugriff am Beispiel einer Container-Klasse `C` und eines
 entsprechenden Container-Objekts `c`:
 
-In C++98 mit expliziter Angabe des Iteratortyps:
+In C++98 mit expliziter Angabe des Iterator-Typs:
 ```
 for (C::iterator it = c.begin(); it != c.end(); ++it) {
     … *it … // Zugriff sowohl lesend als
-    *it = … // auch modfizierend erlaubt
+    *it = … // auch modifizierend erlaubt
 }
 ```
 In C++11 konkurriert dies auch mit der bereichsbasierten Schleife:._[]
 ```
 for (auto &v : c) {
     … v … // Zugriff sowohl lesend als
-    v = … // auch modfizierend erlaubt
+    v = … // auch modifizierend erlaubt
 }
 ```
 
 .F[:
 Auch wenn es hier keinen explizit sichtbaren Iterator gibt, verwendet die
 bereichsbasierte Schleife in ihrer internen Implementierung die
-Iterator-Schnitstelle der Klasse des beteiligten Container-Objekts.
+Iterator-Schnittstelle der Klasse des beteiligten Container-Objekts.
 ]
 
 ---
@@ -987,11 +987,11 @@ Diese Seite zeigt das typische Schleifenkonstrukt für den potenziell
 modifizierenden Zugriff am Beispiel einer Container-Klasse `C` und eines
 entsprechenden Container-Objekts `c`:
 
-In C++98 mit expliziter Angabe des Iteratortyps:
+In C++98 mit expliziter Angabe des Iterator-Typs:
 ```
 for (C::reverse_iterator it = c.rbegin(); it != c.rend(); ++it) {
     … *it … // Zugriff sowohl lesend als
-    *it = … // auch modfizierend erlaubt
+    *it = … // auch modifizierend erlaubt
 }
 ```
 Die einzige, in C++11 mögliche Vereinfachung ist hier die Verwendung von `auto`

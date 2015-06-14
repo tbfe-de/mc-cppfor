@@ -73,8 +73,8 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
   Template used for for pages INTRODUCING to a new Info-Graphic
   *****************************************************************************
   On this kind of pages a size-reduced version of the whole info graphic will
-  be reproduced and occupies aproximately 2/3 of the page width. So only add
-  little information, preferrably links to later pages dealing with single
+  be reproduced and occupies approximately 2/3 of the page width. So only add
+  little information, preferably links to later pages dealing with single
   sections of the info graphic.
 
   On pages USING THIS TEMPLATE the following attributes must be set:
@@ -142,32 +142,42 @@ template: blank
 
 ---------------------------------------------------------------------------
 
-1. [Auffrischung einiger wichtiger Grundlagen	](#cpp_basics)
-1. [Zeiger und Referenzen			](#reference_types)
+1. [Refreshing some C++ Basics			](#cpp_basics)
+1. [Built-in and Standard Types			](#standard_types)
+1. [Pointers and references			](#ptr_and_ref_types)
+1. [Variable and Object Initialisation		](#var_and_object_init)
+1. [Constructors and Destructors		](#ctors_and_dtors)
 1. [Statischer Polymorphismus			](#static_polymorphism)
 1. [Typ-Kompatibilität und -Konvertierung	](#type_conversions)
-1. [Praktikum					](#exercise_mon1)
 
 ---------------------------------------------------------------------------
 
-Kürzere Pausen werden jeweils nach Bedarf eingelegt.
+Together with the following chapter this constitutes roughly what is planned to
+cover on Monday. Depending on the depth of coverage all these topics may even
+require more time than one day. This is especially the case if both is desired,
+refreshing traditional C++ knowledge **and** learning about what is new in
+C++11 and C++14.
 
-Falls die Übungsaufgabe nicht wegen eines verkürzten Vormittagsteils
-entfällt, erfolgt die Besprechung der Musterlösung(en) im direkten Anschluss
-an die Mittagspause.
 
 ---
 template: plain
 name: cpp_basics
-header: ## Auffrischung einiger wichtiger Grundlagen
+header: ## Refreshing some C++ Basics
 
 --------------------------------------------------------------------------
 
-* [Getrennte Kompilierung		](#separate_compilation)
-* [Definition/Reference-Modell		](#definition_reference)
-* [Schreibschutz durch den Compiler	](#const_protection)
+* [Separate Compilation		](#separate_compilation)
+* [Definition/Reference Model		](#definition_reference)
+* [Compile Time Write Protection	](#const_protection)
 
 --------------------------------------------------------------------------
+
+Some topics covered here were not part of C++98 but introduced with C++11.
+
+.I[
+If you have good knowledge of C++98 it may still make sense to give the
+following pages a cursory look and examine features introduced with C++11.
+]
 
 ---
 template: plain
@@ -390,7 +400,7 @@ Definition geben (mit möglicherweise vielen Bezugnahmen).
 
 .W[
 Die Verwendung von `const` auf globaler Ebene **ohne** `extern` impliziert
-den Sichbarkeitsschutz gegenüber dem Linker.
+den Sichtbarkeitsschutz gegenüber dem Linker.
 ]
 
 .F[:
@@ -403,7 +413,7 @@ Link-Phase wurde mit der Regel ausgeschlossen, dass "`const` quasi `static`
 impliziert … mit dem Nachteil, dass globale Konstanten evtl. mehrfach im
 Speicher gehalten werden. (Bei einfachen Datentypen können optimierende
 Compiler dies wiederum vermeiden, indem sie für solche Konstanten – solange
-deren Addresse nicht verwendet wird – überhaupt keinen Speicherplatz anlegen.)
+deren Adresse nicht verwendet wird – überhaupt keinen Speicherplatz anlegen.)
 ]
 
 ---
@@ -440,7 +450,314 @@ möglich.
 
 ---
 template: plain
-name: reference_types
+name: standard_types
+header: ## Builtin and Standard Types
+
+--------------------------------------------------------------------------
+
+* [Basic Integral Types			](#integral_types)
+* [Integral Type Standard Aliases	](#int_type_std_aliases)
+* [Floating Point Types			](#floating_point_types)
+* [`void`, `bool`, and `enum`		](#void_bool_enum)
+* [Querying Type Properties		](#type_properties)
+
+--------------------------------------------------------------------------
+
+---
+template: plain
+name: integral_types
+header: ### Basic Integral Types
+
+Built-in to C++ – i.e. available as reserved word without including any
+header file – are the following integral standard types:
+
+* `char` / `signed char` / `unsigned char` / `wchar_t` / `char16_t` / `char32_t`
+* `short` (same as `signed short`) / `unsigned short`
+* `int` (same as `signed int`) / `unsigned int`
+* `long` (same as `signed long`) / `unsigned long`
+* `long long` (same as `signed long long`) / `unsigned long long`
+
+.N[
+Each of the above type names constitutes a type on its own.
+]
+
+Overloading may be based on these types – i.e. they are distinguishable – even
+if one has identical properties (signedness, limits, …) as another one.
+
+.I[
+For more information on basic integral types (incl. character types) see
+subsections *[Character Types]* and *[Properties]* in:
+http://en.cppreference.com/w/cpp/language/types
+]
+[Character Types]: http://en.cppreference.com/w/cpp/language/types#Character_types
+[Properties]: http://en.cppreference.com/w/cpp/language/types#Properties
+
+.F[:
+E.g. by definition `char` has the same properties as either `signed char` or
+`unsigned char` (implementation defined). Also type `int` often has the same
+properties as either `short` or `long`.
+]
+
+---
+template: plain
+name: int_type_std_aliases
+header: ### Integral Type Standard Aliases
+
+Header file [`<cstdint>`] centralises type definitions (aliases) of frequently
+required integral types with a specific number of bits.
+
+[`<cstdint>`]: http://en.cppreference.com/w/cpp/header/cstdint
+
+#### Standard Aliases for Exact Width
+
+These use name patterns like `int8_t`, `uint8_t`, `int16_t`, `uint16_t` …
+`uint64_t` and these will only be defined if there is hardware support for
+**exactly** that number of bits.
+
+#### Standard Aliases for Minimal Size
+
+These use name patterns like `int_least8_t` … `uint_least64_t` and guarantee the
+**smallest** integral type with at least that number of bits.
+
+#### Standard Aliases for Fast Access
+
+These use name patterns like `int_fast8_t` … `uint_fast64_t` and guarantee the
+**fastest** integral type with at least that number of bits.
+
+---
+template: plain
+name: int_type_std_aliases
+header: ### Floating Point Types
+
+The three different type names `float`, `double` and `long double` are available
+for floating point.
+
+* Often – especially if there is specific hardware support on the target platform
+  – these will be mapped to the ISO754 types with 32, 64, and 80 bits.
+
+* But the standard imposes no such requirement.
+
+* In fact, a conforming implementation might even map all three types to the same
+  hardware representation with only minimal requirements to range and accuracy.
+
+.I[
+For more information on floating point types see subsections
+*[Floating Point Types]* and table *[Range of Values]* in:
+http://en.cppreference.com/w/cpp/language/types
+]
+
+[Floating Point Types]: http://en.cppreference.com/w/cpp/language/types#Floating_point_types
+[Range of Values]: http://en.cppreference.com/w/cpp/language/types#Range_of_values
+
+---
+template: plain
+name: void_bool_enum
+header: ### `void`, `bool`, and `enum`
+
+These types serve different purposes which will be outlined in more detail on
+the following pages.
+
+* [`void`](#details_on_void)  
+  Denotes a type **with no valid values** and is used as result type of
+  functions that return no results (i.e. classic subroutines).._[]
+
+* [`bool`](#details_on_bool)  
+  Denotes a type with the only two values `true` and `false`.
+
+* [`enum`](#details_on_classic_enum)  
+  Denotes a type with a given set of values and was;
+
+* [`enum class`](#details_on_enum_class)  
+  Denotes a variant of `enum`-s with some more features, introduced with C++11.
+
+.F[:
+Note that `void *` has a different purpose, which is to define pointers with an
+unspecified type, i.e. "just addresses". It is often used for a certain form of
+"generic libraries", where mostly memory addresses are handed around, while
+information about the types really stored at these locations is buried in the
+program logic. An improved solution is [Boost.Any], which encapsulates the type
+information with the pointer, making these sort of generic programming better
+readable (and a bit more secure).
+]
+
+[Boost.Any]: http://www.boost.org/doc/libs/release/doc/html/any.html
+
+---
+template: plain
+name: details_on_void
+header: #### Not Existing Values: `void`
+
+The typical use of `void` is as return type of functions returning nothing (via
+their call name). Technically it is an [incomplete type], which means
+
+* it cannot be part of (most sorts of) expressions,
+* nor as type of function parameters,
+* nor to define variables or class member data,
+* …
+
+What is acceptable is to call a function returning `void` as part of the
+`return` statement of some other function:
+```
+void f() { … };
+void g() { return f(); }
+void h() { return g(); }
+```
+
+.F[:
+One realistic use case for this is in templated code, where `h` forwards to
+`g`, which may in turn forward to `f`, and it is expected all these functions
+have the same return type. Then this alleviates the need to have specialisation
+if the functions are generalised on their return type and this might be `void`:
+
+```
+   // a set of type generic functions forwarding from one to the other
+template<typename T> T f() { … }
+template<typename T> T g() { … ; return f(); }
+template<typename T> T f() { … ; return g(); }
+```
+]
+
+---
+template: plain
+name: details_on_bool
+header: #### Truth Values: `bool`
+
+Because of the traditional type conversions applied to variables and expressions of
+type `bool`, it mixes seamlessly with all arithmetic types.
+
+When using an expression in a context expecting a `bool`:
+
+* any pointer other that `nullptr` converts to `true`;
+* any arithmetic value other than zero converts to `true`;
+* only zero and `nullptr` convert to `false`.
+
+When using an expression of type `bool` in an arithmetic expression:
+
+* the value `false` converts to `0` and
+* the value `true` converts to `1` (in the specific type).
+
+Note that type `bool` is usually represented **internally** as type larger than
+only one bit, as otherwise memory access would be inefficient.
+
+[`std::vector<bool>`]: http://en.cppreference.com/w/cpp/container/vector_bool
+[`std::bitset`]: http://en.cppreference.com/w/cpp/utility/bitset
+
+---
+template: plain
+header: #### Packed 0/1 Values
+
+For dense "packing" of many 0/1-values, a classic array of `bool` is not
+space efficient:
+```
+bool bits[100000000];  // 100 million 0/1 values
+```
+
+In this case an `std::bitset` offers a trade-off that may be worth to
+consider:._[]
+```
+std::bitset<100000000> bits; // less space, more access time
+```
+
+.F[:
+For packed bit collections of a size which can only be determined at compile
+time, `std::vector<bool>` – a specialisation of `std::vector` – may be used.
+As this has its own set of potential problems, a detailed discussion will be
+postponed until later.
+]
+
+---
+template: plain
+name: details_on_classic_enum
+header: #### Classic Enumerations
+
+Classic enums (as C++ inherited from C) have the following shortcomings:
+
+* The names of the values declared by the `enum` type (aka. enum labels)
+  are **imported into the enclosing namespace**,_[]
+
+  * thus introducing the risking inadvertent name clashes, which is
+  * usually reduced by scoping `enum`-s in the body of some `class`
+
+* The **underlying type cannot be controlled** …
+  * … at least not easily and …
+  * … not in an implementation-dependant way.
+
+* There **cannot be a forward declaration**,
+  * e.g. in case the enum label values are not used but only its type as
+    argument to a function
+  * eventually resulting in (needless) recompilations when enum labels
+    are added or changed in value.
+
+.F[:
+Sometimes this specific property may not be a problem but an advantage.
+]
+
+---
+template: plain
+name: details_on_enum_class
+header: #### C++11 Scoped Enumerations
+
+With `enum class` C++11 resolved the problems of classic `enum`-s:._[]
+```
+enum class Color : unsigned short { Red, Green, Blue };
+```
+
+* The names of the labels are scoped:  
+  `Color::Red`, `Color::Green`, `Color::Blue`.
+
+* The type can be easily controlled:  
+  `unsigned short` in this case (if not specified default is `int`).
+
+* Forward declarations are possible:  
+  `enum class Color : unsigned short;`
+
+.I[
+For more information see subsection *[Scoped enumerations]* in
+http://en.cppreference.com/w/cpp/language/enum
+]
+[Scoped enumerations]: http://en.cppreference.com/w/cpp/language/enum#Scoped_enumerations
+
+.F[:
+Compared to enum classes in Java, C++ `enum class` is still poor on features!
+]
+
+---
+template: plain
+name: type_properties
+header: ### Querying Type Properties
+
+Header file [`<limits>`] defines specialisations of class
+`std::numeric_limits`._[] for all arithmetic types (integral and floating) and
+also `bool`, providing tests for many properties of these type.._[]
+
+One typical use is to find the range of values representable in some type:
+```
+std::numeric_limits<short>::min()         // lowest short value
+std::numeric_limits<short>::max()         // highest short value
+
+std::numeric_limits<int>::min()           // same for int
+std::numeric_limits<int>::max()           // etc.
+
+std::numeric_limits<unsigned long>::min() // same for
+…                                         // unsigned long etc.
+```
+
+.I[
+For more information see:
+http://en.cppreference.com/w/cpp/types/numeric_limits
+]
+
+.F[:
+Besides `std::numeric_limits` this header also defines the classes
+`std::float_round_style` and `std::float_denorm_style` specifying rounding and
+de-normalisation modes of floating point types.
+]
+
+[`<limits>`]: http://en.cppreference.com/w/cpp/header/limits
+
+---
+template: plain
+name: ptr_and_ref_types
 header: ## Zeiger und Referenzen
 
 --------------------------------------------------------------------------
@@ -542,11 +859,11 @@ Da Referenzen konzeptionell stets vorhandenen Speicherplatz bezeichnen,._[]
 müssen sie zwingend initialisiert werden.
 
 .N[
-Eine Referenz kann nach Definition und Intialisierung nicht mehr so verändert
+Eine Referenz kann nach Definition und Initialisierung nicht mehr so verändert
 werden, dass sie auf eine andere Speicherstelle verweist.
 ]
 
-Insofern entsprechen Referenzen den konstanten Zeigern, die selbst nicht
+Insofern entsprechen Referenzen konstanten Zeigern, die selbst nicht
 veränderbar sind, wohl aber der über sie erreichbare Speicherplatz.
 
 ```
@@ -563,7 +880,7 @@ r = v2;  // copies current content of v2 to v1 (referenced by r)
 Not considering some artistic ways of initialisation to deliberately subvert
 this property of a reference (like `T &r = *reinterpret_cast<T*>(0);`), an
 invalid reference might be created by accident when a dereferenced pointer is
-used to initialize a reference without prior checking: `T *p = 0; … T &r = *p`;
+used to initialise a reference without prior checking: `T *p = 0; … T &r = *p`;
 ]
 
 ---
@@ -572,12 +889,12 @@ name: const_reference
 header: #### Konstante Referenzen
 
 Die `const`-Qualifizierung bezieht sich bei der Referenz auf den darüber
-möglichen Zugriff:
+möglichen Zugriff.
 
-* Im Allgemeinen kann über eine Referenz angesprochener Speicherplatz gelesen
-  und verändert werden.
-
-* Über eine `const`-qualifizierte Referenz sind nur Lesezugriffe möglich.
+.N[
+Über eine `const`-qualifizierte Referenz sind nur Lesezugriffe möglich, selbst
+wenn die referenzierte Variable direkt auch veränderbar ist.
+]
 
 Im folgenden Beispiel kann die Variable `v` zwar direkt und bei Zugriff über
 `r1` verändert werden, nicht aber beim Zugriff über `r2`:
@@ -623,7 +940,6 @@ const T *cp = &cv; // OK
 T *p = &cv;        // ERROR
 ```
 ]
-
 
 Aside from the notational there is **no substantial difference** between
 pointers and references in the two examples above.._[]
@@ -750,58 +1066,874 @@ muss!
 
 ---
 template: plain
-name: static_polymorphism
-header: ## Statischer Polymorphismus
+name: var_and_object_init
+header: ## Variable and Object Initialisation
 
 --------------------------------------------------------------------------
 
-* [Defaultwerte für Argumente		](#default_arguments)
-* [Überladen von Funktionen		](#overloading_functions)
-* [Überladen von Operatoren		](#overloading_operators)
+* [Classic Initialisation Syntax	](#classic_initialisation)
+* [C++11 Brace Initialisation		](#cpp11_brace_init)
+* [C++11 Direct Member Initialisation	](#cpp11_member_init)
+* [C++11 Compile Time Initialisation	](#cpp11_constexpr)
 
 --------------------------------------------------------------------------
-
-Defaultwerte für Argumente wurden in diesen Abschnitt aufgenommen, da ihre
-Wirkung mit dem Überladen von Funktionen konkurriert.._[]
-
-.F[:
-Aus Hardware-Sicht ist die Implementierung bei echten Funktionen (ohne `inline`)
-allerdings unterschiedlich.
-]
-
 
 ---
 template: plain
-name: default_arguments
-header: ### Defaultwerte für Argumente
+name: classic_initialisation
+header: ### Classic Initialisation Syntax
 
-Argumente können "von rechts nach links" mit Default-Werten versehen werden,
-das heißt:
+Until C++11 there were three different styles for initialisations:
 
-* Sobald ein Argument einen Default-Wert hat,
-* müssen alle rechts davon stehenden ebenfalls einen haben.
+* [Assignment-like Syntax](#assignment_like_init)
+* [Constructor Call Syntax](#ctor_call_init)
+* [C (inherited) Syntax for Aggregates](#aggregate_init)
+
+There are also clearly defined rules what happens in case of:
+
+* [Uninitialised Variables](#uninitialised_variables)
+* [Uninitialised Objects](#uninitialised_objects)
+
+---
+template: plain
+name: assignment_like_init
+header: #### Assignment-like Initialisation
+
+The assignment-like uses an equals sign to separate the name of the variable (or
+object) initialised from the initialising expression.
+
+```
+int x = 42;
+double pi = 3.14152;
+std::string greet = "hello, world";
+```
 
 .N[
-Der Defaultwert muss beim Funktionsaufruf bekannt sein, ist also Bestandteil des
-Funktions-Prototyps und steht ggf. zusammen mit diesem in einem Header-File.
+The difference to assignment is the type name on the left.._[]
 ]
 
-Die Namen für die formalen Argumente sind auch in diesem Fall optional:._[]
+.F[:
+Since C++11 the type name can also be replaced with `auto`, which means that the
+variable will have the type of the initialising expression, with reference (`&`),
+`const` or `volatile` qualifiers stripped away.
+]
+
+---
+template: plain
+name: ctor_call_init
+header: #### Constructor Call Syntax
+
+Here the initialisation looks like calling a constructor, by following the
+object with a comma-separated list of argument values, enclosed in parentheses:
+
 ```
-// the following function can be called with 1..3 arguments:
-double foo(int &count, int minsize = 0, char separator = 'z');
-…
-// same as:
-double foo(int &, int = 0, char = 'z');
+std::string greet("hello");
+std::string line(80, '-');
+```
+
+An exception from this rule is initialising with the default constructor.
+In this case there are no parentheses following.
+```
+std::string empty;  // initialised with default (no content)
+```
+
+If (empty) parenthesis were used, this would be seen (like in C) as an `extern`
+declaration of a function returning an `std::string`:._[]
+```
+std::string foo(); // NOT a default-initialised std::string !!
 ```
 
 .F[:
-Using names for arguments in prototypes has pro's and con's: it is of course
-more self-documenting but there is at least a remote chance for surprising and
-**extremely hard to find** name clashes with preprocessor macros. Hint: view
-preprocessor output (`g++ -E …`) whenever you get desparate because of an
-completely unexplainable syntax error in your source code.
+If later that name were used with an `std::string` member function like
+`foo.empty()` the compiler will typically complain that it is expecting a
+function call operation.
 ]
+
+---
+template: plain
+name: aggregate_init
+header: #### C (inherited) Syntax for Aggregates
+
+Here after the equals signed follow several comma separated values, enclosed in
+braces. This can be used as well for arrays._[]
+```
+int primes[] = {2, 3, 5, 7, 11};
+```
+
+as for structures
+```
+struct Point { float x, y; };
+…
+Point origin = {0.0, 0.0};
+```
+
+or combinations:
+```
+Point polygon[] = {
+    { 7.23, 12.1 },
+    { 1, 3.5  },
+    …
+};
+```
+
+.F[:
+If the size is omitted it will be determined from the number of initialising
+values.
+]
+
+---
+template: plain
+name: uninitialised_variables
+header: #### Uninitialised Variables (of Basic Types)
+
+Variables of basic types must not be initialised. Their initial value depends on
+the location of their definition:
+
+Variables at a fixed address assigned at compile time, i.e.
+
+* global variables,
+* block-local `static` variables, and
+* `static` class members
+
+assume an initial value of
+
+* `false` for booleans,
+* `nullptr` for pointers, and
+* zero (according to its type).
+
+.W[
+Variables on the stack and on the heap have undefined initial values, maybe even
+"impossible" values for the given type on the given hardware.._[]
+]
+
+.F[:
+The content is usually just the "bits and bytes" previously stored at that
+memory location. On some hardware not all bit patterns are valid content for
+floating point variables or pointers.
+]
+
+---
+template: plain
+name: uninitialised_objects
+header: #### Uninitialised Objects
+
+Strictly speaking, "uninitialised objects" do not exist, as any object is (at
+least) initialised by the default constructor._[] of its class, but:
+
+* If the default constructor is **automatically supplied** by the compiler, any
+  data member of a built-in type receives the same initialisation as if it were
+  not explicitly initialised.
+
+* Same if a default constructor is **defined by the class itself** but forgoes
+  to initialise some data members.
+
+.N[
+The rules described so far apply recursively, i.e. what happens exactly depends
+on the type of the member: For basic types the rules from the previous page
+apply, for (nested) objects the rules on this page.
+]
+
+.F[:
+The term default constructor might be a bit misleading in some cases, because
+it is easily confused with *"(a) constructor supplied by default"*. The latter
+**may or may not** be the case for the default constructor, but the technical
+meaning is this: *"the constructor that can be called without arguments"*.
+]
+
+---
+template: plain
+name: cpp11_brace_init
+header: ### C++11 Brace Initialisation
+
+Since C++11 braces are accepted in all initialising contexts shown so far (and
+some more). The equals sign is made optional.._[]
+
+.pull-left[
+```
+int x{42};
+double pi{3.14152}
+std::string greet{"hello"}
+std::string line{80, '-'}
+std::string empty{};
+int primes[]{2, 3, 5, 7, 11};
+Point origin{0.0, 0.0};
+Point polygon[] {
+    { 7.23, 12.1 },
+    { 1, 3.5  },
+    …
+};
+```
+]
+.pull-right[
+```
+int x = {42};
+double pi = {3.14152}
+std::string greet = {"hello"}
+std::string line = {80, '-'}
+std::string empty = {};
+int primes[] = {2, 3, 5, 7, 11};
+Point origin = {0.0, 0.0};
+Point polygon[] = {
+    { 7.23, 12.1 },
+    { 1, 3.5  },
+    …
+};
+```
+]
+
+.F[:
+As no "C heritage" has to be taken into account the default constructor has an
+explicitly empty argument list, and initialising values that cannot be
+represented in the target type cause the compilation to fail, not just a
+warning.
+]
+
+---
+template: plain
+name: cpp11_member_init
+header: ### C++11 Direct Member Initialisation
+
+Class members can now be initialised directly (with their definition).
+
+* The values specified are considered to be the default if there is
+  **no member initialisation** via
+
+  * the member initialisation list of the constructor used to initialise an
+    object, or
+  * as direct assignment in the construct block.
+
+* Supported initialisation syntax is
+
+  * classic assignment style,
+  * brace initialisation, but
+  * **not constructor style with round parenthesis!**
+
+.pull-left[
+```
+class Point {
+    float x = 0.0;
+    float y = 0.0;
+    …
+};
+```
+]
+.pull-right[
+```
+class Point {
+    float x{0.0};
+    float y{0.0};
+    …
+};
+```
+]
+
+---
+template: plain
+name: cpp11_constexpr
+header: ### C++11: Compile-Time Initialisation (`constexpr`)
+
+C++11 added the new keyword `constexpr` which may be applied to
+
+* [data definitions](#constexpr_data) and
+* [function definitions](#constexpr_data)
+
+---
+template: plain
+name: constexpr_data
+header: #### Compile-Time Initialised Data
+
+By using `constexpr` with a data definition it is guaranteed that the variable
+can be initialised at compile time.
+
+* The compiler checks for the initialiser whether its value can be determined,
+  because it is
+
+  * a literal constant,
+  * an expressions, or
+  * result of `constexpr` functions
+
+* allowing to use such values in any context that requires compile time
+  constants, most importantly
+
+  * array dimensions
+  * value template arguments
+  * or as part of expressions or function call arguments when initialising
+    some other `constexpr` data item.
+
+.N[
+Compile time initialised data may also be stored in special ways, like in
+statically read-only or dynamically write-protected memory.
+]
+
+---
+
+template: plain
+name: constexpr_functions
+header: #### Compile-Time Callable Functions
+
+By using `constexpr` with a function definition such function may (also) be
+called at compile time.
+
+* In C++11 this was rather restricted:._[]
+
+  * `constexpr` were limited to a single return statement
+  * though recursive calls were allowed, and
+  * recursion could be stopped with a conditional expression.
+
+* In C++14 this is much relaxed, but there are still limitations, e.g.:._[]
+
+  * **no** `asm`, `goto`, or `try`-`catch`,
+  * variables only of literal types and with initialisation,
+  * no `static` or `thread_local` storage duration.
+
+.N[
+If a call to a `constexpr` function cannot be evaluated at compile time, a run
+time version is made available and accordingly called where the value it returns
+is needed.
+]
+
+.F[:
+For more information see:
+http://en.cppreference.com/w/cpp/language/constexpr
+]
+
+---
+template: plain
+name: ctors_and_dtors
+header: ## Constructors and Destructors
+
+--------------------------------------------------------------------------
+
+* [General Purpose				](#ctor_dtor_generally)
+* [(No) Memory Allocation in Constructors	](#ctor_no_memory_alloc)
+* [Memory of Variable Size at Run-Time		](#runtime_sized_memory)
+* [Compile Time vs. Run Time Sizing		](#ct_vs_rt_sizing)
+* [(No) Memory De-Allocation in Destructors	](#dtor_no_memory_dealloc)
+* [Precautions in Memory Allocating Classes	](#prc_memalloc_classes)
+* [Exceptions in Constructors and Destructors	](#ctor_dtor_exceptions)
+* [Re-Using Constructors			](#ctor_reuse)
+
+--------------------------------------------------------------------------
+
+---
+template: plain
+name: ctor_dtor_generally
+header: ### General Purpose of Constructors and Destructors
+
+Constructors and Destructors are one of the key additions of C++ over C.
+
+Together they guarantee that
+
+* initialisation will take place when an object comes into existence, and
+
+* will be reliably reverted when an object ceases to exist.._[]
+
+This is – of course – only true for objects with a scope-bound lifetime. In case
+of local `static` object
+
+* the initialisation will take place only once (when the scope is entered the
+  first time, and
+
+* reverted after the main program has ended.
+
+.F[:
+This easily extends to general resource allocation and deallocation, as is
+purposefully applied in the [RAII-pattern].
+]
+
+[RAII-pattern]: http://en.wikipedia.org/wiki/Resource_Acquisition_Is_Initialization
+
+---
+template: plain
+name: ctor_no_memory_alloc
+header: ### (No) Memory Allocation in Constructors
+
+A common misconception is that it is the constructor's responsibility to allocate
+memory for objects of its class:
+
+.pull-left[
+Classic C++ initialisation:
+```
+class Point {
+    float x;
+    float y;
+public:
+    Point(float x_, float y_)
+        : x(x_), y(y_)
+    {}
+};
+```
+]
+.pull-right[
+C++11 brace initialisation:
+```
+class Point {
+    float x;
+    float y;
+public:
+    Point(float x_, float y_)
+        : x{x_}, y{y_}
+    {}
+};
+```
+]
+
+In this case there is already memory allocated when the constructor is called to
+initialise objects.
+```
+Point origin(0.0, 0.0);	  // classic initialisation
+Point other{3.1, 7.12};   // C++11 brace initialisation
+Point zzz = {1.7, 0.0};   // as before, with equals sign
+```
+
+---
+template: plain
+name: runtime_sized_memory
+header: ### Memory of Variable Size at Run-Time
+
+The reason for the misconception is that **some** classes (like `NamedPoint` below)
+will get space allocated for two `float`-s and one pointer, but the space pointed
+to by `name` is on the heap:
+```
+class NamedPoint {
+    float x, y;
+    char *name;
+public:
+    NamedPoint(const char * name_, float x_, float y_)
+        : x{x_}, y{y_}
+        , name{new char[std::strlen(name_)+1]} {
+        std::strcpy(name, name_);
+    }
+};
+```
+
+.W[
+**Therefore class `NamedPoint` needs a destructor – and probably a copy
+constructor and assignment too.**._[]
+]
+
+.F[:
+Otherwise a resource leak or dangling pointers will almost certainly result as
+soon as objects of this class get created or assigned by copying from existing
+objects.
+]
+
+---
+template: plain
+name: ct_vs_rt_sizing
+header: ### Compile Time vs. Run Time Sizing
+
+The necessity to do memory allocation as part of the constructor – with the
+ultimate consequence to implemented more operations – does not arise if the
+space requirements are variable but fixed at compile time.._[]
+
+.pull-left[
+```
+class FString {
+    const std::size_t N;
+    char *data;
+public:
+    FString(std::size_t n)
+        : N{n}
+        , data{new char[N+1]} {
+        data[0] = '\0';
+    }
+    ~FString() {
+        delete[] data;
+    }
+};
+…
+FString fstr(20);
+```
+]
+
+.pull-right[
+```
+template<std::size_t N>
+class FString {
+    char data[N+1];
+public:
+    FString() {
+        data[0] = '\0';
+    }
+};
+…
+FString<20> fstr;
+```
+* Above: sized at **compile time**.
+* Left: sized at **run time**.
+]
+
+.F[:
+The design of a class for "fixed length" character strings taken as example is
+is only partially fleshed out here – in practice some more member functions
+would make sense.
+]
+
+---
+template: plain
+name: dtor_no_memory_dealloc
+header: ### (No) Memory De-Allocation in Destructors
+
+Classes that do no (further) memory allocation in their constructor code also
+need no deallocation in their destructor – which may of course still be
+necessary for other reasons.
+
+Continuing with the above examples, only `NamedPoint` has the necessity for a
+destructor:
+.pull-left[
+```
+class Point {
+    …
+    // no destructor required
+    // to "de-allocate" memory
+    ~Point() {
+        // … but maybe for
+        // other reasons
+    }
+    …
+};
+```
+]
+
+.pull-right[
+```
+class NamedPoint {
+    …
+    ~NamedPoint() {
+        delete[] name;
+        // … maybe more to do
+    }
+    …
+};
+```
+]
+
+But: supplying a destructor which does nothing is neither necessary nor can it
+be considered "good style" since it may not be optimised-out and slow down the
+program each time an object ends it life.
+
+---
+template: plain
+name: prc_memalloc_classes
+header: ### Precautions in Memory Allocating Classes
+
+Just copying the `data` pointer as the default constructor and assignment
+operator would do is surely the wrong thing, so these should at least be
+blocked,._[] which is particularly easy since C++11.
+
+```
+class NamedPoint {
+    …
+    NamedPoint(const NamedPoint &) =delete;
+    NamedPoint& operator=(const NamedPoint &) =delete;
+    …
+};
+```
+
+.F[:
+Still better were to implememt the operations so that the `name` member gets
+properly cloned:
+
+```
+   … // inside the class above
+    NamedPoint(const NamedPoint &init)
+        : x{init.x}, y{init.y}
+        , name{std::strcpy(new char[std::strlen(init.name)+1], name)}
+    {}
+    NamedPoint& operator=(const NamedPoint &rhs) {
+        if (this != &rhs) {
+            x = rhs.x; y = rhs.y;
+            delete[] name;
+            name = std::strcpy(new char[std::strlen(rhs.name)+1], name);
+        }
+        return *this;
+    }
+```
+]
+
+---
+template: plain
+header: #### Alternative Design with "Self-Contained" Helper Class
+
+A still better design would put allocation and deallocation in a helper class
+which is self-contained with respect to memory management._[]
+```
+class FString {
+    const std::size_t N;
+    char *data;
+public:
+    FString(std::size_t n) : N{n}, data{new char[N+1]} {
+        data[0] = '\0';
+    }
+    FString(const FString &init) : data{new char[init.N+1]} {
+        std::strcpy(data, init.data);
+    }
+    ~FString() { delete[] data; }
+    FString& operator=(const FString &rhs) {
+        std::strncpy(data, rhs.data, N)[N] = '\0';
+    }
+    operator const char*() const { return data; }
+};
+```
+
+.F[:
+Whether that way class `FString` is fleshed-out here is actually desirable for a
+generically usable "fixed length string class" is disputable, but it was chosen
+that way to mimic the prior approach (without helper) as much as possible.
+]
+
+---
+template: plain
+header: #### Simplifying Clients with Self-Contained Members
+
+Now class `NamedPoint` can be implemented without worrying about memory
+allocation and de-allocation:
+```
+class NamedPoint {
+    float x, y;
+    FString name;
+public:
+    Point(const char *name_, float x_, float y_)
+        : x(x_), y(y_), name(std::strlen(name_)  {
+        name = name_;
+    }
+    Point(const Point&) =default;            // if not =delete
+    Point& operator=(const Point&) =default; // if not =delete
+    …
+};
+```
+
+The above also demonstrates the new syntax of C++11 to explicitly request the
+default copy constructor and assignment._[], which means the operations are
+recursively forwarded to all of the members.
+
+.F[:
+For backward compatibility, generating default versions of copy constructor and
+assignment will still happen in C++11 without the above.
+]
+
+---
+template: plain
+name: ctor_dtor_exceptions
+header: ### Exceptions in Constructors and Destructors
+
+Generally constructors and destructors
+
+* may "fail" (in doing what they are expected to do) and
+
+* (in general) **one** option is to inform clients about the
+  problem by throwing an exception.
+
+.N[
+The topic is covered in more detail later, with exceptions, so the following
+pages only try to alert the reader for the problems caused by throwing from
+constructors and destructors.
+]
+
+---
+template: plain
+header: #### Throwing from Constructors
+
+When a constructor cannot establish the object state expected by the client
+(that created the object and caused the constructor to initialise it), the
+preferred way is to throw an exception.
+
+Often this is the easiest way
+
+* for the constructor code (that may just throw) …
+* … and the client, that may catch the problem at an adequate location.
+
+The only thing to remember here is that destructors are not enabled before
+the constructor ends normally,._[] hence partially created objects may required
+to
+
+* wrap the constructor code into a `try`-block and
+* handle exceptions in a local `catch`-block,
+* finally re-throwing them (if the object is not left in a usable state).
+
+.F[:
+This makes another good argument to use "self-contained" members, because then
+the compiler does the appropriate clean-up, as for all fully constructed member
+objects the destructor will be called when the construction of the containing
+object fails with an exception.
+]
+
+---
+template: plain
+header: #### Throwing from Destructors
+
+As – contrary to the constructor – the destructor usually just "cleans-up" and
+may not so easily run into resource limitations, there is much lesser reason for
+problems during destruction.
+
+But the main problem is:
+
+* Destructors are sometimes run during stack-unwinding after an exception has
+  occurred.
+* When a destructor then would throw (again), it is difficult to decide which
+  exception should take priority.
+
+Hence, when a destructor is run during stack-unwinding when handling an
+exception an some destructor it `throw`-s (again) the program is terminated.._[]
+
+.W[
+Therefore the general rule is never to let an exception escape from a
+destructor.
+]
+
+.F[:
+A specific terminate handler for that case can be installed, but it may not
+(portably) return to its caller and continue.
+]
+
+---
+template: plain
+name: ctor_reuse
+header: ### Re-Using Constructors
+
+C++11 has introduced two features to re-use code from existing
+constructors:
+
+* [Constructor Delegation](#ctor_delegation) and
+
+* [Constructor Inheritance](#ctor_inheritance)
+
+The former e.g. allows to have some few *"work-horse"* constructors that are
+called from a number of *"convenience constructors"*.
+
+The latter extends the possibility to *"import"* members from base classes
+with a `using`-directive into a derived class to constructors.._[]
+
+.F[:
+It is not quite clear whether this was not allowed in C++98, maybe it was just
+an oversight …
+]
+
+---
+template: plain
+name: ctor_delegation
+header: #### Constructor Delegation
+
+With this feature – new in C++11 – a constructor of a class can be implemented
+in terms of (calls to) some other constructor:
+
+* It works by calling the delegated-to constructor as part of the
+  member-initialisation list of the delegating constructor.
+
+* The delegating constructor must not have anything else besides the
+  delegated-to constructor in its member initialisation list.
+
+* Constructor delegation may be changed but must not be recursive.._[]
+
+.F[:
+According to the C++11 standard a program with recursive constructor delegation
+is ill-formed and hence should not compile. But at least some older compilers
+seem not to detect this but produce a core dump when run.
+]
+
+---
+template: plain
+header: ##### Constructor Delegation Example
+
+In the example following the `FString` constructor taking a `const char *`
+argument reuses the `FString` constructor taking an `std::size_t` argument
+for memory allocation:
+```
+class FString {
+    const std::size_t N;
+    const char *data;
+public:
+    FString(std::size_t n) : N{n}, data{new char[N+1]} {
+        data[0] = '\0';
+    }
+    FString(const char *init) : FString(std::strlen(init)) {
+	std::strcpy(data, init);
+    }
+    ~FString() {
+        delete[] data;
+    }
+    …
+};
+```
+
+---
+template: plain
+header: ##### Constructor Delegation and Exceptions
+
+There is a small but useful change with respect to the rules when a destructor
+is enabled:
+
+* This happens when the innermost (leaf-) constructor has reached its normal
+  end.
+
+* Therefore a constructor delegated-to should put the object
+
+  * in a usable state – i.e. where all its invariants are established.
+
+  * or at least provide a means by which the destructor can decide what has to
+    be cleaned-up and what is not yet initialised at all.
+
+.W[
+It should be noted that it is (somewhat) against the spirit of C++-constructors
+to leave objects in a "half-baked" state …._[]
+]
+
+.F[:
+In general, if an object has constructors which are only used to delegate to and
+which do **not** establish all the invariants a user may expect, these
+constructors should probably not be `public` but `private` (or `protected` at
+most and properly documented with respect to the remaining initialisations.
+]
+
+---
+template: plain
+name: ctor_inheritance
+header: #### Constructor Inheritance
+
+If the base class constructors also work for the derived class, in C++11 it may
+be made visible in C++11 with a `using` directive:._[]
+```
+class Point {
+protected:
+    float x, y;
+public:
+    Point() : x(0.0), y(0.0) {}
+    Point(float x_, float y_) : x(x_), y(y_) {}
+    …
+};
+…
+class MovablePoint : public Point {
+public:
+    using Point;
+    void move(float dist_x, float dist_y) {
+        x += dist_x;
+        y += dist_y;
+};
+```
+
+.F[:
+Typically a derived class adds its own data members and therefore requires
+extended initialisation, so it needs its own set of constructors.
+]
+
+---
+template: plain
+name: static_polymorphism
+header: ## Static Polymorphism
+
+--------------------------------------------------------------------------
+
+* [Überladen von Funktionen		](#overloading_functions)
+* [Überladen von Operatoren		](#overloading_operators)
+* [Defaultwerte für Argumente		](#default_arguments)
+* [Overloading and Overriding		](#overloading_vs_overriding)
+
+--------------------------------------------------------------------------
+
+Argument default values were included here as their applicability overlaps
+with function overloading, though – viewed from the hardware perspective –
+for non-`inline` functions they are implemented quite differently.
 
 ---
 template: plain
@@ -842,7 +1974,7 @@ header: #### Überladen bei Parametern mit ohne `const`
 
 Auch die `const`-Qualifizierung eines Parameters macht einen Unterschied:
 .pull-left[
-In Fortsetzung des Beispiels von der vorhergehenden Seite:
+In **Fortsetzung** des Beispiels von der vorhergehenden Seite:
 ```
 char data[100];
 …
@@ -866,10 +1998,9 @@ Existiert nur eine der beiden Funktionen (die sich voneinander nur in der
 
 * Existiert **allein** die Funktion für den konstanten Fall, wird sie **auch**
   für modifizierbare Argumente verwendet.._[]
-
 * **Ohne** die Funktion für den konstanten Fall führt der Aufruf mit einem
   nicht-modifizierbaren Argument zum **Compile-Fehler** (im Beispiel etwa
-  `foo("hi")`, wenn nur Version `/*4'/` aber nicht `/*1*/` existiert).
+  `foo("hi")`, wenn nur Version `/*4*/` aber nicht `/*1*/` existiert).
 
 .F[:
 Es ist kein Problem einer Funktion, die verspricht, den Inhalt einer über ein
@@ -896,7 +2027,7 @@ Operatoren._[] können überladen werden mit Funktionen, deren Name mit dem Wort
 * Einige Operatoren sind hinsichtlich der Überladung auf Member-Funktionen
   eingeschränkt.
 
-* Zur konsistenten Überladung ganzer Operatorgruppen kann [Boost.Operators]
+* Zur konsistenten Überladung ganzer Operator-Gruppen kann [Boost.Operators]
   hilfreich sein.
 
 Weiterführende Links:
@@ -905,8 +2036,8 @@ Weiterführende Links:
 * http://www.tutorialspoint.com/cplusplus/cpp_overloading.htm
 
 .F[:
-Therefore the meaning of operators for builtin-types cannot be changed. If you
-want to come close to the behaviour of a given builtin types but change or
+Therefore the meaning of operators for built-in-types cannot be changed. If you
+want to come close to the behaviour of a given built-in types but change or
 remove some predefine operations, you will typically have to **add** a new class
 and implement all the operations it should support.
 ]
@@ -923,14 +2054,18 @@ MyClass operator+(const MyClass &lhs, const MyClass &rhs) {
 }
 ```
 
-Der Rückgabetyp ist dabei beliebig, die `return`-Anweisung muss natürlich vom
+Der Rückgabe-Typ ist dabei beliebig, die `return`-Anweisung muss natürlich vom
 Typ her passend sein.
 
 Genauer gesagt, der Ausdruck hinter `return` muss
 
-* entweder exakt den Rückgabetyp haben (`MyClass` im Beispiel)
+* entweder exakt den Rückgabe-Typ haben (`MyClass` im Beispiel)
+* oder in diesen umwandelbar sein.._[]
 
-* oder in diesen umwandelbar sein.
+.F[:
+See also [here](#brace_init_shorthand) for an interresting short-hand notation
+possible with C++11 brace initialisers.
+]
 
 ---
 template: plain
@@ -944,7 +2079,7 @@ MyClass &MyClass::operator+=(const MyClass &rhs) {
 }
 ```
 
-Auch hier ist der Rückgabetyp grundsätzlich frei wählbar.
+Auch hier ist der Rückgabe-Typ grundsätzlich frei wählbar.
 
 .N[
 Gemäß den Konventionen bei eingebauten Typen wird in der Regel das durch die
@@ -1086,9 +2221,148 @@ c = a + b;        // move assignment (may modify temporary
 Of course, adding operands of type `MyClass` in the last line of the example
 also assumes `operator+` exists and returns by value, as is the usual behaviour.
 In the (unusual) case that operator were defined but returns something that C++
-considers to be "more persistant" (like a reference), copy assignment would be
+considers to be "more persistent" (like a reference), copy assignment would be
 used instead, though a move could be enforced then: `c = std::move( … );`
 ]
+
+---
+template: plain
+name: default_arguments
+header: ### Defaultwerte für Argumente
+
+Argumente können "von rechts nach links" mit Default-Werten versehen werden,
+das heißt:
+
+* Sobald ein Argument einen Default-Wert hat,
+* müssen alle rechts davon stehenden ebenfalls einen haben.
+
+.N[
+Der Defaultwert muss beim Funktionsaufruf bekannt sein, ist also Bestandteil des
+Funktions-Prototyps und steht ggf. zusammen mit diesem in einem Header-File.
+]
+
+Die Namen für die formalen Argumente sind auch in diesem Fall optional:._[]
+```
+// the following function can be called with 1..3 arguments:
+double foo(int &count, int minsize = 0, char separator = 'z');
+…
+// same as:
+double foo(int &, int = 0, char = 'z');
+```
+
+.F[:
+Using names for arguments in prototypes has pro's and con's: it is of course
+more self-documenting but there is at least a remote chance for surprising and
+**extremely hard to find** name clashes with preprocessor macros. Hint: view
+preprocessor output (`g++ -E …`) whenever you get desperate because of an
+completely unexplainable syntax error in your source code.
+]
+
+---
+template: plain
+name: overloading_vs_overriding
+header: ### Overloading and Overriding
+
+The above two terms are sometimes confused, though – if used precisely – they
+have a well defined, different meaning:._[]
+
+* *Overloading* means there are two (or more) functions with identically spelled
+  function names but with different parameter lists so that the compiler can
+  select one based on the actual call arguments.
+
+* *Overriding* means that some class uses the same name for a member function
+  that has already been used in one of its base classes.
+
+As the usual translation for "overriding" to German is "überschreiben", by
+sloppy back-translation sometimes the term "overwriting" has been introduced
+as a synonym for "overriding".
+
+.F[:
+Disregarding the fact that an object in a member function call is syntactically
+not part of the argument list (but goes to the left, separated with a dot), from
+a purely technical perspective the object involved in the call is just another
+argument and hence "under the hood" overloading and overriding are actually
+related.
+]
+
+---
+template: plain
+name: overriding_example
+header: #### Overriding Example (1)
+
+In the following example there are three overloaded member functions `foo`:
+```
+class Base {
+    …
+    void foo(int);
+    void foo(double);
+    void foo(const char *);
+    …
+};
+```
+
+It are **all(!)** of the above that get overridden by a **single** member
+function `foo` in a derived class:
+```
+class Derived : public Base {
+    …
+    void foo(double);
+    …
+};
+```
+
+---
+template: plain
+name: overriding_example
+header: #### Overriding Example (2)
+
+How the following calls are resolved sometimes even surprises seasoned C++
+developers:
+```
+Base b;
+b.foo(42);       // calls Base::foo(int) -- no surprise
+b.foo(3.14);     // calls Base::foo(double) -- no surprise
+b.foo("hello");  // calls Base::foo(const char *) -- no surprise
+…
+Derived d;
+d.foo(3.14);     // calls overriding Derived::foo(double)
+d.foo(42);       // as before(!) with type conversion of argument
+d.foo("hello");  // ERROR (does not compile)
+```
+
+.W[
+Especially if there are automatically applied type conversions (like above from
+`int` to `double`) the problem might go unnoticed for a long time.
+]
+
+---
+template: plain
+name: overriding_and_using
+header: #### Overriding and the `using` Directive
+
+If a derived class shall inherit **all** overloads of its base class and then
+**some** are selectively overridden, the `using` directive will help:
+```
+class Derived : public Base {
+    …
+    using Base::foo;
+    void foo(double);
+    …
+};
+…
+Derived d;
+d.foo(3.14);     // calls overriding Derived::foo(double)
+d.foo(42);       // calls Base::foo(int) -- no surprise
+d.foo("hello");  // calls Base::foo(const char *) -- no surprise
+```
+
+.W[
+There might still be surprises in case of argument types that do not exactly
+match and hence undergo a conversion.
+]
+
+Luckily many oversights falling into that category of problems will manifest
+themselves in ambiguities and cause the compilation to fail.
 
 ---
 template: plain
@@ -1220,7 +2494,7 @@ auf die Basisklasse weisenden Ende spezifiziert.
 
 .F[:
 To be clear once more: what is discussed here is a class relation that implies
-substitutibility according to the LSP. As inheritance is at the heart of
+substitutability according to the LSP. As inheritance is at the heart of
 object-oriented modelling and programming, it will be covered in more depth
 later ([see Wednesday Part 1 Inheritance](05_wednesday1.html#inheritance)).
 ]
@@ -1308,9 +2582,9 @@ eingesetzt werden:
 
   * automatisch nur typisierte in generische Zeiger
 
-* Basisklassen in abgeleitete Klassen (Downcast)
+* Basisklassen in abgeleitete Klassen (Down-Cast)
 
-  * automatisch nur abgeleitete Klassen **→** Basisklassen (Upcast)
+  * automatisch nur abgeleitete Klassen **→** Basisklassen (Up-Cast)
 
 .F[:
 The most typical reason for this is that many compilers will issue a warning
@@ -1331,7 +2605,7 @@ Hiermit lassen sich ausschließlich Typ-Konvertierungen innerhalb von
 Klassenhierarchien vornehmen.
 
 .N[
-Im Fall von Downcasts findet zur Laufzeit eine Überprüfung mit Fehleranzeige
+Im Fall von Down-Casts findet zur Laufzeit eine Überprüfung mit Fehleranzeige
 statt, wenn der Cast nicht durchführbar ist.._[]
 ]
 
@@ -1393,7 +2667,7 @@ header: #### Typ-Konvertierung mit `reinterpret_cast`
   [Boost.Variant]: http://www.boost.org/doc/libs/1_57_0/doc/html/variant.html
 
 Dieses Konstrukt wird vor allem dazu eingesetzt, Zeiger auf (bekannte)
-Hardware-Adressen zu setzen, wie das u.a. im Bereich der Embedded Progammierung
+Hardware-Adressen zu setzen, wie das u.a. im Bereich der Embedded Programmierung
 und bei Gerätetreibern notwendig sein kann.._[]
 
 .F[:
@@ -1407,8 +2681,8 @@ erfolgt).
 
 Darüber hinaus kann man mit einem `reinterpret_cast`
 
-* **wie auch per `static_cast`** generische Zeiger (`void *`) in typisierte Zeiger
-  umwandeln, und
+* **wie auch per `static_cast`** generische Zeiger (`void *`) in typisierte
+  Zeiger umwandeln, und
 
 * **anders als per `static_cast`** typisierte Zeiger **direkt** in anders
   typisierte Zeiger umwandeln.
@@ -1522,7 +2796,6 @@ header: #### Typ-Konvertierungen durch Konstruktoren
 Konstruktoren sind dann automatische Typ-Konvertierungen, wenn sie
 
 * genau ein Argument besitzen und
-
 * **nicht** mit dem Schlüsselwort `explicit` markiert sind.
 
 ```
@@ -1547,25 +2820,53 @@ void foo(MyClass);
 …
 foo(33);            // OK (automatic conversion by c'tor)
 foo(3.3)            // ERROR, c'tor is explict
-foo(MyClass(3.3));  // OK (c'tor is used explicitly)
+foo(MyClass{3.3});  // OK (c'tor is used explicitly)
 …
-MyClass x(-1);      // this also work with explicit c'tor but ...
+MyClass x{-1};      // this would also work with explicit c'tor but ...
 x = 33;             // ... here an automatic conversion is necessary ...
 x = 3.3;            // ... so this will fail if there is none
 ```
 .I[
 Die Notwendigkeit einer Typ-Konvertierung bei der Zuweisung hängt auch davon
-ab, welche zusätzlichen Zuweisung-Operatoren eine Klasse ggf. definiert._[]
+ab, welche (zusätzlichen) Zuweisungs-Operatoren eine Klasse ggf. definiert._[]
 ]
 
 .F[:
-An assignment operator taking **exactly** type of the expression on its right
-hand side as argument will be always be preferred (and of course applied without
-any need for a conversion). In case the assignment operator takes a
-`const MyClass&` argument – as the automatically defined assignment does–, a
-temporary will be if there is a non-explicit c'tor or a type-cast operator
-applicable as automatic conversion.
+An assignment operator taking **exactly** the type of the expression of its
+right hand operand as argument will always be preferred (and of course applied
+as there is no need for a conversion). In case the assignment operator takes a
+`const MyClass&` argument a temporary will be created if a non-`explicit` c'tor
+or a type-cast operator is available as automatic conversion.
 ]
+
+---
+template: plain
+name: brace_init_shorthand
+header: #### Brace Initialisers as Short-Hand Notation
+
+In some contexts brace initialisation syntax may also be used as short-hand
+notation for constructor calls, without naming the class:
+```
+class MyClass {
+   …
+   MyClass();
+   MyClass(int);
+   MyClass(const char*, double);
+   …
+};
+…
+void foo(MyClass);
+foo({});               // foo(C{});
+foo({42});             // foo(C{42});
+…
+MyClass bar() {
+   …
+   return {"hi", 3.14};   // return C{"hi", 3.14}
+}
+```
+
+The only necessary precondition is that the constructors to be applied are not
+`explicit`, their argument count does not matter.
 
 ---
 template: plain
@@ -1665,7 +2966,7 @@ extern void foo(bool);
 template: plain
 header: #### Beispiele: `explicit operator bool()`
 
-Die folgenen Code-Fragmente setzen das begonnene Beispiel fort:
+Die folgenden Code-Fragmente setzen das begonnene Beispiel fort:
 
 * `#1` zeigt eine etwas ungewöhnliche aber erlaubte Form des Aufrufs der
   Typ-Konvertierung in `bool`.
@@ -1737,11 +3038,6 @@ der stillschweigende Wechsel zwischen den beteiligten Typen als "natürlich"
 empfunden wird.
 ]
 
----
-template: plain
-name: exercise_mon1
-header: ## Praktikum
-
 </textarea>
 <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 <!-- ::::::::::::::::::::: )-: ereh TNETNOCLAER fo dne :::::::::::::::::::: -->
@@ -1753,5 +3049,3 @@ header: ## Praktikum
     </script>
   </body>
 </html>
-
-

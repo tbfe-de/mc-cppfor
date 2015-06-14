@@ -73,8 +73,8 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
   Template used for for pages INTRODUCING to a new Info-Graphic
   *****************************************************************************
   On this kind of pages a size-reduced version of the whole info graphic will
-  be reproduced and occupies aproximately 2/3 of the page width. So only add
-  little information, preferrably links to later pages dealing with single
+  be reproduced and occupies approximately 2/3 of the page width. So only add
+  little information, preferably links to later pages dealing with single
   sections of the info graphic.
 
   On pages USING THIS TEMPLATE the following attributes must be set:
@@ -184,7 +184,7 @@ Iteratoren, welche der Kategorie *Unidirectional-Iterator* angehören, können
 sich – ihrem Namen entsprechend – nur in eine Richtung bewegen, nämlich vom
 Anfang eines Containers zu dessen Ende hin.
 
-Um pure Unidirektionale Iteratoren handelt es sich bei
+Um pure unidirektionale Iteratoren handelt es sich bei
 
 * `std::forward_list<T>::iterator`
 
@@ -231,8 +231,8 @@ Die Kategorie *Random-Access-Iterator* schließt die Fähigkeiten der Kategorie
 ]
 
 Neben der Addition und Subtraktion von Ganzzahlen (womit der Iterator über
-größere Distanzen weitergschaltet wird) kann über Differenzbildung auch die
-Anzahl der Elemente bestimmt werden, die sich zwischen zwei Iteratorpositionen
+größere Distanzen weiter geschaltet wird) kann über Differenzbildung auch die
+Anzahl der Elemente bestimmt werden, die sich zwischen zwei Iterator-Positionen
 befinden.
 
 Um Iteratoren mit wahlfreiem Zugriff handelt es sich bei
@@ -245,7 +245,7 @@ inklusive der jeweiligen `const_`, `reverse_` und `const_reverse_`-Varianten.
 
 ---
 template: plain
-header: ### Grenzprüfung Iteratoren mit wahlfreiem Zugriff
+header: ### Grenzprüfung bei Iteratoren mit wahlfreiem Zugriff
 
 Hier ist zu beachten, dass die Minimal-Anforderungen des C++-Standards so
 gefasst sind, dass eine sehr effiziente Implementierung möglich ist, auch
@@ -257,7 +257,7 @@ eine (neue) Iterator-Position außerhalb des Containers liefern, ist das Ergebni
 undefiniert.
 ]
 
-Gültige Positionen sind dabei auch die möglichen Endstellungen (am
+Gültige Positionen sind dabei auch die möglichen Endpositionen (am
 Container-Ende für normale Iteratoren bzw. an Container-Anfang für
 Reverse-Iteratoren).
 
@@ -295,7 +295,7 @@ header: ## Konventionen der Iterator-Schnittstelle
 ----------------------------------------------------------------------------
 
 * [Füllstands- und …		](#state_from_filling)
-* [… Löschenanzeige		](#removing_logically_only)
+* [… Löschungs-Anzeige		](#removing_logically_only)
 
 ----------------------------------------------------------------------------
 
@@ -340,7 +340,7 @@ section: Algorithm-Dimension
 name: algorithm_axis
 header: ### Algorithmen-Achse
 
-Hier gibt es – je nach zählweise – im Rahmen des ISO&ANSI-Standards gut drei
+Hier gibt es – je nach Zählweise – im Rahmen des ISO&ANSI-Standards gut drei
 Dutzend Einträge.
 
 Viele Algorithmen kommen in "Familien" wie etwa:
@@ -362,7 +362,7 @@ Input-Iteratoren sind *abwechselnd*
 
 * für den *Lese-Zugriff* zu dereferenzieren (`*`) 
 
-* und *weiterzuschalten* (`++`).
+* und *weiter zu schalten* (`++`).
 
 .W[
 Bei Nichtbeachtung dieser Anwendungsvorschrift betrifft das Fehlverhalten oft
@@ -381,7 +381,7 @@ Output-Iteratoren sind *abwechselnd*
 
 * für den *Schreib-Zugriff* zu dereferenzieren (`*`)
 
-* und *weiterzuschalten* (`++`).
+* und *weiter zu schalten* (`++`).
 
 .W[
 Bei Nichtbeachtung dieser Anwendungsvorschrift betrifft das Fehlverhalten oft
@@ -441,7 +441,7 @@ Beim Füllen eines Containers ist es üblich, dass Algorithmen
 
 durch einen entsprechenden Iterator als Rückgabewert anzeigen.
 
-.I[
+.N[
 Dies ist sinnvoll und praktisch, um den Container ab dieser Stelle später weiter
 füllen zu können.
 ]
@@ -451,7 +451,7 @@ template: withinfo
 graphic: STL-IteratorUsages
 name: removing_logically_only
 section: Return "New End" when "Removing" Elements
-header: ### Löschanzeige durch neues (logisches) Ende
+header: ### Löschungs-Anzeige durch neues (logisches) Ende
 
 Da die Algorithmen für eine große Zahl von Containern funktionieren sollen,
 finden gibt es einige aus pragmatischer Sicht sinnvolle aber Besonderheiten.
@@ -459,7 +459,7 @@ finden gibt es einige aus pragmatischer Sicht sinnvolle aber Besonderheiten.
 Eine davon betrifft die Tatsache, dass "löschende" Algorithmen nicht davon
 ausgehen, den bearbeiteten Container verkleinern zu können.
 
-.I[
+.N[
 Dadurch funtionieren diese Algorithmen auch für die eingebauten Arrays und
 die STL-Klasse `std::array`.
 ]
@@ -479,7 +479,7 @@ Die konsequente Verwendung von Iteratoren bei der Implementierung aller
 STL-Algorithmen verschafft eine besondere Flexibilität.
 
 Iteratoren sind in der Regel einfache (Helfer-) Klassen, welche abhängig vom
-Container, für den sie jeweils zuständig sind, eine vollkommen unerschiedliche
+Container, für den sie jeweils zuständig sind, eine vollkommen unterschiedliche
 Implementierung besitzen können.
 
 .N[
@@ -564,7 +564,7 @@ header: ##### Hilfsfunktion: `back_inserter`
 Die – redundant erscheinende – Angabe von `int` als Datentyp des Containers `v`
 ist technisch der Tatsache geschuldet, dass ein (temporäres) Objekt der
 Template-Klasse `std::back_insert_iterator` erzeugt werden muss und der
-Konstrukor aus dem Argumenttyp nicht auf den Instanziierungstyp schließen kann.
+Konstrukor aus dem Argumenttyp nicht auf den Instanziierungs-Typ schließen kann.
 
 Eine Hilfsfunktion._[] vermeidet diese Redundanz:
 ```
@@ -572,7 +572,7 @@ std::copy(s.begin(), s.end(), std::back_inserter(v));
 ```
 
 .F[:
-Diese Funktion ist zwar Bestandteil der Standardbibliothek, muss also nicht
+Diese Funktion ist zwar Bestandteil der Standard-Bibliothek, muss also nicht
 selbst implementiert werden, ihre Implementierung ist aber insofern interessant,
 als die zugrundeliegende Technik in ähnlich gelagerten Fällen zur Vermeidung
 redundanter Typangaben eingesetzt werden kann:
@@ -663,7 +663,7 @@ template: plain
 header: #### Stream-Iteratoren
 
 So wie ein Back- oder Front-Insert-Iterator letzten Endes (bei der
-derefenzierten Zuweisung) eine `push_back`- bzw. `push_front`-Operation für
+dereferenzierten Zuweisung) eine `push_back`- bzw. `push_front`-Operation für
 den betroffenen Container ausführt, lassen sich auch andere Operationen in den
 (überladenen) Operatoren spezieller Iteratoren unterbringen.
 
@@ -699,7 +699,7 @@ die Frage auf, wie es denn "hinter den Kulissen" funktioniert. Daher als Hinweis
 das folgende:  
 Offensichtlich gibt es zwei Konstruktoren, von denen einer ein
 `std::istream`-Objekt als Argument erhält. Ein auf diese Weise erzeugter
-Input-Stream-Iterator liefert im Vergleich mit einem per Default-Konstrukor
+Input-Stream-Iterator liefert im Vergleich mit einem per Default-Konstruktor
 erzeugten Gegenstück zunächst `false`.  
 Die Operationen `*` und `++` werden auf eine Eingabe mit `operator>>`
 abgebildet, wobei die eingelesene Variable genau den Typ hat, der zur
@@ -863,7 +863,7 @@ Die Variable `end` enthält nun einen Iterator, der das neue (logische) Ende des
 v.erase(end, v.end());
 ```
 
-.I[
+.N[
 Code wie der gerade gezeigte ist vor allem in generischen Templates zweckmäßig,
 bei denen die Klasse von `v` völlig offen gehalten werden soll.._[]
 ]
@@ -883,6 +883,7 @@ header: ## Callbacks aus Algorithmen
 * [Generelle Möglichkeiten für Callbacks		](#callbacks_general)
 * [Callback mit Funktor 				](#callback_with_functor)
 * [Callback mit Lambda					](#callback_with_lambda)
+* [C++14 Erweiterungen für Lambdas			](#cpp14_lambda_extensions)
 * [Prädikate für Algorithmen (generell)			](#predicates_general)
 * [Prädikate für Algorithmen (Beispielserie)		](#predicate_examples))
 * [Algorithmen vs. spezifische Member-Funktionen	](#generic_vs_specific)
@@ -894,7 +895,7 @@ template: plain
 name: callbacks_general
 header: ### Generelle Möglichkeiten für Callbacks 
 
-Prinzipiell sind Algorithmen zwar Code aus einer Bibliothek, nicht selten enthält dieser
+Prinzipiell sind Algorithmen zwar Code aus einer Bibliothek, häufig enthalten diese
 aber "*Callbacks*" an die Applikation.
 
 Dafür existieren drei Möglichkeiten:
@@ -907,7 +908,7 @@ Dafür existieren drei Möglichkeiten:
   * oft wird eine Objekt-Instanz direkt bei der Argumentübergabe erzeugt;
   * in diesem Fall enthalten nachfolgenden runde Klammern
     * die Argumentliste Konstruktors oder
-    * bleiben leer (= Default Konstruktur)
+    * bleiben leer (= Default Konstruktor)
 
 * C++11 Lambdas
 
@@ -1017,7 +1018,7 @@ void foo(std::ostream &output) {
 }
 ```
 
-.I[
+.N[
 Dies ist nur noch mit Funktoren (und Lambdas) sauber abzubilden, mit einer
 Funktion scheidet diese Technik aus.
 ]
@@ -1034,8 +1035,8 @@ Diese richten sich nach der gewünschten Zugriffsart:
 |direkt, nur lesend|konstante Referenz|(konstante) Referenz          |
 |auch schreibend   |Referenz          |Referenz                      |
 
-Referenzen für Datenmember dürfen keinesfalls mit Wertübergabe im Konstruktor
-kombiniert werden:
+Referenzen für Daten-Member dürfen keinesfalls mit Wertübergabe im
+Konstruktor kombiniert werden:
 ```
 class SomeFunctor {
     …
@@ -1103,8 +1104,8 @@ header: #### Lambda mit privaten Daten
 Ein Funktor kann problemlos private Daten besitzen, welche ausschließlich dem
 überladenen Funktionsaufruf zur Verfügung stehen.
 
-Die Möglichkeiten zur Kapselung sind in dieser Hinsicht für ein Lambda etwas
-eingeschränkt: lokale Daten können nicht wirklich privat sein sondern sind
+In C++11 sind die Möglichkeiten zur Kapselung in dieser Hinsicht für ein Lambda
+etwas eingeschränkt: lokale Daten können nicht wirklich privat sein sondern sind
 auch in der Aufrufumgebung sichtbar:
 ```
 void foo(std::ostream &output) {
@@ -1123,6 +1124,168 @@ Aufrufumgebung nicht nur lesend sondern auch modifizierend einwirken kann.
 
 ---
 template: plain
+name: cpp14_lambda_extensions
+header: ### C++14 Extensions to Lambdas
+
+With C++14 lambdas have been further extended:._[]
+
+* Lambdas may use [`auto` as argument type](#cpp14_lambda_auto_arg), thus
+  allowing generic lambdas, similar to functors with a templated `operator()`.
+
+* The capture list may define so-called [init-captures](#cpp14_lambda_init),
+  giving the same options as local (independent) data members of a functor,
+  with (possibly context dependant) initialisation.
+
+.F[:
+For the curious, C++14 also fixed a minor oversight in the lambda syntax
+specification of C++11: While the idea was to allow the lambda argument list
+to be completely dropped if empty, including its parentheses if empty, that
+was forgotten in the syntax for `mutable` lambdas.
+
+---
+template: plain
+name: cpp14_lambda_auto_arg
+header: #### C++14 `auto`-typed Lambda Arguments
+
+Prior to C++14 argument types of lambdas had to be spelled out explicitly,
+which could sometimes be wordy and inconvenient:._[]
+```
+std::map<std::string, unsigned long> m;
+…
+std::map<std::string, unsigned long> other;
+std::copy_if(m.cbegin(), m.cend(), std::inserter(other),
+             [](const std::pair<std::string, unsigned long> &e) {
+                 return e.second != 0;
+             });
+```
+
+Clearly, in the above scenario `auto`-typed arguments for lambdas offer a big
+simplification:
+```
+std::copy_if(m.cbegin(), m.cend(), std::inserter(other),
+             [](const auto &e) { return e.second != 0; });
+```
+
+.F[:
+The problem could be slightly alleviated if there were a type definition for the
+map, say `C`, allowing to refer to the element type inside as `C::value_type`
+(or if `C` were a dependant type as `typename C::value_type`).
+]
+
+---
+template: plain
+header: #### C++14 Lambda Init-Captures
+
+This C++14 extension allows a third form of capture:
+```
+// assuming local scope here
+SomeType local;
+…
+… [local]( … ) { // capturing by value-copy
+   … // access local copy read-only
+  } …
+… [local]( … ) mutable { // capturing by value-copy
+    … // access local copy modifiable
+  } …
+… [&local]( … ) { // capturing by reference
+    … // access and possibly modify local in outer scope
+  } …
+… [mine = local]( … ) { // init-capture (C++14 only)
+    … // access mine modifiable, initial value from local
+  } …
+```
+
+The initialisation of init-captures may also use arbitrary expressions.
+```
+… [mine = 2*local + 1] ( … ) { … } …
+… [mine = std::make_shared<SomeType>(local)] ( … ) { … } …
+```
+
+---
+template: plain
+header: #### Extended Type Deduction for C++14 Lambdas
+
+With the extensions to lambdas in C++14 also two new contexts for type deduction
+were introduced:
+
+* In case of `auto`-typed lambda arguments the type deduction rules are the same
+  as for template functions (and hence **not** exactly the same as for
+  `auto`-typed variables!)
+
+* In case of init-captures the type of the newly introduced identifier is determined
+  is like for `auto`-typed variables.
+
+---
+template: plain
+header: #### Init-Captures and Move-Construction
+
+Init-captures solve a problem that lay outside the capabilities of lambdas as
+defined by C++11:
+
+* When capturing by value-copy, only the copy-constructor applies.
+
+  * In an init-capture, if the initialising expression is a temporary, the
+    move construction may take place – given a move constructor exists and
+    the compiler does not choose to prefer [(N)RVO].
+
+Therefore only init-captures allow the following (assuming `local` is a move-only
+type._[] or it is its last use and copying is expensive):
+```
+… [mine = std::move(local)] ( … ) { … } …
+```
+
+.F[:
+Like e.g. `std::unique_ptr`, `std::thread`.
+]
+
+[(N)RVO]: http://en.wikipedia.org/wiki/Return_value_optimization
+[ugly work-around]: http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2013/n3610.html
+
+---
+template: plain
+header: #### C++14 Init-Capture Pitfalls
+
+One possible pitfall with init-captures compared to value-copy is this:
+
+.W[
+Classic (C-style) arrays are treated as value objects captured by value-copy
+but decay to pointers (to the first element) in init-captures.
+]
+
+<!-- -->
+
+.pull-left[
+Secure when capturing value-copies:
+```
+auto foo() {
+    int primes[] = {2, 3, 5, 7};
+    return [primes]( … ) {
+               … // lambda-body
+           };
+};
+```
+] 
+.pull-right[
+Refers to invalidated stack memory:
+```
+auto foo() {
+    int primes[] = {2, 3, 5, 7};
+    return [p = primes]( … ) {
+               … // lambda-body
+           };
+};
+```
+]
+
+<!-- -->
+
+.N[
+This can be used as an argument to prefer `std::array` over classic arrays, as
+then in both cases copying the content would be copied.
+]
+
+---
+template: plain
 name: predicates_general
 header: ### Prädikate für Algorithmen (generell)
 
@@ -1130,7 +1293,7 @@ Viele STL-Algorithmen haben eine Variante, in der man ein Auswahlkriterium
 (Prädikat) flexibel angeben kann. Es handelt sich dabei typischerweise um die
 Algorithmus-Variante, die mit `_if` endet.
 
-Als Beispiel zur Verdeutlichung des Prinzips kann wieder die Implemenierung
+Als Beispiel zur Verdeutlichung des Prinzips kann wieder die Implementierung
 eines Algorithmus zum Kopieren von einem Container in einen anderen dienen,
 diesmal beschränkt auf ausgewählte Elemente:._[]
 ```
@@ -1263,8 +1426,8 @@ genug sind), besteht mehr Flexibilität – wobei teilweise ähnliche Techniken
 aus einem unterschiedlichen Grund zur Anwendung kommen.
 
 * [Parametrisierter Funktor		](#predicate_parametrized_functor)
-* [Zugriff auf loale Daten mit Funktor	](#predicate_capturing_functor)
-* [Zugriff auf loale Daten mit Lambda	](#predicate_capturing_lambda)
+* [Zugriff auf lokale Daten mit Funktor	](#predicate_capturing_functor)
+* [Zugriff auf lokale Daten mit Lambda	](#predicate_capturing_lambda)
 
 
 ---
@@ -1373,7 +1536,7 @@ void foo(const std::vector &v, int hide) {
 .F[:
 Die Parameter einer Funktion entsprechen nahezu ihren lokalen Variablen.
 Es kommt lediglich die (garantierte) Initialisierung mit vom Aufrufer
-angegebenden Werten hinzu.
+anzugebenden Werten hinzu.
 ]
 
 ---
@@ -1447,5 +1610,4 @@ header: ## Praktikum
     </script>
   </body>
 </html>
-
 

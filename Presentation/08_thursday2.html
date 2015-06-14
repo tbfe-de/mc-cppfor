@@ -73,8 +73,8 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
   Template used for for pages INTRODUCING to a new Info-Graphic
   *****************************************************************************
   On this kind of pages a size-reduced version of the whole info graphic will
-  be reproduced and occupies aproximately 2/3 of the page width. So only add
-  little information, preferrably links to later pages dealing with single
+  be reproduced and occupies approximately 2/3 of the page width. So only add
+  little information, preferably links to later pages dealing with single
   sections of the info graphic.
 
   On pages USING THIS TEMPLATE the following attributes must be set:
@@ -242,7 +242,7 @@ Daher sollte ein Kopieren vermieden werden:
 * Argumente von `catch`-Blöcken als Referenz spezifizieren.
 
 * Bei nur teilweiser Auflösung der Fehlersituation das beim Eintritt in den
-  `catch`-Block vorliegende Exception-Objekt mit `throw;` weiterwerfen.
+  `catch`-Block vorliegende Exception-Objekt mit `throw;` weiter werfen.
 
 ---
 template: withinfo
@@ -274,7 +274,7 @@ Eine `throw`-Anweisung ohne nachfolgendes Argument kann nicht nur in einem
 .F[:
 Gemeinsamkeiten mehrerer `catch`-Blöcke können damit auch dann problemlos in
 eine Hilfsfunktion ausgelagert werden, wenn diese eine komplexe Ablaufsteuerung
-benötigt und die gefangene Exception nicht nur am Ende weitergeworfen wird.
+benötigt und die gefangene Exception nicht nur am Ende weiter geworfen wird.
 ]
 
 ---
@@ -339,9 +339,9 @@ class MyClass {
 }; 
 ```
 .F[:
-Ob es tatsächlich sinnvoll ist, die Exception wie gezeigt weiterzuwerfen, falls
-der Destruktor **nicht** im Rahmen eines Exceptions-Handlings abläuft, muss je
-nach Sachlage individuell entschieden werden.
+Ob es tatsächlich sinnvoll ist, die Exception wie gezeigt weiter zu werfen,
+falls der Destruktor **nicht** im Rahmen eines Exceptions-Handlings abläuft,
+muss je nach Sachlage individuell entschieden werden.
 ]
 
 ---
@@ -374,7 +374,7 @@ Diese bewirkt folgendes:
 
 * Wirft eine `noexcept`-Funktion direkt oder indirekt eine Exception, wird das
   Programm **unwiderruflich beendet** – wenn auch ggf. erst nach Durchlaufen
-  eines frei festlegbaren, zentralen Handlers.
+  eines frei festlegbaren, zentralen Behandlungsblocks.
 
 * In anderen Funktionen, welche wiederum `noexcept`-Funktion aufrufen, gelten
   letztere als **aufrufbar ohne Risiko einer Exception**.._[]
@@ -397,7 +397,7 @@ template: plain
 name: noexcept
 header: ### Bedingte Exception-Freiheit
 
-Über das auf der vorhergenden Seite Dargestellte hinaus ist `noxecept` auch eine
+Über das auf der vorhergehenden Seite Dargestellte hinaus ist `noexcept` auch eine
 Compilezeit-Funktion, mit welcher insbesondere Templates auch die **bedingte
 Freiheit von Exceptions** ankündigen können.
 
@@ -423,7 +423,7 @@ float fahrenheit_to_centigrade(float temperature) noexcept {
     return 9.0*temperature/5.0 + 32.0;
 }
 ```
-Wenn es zu einer Exception kommt ist der Programmabruch jeglichem Versuch einer
+Wenn es zu einer Exception kommt ist der Programmabbruch jeglichem Versuch einer
 irgendwie gearteten Fortsetzung vorzuziehen:
 ```
 extern void may_fail_catastrophically(int = 42) noexcept;
@@ -651,7 +651,7 @@ Choice::Choice( … )
 ```
 
 .W[
-Bevor der Konstruktor (fehlerfrei) beendet wurde, ist der Destruktur noch nicht
+Bevor der Konstruktor (fehlerfrei) beendet wurde, ist der Destruktor noch nicht
 aktiv – evtl. auftretende Probleme müssen daher in einem lokalen `catch`-Block
 behandelt werden.
 ]
@@ -814,7 +814,7 @@ Eigentümerschaft für das referenzierte Objekt sicherzustellen:
 
 ---
 template: plain
-header: #### Geteilte Einegtümerschaft: `std::shared_ptr`
+header: #### Geteilte Eigentümerschaft: `std::shared_ptr`
 
 Die Verwendung dieser Art von Smart-Pointer hilft, bei geteilter
 Eigentümerschaft die Beseitigung referenzierter Objekte sicherzustellen.
@@ -834,7 +834,7 @@ Von der `std::shared_ptr`-Klasse wird in letzterem durch
 die Anzahl der Referenzierer eingetragen bzw. aktualisiert.
 
 .N[
-Fällt der Referenzzähler auf 0, wird der Destruktur des referenzierten
+Fällt der Referenzzähler auf 0, wird der Destruktor des referenzierten
 Objekts ausgeführt und dessen Speicherplatz freigegeben.
 ]
 
@@ -865,7 +865,7 @@ dessen Teile nur noch untereinander über `std::shared_ptr` verbunden sind.
 
 .F[:
 Die Kernproblematik besteht also nicht nur, wenn ein `std::shared_ptr` **exakt**
-auf die Art von Objekten zeigt, die ihn enhtalten. Auch bei der Konstellation
+auf die Art von Objekten zeigt, die ihn enthalten. Auch bei der Konstellation
 *"A zeigt auf B und B auf A"* oder *"A zeigt auf B, B zeigt auf C und C zeigt
 auf A"* kann das beschriebene Problem auftreten.
 ]

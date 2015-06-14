@@ -73,8 +73,8 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
   Template used for for pages INTRODUCING to a new Info-Graphic
   *****************************************************************************
   On this kind of pages a size-reduced version of the whole info graphic will
-  be reproduced and occupies aproximately 2/3 of the page width. So only add
-  little information, preferrably links to later pages dealing with single
+  be reproduced and occupies approximately 2/3 of the page width. So only add
+  little information, preferably links to later pages dealing with single
   sections of the info graphic.
 
   On pages USING THIS TEMPLATE the following attributes must be set:
@@ -142,10 +142,12 @@ template: blank
 
 -------------------------------------------------------------------------------
 
-1. [Templates selbst schreiben			](#writing_templates)
-1. [Optimierung von Templates			](#optimising_templates)
-1. [Templates als Compilezeit-Funktionen	](#compiletime_functions)
-1. [Fortgeschrittene Nutzung des Präprozessors	](#advanced_preprocessor)
+1. [Implementing Templates			](#writing_templates)
+1. [Optimising Templates			](#optimising_templates)
+1. [Perfect Forwarding with Templates		](#perfect_forwarding)
+1. [Templates as Compile Time Functions		](#compiletime_functions)
+1. [Variadic Templates (Parameter Packs)	](#variadic_templates)
+1. [Advanced Use of the Preprocessor		](#advanced_preprocessor)
 1. [Praktikum					](#exercise_thu1)
 
 -------------------------------------------------------------------------------
@@ -237,7 +239,7 @@ Strukturierung von Templates.
 
 Problematisch ist eine erhebliche Vermischung von
 
-* Abschnitten, welche abhängig von den Instanziierungsparametern stets
+* Abschnitten, welche abhängig von den Instanziierungs-Parametern stets
   **unterschiedlichen** Maschinencode erzeugen, und
 
 * Abschnitten, die stets **ein und denselben** Maschinencode erzeugen.
@@ -254,7 +256,7 @@ Die Vorbereitung für die Reduzierung von Code-Bloat sieht wie folgt aus:
 In einer Template-Klasse oder -Funktion sind möglichst große, zusammenhängende
 Abschnitte zu schaffen,
 
-* die Maschinencode erzeugen, der tatsächlich von den Instanziierungsparametern
+* die Maschinencode erzeugen, der tatsächlich von den Instanziierungs-Parametern
   abhängt, und
 
 * diese damit zu trennen von anderen, immer auf ein und denselben Maschinencode
@@ -276,6 +278,91 @@ können ausgelagert werden, und zwar
 
 ---
 template: plain
+name: perfect_forwarding
+header: ## Perfect Forwarding with Templates
+
+A special use case for templates is *Perfect Forwarding*, which basically is
+about keeping the "Rvalue-ness" of a function argument until it is used.
+
+It can be applied
+
+* either in [cookbook style](#perfect_forwarding_cookbook) or
+
+* with first explaining (and consequently trying to grasp) a lot of its
+  [background](http://thbecker.net/articles/rvalue_references/section_01.html).
+
+.N[
+One key point with both approaches is to understand that the rvalue reference
+declarator (`&&`) is special if used with a template argument.
+]
+
+Scott Meyers has even coined a special term for it: [Universal References]
+
+[Universal References]: http://isocpp.org/blog/2012/11/universal-references-in-c11-scott-meyers
+
+---
+template: plain
+name: perfect_forwarding_cookbook
+header: ### Perfect Forwarding - Cookbook Style
+
+Perfect forwarding is achieved by applying the following recipe:._[]
+```
+template<typename T1, typename T2>
+void foo(T1 &&arg1, T2 &&arg2) {
+    bar(std::forward<T1>(arg1));
+    baz(std::forward<T2>(arg2));
+};
+```
+
+.N[
+If there are overloads of `bar` and `baz` optimized for lvalue and rvalue
+arguments, the appropriate one will be called.
+]
+
+.F[:
+Perfect forwarding always requires the use of templates, even if it is applied
+to cope with the exponential explosion of overloads necessary if only arguments
+of known types are to be forwarded, like here:
+```
+  // Assume objects of these classes can be arguments to foo, which it
+class MyClass { … }; // it forwards to bar and baz and the caller may
+class AnOther { … }; // either supply lvalues or rvalues as argument:
+…
+void foo(const MyClass  &arg1, const Another  &arg2) { … }
+void foo(const MyClass  &arg1,       Another &&arg2) { … }
+void foo(      MyClass &&arg1, const Another  &arg2) { … }
+void foo(      MyClass &&arg1,       Another &&arg2) { … }
+```
+]
+
+---
+template: plain
+name: perfect_forwarding_background
+header: ### Perfect Forwarding - The Background
+
+The background of perfect forwarding combines three essential pieces:
+
+1. For a template argument `T&&` there is a special deduction of `T`:
+   * `T` is *reference* for lvalue arguments,
+   * otherwise it is the plain argument type  
+     (as usual with `&` and `const` stripped away).
+
+1. Reference collapsing defines what happens if two reference declarators
+   are applied in a row:
+   * `&` and `&` → `&`
+   * `&` and `&&` → `&`
+   * `&&` and `&` → `&`
+   * `&&` and `&&` → `&&`
+
+1. `std::forward<T>(expr)` statically casts `expr` to `T&&`.
+
+.I[
+For more information on `std::forward` see:
+http://en.cppreference.com/w/cpp/utility/forward
+]
+
+---
+template: plain
 name: compiletime_functions
 header: ## Templates als Compilezeit-Funktionen
 
@@ -288,7 +375,7 @@ Der wesentliche Schlüssel dazu ist, das folgende zu verstehen:
 
 * Jeglicher "Output" besteht aus Datentypen.
 
-.I[
+.N[
 **Anders ausgedrückt:**  
 Templates sind (auch) Typ-Transformationen zur Compilezeit.
 ]
@@ -337,8 +424,8 @@ header: ### Fakultäts-Funktion als Beispiel
 
 #### Der übliche Ansatz …
 
-Die allseits bekannte Funktion zur Fakultätsberechnung kann man in C++ mit
-einer Schleife so programmieren:
+Die bekannte Funktion zur Fakultätsberechnung kann man in C++ mit einer
+Schleife so programmieren:
 ```
 unsigned long long fakul(unsigned long long n) {
     auto result = 1uLL;
@@ -367,13 +454,13 @@ unsigned long long fakul(0uLL) {
     return 1;
 }
 ```
-Natürlich ist das obige **kein gültiges C++** … aber doch irgendwie
+Natürlich ist obiges **kein gültiges C++** … aber doch irgendwie
 verständlich, oder nicht?
 
-.I[
-Der Abbruch der in der allgemeinen Funktion eigentlich endlosen Rekursion
-erfolgt durch Spezialisierung von `fakul` für den Argumentwert `0uLL`
-(0 im Typ `unsigned long long`).
+.N[
+Die Idee ist, dass der Abbruch der gemäß der allgemeinen Funktion eigentlich
+endlosen Rekursion durch die Spezialisierung von `fakul` für den Argumentwert
+`0uLL` (0 im Typ `unsigned long long`) erfolgt.
 ]
 
 ---
@@ -410,37 +497,27 @@ header: ### Beispiele für Typ-Transformationen
 
 #### Eine Zeigerstufe hinzufügen
 ```
-template<typename T>
-struct add_pointer {
-    typedef T* result;
-};
+template<typename T> struct add_pointer { typedef T* result; };
 ```
 
 #### Eine Zeigerstufe wegnehmen
 ```
-template<typename T>
-struct remove_pointer;
-template<typename T>
-struct remove_pointer<T*> {
-    typedef T result;
-};
+template<typename T> struct remove_pointer;
+template<typename T> struct remove_pointer<T*> { typedef T result; };
 ```
 #### Alle Zeigerstufen wegnehmen
 
-(Denken Sie doch einfach mal selbst kurz nach!)
+Denken Sie doch einfach mal selbst kurz nach …._[]
 
-???
-Die Lösung lautet – natürlich – so:
+.F[:
+The solution – of course – is this:
 ```
-template<typename T>
-struct remove_all_pointers {
-    typedef T result;
-};
-template<typename T>
-struct remove_pointer<T*> {
-    typedef remove_all_pointers<T> result;
-};
+   // primary template
+template<typename T> struct remove_all_ptr { typedef T result; };
+// specialisation
+template<typename T> struct remove_all_ptr<T*> { typedef remove_all_ptr<T> result; };
 ```
+]
 
 ---
 template: plain
@@ -448,12 +525,456 @@ header: ### Type-Traits Library
 
 [Type-Traits]: http://www.boost.org/doc/libs/release/libs/type_traits/doc/html/boost_typetraits/background.html
 
-Mit C++11 wurden die zuvor unter Boost entwickelten [Type-Traits] zum Standard.
+With C++11 the [Type-Traits] originally developed as a Boost library became a
+part if the standard.
 
-Mehr dazu finden Sie hier:
+.I[
+For more information on standard type traits see:
+http://www.cplusplus.com/reference/type_traits/
+http://en.cppreference.com/w/cpp/types/
+]
 
-* http://www.cplusplus.com/reference/type_traits/
-* http://en.cppreference.com/w/cpp/types/
+C++14 simplified the use of the standardised type traits with a number of
+template aliases (instead of accessing `::type`` for traits returning types)
+and convential conversion to `bool` (as `constexpr`) is implemented for traits
+with a `static constexpr bool value`).
+
+* For some type trait `xxx` accessed conventionally via `typename xxx<T>::type`,
+  in C++14 just `xxx_t<T>` may be used.
+
+* For some type trait `yyy` accessed conventionally via `yyy::value`, in C++14
+  just `yyy{}` may be used.
+
+---
+template: plain
+header: #### Using SFINAE with `std::enable_if`
+
+Often, after doing type calculations, the final goal is to choose among several
+implementations of a given function.
+
+If this is not the automatic effect from calculating a type that selects the
+appropriate overload, `std::enable_if` and [SFINAE] can be applied.
+
+The basic idea is this:
+
+* Create an overload set of (template) functions that is deliberately ambiguous.
+
+* Make all but one instantiations of the functions in this set fail for a
+  particular condition.
+
+As compile time calculations must express every result as a type (last and finally),
+`std::enable_if` creates an illegal type as "substitution failure" and the particular
+instantiation is removed from the overload set.
+
+[SFINAE]:http://en.wikipedia.org/wiki/Substitution_failure_is_not_an_error
+
+---
+template: plain
+header: #### Example for SFINAE with `std::enable_if` (C++11)
+
+The following example selects between two implementations of foo, depending on
+whether the arguments `arg1` and `arg2` are objects related with each other as
+base and derived class:
+```
+template<typename T1, typename T2>
+typename std::enable_if<
+    std::is_base_of<T1, T2>::value
+>::type foo(T1 arg1, T2 arg2) { … } // called for T1 is base class of T2
+
+template<typename T1, typename T2>
+typename std::enable_if<
+    !std::is_base_of<T1, T2>::value
+>::type foo(T1 arg1, T2 arg2) { … } // called for T1 is NOT base class of T2
+```
+
+---
+template: plain
+header: #### Example for SFINAE with `std::enable_if_t` (C++14)
+
+With the additions C++14 made to the standard type traits, the previous example
+can be slightly simplified to:._[]
+```
+template<typename T1, typename T2>
+std::enable_if_t<
+    std::is_base_of<T1, T2>{}
+> foo(T1 arg1, T2 arg2) { … } // called for T1 is base of T2
+
+template<typename T1, typename T2>
+typename std::enable_if_t<
+    !std::is_base_of<T1, T2>{}
+> foo(T1 arg1, T2 arg2) { … } // called for T1 is NOT base of T2
+```
+
+.F[:
+Note that the support for this simplifications is close to trivial In `namespace std { … }`:
+```
+template<bool C, typename T = void> using enable_if_t = typename std::enable_if<C, T>::type;
+```
+And:
+```
+typename<T1, T2>
+struct is_base_of {
+   /* as in C++11, set according to result */ static constexpr bool value = …;
+   /* added in C++14 */ constexpr explicit operator bool() const { return value; }
+}
+```
+]
+
+---
+template: plain
+name: variadic_templates
+header: ## Variadic Templates
+
+C++11 introduced [Parameter Packs] to allow templates to accept a variable
+number of arguments.
+
+--------------------------------------------------------------------
+
+* [Defining Variadic Templates 		](#define_variadic_template)
+
+* [Unpacking Parameter Packs		](#unpack_parameter_packs)
+
+--------------------------------------------------------------------
+
+Generally variable argument lists help
+
+* to avoid much repetitive systematic coding and
+* at the same time removes arbitrary upper limits.
+
+.I[
+For more information see on variadic templates see:
+http://en.cppreference.com/w/cpp/language/parameter_pack
+]
+
+.F[:
+The ellipsis was originally introduced with C to indicate variable length
+argument list.
+]
+
+---
+template: plain
+name: define_variadic_template
+header: ### Defining Variadic Templates
+
+In the **definition** of template a symbolic name be introduced with three dots
+appended.
+
+In this syntax the identifier right to the dots introduces kind of a list,._[]
+actually representing
+
+* either sequences of type names
+
+* or values of a specified type.
+
+This can be used with [template classes](#variadic_template_class_example)
+or [template functions](#variadic_template_function_example).
+
+
+.F[:
+Before C++11, to implement templates with a variable number of arguments
+required repeated, similar code (though some libraries like [Boost.Preprocessor]
+provided means to generate such using the C/C++ preprocessor):
+```
+   // defining a tuple class …
+template<typename T1>
+class tuple { T1 first; … };
+template<typename T1, typename T2>
+class tuple { T1 first; tuple<T2> rest; … };
+template<typename T1, typename T2, typename T3>
+class tuple { T1 first; tuple<T2, T3> rest; … };
+template<typename T1, typename T2, typename T3, typename T4>
+class tuple { T1 first; tuple<T2, T3, T4> rest; … };
+… // etc. up to some upper limit
+```
+]
+
+[Boost.Preprocessor]: http://www.boost.org/doc/libs/1_41_0/libs/preprocessor/doc/topics/motivation.html
+
+---
+template: plain
+name: variadic_template_class_example
+header: #### Example: Variadic Template Class
+
+.pull-left[
+```
+// Definition:
+template<typename... Ts>
+class MyClass {
+    …
+};
+…
+// Valid Uses:
+… MyClass<int, double> …
+… MyClass<const char *> …
+… MyClass<std::string, bool> …
+… MyClass<int, int, int, int> …
+```
+]
+.pull-right[
+```
+// Definition:
+template<int... Ints>
+class MyIntegers { … };
+template<std::string... Words>
+class MyStrings { … };
+…
+// Valid Uses:
+… MyInts<2, 3, 5, 7, 11, 13> …
+… MyStrings<> …
+… MyStrings<
+      std::string("hello"),
+      std::string("world")> …
+```
+]
+
+In a template class, if this mechanism is combined with other (fixed) template
+arguments, the variable part must come last:
+```
+template<typename T1, unsigned int N, typename T2, bool... Bs>
+class Whatever { … };
+…
+… Whatever<std::string, 7u, int, true, false, true, true, false> …
+… Whatever<const volatile unsigned long&, (~0u >> 12), void> …
+```
+
+---
+template: plain
+name: variadic_template_function_example
+header: #### Example: Variadic Template Function
+
+The general syntax is similar to variadic template classes, but the type list
+usually also occurs as part of the argument list:
+```
+template<typename... Ts>
+std::string concat(char, Ts...); // prototype only, so far
+```
+
+In signature of `concat` state that the function is to be called with a first
+(mandatory) argument of type `char` and any more arguments of arbitrary type,
+hence – in principle – all of the following calls were correct:
+```
+… concat(' ', "hello", 7, "world" '!') …
+… concat('+', std::string("whatever"), 2/1.0, true, false) …
+```
+
+---
+template: plain
+name: variadic_template_function_example
+header: #### Implementing Variadic Templates
+
+Implementing variable templates usually has two options:
+
+* Internally forwarding to another variadic template.._[]
+* Applying recursion at compile time.
+
+.N[
+For the latter the following has to be understood:
+
+* Recursion is the (only) way to write "loops" at compile time, and
+* there must be a "condition" to stop an otherwise endless recursion.
+]
+
+Furthermore:
+
+.N[
+Conditions at compile time are typically expressed
+
+* as specialisation for some border case, or
+* by selecting from an overload-set with [SFINAE].
+]
+
+
+[SFINAE]: http://en.wikipedia.org/wiki/Substitution_failure_is_not_an_error
+
+.F[:
+Of course, this only shifts "the burden of implementation" to the callee …
+]
+
+---
+template: plain
+name: unpack_parameter_packs
+header: ### Unpacking Parameter Packs
+
+The second use of the ellipsis is to unpack a parameter pack, by writing
+it after some "pattern" containing at least one name of a variadic template
+representing a parameter pack.
+
+* If the name represents a type list, it may be used wherever type lists are
+  acceptable, e.g. to instantiate some (other) variadic template.
+
+* If the name represents a value list, it may be used to expand to parameter
+  lists of a variadic function (template or classic) or as initialiser for
+  data structures or be used as an `std::initializer_list`.
+
+* If the name is the formal argument name representing an unpacked formal
+  parameter list, the pattern will be expanded once for each parameter.
+
+* Finally, several packs may be unpacked simultaneously.
+
+.N[
+Some practical examples (following) should help to clarify the above.
+]
+
+---
+template: plain
+header: #### Example: Compile Time Recursive Data Structure
+
+[`std::tuple`]: http://de.cppreference.com/w/cpp/utility/tuple
+
+The following class shows an approach how something like [`std::tuple`]
+might be implemented with a variadic template:._[]
+.pull-left[
+```
+template<typename T,
+         typename... Ts>
+struct MyTuple {
+    T first;
+    MyTuple<Ts...> rest;
+    MyTuple(T f, Ts... r)
+        : first(f), rest(r)
+    {}
+};
+```
+]
+.pull-right[
+The general case (left) …
+
+… and its specialisation for the empty border case, required to stop endless
+recursion (below):
+```
+template<>
+struct MyTuple<> {
+};
+```
+]
+
+With this, `MyTuple` objects could be created as follows:
+```
+MyTuple<int, double, const char *> x(1, 0.5, "one by three");
+MyTuple<std::string, const char *> y("one", "two");
+MyTuple<> z;
+```
+
+.F[:
+Note that this example is stripped down to its bare bones deliberately omits
+the finer points that were important for useful and performant tuple class.
+]
+
+---
+template: plain
+header: #### Example: Compile Time Recursive Functions
+
+The function `concat` was already introduced as example for a variadic template
+function.._[]
+
+```
+// FIRST(!) the basic form that stops recursion:
+std::string concat(char) {
+    return {};
+}
+
+// THEN the recursive form (to unfold at compile time):
+template<typename T, typename... Ts>
+std::string concat(char sep, T, arg, Ts... args) {
+   return arg.append(&sep, 1) + concat(sep, args...);
+};
+```
+.W[
+The definition of the basic version (stopping recursion) and the recursive
+version must not be reversed – or the program will not compile any more.
+]
+
+.F[:
+This example too is stripped down to its bare bones and deliberately omits
+the finer points that would make sense for useful and performant implementation.
+]
+
+---
+template: plain
+header: #### Example: Stopping Recursion with SFINAE
+
+Stopping recursion by using SFINAE is demonstrated in the following
+implementation of a `get<N>` member function of class `MyTuple`:._[]
+```
+template<typename T, typename... Ts>
+class MyTuple {
+    …
+    … // as shown on a previous page
+    …
+    template<std::size_t N>
+    typename std::enable_if<N == 0, T>::type
+    get() { return first; }
+    
+    template<std::size_t N>
+    using Rtype = decltype(rest.template get<N-1>());
+
+    template<std::size_t N>
+    typename std::enable_if<N != 0, Rtype<N>>::type
+    get() { return rest.template get<N-1>(); }
+};
+```
+
+.F[:
+Note that implementing `get<N>` as a member is like [Boost.Tuple] provides
+member access, while [`std::tuple`] uses a non-member overload.
+]
+
+[Boost.Tuple]: http://www.boost.org/doc/libs/release/libs/tuple/doc/tuple_users_guide.html
+[`std::tuple`]: http://en.cppreference.com/w/cpp/utility/tuple/get
+
+---
+template: plain
+header: #### Simultaneous Unpacking of Parameter Packs
+
+Two (or more) parameter packs may also be unpacked simultaneous, as shown in the
+following example. It demonstrates how `std::make_unique` (missing from C++11._[])
+may be implemented:
+```
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args)
+{
+    return std::unique_ptr<T>{new T(std::forward<Args>(args)...)};
+           //                                   /^^^^  ^^^^\
+           // simultaneously unpack argument types and names
+}
+```
+
+The interesting part with respect to simultaneous unpacking is marked in the
+comment.
+
+.N[
+The example also demonstrates how [perfect forwarding](#perfect_forwarding)
+can be applied to whole argument lists with ease in a single statement
+]
+
+.F[:
+Though a factory function for `std::unique_ptr` similar to `std::make_shared` for 
+`std::shared_ptr` makes sense, it was not defined in C++11, but only added in C++14.
+]
+
+---
+template: plain
+header: #### C++14 `std::integer_sequence` Template
+
+As code implementing variadic templates needs to "unfold" at compile time,
+C++14 provides the following compile time integer sequences:
+
+* A template `std::integer_sequence` holding a sequence of arbitrary values of
+  a given integral type.
+
+* A template `std::index_sequence` as special form of the above where the
+  integral type is `std::size_t`.
+
+* A helper template `std::make_index_sequence` to generate a given number of
+  consecutive values, starting from zero.
+
+* A helper template `std::index_sequence_for` to generates an index sequence
+  with the length of a given parameter pack.
+
+.I[
+For more information on the above including examples see:
+http://en.cppreference.com/w/cpp/utility/integer_sequence
+]
 
 ---
 template: plain
@@ -700,7 +1221,7 @@ header: #### Makros nur lokal definieren
 Abschließend noch zwei weitere vorbeugende Maßnahmen gegen Überraschungen,
 welche nicht beabsichtigten Ersetzungen des Präprozessors vermeiden helfen:
 
-* Nur über kurze Quelltextabschnitte hinweg nötige Makros zur systematischen
+* Nur über kurze Quelltext-Abschnitte hinweg nötige Makros zur systematischen
   Erzeugung von Quelltext sollten ggf. direkt nach ihrer letzten Verwendung
   mit `#undef` wieder gelöscht werden.
 

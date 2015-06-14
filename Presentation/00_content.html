@@ -135,7 +135,6 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
 ---
 template: blank
 name: frontmatter
-layout: false
 
 .title[
 	[C++-FOR](#online_version)
@@ -163,12 +162,12 @@ layout: false
 template: plain
 class: agenda
 name: agenda
-header: ## Agenda
+header: ## Agenda._[]
 
 -----------------------------------------------------------------
 
-* [Monday(1): General C++-Basics (and some major C++11 changes)	](01_monday1.html)
-* [Monday(2): More C++-Basics (Templates, Exceptions, Library)	](02_monday2.html)
+* [Monday(1): General C++-Basics (and some C++11 extensions)	](01_monday1.html)
+* [Monday(2): More C++-Basics (Templates, Execeptions, Library)	](02_monday2.html)
 
 -----------------------------------------------------------------
 
@@ -271,7 +270,7 @@ Die verschiedenen Elemente dieser Unterlage, also
 erfüllen unterschiedliche Aufgaben.
 
 .N.center[
-Insbesondere zu Funktionen und Klassen der Standardbibliothek sollten Sie
+Insbesondere zu Funktionen und Klassen der Standard-Bibliothek sollten Sie
 ergänzend [Online-Referenzen](#online_references) nutzen.
 
 Die Schulungsunterlagen können in dieser Hinsicht keine Vollständigkeit
@@ -294,9 +293,9 @@ Online-Referenz verlinkt ist, können Sie diese natürlich nutzen.
 Bitte bedenken Sie aber, dass in den Hilfe-Seiten einer spezifischen
 C++-Implementierung mitunter nicht sauber getrennt wird zwischen
 
-* dem Sprach- und Bibliotheksumfang gemäß ISO-Standard und
+* dem Sprach- und Bibliotheksumfang von C++ gemäß ISO-Standard
 
-* den Erweiterungen dieser spezifischen Implementierung.
+* und spezifischen implementierungsspezifischen Erweiterungen.
 
 Gute Online-Referenzen im Internet haben dieses Problem nicht, z.B.:
 
@@ -304,9 +303,9 @@ Gute Online-Referenzen im Internet haben dieses Problem nicht, z.B.:
 * http://en.cppreference.com/w/cpp/
 
 .I[
-Diese beschreiben C++ gemäß dem ersten ISO/ANSI-Standard von 1998 ([C++98]),
-den 2003 vorgenommenen Ergänzungen ([C++03]), dem derzeit meist implementierten
-[C++11]-Standard und dessen kürzlicher Aktualisierung ([C++14]).
+Das dort verfügbare Material dokumentiert C++ gemäß dem ISO/ANSI-Standard von
+1998 ([C++98]), den 2003 und 2011 vorgenommenen Ergänzungen ([C++03] und
+[C++11]) sowie dem neuesten ISO-Standard [C++14].
 ]
 
 ---
@@ -325,18 +324,16 @@ Das Augenmerk bei Erstellung der Präsentations-Seiten lag darauf,
 * sowie gedankliche Modelle und tiefere Zusammenhänge zu verdeutlichen.
 
 .N.center[
-Dabei sind Fragen jeglicher Art willkommen.._[]
-
-**Zu jeder Zeit!**
+Dabei sind Fragen jeglicher Art willkommen - **zu jeder Zeit**.._[]
 
 Das gilt auch und gerade dann, wenn Ihre Fragen über den Inhalt der
 jeweiligen Präsentations-Seite hinausgehen.
 ]
 
 .F[:
-Die Möglichkeit, bei Unklarheiten Rückfragen zu stellen, ist ein ganz
-wesentlicher Vorteil der Teilnahme an einer Schulung … im Vergleich dazu,
-den Stoff lediglich in schriftlicher Form vor sich zu haben.
+Die Möglichkeit, bei Unklarheiten Rückfragen zu stellen, ist ein ganz wesentlicher
+Vorteil der Teilnahme an einer Schulung … im Vergleich dazu, denselben Stoff
+lediglich in schriftlicher Form vor sich zu haben.
 ]
 
 ---
@@ -361,7 +358,7 @@ gedruckten und der [Online-Version](#online_version) sind sie in jedem Fall
 sichtbar.
 
 .F[:
-Ein  Grund hierfür ist, dass neu projezierte Seiten nicht mit Informationen
+Ein  Grund hierfür ist, dass neu projizierte Seiten nicht mit Informationen
 überfrachtet erscheinen sollen, ein anderer, dass – abhängig vom Zeitrahmen – in
 der Präsentation nicht unbedingt alle in Fußnoten verpackte Aspekte besprochen
 werden … ausgenommen auf explizite Nachfrage.
@@ -465,9 +462,9 @@ auch kompilierbare Beispiele in getrennten Dateien verwendet.
 
 .F[:
 Bitte üben Sie hier die notwendige Toleranz: auch und gerade als
-Software-Entwickler/in wird Ihnen bewusst sein, dass in zehn oder zwanzig neu
-eingetippten Quelltext-Zeilen oftmals kleine "Vertipper" enthalten sind, die
-erst beim Kompilieren auffallen. **Hinweise auf Flüchtigkeitsfehler in
+Software-Entwickler/in wird Ihnen bewusst sein, dass in zehn oder zwanzig
+neu eingetippten Quelltext-Zeilen oftmals kleine "Vertipper" enthalten,
+die vor erst beim Kompilieren auffallen. **Hinweise auf Flüchtigkeitsfehler in
 Code-Fragmenten werden natürlich gerne entgegengenommen und möglichst zeitnah
 korrigiert.**
 ]
@@ -663,7 +660,7 @@ können, das den Älteren unter Ihnen noch aus einer [Fernseh-Show] der späten
 vorab ausgewählter Zuschauer heraus – mittels von einer "Joystick"-Box
 erzeugter und per Akustikkoppler und Telefon weitergeleiteter Signale –
 in der Show eine Armbrust ferngesteuert und schließlich abgeschossen werden
-konnte … für die damalige Zeit ein futuristisches "high-tech" Show-Element.)
+konnte … für die damalige Zeit futuristisches "high-tech" Show-Element.)
 ]
 
 [Fernseh-Show]: http://de.wikipedia.org/wiki/Der_goldene_Schu%C3%9F
@@ -728,7 +725,7 @@ template: plain
 name: english_language
 header: ### Kursdurchführung in Englisch
 
-Auf Wunsch ist die Kursdurchführung in englicher Sprache möglich, wenn dies
+Auf Wunsch ist die Kursdurchführung in englischer Sprache möglich, wenn dies
 entweder vorab so abgestimmt wurde oder alle Teilnehmerinnen und Teilnehmer dem
 nachträglich zustimmen.
 
@@ -748,10 +745,10 @@ Da die parallele Aktualisierung von mehrsprachigen Unterlagen sehr aufwändig
 ist, wird längerfristig auf die deutschsprachige Version verzichtet.
 ]
 
-Die Vermischung zweier Sprachen im selben Unterabschnitt eines Kapitel oder gar
-auf ein und derselben Seite – wie gerade hier – wird allerdings die Ausnahme
-bleiben (abgesehen von Beispiel-Code und nachträglich ergänzten Fußnoten, welche
-stets in englischer Sprache verfasst werden).
+Die Übersetzung erfolgt i.d.R. auf Basis einzelner Kapitel oder Abschnitte eines
+Kapitels. Die Vermischung der beiden Sprachen auf ein und derselben Seite – wie
+gerade hier – bleibt die Ausnahme (abgesehen von Beispiel-Code und nachträglich
+ergänzten Fußnoten, welche stets in englischer Sprache verfasst werden).
 
 ---
 template: plain
@@ -776,7 +773,7 @@ in slavische, arabische und fernöstliche Sprachen oder Esperanto kann der Autor
 mangels entsprechender eigener Kenntnisse leider nicht beurteilen.
 ]
 
-Wenn Sie möchten, können Sie den Online-Übersetzungs-Service gleich
+Wenn Sie möchten, können Sie den Online-Übersetzungsservice gleich
 ausprobieren, z.B.
 
 * mit dieser Seite *Deutsch → Englisch* oder
@@ -796,7 +793,7 @@ taking this course.
 The bottom half of all printed pages has been deliberately left empty so that
 you can use the space freely for annotations.
 
-Of course, if you donwload a more recent version of this presentation it may be
+Of course, if you download a more recent version of this presentation it may be
 less usable without your annotations, so you may want to consider the next page.
 
 .N.center[
@@ -819,7 +816,7 @@ template: plain
 name: electronic_annotations
 header: #### Annotations to HTML Version
 
-As the core content of the HTML files is witten in [markdown format] it is
+As the core content of the HTML files is written in [markdown format] it is
 quite readable by itself and you have the option to handle it with purely
 electronic means.
 
@@ -894,7 +891,7 @@ the slide content with a line consisting of **exactly three question marks**.
 
 BTW: The easiest way to include small code examples, what might be a typical
 use case for private annotations, is to just indent them by four spaces –
-surrounding code fragments with lines of three or more backticks, a markdown
+surrounding code fragments with lines of three or more back-ticks, a markdown
 extension known as [Fenced Code Blocks], is the other option.
 
     #include <iostream>
@@ -906,12 +903,12 @@ extension known as [Fenced Code Blocks], is the other option.
 
 As we are at it go: when you have this page loaded in a text editor, with the line
 above – **not displayed** when you view this in the browser – and the paragraph
-before the code example you have a nice way how to embedde links without making
+before the code example you have a nice way how to embed links without making
 the text flow unreadable or inconvenient to edit.
 
 <!-- The reference in square brackets needs to be unique only within a single slide
      and the line connecting the reference with the external link may be placed
-     anywhere in the page ... and HTML comments are another way to annotate,
+     anywhere in the page … and HTML comments are another way to annotate,
      not even visible in the Presenter's View.
 -->
 

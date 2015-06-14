@@ -73,8 +73,8 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
   Template used for for pages INTRODUCING to a new Info-Graphic
   *****************************************************************************
   On this kind of pages a size-reduced version of the whole info graphic will
-  be reproduced and occupies aproximately 2/3 of the page width. So only add
-  little information, preferrably links to later pages dealing with single
+  be reproduced and occupies approximately 2/3 of the page width. So only add
+  little information, preferably links to later pages dealing with single
   sections of the info graphic.
 
   On pages USING THIS TEMPLATE the following attributes must be set:
@@ -209,7 +209,7 @@ weg von Datenstrukturen und Algorithmen.
 ##### Unterprogramme
 
 Unterprogramme teilen Verarbeitungsschritte auf, vom komplexen Gesamtablauf bis
-hinunter zu kleinen, einfach überschau- und testbaren Einheiten.
+hinunter zu kleinen, einfach zu überschauenden und gut testbaren Einheiten.
 
 ##### Bibliotheken
 
@@ -287,7 +287,7 @@ header: #### Mechanismen zur Wiederverwendung
 ##### Klassen
 
 Relativ allgemein und universell gehaltene Klassen bilden in der Regel die
-kleinsten wiederverwendbaren Bausteine im Rahmen der objekt-orientierten
+kleinsten wiederverwendbaren Bausteine im Rahmen der objektorientierten
 Vorgehensweise.
 
 ##### Unterprogramme
@@ -311,7 +311,7 @@ template: plain
 name: multi_paradigm_cpp
 header: ## C++ as Multi-Paradigm Language
 
-Commonly C++ is viewn as **Object Oriented Programming** Language.
+Commonly C++ is viewed as **Object Oriented Programming** Language.
 
 This is correct, but only part of the truth, because C++ also._[]
 
@@ -376,7 +376,7 @@ template: plain
 header: ### How to Recognize that Things Start to Go Wrong?
 
 See the first section of this chapter for the favourable deeper
-[guiding principles](#guiding_priciples) of any software development.
+[guiding principles](#guiding_principles) of any software development.
 
 If you observe increasing failure to reach these goals, you might have chosen
 
@@ -434,7 +434,7 @@ that time, it should not be overestimated:
   templates. But templates were not in that widespread use as later, after they
   became part of the C++98 standard.
 
-* Therefore most any abstraction in the Gof book is via base classes and virtual
+* Therefore most any abstraction in the GoF book is via base classes and virtual
   member functions (aka. late binding, dynamic polymorphism, etc.) – with
   consequences detailed on the next pages.
 
@@ -456,7 +456,7 @@ header: #### Design Patterns and the GoF Book – A Personal Opinion
 It seems, design patterns generally and the GoF book in particular can be
 understood in two different ways:
 
-1. **Train the Brain** to recognize reccuring structures in software projects
+1. **Train the Brain** to recognize recurring structures in software projects
    and know what to do about them, i.e.
    * to which degree the pattern makes sense in a given context,
    * when it might be especially appropriate,
@@ -492,7 +492,7 @@ depreciating, feel free to replace it by something more neutral.
 
 * **There is a – sometimes small, sometimes big – gain:**
 
-  * It may help to susbstantially reduce the modules to recompile in a large
+  * It may help to substantially reduce the modules to recompile in a large
     software system after a tiny or even moderate change.
 
 * **There is a – sometimes big, sometimes small – loss:**
@@ -518,7 +518,7 @@ template: plain
 header: ### Design Patterns and OOP-Languages
 
 Because of the GoF book prevalence in the design patterns world, some of its
-proponents meassure the "quality" of a programming language by the degree to
+proponents measure the "quality" of a programming language by the degree to
 which it supports dynamic polymorphism and introspection – both no absolute
 strengths of C++.
 
@@ -594,7 +594,7 @@ using it with all appropriate STL algorithms.
 ]
 
 .F[:
-[Boost.Iterator] may help to avoid some of the more schematical work.
+[Boost.Iterator] may help to avoid some of the more schematic work.
 ]
 
   [Boost.Iterator]: http://www.boost.org/doc/libs/release/libs/iterator/doc/index.html
@@ -608,7 +608,7 @@ header: #### DP-Example: Observer
   [Boost.Signals2]: http://www.boost.org/doc/libs/release/doc/html/signals2.html
 
 At its core the observer pattern is about decoupling a number of otherwise
-independant components or sub-systems so that each one doesn't have to know too
+independent components or sub-systems so that each one doesn't have to know too
 many details of the other one.
 
 For dynamic control over coupling._[] an implementation may simply use C++11
@@ -629,7 +629,7 @@ such features.
 .F[:
 Sensibly decoupling components with static connections to each other is more or
 less a developer's "every day job" (if she understands the requirements of good
-software engineering); if that were subsummed under the observer pattern, any
+software engineering); if that were subsumed under the observer pattern, any
 non-trivial software would be full of observers …
 ]
 
@@ -660,19 +660,19 @@ For recursive nesting any STL container may be added, e.g. an `std::map`
 * keyed with an `std::string` for access.._[]
 
 (A ready-to-use library solution to consider, especially for composites
-holding persistant state or configuration data, is [Boost.Property_Tree].)
+holding persistent state or configuration data, is [Boost.Property_Tree].)
 
 .F[:
-In other words: more or less mimicking the core of Python's object modell. For
+In other words: more or less mimicking the core of Python's object model. For
 some example code (rather meant as proof of concept but to be used as is) see
 [Examples/DynamicVariant/dv-poc.cpp](../Examples/DynamicVariant/dv-poc.cpp)
 ]
 
 ---
 template: plain
-header: #### DP-Example: Template-Methode
+header: #### DP-Example: Template-Method
 
-From the general perspective the design pattern called *Template-Methode* is
+From the general perspective the design pattern called *Template-Method* is
 an ideal example for the [Open-Close Principle](#oc_principle).
 
 .W[
@@ -709,11 +709,11 @@ template: withinfo
 graphic: Example-OpenClosePrinciple
 section: Virtual Member Functions
 name: oc_with_polymorphism
-header: ##### DP Template Methode Pattern Based on virtual Member Functions
+header: ##### DP Template Method Pattern Based on virtual Member Functions
 
-[GoF Template Methode Pattern]: http://en.wikipedia.org/wiki/Template_method_pattern
+[GoF Template Method Pattern]: http://en.wikipedia.org/wiki/Template_method_pattern
 
-In the classical implementation._[] of the [GoF Template Methode Pattern]
+In the classical implementation._[] of the [GoF Template Method Pattern]
 
 * virtual member functions of a base class are
 
@@ -741,7 +741,7 @@ template: withinfo
 graphic: Example-OpenClosePrinciple
 section: C++ Template Mechanism
 name: oc_with_cpp_templates
-header: ##### DP Template Methode Pattern Based on C++-Templates
+header: ##### DP Template Method Pattern Based on C++-Templates
 
 When implemented with C++-Templates._[]
 
@@ -799,7 +799,7 @@ out chances to improve and enhance the GoF book style by using C++-Templates.
 Of special interest for C++ developers may also be [Boost.Fsm] and [Boost.Msm],
 which both implement state machines applying C++ meta programming techniques.
 The architecture of the latter even allows to chose among several *front-ends*
-(i.e. *DSL-s* to specifiy the states and transitions) and *back-ends* (i.e.
+(i.e. *DSL-s* to specify the states and transitions) and *back-ends* (i.e.
 drivers to execute the machine according to incoming events). The default
 front-end uses a tabular layout similar to the one achievable with a pure C
 approach using tables of function pointers.
@@ -856,7 +856,7 @@ To end with:
 
 * as vastly over-engineered solution to a trivial problem,
 
-* if some ready-to-use libary solution is thrown overboard because it doesn't
+* if some ready-to-use library solution is thrown overboard because it doesn't
   follow (seemingly) "best practice" of the GoF book style, or
 
 * if pointing to the latter is used as an argument to radically limit the
@@ -871,7 +871,7 @@ header: ## Summary and Epilogue
 
 * Keep software "open" where you expect future modifications …
 
-* … but make it "close" where inadvertant changes could break it.
+* … but make it "close" where inadvertent changes could break it.
 
 * Start with the simplest possible solution – don't over-engineer.
 

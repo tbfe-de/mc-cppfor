@@ -73,8 +73,8 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
   Template used for for pages INTRODUCING to a new Info-Graphic
   *****************************************************************************
   On this kind of pages a size-reduced version of the whole info graphic will
-  be reproduced and occupies aproximately 2/3 of the page width. So only add
-  little information, preferrably links to later pages dealing with single
+  be reproduced and occupies approximately 2/3 of the page width. So only add
+  little information, preferably links to later pages dealing with single
   sections of the info graphic.
 
   On pages USING THIS TEMPLATE the following attributes must be set:
@@ -142,17 +142,1600 @@ template: blank
 
 -------------------------------------------------------------------------------
 
-1. [Template Basics					](#template_basics)
-1. [Exception Basics					](#exception_basics)
-1. [Library Basics – Strings				](#string_basics)
-1. [Library Basics – I/O-Streams			](#iostream_basics)
-1. [Praktikum						](#exercise_mon2)
+1. [More C++11/14 Extensions			](#cpp11_14_extensions)
+1. [Basics of Type Deduction			](#cpp_type_deduction)
+1. [Template Basics				](#template_basics)
+1. [Exception Basics				](#exception_basics)
+1. [Library Basics – Strings			](#string_basics)
+1. [Library Basics – I/O-Streams		](#iostream_basics)
 
 -------------------------------------------------------------------------------
 
 Kürzere Pausen werden jeweils nach Bedarf eingelegt.
 
 Die Besprechung der Musterlösung(en) erfolgt zu Beginn des folgenden Vormittags.
+
+---
+template: plain
+name: cpp11_14_extensions
+header: ## More C++11/14 Extensions
+
+--------------------------------------------------------------------------
+
+* [Extensions to Literals		](#extension_to_literals)
+* [Static Assertions 			](#static_assertions)
+* [Explicit `nullptr` Value and Type	](#nullptr_and_nullptr_t)
+* [Initialiser Lists			](#initialiser_lists)
+* [`auto`-typed Variables (and Objects)	](#auto_typed_variables)
+* [Trailing Return-Type Syntax		](#trailing_return_types)
+* [Range (-based) `for`-Loops		](#range_based_for)
+* [Alternative for Type Definitions	](#alternative_typedefs)
+
+--------------------------------------------------------------------------
+
+---
+template: plain
+name: extension_to_literals
+header: ### Extensions to Writing Literals
+
+C++11 extended the syntax for literals in various ways:
+
+* Character and character string literals:  
+  * [UTF-8 and UTF-16 encoding can be requested](#utf8_utf16_char_enc)
+  * [Quoting of special characters can be reduced](#raw_string_literals)
+
+* Numeric literals:  
+  * [Readability can be improved by structuring](#num_literals_structure)
+  * [Notation can be in binary](#binary_literal_notation)
+
+* All kinds of literals:  
+  * [May take user defined suffixes](#user_defined_literals)
+
+---
+template: plain
+name: utf8_utf16_char_enc
+header: #### Specifying Encoding of Characters
+
+Since C++11 characters and string literals can explicitly specify:
+
+* UTF-8 encoding by the prefix `u8` (8 bit code units)
+* UTF-16 encoding with the prefix `u` (16 bit code units).
+* UTF-32 encoding with the prefix `U` (32 bit code units).
+
+Note that the `L`-prefix from C++98 is implementation defined with respect to
+code unit size (typically 16 bit on MS-Windows and 32 bit on Linux and most
+other execution environments derived from Unix) and encoding.
+
+.I[
+For more information on prefixes to specify UTF encoding see:
+http://en.cppreference.com/w/cpp/language/character_literal
+http://en.cppreference.com/w/cpp/language/string_literal
+]
+
+.F[:
+If the full code point space of UCS (with the uppermost limit at 0x10FFFF as set
+by ISO/IEC10646) is used, a single code point may take up to four code units in
+[UTF-8] and one or two code units in [UTF-16]. With [UTF-32] there is always a
+1:1 mapping from between code points and code units – but not necessarily
+between code points and user perceived characters! Only when the character set
+is limited to [UCS-2] – which contains all of the basic multilingual plane
+([BMP]) – there is a 1:1 mapping from code points to code units in [UTF-16] too.
+(But again: code points are not necessarily user perceived characters!) As there
+is currently **very limited support** in standard C++ for conversions between
+encodings and other common operations on multilingual text, usually the (free)
+[ICU-Library] is recommended for text-centric applications with serious needs
+for internationalisation and appropriate localisation.
+]
+
+[BMP]: http://en.wikipedia.org/wiki/Plane_%28Unicode%29#Basic_Multilingual_Plane
+[UTF-8]: http://en.wikipedia.org/wiki/UTF-8
+[UTF-16]: http://en.wikipedia.org/wiki/UTF-16
+[UTF-16]: http://en.wikipedia.org/wiki/UTF-32
+[UCS-2]: http://en.wikipedia.org/wiki/UCS-2
+[ICU-Library]: http://site.icu-project.org/
+
+---
+template: plain
+name: raw_string_literals
+header: #### Raw String Literals
+
+The requirement to quote a number of special characters in string literals is
+alleviated in C++11 with the introduction of raw string literals:
+```
+constexpr char text[] = R"(
+… any content … no necessity for quoting here …
+… no special interpretation of certain characters …
+)"; // <-- except this end of raw string indicator
+```
+
+Also the end marker of raw string literals can be freely chosen and the prefix
+may be combined with an UTF encoding specifier:
+```
+… u8R"!!end-of-text!!( … whatever … )!!end-of-text!!" …
+```
+
+The usual splicing of lines ending in a backslash will **not** happen in raw
+string literals as the first and second of the [Phases of Translation] do not
+apply to their content.
+
+.I[
+For more information on raw string literals see:
+http://en.cppreference.com/w/cpp/language/string_literal
+]
+[Phases of Translation]: http://en.cppreference.com/w/cpp/language/translation_phases
+
+---
+template: plain
+name: num_literals_structure
+header: #### Structuring Numeric Literals for Readability
+
+Since C++14 it is possible to write apostrophes inside numeric literals:
+```
+int x = 250'000;       // 250-thousand (250000)
+int y = 12'500'000;    // 12-million 500-thousand (12500000)
+int z = 1'500'000'000; // one and a half (US-) billion (1500000000)
+                       // or: 1,5 Milliarden in German
+auto t = 0.125'379'12; // if t is a time in seconds this would add
+                       // up to: 125 milliseconds
+                       //      + 379 microseconds
+                       //      + 120 nanosecond (yes, 120!)
+```
+
+Note that apostrophes may be inserted anywhere in a numeric literal, not just to
+separate groups of three or groups of the same length.
+
+.I[
+See also:
+http://en.cppreference.com/w/cpp/language/integer_literal
+http://en.cppreference.com/w/cpp/language/floating_literal
+]
+
+.F[:
+It can be expected that this feature will confuse a number of editors or C++
+IDEs with syntax-highlighting – until such are adapted. (This is possible
+visible on this page, which uses a JavaScript-plugin for syntax highlighting,
+that is not yet adapted to that feature at the time of writing this page.)
+]
+
+---
+template: plain
+name: binary_literal_notation
+header: #### Numeric Literals in Binary Notation
+
+C++14 introduced a syntax for binary literals, starting with `0b`:
+```
+… 0b101010 …                // same as: 052, or 42, or 0x2A
+… 0b'00'1101'101'110101' …  // same as: 0x1B75
+```
+
+Interspersing apostrophs anywhere, like in the second example, might be used to
+reflect a domain specific grouping of bits (2-4-3-6 in the example).
+
+.I[
+See also:
+http://en.cppreference.com/w/cpp/language/integer_literal
+]
+
+---
+template: plain
+name: user_defined_literals
+header: #### User Defined Literals
+
+C++11 introduced a new form of operator overloading to allow user specific
+suffix to numeric, character and string literals.
+
+There are many possible uses, one is to provide readable, strongly typed units
+for literals representing physical quantities.
+
+C++14 applied that feature to provide a number of additional suffixes, e.g.._[]
+
+* `"hello"s` – represents an object of type `const std::string` initialised
+  with `hello`.
+
+* `2.0i` – represents an object of type `std::complex` with the real part set
+  to zero and the imaginary part set to two.
+
+.I[
+For more information see:
+http://en.cppreference.com/w/cpp/language/user_literal
+]
+
+---
+template: plain
+header: #### User Defined Literals Example (1)
+
+As a motivating example assume a class representing a length as a distinct type,
+i.e. one that should not mix with ordinary (dimensionless) numbers.
+
+The initial shot could look as follows:
+```
+class Length {
+    long double metres;
+    constexpr Length(long double m) : metres(m) {}
+    …
+};
+```
+
+Internally a `long double` is used to represents some length in metres, but to
+avoid wrong assumptions on the user's side the constructor is private.
+
+---
+template: plain
+header: #### User Defined Literals Example (2)
+
+To create objects of this class it provides a number of helper functions:
+```
+class Length {
+    …
+public:
+    static constexpr Length m(long double v) {
+        return Length(v);
+    }
+    static constexpr Length km(long double v) {
+        return Length(v*1000.0);
+    }
+    static constexpr Length mm(long double v) {
+        return Length(v/1000.0);
+    }
+};
+```
+
+---
+template: plain
+header: #### User Defined Literals Example (3)
+
+If the class also provides some output operation, like
+```
+#include <iostream>
+…
+class Length {
+    …
+    friend
+    std::ostream &
+    operator<<(std::ostream &lhs, const Length &rhs) {
+        return lhs << rhs.metres << "m";
+    }
+}
+```
+
+the following small demo program should compile:
+```
+int main() {
+    auto dtm = Length::km(385000);
+    auto inch = Length::mm(25.4);
+    std::cout << "Distance to moon is " << dtm << std::endl;
+    std::cout << "One inch is " << inch << std::endl;
+}
+```
+
+---
+template: plain
+header: #### User Defined Literals Example (4)
+
+User defined literals would provide the following convenience:
+```
+auto dtm = 385000_km;
+auto inch = 25.4_mm;
+```
+
+In the following implementation they delegate to a single helper
+```
+constexpr Length operator"" _km(unsigned long long v) {
+    return Length::m(v*1000.0);
+}
+constexpr Length operator"" _mm(long double v) {
+    return Length::m(v/1000.0);
+}
+```
+
+so the other helpers are not any more necessary – even no helper at all
+were necessary if the functions were turned into friends of `Length`.
+
+---
+template: plain
+name: static_assertions
+header: ### Static Assertions
+
+C++11 introduced the compile time directive `static_assert` to allow for
+tests that may terminate compilation, if some condition is not fulfilled.
+
+C++1y will make the second argument of `static_assert` optional.
+
+.I[
+For more information on static assertions see:
+http://en.cppreference.com/w/cpp/language/static_assert
+]
+
+---
+template: plain
+name: static_assertions
+header: #### Static Assertion Example
+
+Application for static assertions are manifold.
+
+The following example shows how a user defined literal could check for a
+certain properties of the value supplied, e.g. when only even numbers from
+the range `1` to `1001` make sense:
+```
+MyClass operator"" _mysfx(unsigned long long v) {
+    static_assert(1 <= v && v <= 1001, "value out of range");
+    static_assert((v % 2) == 0, "only even numbers accepted");
+    return {v}; // assuming MyClass has a non-explicit constructor
+                // taking an argument of type unsigned long long
+}
+…
+… 12_mysfx …     // OK
+… 123_mysfx …    // ERROR (due to check with static assert)
+… 12.3_mysfx …   // ERROR (because operator"" _mysfx()
+                 //        expects an integral value)
+```
+
+---
+template: plain
+name: static_assertions
+header: #### Static Assertion Recommendations
+
+.N[
+
+* If some erroneous condition can be checked at compile time, this is
+  **always** preferable to a test at run time.
+
+* Static assertions require expressions that can be evaluated at compile time,
+  hence `constexpr` helper functions will often come in handy.
+
+* To unlock the full potential of static assertions, be sure to get a good
+  understanding of what is provided via the header file [`<type_traits>`].
+
+]
+
+[`<type_traits>`]: http://en.cppreference.com/w/cpp/header/type_traits
+
+---
+template: plain
+name: nullptr_and_nullptr_t
+header: ### Explicit `nullptr` Value and Type
+
+C++11 introduced the new keyword `nullptr` of type `std::nullptr_t`._[]
+
+* to denote a literal constant for an address,
+
+* which will never be given to a valid
+
+* variable of some built-in type or
+
+* object of some class.
+
+Before, either the preprocessor macro `NULL` or a literal `0` had to be used.
+
+.I[
+For more information on `nullptr` and `std::nullptr_t` see:
+http://en.cppreference.com/w/cpp/language/nullptr and
+http://en.cppreference.com/w/cpp/types/nullptr_t
+]
+
+.F[:
+Other as for `void *`, **into which** any other pointer type will be converted
+if necessary, the type `std::nullptr_t` which converts vice versa converts
+**into** any other pointer type, but its only possible value is `nullptr`.
+]
+
+---
+template: plain
+header: #### `nullptr` Example (1)
+
+The use of `nullptr` as an argument may help to resolve overloads (and avoid
+surprises) in some cases like the following.
+
+.pull-left[
+Assume a function with overloads for integral values and char pointers:
+```
+…
+void foo(int);
+void foo(const char *);
+…
+```
+]
+.pull-right[
+What is called here?
+```
+foo(NULL);
+```
+Here the intent is clear:
+```
+foo(0);
+foo(nullptr);
+```
+]
+
+Since `nullptr` is a keyword, it is available without any include file, but to
+use `std::nullptr_t` the header `<cstddef>` has to be included.
+
+---
+template: plain
+header: #### `nullptr` Example (2)
+
+Even `nullptr` is not helpful if there are several overloads on pointers:
+.pull-left[
+```
+…
+void foo(void *);
+void foo(const char *);
+void foo(int *);
+void foo(MyClass *);
+…
+```
+]
+.pull-right[
+Given a number of overloads for different kinds of pointers as shown left, the
+following call is ambiguous:
+```
+foo(nullptr);   // ambiguous
+```
+]
+
+The solution is to cast the `nullptr` (or `0` or `NULL`) to the correct
+type:._[]
+```
+foo(static_cast<int*>(nullptr)); // OK (in C++11, as nullptr used)
+foo(static_cast<int*>(0));       // OK (in C++98 and C++11)
+foo((int*)0);   // also OK (but C-style cast is deprecated in C++)
+```
+
+.F[:
+If all the pointer overloads test for the `nullptr`-case – like it should be
+expected for a wide interface in which the client may legally hand-over that
+value – and if all react in the same way, an alternative were to add another
+overload for `std__nullptr_t`
+]
+
+---
+template: plain
+name: nullptr_usage
+header: #### Usage Recommendations for `nullptr`
+
+.N[
+
+* With `nullptr` there is little reason to stay with the classic
+  alternatives.._[]
+
+* Any use `0` or `NULL` in a pointer context can safely be changed to `nullptr`.
+
+* Care has to be taken when `0` or `NULL` is explicitly casted to some pointer
+  type.
+
+* Some (but not all) of such usages will still require the use of a cast.
+]
+
+.W[
+A `reinterpret_cast` on a `nullptr` (or `0` or `NULL`) should always be
+looked-at with suspicion, as it just reuses the `bits and bytes` given to it
+with a different interpretation.
+]
+
+.F[:
+One exception were backward-compatibility to compilers not (yet) implementing
+C++11.
+]
+
+---
+template: plain
+name: initialiser_lists
+header: ### Initialiser Lists
+
+As new type the template `std::initializer_list` has been introduced with C++11.
+
+* Initializer lists may be used as argument to constructors to fill containers.
+
+* The type of the contained initialisers may be
+
+  * deduced from the call context and accordingly converted (if mapped to an
+    `std::initializer_list<T>`-s with a known `T`), or
+
+  * must at least be unique (if mapped to an `std::initializer_list<T>` with
+    a dependant type `T`).
+
+.I[
+For more information on initialiser lists see:
+http://en.cppreference.com/w/cpp/utility/initializer_list
+]
+
+---
+template: plain
+header: #### Initialiser List Example
+
+A (hypothetical) class `Polygon` might be initialised as follows:._[]
+```
+#include <initializer_list>
+…
+class Polygon {
+    std::vector<Point> points;
+public:
+    Polygon(std::initializer_list<Point> init) {
+        std::copy(init.begin(), init.end(),
+                  std::back_inserter(points));
+   }
+   …
+};
+…
+Polygon drawing{ {Point{7, 12}, Point{3, 8}, Point{1, 5}} };
+```
+
+.F[:
+Also the classic initialisation syntax may be used as long as the initialiser
+list is enclosed in curly braces. (Also, as shown in the last line, the class
+name `Point` may be omitted, but only with brace initialisers.)
+```
+   // alternatives to the above:
+Polygon drawing = {Point{7, 12}, Point{3, 8}, Point{1, 5}};
+Polygon drawing({Point{7, 12}, Point{3, 8}, Point{1, 5}});
+Polygon drawing({Point(7, 12), Point(3, 8), Point(1, 5)});
+Polygon drawing({ {7, 12}, {3, 8}, {1, 5} });
+```
+]
+
+---
+template: plain
+header: #### Initialiser List Recommendations
+
+.N[
+
+* Initialiser lists allow more compact initialisation of container-like classes.
+
+* Though they are not limited to that area, they might e.g. also be
+  [used with range-`for`](#range_for_init_list).
+
+* Aside from simple uses, as for (by-) value elements with copy initialisation,
+  be aware of some limitations, like e.g.:._[]
+
+  * Initialiser lists containing move-only types can still be handed over as
+    function arguments via rvalue references …
+  * … but elements from such lists cannot be move-out, only accessed in place.
+
+]
+
+.F[:
+Also if some such limitations may not be obvious at the first glance, they have
+a natural reason that becomes evident if alternative choices are considered.
+]
+
+---
+template: plain
+name: auto_typed_variables
+header: ### `auto`-typed Variables and Objects
+
+Instead of supplying the type in a definition of a variable or object, C++11
+allows the use of the keyword `auto`.._[]
+
+* There must be an initialising expression.
+
+* The type of the definition is taken from that expression.
+
+* If `auto` is used unadorned, then the type is the type of the initialising
+  expression with `const`, `volatile` and references (`&`, `&&`) stripped away.
+
+The type deduction rules for `auto` will be considered in more detail later.
+
+.I[
+For more information on `auto` as type specifier see:
+http://en.cppreference.com/w/cpp/language/auto
+]
+
+.F[:
+Actually this is a change of the meaning `auto` once had in C, which is to
+request a stack-based variable with the option to omit the type and use the
+default `int`. As types were not any more optional in C++ since long, the
+new meaning cannot cause silent changes.
+]
+
+---
+template: plain
+name: auto_type_examples
+header: #### Examples for `auto`-typed Variables (and Objects)
+
+Though the main use cases for `auto` as type of a variable or object comes in
+later examples (with more complex types), here are some trivial cases using
+`auto` instead of an explicit type, which behave "like expected".
+
+.pull-left[
+Given the following definitions …
+```
+int a = 0;
+long int b = 42;
+const int &r = a;
+const std::string s("hi");
+```
+]
+
+.pull-right[
+… `auto` may be used as shown:
+```
+// type of variable is:
+auto u = 42LL;    /*1*/
+auto v = 2*b;     /*2*/
+auto w = r;       /*3*/
+auto x = s;       /*4*/
+auto y = "hi!";   /*5*/
+auto z = nullptr; /*6*/
+```
+]
+
+Types were not named on the right, in case you want try yourself :-) …._[]
+
+.F[:
+… here they are, in the order of appearance:
+
+* `u` has type `long long`
+* `v` has type `long`
+* `w` has type `int` (plain `int`, no `const`, no reference)
+* `x` has type `std::string` (no `const`)
+* `y` has type `const char *`
+* `z` has type `std::nullptr_t`
+]
+
+---
+template: plain
+name: auto_type_usage
+header: #### Usage Recommendations for `auto`-typed Variables
+
+.N[
+
+* Advantages for simple types (like shown so far) are debatable.
+
+* Some C++-Gurus nevertheless recommend to **always** prefer `auto`.._[]
+
+* One obvious advantage is that it guarantees initialisation.
+
+* If a specific type is required, it may also "go to the right" like in:  
+  `auto x = std::uint16_t{0xFFFF};`
+
+* This makes code look more unique as the above is similar to e.g.:
+  `auto p = new MyClass{"hi!", 3.14};`
+
+]
+.W[
+Do not blindly change any use of typed variables to plain `auto`, as not
+everybody may be familiar with how to specify types in literal initialisers.
+Especially – for the moment – do not combine `auto` with brace initialisers.
+]
+
+.F[:
+Here is a section from a video in which Herb Sutter gives his arguments why he
+would prefer to see a change of customs … but also concedes to other experts to
+have "the right to have a different opinion":  
+https://www.youtube.com/watch?feature=player_detailpage&v=xnqTKD8uD64#t=1704
+]
+
+---
+template: plain
+header: #### Intermezzo: `auto` and Brace Initialisation Corner Cases
+
+.pull-left[
+
+**Minimised Number of Rules**
+
+The fewer the rules exist, the lesser is to learn and to remember.
+All cases, from trivial to highly complicated, can be explained
+with the given set, though the outcome is (sometimes) not the most
+convenient.
+]
+.pull-right[
+
+**Principle of Least Surprise**
+
+If a feature "just works" in a way that meets the expectations of
+"most users", then nothing at all is to be learned …  except – maybe – for
+some dark corner cases, where it works not as expected.
+]
+
+For new features and their cooperation with each other the trade-off is
+sometimes hard to make and an initial try may come out wrong:
+
+.pull-left[
+All below is currently deduced as `std::initializer_list`:
+```
+auto x{2, 3, 5};
+auto x = {2, 3, 5};
+auto y{42};
+auto y = {42};
+```
+]
+.pull-right[
+Expected for C++1y and already implemented in some compilers:._[]
+```
+auto x{2, 3, 5}; // illegal
+auto x = {2, 3, 5}; // list
+auto y{42}; // deduced as int
+auto y = {42}; // list
+```
+]
+
+.F[:
+Surely this does not minimise the number of rules … so does it at least avoid
+surprises?
+]
+
+---
+template: plain
+header: #### Recommendations for `auto` and Brace Initialisation
+
+The least to state is that brace initialisation in cooperation with `auto`
+did probably not "simplify" learning C++, even if no legacy code were to be
+maintained and all the "old" initialisation syntax could be forgotten.
+
+.I[
+For more information, especially when an why the rules do not produce the
+expected behavior and therefore will probably change with C++1y (and are
+already implemented in the new way in MS-VC++ and the upcoming releases
+GCC 5.0) see:
+http://arne-mertz.de/2015/02/type-deduction-and-braced-initializers/
+]
+
+For now the most easy to follow recommendation to avoid surprises in case of
+brace initialisation and `auto`-typed variables is this:
+
+.N[
+
+* Do not combine `auto`-typed variables with brace initialisation.
+
+]
+
+---
+template: plain
+name: trailing_return_types
+header: ### Trailing Return-Type Syntax
+
+Since C++11 `auto` can also be used to specify the return type of a function
+after its formal argument list, like in:
+.pull-left[
+```
+const char *foo() {
+    …
+    return "hello, world";
+}
+```
+]
+.pull-right[
+```
+auto foo( … ) -> const char * {
+    …
+    return "hello, world";
+}
+```
+]
+
+In these simple examples an advantage is hard to see, but they will become
+visible in later (more advanced) use cases.
+
+.I[
+For further coverage of leading and trailing return type syntax see:
+http://en.cppreference.com/w/cpp/language/function
+]
+
+---
+template: plain
+name: trailing_return_types
+header: #### Completely Omitted Return-Type
+
+Since C++14 when replacing the leading return type of a function with `auto`,
+the trailing return type may also be omitted in some cases.
+
+If a function is only declared but not defined, the return type must be given:
+```
+auto foo() -> const char *; // trailing return type required
+```
+
+.pull-left[
+Otherwise the return type is deduced if there is only a single return statement
+or all return statements have the same type:
+```
+auto foo()
+    …
+    return "hello, world";
+}
+```
+]
+.pull-right[
+More than one return statement and different types:
+```
+auto foo() -> const char * {
+    if ( … )
+        return nullptr;
+    …
+    return "hello, world";
+}
+```
+]
+
+---
+template: plain
+name: trailing_return_usage
+header: #### Usage Recommendations for Trailing Return Types
+
+.N[
+
+* In many (simple) cases using the trailing return type syntax has no direct
+  benefit.
+
+* Instead it requires more typing and breaks with the familiar "look & feel" of
+  function definitions.
+
+* Nevertheless deciding to **require** the use of trailing return types – e.g.
+  per local *Style Guide* – might help to produce a more consistent programming
+  style … (on the long run, after most traditional usages are changed).
+
+* Also be prepared for rejection by a substantial fraction of developers,
+  clinging to traditional style (with various arguments).
+
+]
+
+.W[
+Do **not omit** trailing return types completely unless you surely know you
+will **never** have to compile in environments less recent than C++14.
+]
+
+---
+template: plain
+name: range_based_for
+header: ### Range (-based) `for`-Loops
+
+C++11 introduced a unified syntax to loop over all elements of a collection.
+
+It looks similar to the classic `for`-Syntax, but  inside the parentheses
+following the keyword `for`
+
+* a place-holder variable
+
+* is separated by a colon (`:`)
+
+* from a collection.
+
+Its use becomes usually obvious from some characteristic examples, like those
+shown in the next pages, and also feels quite natural soon.
+
+.I[
+For more information on range-based loops (aka. "range-for") see:
+http://en.cppreference.com/w/cpp/language/range-for
+]
+
+---
+template: plain
+header: #### Example: Range-For over Classic Array
+
+Using range-`for` to read or modifying all elements in a classic array …
+.pull-left[
+```
+int data[100];
+… // fill with 100 values
+```
+]
+.pull-right[
+```
+for (int e : data)
+    … // sequentially read
+      // values from data via e
+…
+for (int &v : data)
+    … // sequentially modify
+      // values from data via v
+```
+]
+.pull-left[
+… the code on the right side is equivalent to the code below, accessing all
+elements of data one after the other by index …
+```
+for (int i = 0; i < 100; ++i) {
+    int e = data[i];
+    … // read data[i] via e
+}
+…
+for (int i = 0; i < 100; ++i) {
+    int &v = data[i];
+    … // modify data[i] via v
+}
+```
+]
+.pull-right[
+… or – more C-style – via pointer:._[]
+```
+for (int *p = data;
+    p < data+100; ++p)
+    … // read data via *p
+…
+for (int *p = data;
+    p < data+100; ++p)
+    … // modify data via *p
+```
+]
+
+.F[:
+Performance evaluations typically show neither version has an advantage over the
+other.
+]
+
+---
+template: plain
+header: #### Example: Range-For over STL-Vector
+
+One of the main advantages of range-`for` is its uniform syntax that applies to
+STL containers too (below left) instead of classic iterator loop (right):
+.pull-left[
+```
+std::vector<int> data;
+… // fill with values
+for (int e : data)
+    … // read data values
+      // via e
+…
+for (int &v : data)
+    … // modify data values
+      // via v
+```
+
+```
+for (auto e : data)
+   … // access via copy
+for (const auto &e : data)
+   … // access via reference
+```
+]
+.pull-right[
+```
+typedef
+vector<int>::iterator Iter;
+for (Iter it = data.begin();
+          it != data.end();
+        ++it)
+    … // access (read or
+      // modify) data
+      // values via *it
+```
+Also `auto` comes in handy as well for read-only (left) as for modifying
+access (below):._[]
+
+```
+for (auto &e : data)
+   … // access via reference
+```
+]
+
+.F[:
+Actually this will allow for modifying access only if `data´ is not
+`const`-qualified, because otherwise the place-holder of the range-`for`
+loop would be deduced as `const` reference!
+]
+
+---
+template: plain
+header: #### Example: Range-For over STL-Map
+
+In case of an STL-Map the place-holder is in the range-`for` loop is a pair of
+the maps key value-type … which might seem inconvenient to specifiy …
+```
+std::map<std::string, int> data:
+… // fill with key-value pairs
+for (std::pair<std::string, int> e : data)
+    … // access key via e.first and
+      // associated data via e.second
+```
+.pull-left[
+… but again `auto` comes in handy:
+```
+for (const auto &e : data)
+    … // access key via e.first
+      // and associated data
+      // read-only via e.second
+```
+]
+.pull-right[
+```
+for (auto &e : data)
+    … // access key via e.first
+      // and associated data
+      // modifiable via e.second
+```
+Note that the key is always non-modifiable!
+]
+
+---
+template: plain
+header: #### Example: Range-For over Non-Standard Containers
+
+It is well possible to use range-`for` loops with non-standard containers
+```
+MyContainer data;
+… // fill data with values
+for (auto e : data) … // read (by copy) via e
+for (const auto &e : data) … // read (efficiently) via e
+for (auto &e : data) … // access modifiable via e
+```
+
+given one of the following helpers exist:._[]
+.pull-left[
+**Either:**  
+`MyContainer` provides (the standard STL container interface with) the
+**member functions**:
+
+* `… MyContainer::begin() …`
+* `… MyContainer::end() …`.
+
+]
+.pull-right[
+**Or:**  
+There are overloads with an argument of type `MyContainer` for the
+**global functions**:
+
+* `… begin(… MyContainer& …) …`
+* `… end(… MyContainer& …) …`.
+
+]
+
+.F[:
+In both cases the return type and some details of the argument transfer in case
+of global functions are left unspecified here. But what is returned from these
+functions must be equality-comparable (and eventually compare unequal if the
+loop is expected terminate regularly) and there must be increment and
+dereference operations for the returned type.
+]
+
+---
+template: plain
+name: range_for_init_list
+header: #### Example: Range-For with Initialiser List
+
+It is also possible to combine range-`for` with `std::initializer_list`-s:
+```
+enum class Color { Red, Blue, Green, Unspecified = -1 };
+…
+for (auto c : { Color::Red, Color::Blue, Color::Green }) {
+    … // do something with c
+}
+```
+
+If such lists (of all values of some enumeration type) are required in many
+places, they may be specified as initialised constants, preferably close to the
+definition of the enumeration, so that both can be easily maintained in
+parallel.
+```
+enum class Color { Red, Blue, Green, Unspecified = -1 };
+constexpr auto ALL_COLORS = { Color::Red, Color::Blue, Color::Green };
+…
+for (auto c : ALL_COLORS ) …
+```
+
+---
+template: plain
+header: #### Usage Recommendations for Range-`for` Loops
+
+.N[
+
+* Replacing typical iterator loops over containers with range-`for` usually
+  causes no problems and will result in code that is more readable and easier to
+  maintain.
+
+* The same is often true for `std::for_each`, at least as long as a container is
+  processed **completely**.
+
+* For processing container sub-ranges `std::for_each` is still useful.
+
+* Non-standard containers should **strongly consider** to provide the interface
+  required by range-`for` to iterate over their content.
+
+]
+.W[
+Efficiency problems may result if some container holds large objects which are
+not cheap to copy and the place-holder in a range-`for` loop is not specified as
+reference.._[]
+]
+
+.F[:
+The recommendation for *generic code* is to use `auto&&` because this will
+always give optimal results. On the other hand, `auto&&` is a language construct
+which should not be carelessly (i.e. without really understanding the
+implications).
+]
+
+---
+template: plain
+name: alternative_typedefs
+header: ### Alternative for Type Definitions
+
+There is a completely new way to specify a type alias in C++11.
+
+Its syntax is._[]
+
+* the keyword `using` followed by
+* the new type name
+* an equals sign
+* some existing type.
+
+The whole construct may also be specified as a template, requiring (one or
+more) instantiation types when used.
+
+.I[
+For more information on *type aliases* see:
+http://en.cppreference.com/w/cpp/language/type_alias
+]
+
+.F[:
+Since long `typedef` is a feature of C and hence became part of C++ too. Though,
+looking closely, its syntax seems not straight-forward compared to the usual
+assignment syntax, as the new "name" that gets an existing type as "value" is
+on the right.
+]
+
+---
+template: plain
+header: #### New C++11 Type Aliases Example (1)
+
+How to use the feature becomes quickly obvious from a few examples:._[]
+```
+using counter_type = int;
+using MyDataContainerType = std::vector<int>;
+using named_counter_t = std::map<std::string, counter_type>;
+```
+
+.N.center[
+The new names are aliases (only).
+]
+
+Especially they do not constitute new types on which overloading were possible,
+i.e.  the semantics are the same as for `typedef`.
+
+---
+template: plain
+header: #### New C++11 Type Aliases Example (2)
+
+Often local type definitions or aliases may help to make code more readable.
+
+The `typedef` may look more familiar as everybody knows it …
+
+```
+typedef map<std::string, unsigned long>::iterator MapIterator;
+for (MapIterator it = data.begin(); it != data.end(); ++it)
+    …
+```
+… but aliases with `using` may appears more natural, as the new identifier being
+defined goes to the left and what it stands for to the right.._[]
+
+```
+using MapIterator = map<std::string, unsigned long>::iterator;
+for (MapIterator it = data.begin(); it != data.end(); ++it)
+    …
+```
+}
+
+.F[:
+It is probably because the switched around positions of the new type name and
+what it is aliased to, together with the equals sign that makes it easy see the
+role of each part, what makes the new syntax with `using` better readable.
+]
+
+---
+template: plain
+header: #### New C++11 Type Aliases Example (3)
+
+A particularly convincing example for the improved readability is this:
+
+* A pointer to a function
+* taking an argument list of
+  * a pointer to non-modifiable characters and
+  * an integer
+* returning a result of type `bool`.
+
+Usual C style (up to C++98):
+```
+typedef bool (*MyFuncPtr)(const char *, int);
+```
+With C++11 type aliases:
+```
+using MyFuncPtr = bool (*)(const char *, int);
+```
+
+---
+template: plain
+header: #### New C++11 Type Aliases Example (3)
+
+An additional advantage of the new syntax is that it allows to be templated:._[]
+```
+template<typename CounterType>
+using NamedCounters = std::map<std::string, CounterType>;
+```
+
+It also allows for default arguments, but an empty angle bracket remains if the
+default is to be used (and no other template arguments remain).
+```
+template<typename CounterType = long long>
+using NamedCounters = std::map<std::string, CounterType>;
+…
+NamedCounters<> counters;
+```
+
+.F[:
+By using the new type aliases in C++14 (in addition to) the classic style in
+which [Type Traits] were made available in C++11, a lot of (ugly and seemingly
+redundant) `typename` …`::type` constructs can be simplified, as the following
+are equivalent:
+
+* … `typename std::enable_if<(N > 0), typename std::add_lvalue_reference<T>::type>::type` …
+* … `std::enable_if_t<(N > 0), std::add_reference_t<T>>` …
+]
+
+[Type Traits]: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3655.pdf
+
+---
+template: plain
+name: trailing_return_usage
+header: #### Usage Recommendations for C++11 Type Aliases
+
+.N[
+
+* As type aliases in C++11 style are much more readable there is little reason
+  not to use them.
+
+* As they have block scope introducing an alias with an expressive name can
+  make (closely following) code easier understandable.
+
+* Templated type aliases allow elegant solutions for a number of problems that
+  formerly required more effort, like derived classes with a certain amount
+  of duplicated code.
+
+* Beyond the definition syntax nothing new needs to be learned since the
+  semantics of C++11 type aliases are identical to `typedef`-s.
+]
+.W[
+Identical semantics also means that C++11 type aliases do not constitute types
+of their own, so **overloading will not work** for different aliases mapping to
+the same underlying type.
+]
+
+---
+template: plain
+name: cpp_type_deduction
+header: ## Basics of Type Deduction
+
+-------------------------------------------------------------------------------
+
+* [Type Deduction – Why and Where?		](#reasons_for_type_deduction)
+
+* [Type Deduction for `auto` Variables		](#auto_type_deduction)
+
+* [Type Deduction for Templates			](#template_type_deduction)
+
+* [More Type Deduction Scenarios		](#more_type_deduction)
+
+-------------------------------------------------------------------------------
+
+These chapter centrally introduces into type deduction so that this topic is
+not sprinkled through the other parts, where type deduction occurs.
+
+
+---
+template: plain
+name: reasons_for_type_deduction
+header: ### Type Deduction … Why and Where
+
+There are several places where type deduction is done by the compiler. Some have
+to do with convenience, but most have to do with [Generic Programming], which is
+the C++ solution to the following observation:
+
+* Some code, especially reusable code designated for a library, only differs in
+  types, not in algorithm.
+
+* Code duplication can not be the solution, as it violates the [DRY-Principle].
+
+* To weave together generic code and the places of its use with specific types,
+  the compiler needs to carry out type deductions.
+
+.N[
+The latter may seem – and are – trivial in simple cases but can also become
+quite complicated, because the underlying rules try too guarantee an outcome
+according to *what the users (of generic code) expect (in their special use
+case*.
+]
+
+[Generic Programming]: http://en.wikipedia.org/wiki/Generic_programming
+[DRY-Principle]: http://de.wikipedia.org/wiki/Don%E2%80%99t_repeat_yourself
+
+---
+template: plain
+name: auto_type_deduction
+header: ### Type Deduction for `auto`-Variables
+
+Using `auto` as type was introduced into C++11 mainly as a convenience
+feature._[], though in the meantime using `auto` on a regular base becomes
+part of some style recommendations.
+
+The basic rules, how the type is deduced from the initialising expression,
+differs between the unadorned use and possible declarators like `*`, `&`, `&&`
+(pointer, reference) and qualifiers like `const` or `volatile`, e.g.:
+```
+auto x = …        // any initialising expression
+auto *p = …       // initialiser must denote an address
+const auto &r = … // initialiser must be an lvalue but
+                  // access does not allow modifications
+```
+
+.I[
+For an exhaustive summary of `auto` type deduction rules see:
+http://en.cppreference.com/w/cpp/language/auto (and maybe follow the
+[link to Other contexts](http://en.cppreference.com/w/cpp/language/template_argument_deduction#Other_contexts)
+in section 1 of Explanations)
+]
+
+---
+template: plain
+header: #### Type Deduction unadorned `auto`
+
+The rules follow the prevailing user expectations._[] that `const` will not get
+part of the type of the defined variable
+```
+auto x = 42; // x is type int (NOT const int)
+auto y = 0L; // y is type long (NOT const long)
+```
+despite the fact that `42` and `0L` are both literals and hence constant.
+
+This logically extends to `const` qualified names and references used as
+initialising expressions
+```
+const unsigned int MAX = 1000;
+…
+auto limit = MAX; // limit is type unsigned int (NOT const)
+```
+where the `const` qualifier does **not** propagate from `MAX` as initialiser
+into the type deduced for `auto`.
+
+.F[:
+Alternatively the reasoning about why these rules make sense can be built on the
+argument that the alternative – carrying over `const`-ness into the type deduced
+by `auto` – would make that feature much less useful: you may much more often
+need variables initialised with a value from a constant, as you need (another)
+name for an existing constant.
+]
+
+---
+template: plain
+header: #### Type Deduction `auto` and References
+
+With respect to references there is a difference between
+
+ * an initialising expression of reference type, and
+ * a reference declarator as part of the `auto` type.
+
+```
+int s;
+int &r;
+…
+auto x = r;   // x is int (NOT int reference)
+auto& y = s;  // y is reference to int (and s needs to be an lvalue)
+auto& z = r;  // z is reference to int (and r needs to be an lvalue)
+```
+
+Again the rules meet the user expectations, especially for `y` and `z` which
+of course need to be references as to expect from the involved declarator (`&`).
+
+Furthermore, in case of `auto&` it makes sense to carry over `const`-ness into
+the deduced type:
+```
+const int s2 = -1;
+…
+auto& z2 = s2; // s2 is reference to const int
+```
+
+---
+template: plain
+header: #### Type Deduction for `auto` with Adornments
+
+If a variable type is to be deduced automatically and it is not plain `auto`
+
+* the adornments to `auto` get part of the deduced type,
+* the type of the initialising expression may be limited accordingly, and
+* `const` qualifiers from the initialiser become part of the deduced type.
+
+.pull-left[
+Given existing variables (below) used to initialise `auto` typed variables (right):
+```
+int a;
+const int b = 20;
+```
+If you want to try yourself … ._[]
+]
+
+.pull-right[
+```
+const auto v = a;    /*1*/
+auto *p1 = &a;       /*2*/
+auto *p2 = &b;       /*3*/
+const auto *p3 = &a; /*4*/
+auto &r1 = a;        /*5*/
+auto &r2 = b;        /*6*/
+const auto &r3 = a;  /*7*/
+```
+]
+
+.F[:
+… the result is:
+
+* `/*1*/` is `const int`
+* `/*2*/` is pointer to `int`
+* `/*3*/` is pointer to `const int`
+* `/*4*/` is pointer to `const int` (even though `a` is not `const`)
+* `/*5*/` is reference to `int`
+* `/*6*/` is reference to `const int`
+* `/*7*/` is reference to `const int` (even though `a` is not `const`)
+]
+
+---
+template: plain
+name: template_type_deduction
+header: ### Type Deduction for Templates
+
+Before `auto` was introduced to derived the type of a variable from the
+initialising expression with C++11, there was already a set of type deduction
+rules in C++98, used in case of template function parameters:._[]
+```
+template<typename T> void foo(T arg) { … }
+template<typename T> void bar(T &ref) { … }
+template<typename T> void bar(const T *ptr) { … }
+```
+
+In this case a type were to be deduced from the call argument.
+
+.I[
+For an exhaustive summary of template argument type deduction rules see:
+http:[//en.cppreference.com/w/cpp/… …/language/template_argument_deduction]
+]
+[//en.cppreference.com/w/cpp/… …/language/template_argument_deduction]: http://en.cppreference.com/w/cpp/language/template_argument_deduction
+
+.F[:
+In fact, as templates are much older, their type deduction rules were used to
+guided the rules for `auto`, but there are although subtle differences.
+]
+
+---
+template: plain
+header: #### Template Type Deduction Example (1)
+
+.pull-left[
+Assuming the template functions from the previous page and given existing
+variables (as below) valid calls might look like on the right:
+```
+int a;
+const int b = 20;
+```
+]
+
+.pull-right[
+```
+foo(12);  /*1*/
+foo(a);   /*2*/
+foo(b);   /*3*/
+bar(a);   /*4*/
+bar(b);   /*5*/
+baz(&a);  /*6*/
+baz(&b);  /*7*/
+```
+]
+
+The key point to understand here is that actually two types are deduced:
+
+* The type formally represented by `T` and
+* the type of the argument (`arg`, `ref`, or `ptr`).
+
+Again, if you want to try yourself … ._[]
+
+.F[:
+… the result is:
+
+* `/*1*/` to `/*3*/` `T` and `arg` is type `int` (call by value)
+* `/*4*/` `T` is type `int` and `ref` is type reference for `int`
+* `/*5*/` `T` is type `const int` and `ref` is type reference for `int`
+* `/*6*/` `T` is type `int` and `ptr` is type pointer to `const int`
+* `/*7*/` `T` is type `int` and `ptr` is type pointer to `const int`
+
+Make sure you did not overlooked the different use of `const` in the  definitions of `bar` and `baz`!
+]
+
+---
+template: plain
+header: #### Template Type Deduction Example (2)
+
+In case it is not obvious so far, template typed deduction may look "deeply"
+into an argument definition to find the templated type and hence will also
+manage deduce `T` in the following examples:
+```
+#include <cstdlib> // for extern int std::atoi(const char[]);
+#include <vector>
+…
+std::vector<double> data;
+…
+template<typename T1, typename T2>
+void foo(T1 (*f)(const char *), std::vector<T2> &c);
+…
+foo(std::atoi, data);   // f is poiner to function
+                        //   - taking a const char * argument
+                        //   - and returning an int
+                        // c is reference to std::vector<double>
+                        // hence:  T1 is int and T2 is double
+```
+
+Surely it would be nice if the type deduction as far as stated in the comments
+of the above example could be "proven" somehow …._[]
+
+.F[:
+… though this can be tricky with the standard instruments of C++. For more
+convenience [Boost.Typeindex] may be used.
+]
+
+[Boost.Typeindex]: http://www.boost.org/doc/libs/1_58_0/doc/html/boost_typeindex.html
+
+---
+template: plain
+header: #### Template Type Deduction Example (3)
+
+Templated types are also deduced if they occur more than once in the argument
+list:._[]
+```
+template<typename T>
+void bar(T (*)(const char *), std::vector<T> &c);
+…
+bar(std::atof, data);   // f is poiner to function
+                        //   - taking a const char * argument
+                        //   - and returning a double
+                        // c is reference to std::vector<double>
+                        // hence:  T is double
+bar(std::atoi, data);   // ERROR (T cannot be both, int and double)
+```
+
+.F[:
+Sometimes the problem may be subtle, but can be recognized (and solved) with a
+systematic analysis, like in the example below:
+```
+   // which change will make the following code compile?
+template<typename T> void baz(T &val, std::vector<T> &c);
+…
+std::vector<double> data;
+const double PI = 3.14152;
+baz(PI, data);
+```
+]
+
+---
+template: plain
+name: more_type_deduction
+header: ### More Type Deduction Scenarios
+
+Besides the type deduction scenarios introduced here, there are some more:
+
+.pull-left[
+**Introduced with C++11 was:**
+
+* `decltype`
+* perfect forwarding
+* lambda captures and returns
+]
+
+.pull-right[
+**C++14 added some more:**
+
+* `decltype(auto)`
+* lambda init captures
+* function return values
+]
+
+These use similar basic rule sets but with some variations._[] and will be
+covered – as far as necessary – in an adequate later chapters.
+
+.N[
+For most C++ developers it is not necessary to become the ultimate specialist
+for type deduction, as – especially in the simple cases – everything works
+as expected …
+]
+
+.F[:
+… thus opening the door for confusion. A good starting point to delve deeper
+into the topic of type deduction is the following video lecture by Scott Meyers:
+https://vimeo.com/97344493
+]
 
 ---
 template: linkinfo
@@ -284,7 +1867,7 @@ header: ## Exception Basics
 
 * [Exception Klassen als Label verstanden	](#exception_as_label)
 * [Gruppieren ähnlicher Exceptions 		](#exception_grouping)
-* [Aktivieren der Wiedereintrittspunkte		](#exception_try_block)
+* [Aktivieren der Behandlungs-Blöcke		](#exception_try_block)
 
 -------------------------------------------------------------------------------
 
@@ -298,7 +1881,7 @@ section: Exception Class Hierarchies
 name: exception_hierarchies
 header: ### Hierarchien von Exception-Klassen
 
-Die im Rahmen von Bibliotheksfuntionen ggf. geworfenen Exceptions bilden eine
+Die im Rahmen von Bibliotheksfunktionen ggf. geworfenen Exceptions bilden eine
 Klassenhierarchie:
 
 * An deren Spitze steht die Klasse `std::exception`.
@@ -385,7 +1968,7 @@ Argumentliste geben, stellt die Verzweigung des Kontrollflusses in einen
 .F[:
 It is rather some kind of special return into the control flow of the (still)
 active function with the (once) active `try`-Block. But there are even more
-similartities to a function and a parameter specification, not only that the
+similarities to a function and a parameter specification, not only that the
 usual type conversions take place, but also with respect to `const` and value or
 reference access to the exception object thrown. Finally, two requirements
 imposed syntactically are that there must always be exactly one "argument" and
@@ -398,7 +1981,7 @@ template: withinfo
 graphic: ExceptionBasics
 section: Enabling Handler Blocks
 name: exception_try_block
-header: ### Aktivieren der Wiedereintrittspunkte
+header: ### Aktivieren der Behandlungs-Blöcke
 
 Ein `try`-Block wird aktiv, sobald der Kontrollfluss die erste enthaltene
 Anweisung erreicht und deren Ausführung beginnt.
@@ -418,7 +2001,7 @@ bzw. wenn die letzte enthaltene Anweisung vollständig ausgeführt wurde.
 
 .N[
 Anschließend werden die nachfolgenden `catch`-Blöcke nicht mehr als mögliche
-Wiedereintrittspunkte nach einem `throw` in Betracht gezogen.
+Behandlungs-Blöcke nach einem `throw` in Betracht gezogen.
 ]
 
 .F[:
@@ -520,7 +2103,7 @@ header: ### Klassen (Übersicht)
 
 Die aus C++98 bekannten `std::string` und `std::wstring` sowie die von C++11
 hinzugefügten Klassen `std::u16string` und `std::u32string` sind lediglich
-Typdefinitionen ähnlich den folgenden:._[]
+Typ-Definitionen ähnlich den folgenden:._[]
 ```
 namespace std {
     typedef basic_string<char> string;      // since C++98
@@ -549,20 +2132,20 @@ name: stdstring_c_compatibility
 header: ### Kompatibilität zu C
 
 Die Klasse `std::string` speichert die Zeichen eines Strings in einem
-zusammenhängenden._[] Speicherstück, das zumindest in der erforderlichen Größe,
-oft aber auch mit etwas Reserve auf dem Heap angelegt wird.
+zusammenhängenden._[] Speicherbereich, der zumindest in der erforderlichen
+Größe, oft aber auch mit etwas Reserve auf dem Heap angelegt wird.
 
 Ein Objekt der `std::string`-Klasse enthält **direkt** typischerweise drei
 Zeiger auf bzw. in ein Stück [Heap-Speicher](06_wednesday2.html#heapdata).
 
 * Die Adresse des ersten enthaltenen Zeichens.
 
-* Die Addresse des letzten (gültigen) Zeichens.
+* Die Adresse des letzten (gültigen) Zeichens.
 
-* Die Addresse, bis zu der Speicher alloziert ist.
+* Die Adresse, bis zu der Speicher alloziert ist.
 
 .N[
-Insbsondere sind die als `std::string` Inhalt möglichen Zeichen nicht (wie in C)
+Insbesondere sind die als `std::string` Inhalt möglichen Zeichen nicht (wie in C)
 dahingehend eingeschränkt, dass ein Zeichen mit der ganzzahligen Wertigkeit 0
 (ein "NUL-Byte") die Zeichenkette beendet.
 ]
@@ -613,7 +2196,7 @@ section: C-Compatibility
 name: stdstring_cstr_risk
 header: #### Risiken von `c_str()`
 
- ei Verwendung von `c_str()` oder dem seit C++11 gleichwertigen `data()` sollte
+Bei Verwendung von `c_str()` oder dem seit C++11 gleichwertigen `data()` sollte
 klar sein, dass darüber Zugang zu dem für den `std::string`-Inhalt auf dem Heap
 angelegten Speicherplatz gegeben wird.
 
@@ -646,9 +2229,9 @@ const char *mammamia() {
 ]
 
 .F[:
-In the example on the right hand side, derefencing the pointer returned from the
-function will access deallocated heap memory (once owned by `local`) with near
-to 100% certainty.
+In the example on the right hand side, dereferencing the pointer returned from
+the function will access deallocated heap memory (once owned by `local`) with
+near to 100% certainty.
 ]
 
 ---
@@ -664,8 +2247,8 @@ stets automatisch durch einen als
 
 .I[
 Sollen Funktionen sowohl mit (unveränderbaren) `std::string`-Argumenten als auch
-mit klassischen String-Literalen im C-Stil aufrufbar sein, besteht die sparsamte
-Lösung in der Verwendung des Argumenttyps `const std::string &`.
+mit klassischen String-Literalen im C-Stil aufrufbar sein, besteht die sparsamste
+Lösung in der Verwendung des Argument-Typs `const std::string &`.
 ]
 
 Eine – gemessen am zu schreibenden Code – deutlich aufwändigere Lösung ist es,
@@ -687,7 +2270,7 @@ section: Efficiency
 name: stdstring_efficiency
 header: ### Effizienz-Betrachtungen
 
-[Small String Optimization]: http://john-ahlgren.blogspot.de/2012/03/small-string-optimization-and-move.html
+[Small String Optimisation]: http://john-ahlgren.blogspot.de/2012/03/small-string-optimization-and-move.html
 
 Typische Implementierungen der `std::string`-Klasse nutzen die folgenden
 Maßnahmen zur Effizienzsteigerung:
@@ -697,7 +2280,7 @@ Maßnahmen zur Effizienzsteigerung:
 * Wenn nötig proportionale Vergrößerung._[] der Allozierung (nicht mit
   konstanten Zuschlag).
 
-* Insbesondere auf 64-Bit Hardware lohnend: [Small String Optimization]
+* Insbesondere auf 64-Bit Hardware lohnend: [Small String Optimisation]
 
 .F[:
 Proportional here means that when the current allocation doesn't suffice any
@@ -763,9 +2346,9 @@ stellen sie üblicherweise keine hohe Hürde dar.
 
 .N[
 Eine Überlegung zum Programmierstil beim Element-Zugriff könnte sein, diesen
-in nicht performance-kritischem Code konsequent mit der Member-Funktion `at()`
-vorzunehmen und damit undefiniertes Verhalten bei Bereichsüberschreitungen
-zuverlässig zu vermeiden.
+in nicht für die Performance relevantem Code konsequent mit der Member-Funktion
+`at()` vorzunehmen und damit undefiniertes Verhalten bei
+Bereichsüberschreitungen zuverlässig zu vermeiden.
 ]
 
 ---
@@ -893,8 +2476,8 @@ section: Input and Output
 name: stdstring_io
 header: ### Ein- und Ausgabe
 
-Die Ausgabe von Zeichenketten erfolgt üblicherweise mit dem überladenenen
-Ausgabeoperator:._[]
+Die Ausgabe von Zeichenketten erfolgt üblicherweise mit dem überladenen
+Ausgabe-Operator:._[]
 ```
 std::string greet{"hello, world"};
 …
@@ -904,7 +2487,7 @@ std::cout << greet;
 .F[:
 Of course, this is not a specific operator for output but an overload to the
 left-shift operator (as introduced in C), when the left-hand operand is an
-output stream. Nevertheless, especially when C is used oustide the realm of
+output stream. Nevertheless, especially when C is used outside the realm of
 embedded programming, some call `operator<<` now *output operator*.
 ]
 
@@ -1080,7 +2663,7 @@ Datenstroms:
 * `std::istringstream` zum Lesen
 * `std::ostringstream` zum Schreiben
 
-Darüberhinaus gibt es auch bidirektional verwendbare Stringstreams:
+Darüberhinaus gibt es auch bidirektional verwendbare String-Streams:
 
 * `std::stringstream`
 
@@ -1097,7 +2680,7 @@ section: I/O-Streams Back-End
 name: iostream_backend
 header: ### Back-End der I/O-Streams
 
-Das Backend der I/O-Streams implementiert vor allem einen Mechanimus zur
+Das Backend der I/O-Streams implementiert vor allem einen Mechanismus zur
 Datenpufferung.
 
 .N[
@@ -1126,13 +2709,13 @@ Jeder Stream besitzt eine Reihe von Zustandsbits.
 
 * Ist keines gesetzt ist, befindet sich der Stream im *good*-Zustand.
 
-* Bei im Rahmen der Eingabe eines bestimmten Datentyps *unerwarteten (also
+* Bei im Rahmen der Eingabe eines bestimmten Daten-Typs *unerwarteten (also
   nicht zu verarbeitenden)* Zeichen wird das `std::ios::failbit` gesetzt.
 
 * Tritt im Rahmen der Eingabe die *End-Of-File*-Bedingung ein, wird das
   `std::ios::eofbit` gesetzt.
 
-* Bei anderen – vom Standard nicht näher spezifierten – Fehlerbedingungen kann
+* Bei anderen – vom Standard nicht näher spezifizierten – Fehlerbedingungen kann
   auch das `std::ios::badbit` gesetzt werden.._[]
 
 .F[:
@@ -1203,11 +2786,6 @@ catch (std::ios_base::failure &e) {
 }
 ```
 
----
-template: plain
-name: exercise_mon2
-header: ## Praktikum
-
 </textarea>
 <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 <!-- ::::::::::::::::::::: )-: ereh TNETNOCLAER fo dne :::::::::::::::::::: -->
@@ -1220,5 +2798,3 @@ header: ## Praktikum
     </script>
   </body>
 </html>
-
-

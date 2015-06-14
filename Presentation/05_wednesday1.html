@@ -73,8 +73,8 @@ customer:  [im Auftrag von MicroConsult Training & Consulting GmbH](http://micro
   Template used for for pages INTRODUCING to a new Info-Graphic
   *****************************************************************************
   On this kind of pages a size-reduced version of the whole info graphic will
-  be reproduced and occupies aproximately 2/3 of the page width. So only add
-  little information, preferrably links to later pages dealing with single
+  be reproduced and occupies approximately 2/3 of the page width. So only add
+  little information, preferably links to later pages dealing with single
   sections of the info graphic.
 
   On pages USING THIS TEMPLATE the following attributes must be set:
@@ -144,7 +144,7 @@ template: blank
 
 1. [Beziehungen zwischen Klassen	](#classes_and_relations)
 1. [Unterstützung der Mehrfachvererbung	](#multiple_inheritance)
-1. [Rautenförmige Ableitungshierarchien	](#diamond_shapes)
+1. [Rautenförmige Ableitungs-Hierarchien](#diamond_shapes)
 1. [Beispiele zu Klassenbeziehungen	](#example_relations)
 1. [Praktikum				](#exercise_wed1)
 
@@ -203,7 +203,7 @@ Die minmale Darstellung einer Klasse in der [UML] besteht aus einem Rechteck,
 in welchem der Klassenname steht.
 
 .N[
-Klassen und Beziehungen zwischen Klassen sind die wichtigsten Bestandeteile
+Klassen und Beziehungen zwischen Klassen sind die wichtigsten Bestandteile
 einer *Objekt-Orientierten-Modellierung* ([OOM]).
 ]
 
@@ -261,7 +261,7 @@ Diese kommen einem *Bauplan* gleich und beschreiben in der UML-Darstellung alle
 *Gemeinsamkeiten* der Objekte, die gemäß diesem Bauplan erstellt werden.
 
 #### Objekte
-Diese sind *instanzierte Klassen* und beinhalten in der UML-Darstellung die
+Diese sind *instanziierte Klassen* und beinhalten in der UML-Darstellung die
 *Unterschiede* aus, welche trotz des gemeinsamen Bauplans bestehen.
 
 .F[:
@@ -276,7 +276,7 @@ template: plain
 header: #### Klassen und Objekte in C++
 
 In kompilierten Sprachen wie C++, in denen die Unterstützung der
-Objektorientierten Programmierung nict darin besteht, quasi einen Interpreter
+Objektorientierten Programmierung nicht darin besteht, quasi einen Interpreter
 für ein Objekt-System zur Laufzeit anzubieten, gibt es in der Regel einen
 weiteren charakteristischen Unterschied zwischen Klassen und Objekten:
 
@@ -337,8 +337,8 @@ beides ist optional.
 
 .N[
 Pragmatiker weisen gerne darauf hin, dass die UML **keineswegs** die Nutzung
-aller ihrer notationellen Möglichkeiten vorschreibt sondern der
-Detaillierungsgrad eines Klassendiagramm stets an dessen Zweck bzw. dem
+aller ihrer notationalen Möglichkeiten vorschreibt sondern der
+Detaillierungsgrad eines Klassendiagramms stets an dessen Zweck bzw. dem
 Zielpublikum entsprechend ausgerichtet sein sollte.
 ]
 
@@ -368,7 +368,7 @@ In C++ ist hierfür eher die Bezeichnung *Member-Funktionen* üblich.
 Innerhalb der Klammern können optional zu übergebende Parameter benannt werden,
 inklusive deren Typ (nachgestellt und durch Doppelpunkt getrennt), und der
 geklammerten Parameterliste kann (ebenfalls durch einen Doppelpunkt getrennt)
-ein Rückgabetyp folgen.
+ein Rückgabe-Typ folgen.
 
 ---
 template: plain
@@ -394,9 +394,9 @@ Member-Daten wie auch Member-Funktionen optional vorangestellt werden:
 
 ---
 template: plain
-header: #### C++ Zugriffschutz: `class` vs. `struct`
+header: #### C++ Zugriffsschutz: `class` vs. `struct`
 
-Eine Besonderheit gilt in C++ für den Default des Zugriffschutzes:
+Eine Besonderheit gilt in C++ für den Default des Zugriffsschutzes:
 
 * In einer `struct` ist dieser `public`,
 * in einer `class` dagegen `private`.
@@ -454,19 +454,19 @@ Diese sind **nicht** pro Objekt sondern pro Klasse gespeichert.._[]
 
 .F[:
 Eine typische Anwendung wäre z.B. eine fortlaufende Nummerierung aller jemals
-erzeugten Objekte einer Klasse, wobei ein Klassenattribut die nächste zu
+erzeugten Objekte einer Klasse, wobei ein Klassen-Attribut die nächste zu
 vergebende Nummer enthält.
 ]
 
 ##### Klassen-Methoden
 
-Diese können ausschließlich auf Klassenattribute zugreifen. In C++
+Diese können ausschließlich auf Klassen-Attribute zugreifen. In C++
 
 * bieten sie zum einen eine kleine Effinzienzverbesserung, da bei ihrem Aufruf
   keine Objektadresse übergeben werden muss, und
 
 * sind zum anderen auch ohne ein vorhandenes Objekt durch Voranstellen des
-  Klassenamens gefolgt vom Scope-Operator (`::`) aufrufbar.
+  Klassennamens gefolgt vom Scope-Operator (`::`) aufrufbar.
 
 ---
 template: withinfo
@@ -715,7 +715,7 @@ Motor firstMotors;
 Motor otherMotor;
 Motor unusedMotor;
 ```
-Prefering pointers over references looks like an appropriate decision if a car,
+Preferring pointers over references looks like an appropriate decision if a car,
 during its lifetime, may get a replacement engine.._[]
 ]
 
@@ -757,13 +757,13 @@ Speicher-Layout und Lebenszeit-Kopplung entsprechen zwar der Komposition, als
 wichtige Besonderheit gilt jedoch das [LSP].
 
 .I[
-Das von Barbara Liskov formulierte Ersetzungs-Prinzip verlangt, dass ein Objekt
+Das von Barbara Liskov formulierte Ersetzungsprinzip verlangt, dass ein Objekt
 einer abgeleiteten Klasse (Spezialisierung) stets ein geeigneter Stellvertreter
 für ein Objekt seiner Basisklasse sein sollte.._[]
 ]
 
 .F[:
-Any conventional compiler which only checks the existance of member functions
+Any conventional compiler which only checks the existence of member functions
 and their correct call with respect to argument and return types can guarantee
 the LSP only to a very limited degree!
 ]
@@ -823,7 +823,7 @@ Generell reduzieren Interfaces die Kopplung, d.h. den Grad zu dem verschiedene
 Klassen Details voneinander kennen (müssen).
 
 Zudem bieten sie Flexibilität zur Laufzeit, indem aus mehreren verfügbaren
-Implemetierungen u.U. die für eine Situation am passende gewählt werden kann.
+Implementierungen u.U. die für eine Situation am passende gewählt werden kann.
 
 .N[
 Interfaces haben vor allem durch *Objektorientierte Entwurfsmuster ([OO-DP])*
@@ -943,13 +943,13 @@ section: Multiple Inheritance
 name: mi_principle
 header: ### Prinzip der Mehrfachvererbung
 
-Bei der Mehrfachvererbung kann im Speicherlayout nur noch eine der Basisklassen
+Bei der Mehrfachvererbung kann im Speicher-Layout nur noch eine der Basisklassen
 eine gemeinsame Anfangsadresse mit der abgeleiteten Klasse haben.
 
 .N[
 Dies stellt keine große technische Herausforderung dar sondern bedeutet
-lediglich eine minimale Komplikation bei der Umsetzung des LSP, wo im Fall der
-Weiterreichung der abgeleiteten Klasse ggf. ein Offset zum `this`-Zeiger
+lediglich eine minimale Komplikation bei der Umsetzung des LSP, wo im Fall des
+Weiterreichens der abgeleiteten Klasse ggf. ein Offset zum `this`-Zeiger
 addiert werden muss.
 ]
 
@@ -1189,7 +1189,7 @@ header: ### Rautenförmige (Mehrfach-) Vererbung
 
 Besteht die Bereitschaft den Preis für die dann oft notwendigen, virtuellen
 Basisklassen zu zahlen, lassen sich flexible Kombinationsmöglichkeiten mit einem
-guten Grad an Wiederverwendung durch Mehrfachverarbung erreichen.
+guten Grad an Wiederverwendung durch Mehrfachvererbung erreichen.
 
 .N[
 In den konkreten Beispielen._[] zu diesem Abschnitt werden aus den Klassen `Average`
