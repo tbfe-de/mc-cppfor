@@ -1086,12 +1086,14 @@ Zum Zugriff in den Sichtbarkeitsbereich des umgebenden Blocks muss die
 *Capture-List* verwendet werden:
 ```
 void foo(std::ostream &output) {
-…
-std::for_each(v.begin(), v.end(),
-              [&output](const std::string &s) {
-                  output << s << '\n';
-              }
-);
+    …
+    std::for_each(v.begin(), v.end(),
+                  [&output](const std::string &s) {
+                      output << s << '\n';
+                  }
+    );
+    …
+}
 ```
 
 Darin werden die übergebenen Bezeichner aufgelistet, ggf. mit vorangestelltem
