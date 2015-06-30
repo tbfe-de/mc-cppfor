@@ -504,9 +504,17 @@ T2 my_copy(T1 from, T1 upto, T2 dest) {
 }
 ```
 
+Der hier gezeigte Code soll nur das Prinzip veranschaulichen. Es ist davon auszugehen,
+dass `std::copy` Maßnahmen zur Effizienz-Steigerung enthält.
+
+.N[
+Hinsichtlich der äußeren Schnittstelle – also Parameter und Rückgabewert –
+entsprechen sich `my_copy` und `std::copy`.
+]
+
 .F[:
-Damit dieser Algorithmus ggf. per *Copy&Paste* in ein Programm übernommen und
-ausprobiert werden kann, wurde er vorsorglich `my_copy` genannt, so dass auch
+Nur damit dieser Algorithmus ggf. per *Copy&Paste* in ein Programm übernommen und
+ausprobiert werden kann, wurde er vorsorglich `my_copy` genannt, so dass selbst
 bei `using namespace std;` ein Konflikt mit `std::copy` ausgeschlossen ist.
 ]
 
@@ -539,22 +547,24 @@ eine sichere Variante des Kopierens auch erreichen, indem neue Elemente mit
 `push_back` angefügt werden:._[]
 ```
 std::copy(s.begin(), s.end(),
-          std::back_insert_iterator<std::vector<int>>(v)
+          std::back_insert_iterator<std::vector<int>>{v}
 );
 ```
 
 .N[
-Da die in diesem und vielen folgenden Beispielen an Algorithmen übergebenen
-Argumentlisten recht lang sind, erfolgt ein Umbruch innerhalb der
-Argument-Liste, um die Lesbarkeit zu verbessern.
+Im obigen und den nachfolgenden Beispielen wird für Konstruktoren einheitlich
+die (C++11) Syntax der "Brace-Initialisierung" verwendet.
 ]
 
-Dabei werden auch unterschiedliche Formatierungs-Stile demonstriert.._[]
+Damit soll der Unterschied zu Funktionsaufrufen herausgehoben werden –
+für die Funktionsfähigkeit der Beispiele ist es unerheblich.
 
 .F[:
-Die oben verwendete asymmetrische Klammerung der Argumentliste ist sicher
-Geschmackssache, dupliziert aber den oft auch bei geschweiften Klammern
-üblichen Stil.
+Da in diesem wie auch in vielen folgenden Beispielen die Argumentlisten recht
+lang sind, erfolgt ggf. ein Umbruch, um die Lesbarkeit zu verbessern. Dabei
+werden auch unterschiedliche Formatierungs-Stile demonstriert. Die oben
+verwendete asymmetrische Klammerung der Argumentliste ist Geschmackssache,
+überträgt aber sinngemäß den oft auch bei geschweiften Klammern üblichen Stil.
 ]
 
 ---
@@ -579,7 +589,7 @@ redundanter Typangaben eingesetzt werden kann:
 ```
    template<typename T>
 inline std::back_inserter_iterator<T> std::back_inserter(T &c) {
-    return std::back_insert_iterator<T>(c);
+    return std::back_insert_iterator<T>{c};
 }
 ```
 ]
@@ -624,7 +634,7 @@ std::list<MyClass> li;
 …
 std::set<MyClass> s;
 std::copy(li.begin(), li.end(),
-          std::insert_iterator<std::set<MyClass>>(s)
+          std::insert_iterator<std::set<MyClass>>{s}
 );
 ```
 
@@ -675,7 +685,7 @@ Standard-Ausgabe und fügt nach jedem Wert ein Semikolon ein:
 std::forward_list<long> fli;
 …
 std::copy(fli.begin(), fli.end(),
-          std::ostream_iterator<long>(std::cout, ";")
+          std::ostream_iterator<long>{std::cout, ";"}
 );
 ```
 
@@ -687,8 +697,8 @@ Das folgende Beispiel._[] kopiert Worte von der Standardeingabe bis EOF in eine
 `std::forward_list`:
 ```
 std::forward_list<std::string> fli;
-copy(std::istream_iterator<std::string>(std::cin),
-     std::istream_iterator<std::string>(),
+copy(std::istream_iterator<std::string>{std::cin},
+     std::istream_iterator<std::string>{},
      std::front_inserter(fli)
 );
 ```
@@ -780,7 +790,7 @@ const auto endp = copy(v.begin(), v.end(), data);
 set<int> s; copy(data, endp, inserter(s, s.begin()));
 
 // ... to stdout with semicolon and space after each value
-copy(s.begin(), s.end(), ostream_iterator<int>(cout, "; "));
+copy(s.begin(), s.end(), ostream_iterator<int>{cout, "; "});
 ```
 
 .F[:
@@ -828,16 +838,16 @@ std::vector<int> v;
 ```
 der mit einigen Datenwerten gefüllt wurde.
 
-#### Zählen der Elemente mit dem Wert 542
+#### Zählen der Elemente mit dem Wert 42
 ```
-auto n = std::count(v.begin(), v.end(), 542);
+auto n = std::count(v.begin(), v.end(), 42);
 ```
 
 ---
 template: plain
-header: #### Suchen des ersten Elements mit dem Wert 542
+header: #### Suchen des ersten Elements mit dem Wert 42
 ```
-const auto f = std::find(v.begin(), v.end(), 542);
+const auto f = std::find(v.begin(), v.end(), 42);
 if (f != v.end()) {
     // erstes (passendes) Element gefunden
     …
@@ -850,10 +860,10 @@ else {
 
 ---
 template: plain
-header: #### Löschen aller Elemente mit dem Wert 542
+header: #### Löschen aller Elemente mit dem Wert 42
 
 ```
-const auto end = std::remove(v.begin(), v.end(), 542);
+const auto end = std::remove(v.begin(), v.end(), 42);
 ```
 
 Die Variable `end` enthält nun einen Iterator, der das neue (logische) Ende des
@@ -887,6 +897,7 @@ header: ## Callbacks aus Algorithmen
 * [Prädikate für Algorithmen (generell)			](#predicates_general)
 * [Prädikate für Algorithmen (Beispielserie)		](#predicate_examples))
 * [Algorithmen vs. spezifische Member-Funktionen	](#generic_vs_specific)
+* [Zusammenfassung zur Anwendung von Callbacks          ](#callback_use_summary)
 
 ---------------------------------------------------------------------------------
 
@@ -1143,6 +1154,7 @@ For the curious, C++14 also fixed a minor oversight in the lambda syntax
 specification of C++11: While the idea was to allow the lambda argument list
 to be completely dropped if empty, including its parentheses if empty, that
 was forgotten in the syntax for `mutable` lambdas.
+]
 
 ---
 template: plain
@@ -1439,15 +1451,15 @@ header: #### Prädikat mit spezifischem Funktionszeiger
 
 Dies ist die aus der C-Programmierung bekannte Technik.
 
-Das Beispiel gibt alle Elemente mit einem Wert ungleich 524 aus:
+Das Beispiel gibt alle Elemente mit einem Wert ungleich 42 aus:
 ```
-bool notEq524(int n) { return n != 524; }
+bool notEq42(int n) { return n != 42; }
 
 void foo(const std::vector<int> &v) {
     …
     std::copy_if(v.begin(), v.end(),
        	         std::ostream_iterator<int>(cout, " "),
-                 notEq524
+                 notEq42
     );
     …
 }
@@ -1460,16 +1472,16 @@ header: #### Prädikat mit spezifischem Funktor
 
 Dies ist eine für C++-typische Technik.
 
-Das Beispiel gibt alle Elemente mit einem Wert ungleich 524 aus:
+Das Beispiel gibt alle Elemente mit einem Wert ungleich 42 aus:
 ```
-struct NotEq524 {
-    bool operator()(int n) const { return n != 524; }
+struct NotEq42 {
+    bool operator()(int n) const { return n != 42; }
 };
 void foo(const std::vector<int> &v) {
     …
     copy_if(v.begin(), v.end(),
             std::ostream_iterator<int>(std::cout, " "),
-            NotEq524()
+            NotEq42()
     );
     …
 }
@@ -1485,7 +1497,7 @@ void foo(const std::vector &v) {
     …
     std::copy_if(v.begin(), v.end(),
                  std::ostream_iterator<int>(std::cout, " "),
-                 [](int n) { return n != 524; }
+                 [](int n) { return n != 42; }
     );
     …
 }
@@ -1511,7 +1523,7 @@ void foo(const std::vector &v) {
     …
     std::copy_if(v.begin(), v.end(),
                  std::ostream_iterator<int>(std::cout, " "),
-                 NotEq(524)
+                 NotEq(42)
     );
     …
 }
@@ -1570,31 +1582,289 @@ ausgeführt wird.
 ---
 template: plain
 name: generic_vs_specific
-header: ### STL Algorithmen vs. spezifische Member-Funktionen
+header: ### Algorithmen vs. spezifische Member-Funktionen
 
 Ist die Klasse des Containers genau festgelegt, steht alternativ zu einem
 generischen Algorithmus eventuell eine spezifische Member-Funktion zur
 Verfügung, deren Verwendung in der Regel einfacher und effizienter ist.
 
-Beispielsweise wird bei löschenden Algorithmen gerne vergessen, dass der
-Container dadurch nicht tatsächlich kleiner wird.._[] Zwar könnte man das
-Problem so lösen
+Beispielsweise ist bei löschenden **Algorithmen** zu berücksichtigen, dass der
+Container dadurch [nicht tatsächlich verkleinert](#removing_logically_only)
+wird, d.h. dies muss ggf. explizit in einem zweiten Schritt geschehen:
 ```
 std::list<std::string> li;
 …
-auto end = std::remove(li.begin(), li.end(), 542);
+auto end = std::remove(li.begin(), li.end(), 42);
 li.erase(end, li.end());
 ```
 
-aber kompakter und effizienter geht es so:
+.W[
+Das obige Verfahren erscheint bei einer Liste nicht sinnvoll, da die
+Kombination aus "zuerst tauschen" und "später entfernen" im Vergleich zu
+"gleich entfernen" vermutlich aufwändiger ist.
+]
+
+---
+template: plain
+header: #### Beispiel: Elemente Entfernen mit Member-Funktion
+
+Für das Löschen von Elementen aus einer Liste – oder einem anderen
+STL-Container, der sich physisch verkleinern lässt – ist die Verwendung
+der entsprechenden Member-Funktion._[] vorzuziehen, so z.B. …
+
+.pull-left[
+… beim Löschen einzelner Elemente …
 ```
-	li.remove(542);
+li.remove(42);
+```
+]
+.pull-right[
+… oder dem Entfernen aufeinanderfolgender Duplikate:
+```
+li.unique();
+```
+]
+
+Auch hier wäre der entsprechende Algorithmus weniger effizienter:.
+```
+const auto endp{std::unique(li.begin(), li.end())};
+li.erase(endp, li.end());
+```
+
+Das gilt natürlich auch in der Form des weniger lesbaren "one-liners":
+```
+li.erase(std::unique(li.begin(), li.end()), li.end());
 ```
 
 .F[:
-Vielmehr werden – [wie bereits dargestellt](#removing_logically_only) – nur
-Elemente umkopiert oder getauscht und als Ergebnis wird ein Iterator
-zurückgegeben, der das neue logische Ende anzeigt.
+Der generische Ansatz (also *erst innerhalb des Containers umkopieren oder
+-tauschen, dann Container verkleinern*) hat bei anderen STL-Containern als
+weniger negative Aspekte – was man zumindest indirekt daraus schlussfolgern
+kann, dass weder `std::vector` noch `std::deque` die über die notwendigen
+Member-Funktionen verfügen, den Weg über die jeweiligen generischen
+Algorithmen zu vermeiden.
+]
+
+---
+template: plain
+header: #### Beispiel: Callbacks aus Member-Funktion (1)
+
+Callbacks erfolgen nicht nur im Rahmen der diversen, generischen STL-Algorithmen
+sondern auch aus Member-Funktionen.
+
+Als Beispiel hier das Durchsuchen eines `std::set` nach dem Wert 42 …
+```
+std::set<int> s;
+… // fill set with content
+const auto found = s.find_if([](int e) { return e == 42; });
+if (found != s.end()) … // key was found
+```
+… oder die Suche nach dem Schlüssel `lookup` in einer `std::map`:._[]
+```
+using MyMap = std::map<std::string, MyClass> m;
+MyMap m;
+… // fill map with content
+const std::string lookup{ … }; // set search key
+const auto f = m.find_if([&lookup](const MyMap::value_type& e) {
+                             return e.first == lookup;
+                         });
+```
+
+.F[:
+The variable `lookup` is handed over in the capture list, assuming it is not
+global, and because it has a `const`-qualifier the reference will also be 
+const`-qualified (i.e. `const std::string&`).
+]
+
+---
+template: plain
+header: #### Beispiel: Callbacks aus Member-Funktion (2)
+
+An vielen weiteren Stellen kommen Callbacks zum Einsatz, etwa bei der Übergabe
+einer Vergleichsfunktion, hier gezeigt am Beispiel der absteigenden Sortierung
+einer `std::list`._[] …
+
+.pull-left[
+… zu übergeben per Lambda …
+```
+std::list<int> li;
+… // fill list
+li.sort([](int lhs, int rh) {
+            return lhs > rhs;
+}
+```
+
+… per Funktionszeiger …
+```
+bool gtcmp(int lhs, int rhs) {
+    return lhs > rhs;
+}
+…
+li.sort(gtvmp);
+```
+]
+
+.pull-right[
+… Funktor …
+```
+struct GtCompare {
+    bool operator()(int lhs,
+                    int rhs) {
+        return lhs > rhs;
+    }
+};
+…
+li.sort(GtCompare());
+```
+
+… oder mit Standard-Funktoren
+(aus `#include <functional>`):
+```
+li.sort(std::greater<int>());
+```
+]
+
+.F[:
+Because `std::list` and `std::forward_list` only provide bidirectional iterators
+the generic `std::sort` algorithm is not applicable, as it needs random access
+iterators.
+]
+
+---
+template: plain
+header: #### Beispiel: Zusammen mit Objekten definierte Callbacks
+
+Vergleichsfunktionen werden auch von den assoziativen Containern benötigt, um
+ihre Elemente in den Binärbaum einzusortieren. (Default ist dabei `operator<`
+für den Elementtyp des Containers).
+
+Spezielle Vergleiche (z.B. zur Abwärts-Sortierung) sind zu übergeben …
+.pull-left[
+… als **Funktor-Klasse** (Typ-Argument für die Template) …
+```
+std::set<int, GtCompare> s;
+```
+]
+.pull-right[
+… oder **Funktor-Objekt** (Wert-Argument für den Konstruktor):._[]
+```
+std::set<int> {GtCompare{}};
+```
+]
+
+**Funktionszeiger** sind Werte, also zwingend Konstruktor-Argumente:
+```
+std::set<int> s{gtcmp};
+```
+
+Genau dasselbe gilt für Lambdas:
+```
+std::set<int> s{[](int lhs, int rhs) { return lhs > rhs; }}; 
+```
+
+.F[:
+Auch ein Funktor der Standardbibliothek geht natürlich mit beidem.
+```
+]
+
+---
+template: plain
+header: #### Beispiel: Container-Varianten per Typ-Definition
+
+Wenn es nur darum geht, bei einem `std::set` oder einer `std::map` eine
+spezielle Sortierung zu erreichen, kann die in C++11 eingeführte Syntax der
+*Template Typ-Definitionen*  verwendet werden.
+
+Hier ein Beispiel:._[]
+```
+template<typename ElemType>
+using descending_set = std::list<ElemType, std::greater<ElemType>>;
+…
+descending_set<long double> li;
+descending_set<std::string> la;
+descending_set<MyClass> lu;
+```
+
+Entsprechend für eine Map:
+```
+template<typename KT, VT>
+using descending_key_map = std::map<KT, VT, std::greater<KT>>;
+…
+descending_key_map<int, std::string> dmap;
+```
+
+.F[:
+Das Beispiel ist insofern nur als Syntax-Demonstration zusehen, als in der
+gezeigten Form keine Angabe eines Allocators möglich ist.
+]
+
+---
+template: plain
+name: callback_use_summary
+header: ### Anwendung von Callbacks (Zusammenfassung 1)
+
+Zu den häufigsten Anwendungen von Callback zählen mit Sicherheit:
+
+* Prädikate (Bedingungen) und
+* Sortierfolgen (Vergleiche)
+
+Prädikate (z.B. wie in allen `_if`-Varianten generischer Algorithmen verwendet)
+sehen typischerweise so aus:
+```
+… [](const MyContainer::value_type& v) {
+    return …  ; // a bool - true if of interest (= found)
+} …
+```
+
+Mit einer Typ-Definition `MyContainer` lässt sich der Argumenttyp des
+Lambda stets als `MyContainer::value_type` festlegen.
+
+.N[
+In C++14 wurde zudem die Möglichkeit eingeführt, Lambda-Argumenten den Typ
+`auto` zu geben, womit ihr durch den Aufrufe (im Code des jeweiligen
+Algorithms) festgelegt wird.
+]
+
+---
+template: plain
+name: callback_use_summary_2
+header: ### Anwendung von Callbacks (Zusammenfassung 2)
+
+[`accumulate`]: http://en.cppreference.com/w/cpp/algorithm/accumulate
+[`binary_search`]: http://en.cppreference.com/w/cpp/algorithm/binary_search
+[`generate`]: http://en.cppreference.com/w/cpp/algorithm/generate
+[`generate_n`]: http://en.cppreference.com/w/cpp/algorithm/generate_n
+[`partial_sum`]: http://en.cppreference.com/w/cpp/algorithm/partial_sum
+[`partition`]: http://en.cppreference.com/w/cpp/algorithm/partition
+[`random_shuffle`]: http://en.cppreference.com/w/cpp/algorithm/random_shuffle
+[`shuffle`]: http://en.cppreference.com/w/cpp/algorithm/shuffle
+[`sort`]: http://en.cppreference.com/w/cpp/algorithm/sort
+[`stable_sort`]: http://en.cppreference.com/w/cpp/algorithm/stable_sort
+[`stable_partition`]: http://en.cppreference.com/w/cpp/algorithm/stable_partition
+[`tranfsorm`]: http://en.cppreference.com/w/cpp/algorithm/tranfsorm
+
+Vergleiche für Sortierfolgen, anzugeben beim vollständigen ([`sort`],
+[`stable_sort`]) und teilweisen ([`partitition`], [`stable_partition`])
+Sortieren, aber auch zum Binären Suchen ([`binary_search`]):._[]
+```
+… [](const auto& lhs, const auto& rhs) {
+     return … ; // a bool - true if is the case that
+                            lhs "is less than" rhs
+} …
+```
+
+Einige weitere Anwendungen sind:
+
+* Zufällig verteilte Zahlen generieren  
+  bei [`random_shuffle`], [`shuffle`], …
+* Systematisch (algorithmisch) Werte generieren  
+  bei [`generate`], [`generate_n`], …
+* Verküpfungs-Operationen bereitstellen bei  
+  [`accumulate`], [`transform]`, [`partial_sum`] …
+
+.F[:
+This time, of course, **C++14 only** as `auto` is used for the lambda's argument
+types.
 ]
 
 ---

@@ -515,7 +515,8 @@ The solution – of course – is this:
    // primary template
 template<typename T> struct remove_all_ptr { typedef T result; };
 // specialisation
-template<typename T> struct remove_all_ptr<T*> { typedef remove_all_ptr<T> result; };
+template<typename T>
+struct remove_all_ptr<T*> { typedef typename remove_all_ptr<T>::result result; };
 ```
 ]
 
@@ -562,9 +563,9 @@ The basic idea is this:
 * Make all but one instantiations of the functions in this set fail for a
   particular condition.
 
-As compile time calculations must express every result as a type (last and finally),
-`std::enable_if` creates an illegal type as "substitution failure" and the particular
-instantiation is removed from the overload set.
+As compile time calculations must express every result as a type (last and
+finally), `std::enable_if` creates an illegal type as *substitution failure*
+and the particular instantiation is removed from the overload set.
 
 [SFINAE]:http://en.wikipedia.org/wiki/Substitution_failure_is_not_an_error
 
@@ -579,12 +580,12 @@ base and derived class:
 template<typename T1, typename T2>
 typename std::enable_if<
     std::is_base_of<T1, T2>::value
->::type foo(T1 arg1, T2 arg2) { … } // called for T1 is base class of T2
+>::type foo(T1 arg1, T2 arg2) { … } // called for T1 base of T2
 
 template<typename T1, typename T2>
 typename std::enable_if<
     !std::is_base_of<T1, T2>::value
->::type foo(T1 arg1, T2 arg2) { … } // called for T1 is NOT base class of T2
+>::type foo(T1 arg1, T2 arg2) { … } // called for T1 NOT base of T2
 ```
 
 ---
@@ -1170,7 +1171,7 @@ Ggf. kann zusätzlich auch erwogen werden,._[]
 ```
 #define DEF_ERROR_CLASS(name, desc)                 \
 class name : public std::runtime_error {            \
-      public: name() : std::runtime_error(desc) {}    \
+    public: name() : std::runtime_error(desc) {}    \
 };                                    // END-OF-MACRO
 ```
 
