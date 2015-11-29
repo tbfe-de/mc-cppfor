@@ -529,13 +529,11 @@ template: plain
 name: int_type_std_aliases
 header: ### Floating Point Types
 
-[IEEE 754]: http://grouper.ieee.org/groups/754/
-
 The three different type names `float`, `double` and `long double` are available
 for floating point.
 
 * Often – especially if there is specific hardware support on the target platform
-  – these will be mapped to the [IEEE 754] types with 32, 64, and 80 bits.
+  – these will be mapped to the ISO754 types with 32, 64, and 80 bits.
 
 * But the standard imposes no such requirement.
 
@@ -760,28 +758,28 @@ de-normalisation modes of floating point types.
 ---
 template: plain
 name: ptr_and_ref_types
-header: ## Zeiger und Referenzen
+header: ## Pointers and References
 
 --------------------------------------------------------------------------
 
-* [Zeiger allgemein und `const`-qualifiziert	](#const_pointers)
-* [Klassische Referenzen (Lvalue-Referenzen)	](#classic_references)
-* [Zeiger versus Referenzen			](#pointer_vs_reference)
-* [Rvalue-Referenzen (neu in C++11)		](#rvalue_reference)
+* [General and `const`-qualified Pointers	](#const_pointers)
+* [Classic References (Lvalue References)	](#classic_references)
+* [Comparison of Pointers and Reference		](#pointer_vs_reference)
+* [Rvalue References (introduces with C++11)	](#rvalue_reference)
 
 --------------------------------------------------------------------------
 
 ---
 template: plain
 name: const_pointers
-header: ### Zeiger allgemein und `const`-qualifiziert
+header: ### General and `const`-qualified Pointers
 
 ```
 int *p1;       // pointer and pointed-to memory are modifiable
 p1 = …;        // OK
 *p1 = …;       // OK (assuming p1 points to valid memory now)
 ```
-Bei Zeigern kann sich `const` **auf den Zeiger selbst** beziehen …
+For a pointer `const` my refer to **the pointer itself** …
 ```
 int *const p3 = …; // must be initialized (with address of an int)
 p3 = …;            // ERROR (would modify pointer itself)
@@ -789,7 +787,7 @@ p3 = …;            // ERROR (would modify pointer itself)
 ++*p3;             // OK (increments pointed-to memory location)
 ++p3;              // ERROR (would increment pointer itself!) 
 ```
-… oder auf das, was **über den Zeiger erreichbar** ist:._[]
+… or the memory location **reachable via the pointer**:._[]
 ```
 const int *p2; // same as: int const *p2;
 p2 = …;        // pointer is still modifiable, but ...
@@ -806,10 +804,9 @@ of the qualification and the type to which it is applied:
 ---
 template: plain
 name: classic_references
-header: ### Klassische Referenzen (Lvalue-Referenzen)
+header: ### Classic References (Lvalue References)
 
-Das klassische Beispiel ist eine Funktion, welche die Inhalte zweier Variablen
-vertauscht:
+The classic example is a function swapping the contents of two variables:
 
 .pull-left[
 ```
@@ -841,15 +838,15 @@ if (a > b) swap(a, b);
 ```
 ]
 
-In der linken Version werden Zeigerargumente verwendet und explizit Adressen
-übergeben, in der rechten sind die Argumente Referenzen. Der Unterschied besteht
-aber nur in der sparsameren Notation im Quelltext (mit Referenzen) – es kann
-identischer Maschinencode erzeugt werden.._[]
+On the left pointers are used and addresses are handed over explicitly, on the
+right arguments are defined as references, causing implicit dereferencing inside
+`swap` and handing over addresses at the call site..[]
 
 .F[:
-Though there is no rule to enforce this. E.g. depending on compile time debug
-options different security checks could be generated for pointers and
-references.
+So the difference is mostly notational (simplified source code with references),
+while generated machine instructions are typically the same, though there is no
+strict rule enforcing this. E.g. depending on compile time debug options
+different safety checks could be generated for pointers and references.
 ]
 
 ---
@@ -857,16 +854,16 @@ template: plain
 name: reference_initialisation
 header: #### Initialisierung von Referenzen
 
-Da Referenzen konzeptionell stets vorhandenen Speicherplatz bezeichnen,._[]
-müssen sie zwingend initialisiert werden.
+By concept references always denote existing memory locations,._[] therefore
+they need to be initialised.
 
 .N[
-Eine Referenz kann nach Definition und Initialisierung nicht mehr so verändert
-werden, dass sie auf eine andere Speicherstelle verweist.
+After its definition and initialisation a reference cannot be modified so that
+it subsequently refers to a different memory location.
 ]
 
-Insofern entsprechen Referenzen konstanten Zeigern, die selbst nicht
-veränderbar sind, wohl aber der über sie erreichbare Speicherplatz.
+From that point of view references are like constant pointers, which may **not**
+be modified themselves, though referenced memory can be read **and** written.
 
 ```
 int v1, v2;  // some variables ...
@@ -888,18 +885,19 @@ used to initialise a reference without prior checking: `T *p = 0; … T &r = *p`
 ---
 template: plain
 name: const_reference
-header: #### Konstante Referenzen
+header: #### Constant References
 
-Die `const`-Qualifizierung bezieht sich bei der Referenz auf den darüber
-möglichen Zugriff.
+A `const` qualifier for a reference always effects memory access via the
+reference.
 
 .N[
-Über eine `const`-qualifizierte Referenz sind nur Lesezugriffe möglich, selbst
-wenn die referenzierte Variable direkt auch veränderbar ist.
+References which are `const`-qualified only allow reading memory, even if the
+referenced memory (or variable) is writable.
 ]
 
-Im folgenden Beispiel kann die Variable `v` zwar direkt und bei Zugriff über
-`r1` verändert werden, nicht aber beim Zugriff über `r2`:
+In the following example the variable `v` may be modified directly and via `r1`,
+but is read-only when accessed via `r2`:._[]
+
 ```
 T v;
 T &r1 = v;       // r1 now refers to content of v
@@ -908,8 +906,6 @@ const T &r2 = v; // r2 also refers to content of v
 r1 = …; // OK (actually changes v)
 r2 = …; // ERROR (at compile time)
 ```
-
-Lesender Zugriff ist natürlich sowohl über `r1` wie auch über `r2` möglich.._[]
 
 .F[:
 It should be obvious that in the light of references a value-tracking compiler
@@ -1004,45 +1000,47 @@ was "obviously" handed over by reference).
 ---
 template: plain
 name: pointer_vs_reference
-header: ### Zeiger versus Referenzen
+header: ### Comparing Pointers to References
 
-C++ Referenzen können auf zwei Arten betrachtet werden:
+References may be viewed in two ways:
 
-* Eine alternative Syntax für Zeiger, welche
+* **Either** an alternative syntax for pointers, which
 
-  * die Dereferenzierung bei der Verwendung impliziert  
-    (also "`*`" automatisch vorangestellt);
+  * during initialisation expects an lvalue of which the address is taken
+    (i.e. "`&`" is automatically and invisibly applied);
 
-  * bzw. den Adress-Operator bei der Initialisierung  
-    (also "`&`" automatisch vorangestellt).
+  * on each **use** implies the dereferencing operation on each use
+    (i.e. "`*`" is automatically and invisibly applied).
 
-* Oder aber einen Alias-Name für bereits (an anderer Stelle) existierenden,
-  typisierten Speicherplatz.
+* **Or** an alias name for an existing memory location with a matching type.
 
 .N[
-Der für Zeiger und Referenzen erzeugte Maschinen-Code unterscheidet sich in
-der Regel nicht – unterschiedlich ist nur die Syntax bei Initialisierung und
-beim Zugriff auf das, was referenziert wird.._[]
+Taking inot account the invisibly applied operations to references, then there
+are usually the same machine instructions generated for references as are for
+pointers – the difference is in the syntax for initialisation and access.._[]
 ]
 
 .F[:
-Der Nachweis ist bei `g++` durch Erzeugung des Assembler-Codes möglich, wozu die
-Option "`-S`" (Großbuchstabe) anzugeben und das Resultat dann in einer Datei mit
-Suffix "`.s`" (Kleinbuchstabe) zu finden ist.
+Hint: When compiling with `g++` or `clang++` you may want to use the command
+line option "`-S`" (upper case) and have look at the assembler code stored in a
+file with suffix "`.s`" (lower case).
 ]
 
 ---
 template: plain
 name: rvalue_reference
-header: ### Rvalue-Referenzen
+header: ### Rvalue Referenes
 
-[Rvalue-Referenzen]: http://en.cppreference.com/w/cpp/language/reference
+[Rvalue References]: http://en.cppreference.com/w/cpp/language/reference
 
-Mit C+11 neu eingeführt wurde das Konzept der [Rvalue-Referenzen]. Sie lassen
-sich nur mit Ausdrücken initialisieren, also *temporären Werten*, auf die dann
-kein anderer Zugriff als über die Referenz besteht.
+[Copy Constructor and Assignment](#copy_ctor_assign)
+[Move Constructor and Assignment](#move_ctor_assign)
 
-Nachfolgend zusammengefasst die wichtigsten Regeln:._[]
+C++11 introduced [Rvalue References]. They may only be initialised by
+expressions, i.e. memory locations introduced to hold temporaries with no other
+access path.
+
+Following are the most important rules:
 ```
 T &r = …;          // … must be modifiable T in memory
 const T &cr = …;   // … must be modifiable T in memory OR
@@ -1052,18 +1050,18 @@ T &&rr = …;        // … must be temporary T in memory (expression)
 ```
 
 .N[
-Die Hauptanwendung liegt beim Überladen von Funktionen für unterschiedliche
-Herkunft von Argumenten, und dort wiederum insbesondere bei
-[Kopier-Konstruktor und -Zuweisung](#copy_ctor_assign), denen damit
-[Move-Varianten](#move_ctor_assign) zur Seite gestellt werden können.
+The main use for rvalue references are to overload functions differently for
+arguments denoting **either** existing **or** temporary objects, and again the
+main use for this is to implement [Copy Constructor and Assignment] differently
+from [Move Constructor and Assignment].
 ]
 
 .F[:
-In dem für die obige Szenarien typischen Fall von Funktionsargumenten kann bei
-einer Rvalue-Referenz – anders als bei einer klassischen `const`-Referenz – das
-übergebene Argument modifiziert werden. Die Freiheit, dies zu tun, reicht
-allerdings nur so weit, dass der Destruktor nach wie vor korrekt funktionieren
-muss!
+As a function argument an rvalue reference is in most any case **not**
+`const`-qualified, as the temporary reachable over it needs to be modified
+(within the limits that the destructor needs still to work correctly). 
+In contrary a classical reference typically **will** be `const` qualified if
+introduced for improved performance of read-only accesses.
 ]
 
 ---
@@ -1926,9 +1924,9 @@ header: ## Static Polymorphism
 
 --------------------------------------------------------------------------
 
-* [Überladen von Funktionen		](#overloading_functions)
-* [Überladen von Operatoren		](#overloading_operators)
-* [Defaultwerte für Argumente		](#default_arguments)
+* [Overloading Functions		](#overloading_functions)
+* [Overloading Operators		](#overloading_operators)
+* [Argument Default Values		](#default_arguments)
 * [Overloading and Overriding		](#overloading_vs_overriding)
 
 --------------------------------------------------------------------------
@@ -1940,18 +1938,19 @@ for non-`inline` functions they are implemented quite differently.
 ---
 template: plain
 name: overloading_functions
-header: ### Überladen von Funktionen
+header: ### Overloading Functions
 
-Mehrere Funktionen gleichen Namens können parallel existieren sofern sie sich in
-Anzahl und/oder Typ ihrer Argumente unterscheiden:._[]
+Several functions may exist with the same name as long as they can be
+distinguished by number and type of arguments._[]
+
 ```
 void foo(const char *);         /*1*/
 double foo(const int &, char);  /*2*/
 double foo(double, double);     /*3*/
 ```
 .N[
-Welche Funktion aufgerufen wird (oder der Aufruf mehrdeutig ist),
-entscheidet der Compiler gemäß den tatsächlichen Argumenten.
+Which function will be called (or that the call is ambiguous) will be decided
+from the arguments actually used.
 ]
 ```
 int x; double y;
@@ -1972,11 +1971,12 @@ automatically supplied.
 
 ---
 template: plain
-header: #### Überladen bei Parametern mit ohne `const`
+header: #### Overloading based on `const` and non-`const` Parameters
 
-Auch die `const`-Qualifizierung eines Parameters macht einen Unterschied:
+A `const` qualification in so far is part of the parameter type as it makes a
+difference:
 .pull-left[
-In **Fortsetzung** des Beispiels von der vorhergehenden Seite:
+**Continuing** the example from the previous page:
 ```
 char data[100];
 …
@@ -1985,7 +1985,7 @@ foo(data); /*1*/
 ]
 
 .pull-right[
-Mit **Erweiterung** dieses Beispiels:
+**Extending** this example:
 ```
 void foo(char *); /*4*/
 extern const char greet[]; 
@@ -1995,60 +1995,59 @@ foo(greet); /*1*/
 ```
 ]
 
-Existiert nur eine der beiden Funktionen (die sich voneinander nur in der
-`const`-Qualifizierung eines Parameters unterscheiden), so gilt:
+If only one function (either the one with or the one without `const`) exists,
+the effect is as follows:
 
-* Existiert **allein** die Funktion für den konstanten Fall, wird sie **auch**
-  für modifizierbare Argumente verwendet.._[]
-* **Ohne** die Funktion für den konstanten Fall führt der Aufruf mit einem
-  nicht-modifizierbaren Argument zum **Compile-Fehler** (im Beispiel etwa
-  `foo("hi")`, wenn nur Version `/*4*/` aber nicht `/*1*/` existiert).
+* With **only** the function taking a `const char *` it will be used in **both**
+  cases.._[]
+* **Without** the function for a `const char *` the call with a non-modifiable
+  argument (as `foo("hi")` in the example) **will fail to compile**.
 
 .F[:
-Es ist kein Problem einer Funktion, die verspricht, den Inhalt einer über ein
-Zeiger- oder Referenz-Argument erreichbaren Variablen nicht zu verändern,
-Zugriff auf (prinzipiell) veränderbaren Speicherplatz zu geben – **wohl aber
-umgekehrt!**
+Clearly it is no problem to hand a modifiable memory location via pointer or
+reference over to a function that promises **not** to change it, but **not vice
+versa**!
 ]
 
 ---
 template: plain
 name: overloading_operators
-header: ### Überladen von Operatoren
+header: ### Overloading Operators
 
-[Boost.Operators]: http://www.boost.org/doc/libs/1_55_0/libs/utility/operators.htm
+[Boost.Operators]: http://www.boost.org/doc/libs/release/libs/utility/operators.htm
 
-Operatoren._[] können überladen werden mit Funktionen, deren Name mit dem Wort
-`operator` beginnt.
+Operators may be overloaded by defining functions with a name that starts with
+`operator`:
 
-* Die meisten Operatoren können wahlweise mit freistehenden Funktionen oder mit
-  Member-Funktionen überladen werden.
+* The overload must take at least one operand of class type.._[]
 
-* An der Überladung muss aber mindestens eine Klasse beteiligt sein.._[]
+* Most operators can be overloaded with either free functions or with member
+  functions, i.e. either the left of the right hand operand needs to be of a
+  class type.
 
-* Einige Operatoren sind hinsichtlich der Überladung auf Member-Funktionen
-  eingeschränkt.
+* Some operators may only be overloaded with member functions; then the left
+  hand operand must be of a class type.
 
-* Zur konsistenten Überladung ganzer Operator-Gruppen kann [Boost.Operators]
-  hilfreich sein.
+* To consistently overload whole operator groups [Boost.Operators] may come in
+  handy.
 
-Weiterführende Links:
+See also:
 
 * http://en.cppreference.com/w/cpp/language/operators
 * http://www.tutorialspoint.com/cplusplus/cpp_overloading.htm
 
 .F[:
-Therefore the meaning of operators for built-in-types cannot be changed. If you
+Therefore the meaning of operators for built-in-types cannot be modified. If you
 want to come close to the behaviour of a given built-in types but change or
-remove some predefine operations, you will typically have to **add** a new class
+remove some predefine operations you will typically have to **add** a new class
 and implement all the operations it should support.
 ]
 
 ---
 template: plain
-header: #### Operator-Überladung mit freistehender Funktion
+header: #### Overloading Operators with Free Functions
 
-Diese sieht prinzipiell so aus:
+In principle this needs to happen as follows:
 ```
 MyClass operator+(const MyClass &lhs, const MyClass &rhs) {
     … // do whatever must be done
@@ -2056,13 +2055,13 @@ MyClass operator+(const MyClass &lhs, const MyClass &rhs) {
 }
 ```
 
-Der Rückgabe-Typ ist dabei beliebig, die `return`-Anweisung muss natürlich vom
-Typ her passend sein.
+The return type can be freely chosen - as long as the `return` statement is of
+compatible type.
 
-Genauer gesagt, der Ausdruck hinter `return` muss
+More exactly, the expression after `return` must
 
-* entweder exakt den Rückgabe-Typ haben (`MyClass` im Beispiel)
-* oder in diesen umwandelbar sein.._[]
+* either have the exact return type (`MyClass` in the example)
+* or be convertible to that type.._[]
 
 .F[:
 See also [here](#brace_init_shorthand) for an interresting short-hand notation
@@ -2071,9 +2070,9 @@ possible with C++11 brace initialisers.
 
 ---
 template: plain
-header: #### Operator-Überladung mit Member-Funktion
+header: #### Operator Overloading with Member Functions
 
-Diese sieht prinzipiell so aus:
+In principle this needs to happen as follows:
 ```
 MyClass &MyClass::operator+=(const MyClass &rhs) {
     … // do whatever must be done
@@ -2081,20 +2080,20 @@ MyClass &MyClass::operator+=(const MyClass &rhs) {
 }
 ```
 
-Auch hier ist der Rückgabe-Typ grundsätzlich frei wählbar.
+Again the return type may be freely chosen.
 
 .N[
-Gemäß den Konventionen bei eingebauten Typen wird in der Regel das durch die
-Operation gerade veränderte Objekt selbst zurückgegeben.
+According to what happens for built-in types, usually the object itself will be
+returned
 ]
 
-Die Rückgabe erfolgt typischerweise als Referenz (sonst wäre es auch nicht das
-Objekt selbst sondern nur eine identische Kopie).
+Typically that object is returned by reference (otherwise it weren't the object
+but only a copy).with the modifications done by the operations
 
-Da dies technisch gesehen nur Weitergabe einer Adresse bedeutet, ist es
+As technically a reference is just an address, this is
 
-* performant (z.B. Rückgabe in Register) und
-* nahezu frei von Overhead bei Nichtbenutzung._[]
+* performant (e.g. may use a register) and
+* nearly free of any overhead if not used.._[]
 
 .F[:
 Also, for an optimizing compiler there is a fair chance to remove any remaining overhead …
@@ -2103,12 +2102,12 @@ Also, for an optimizing compiler there is a fair chance to remove any remaining 
 ---
 template: plain
 name: copy_ctor_assign
-header: #### Überladung von Kopier-Konstruktor und -Zuweisung
+header: #### Overloading Copy Constructor and Assignment
 
 [Rule Of Three]: http://en.cppreference.com/w/cpp/language/rule_of_three
 
-Für einige Arten von Objekten müssen diese Operationen überladen werden, da
-der Default – elementweises Initialisieren bzw. Zuweisung – ungeeignet ist.._[]
+For certain classes the following operations need to be overloaded, as the
+compiler-generated default does the wrong thing:
 ```
 class MyClass {
     T *some_ptr;
@@ -2122,8 +2121,8 @@ public:
 ```
 
 .N[
-Der klassische Indikator sind als Member-Daten enthaltene Zeiger auf
-Speicherplatz, welcher individuell für jedes Objekt vorhanden sein muss.._[]
+The classic indication are pointers as member data, referring to memory managed
+by the instance.
 ]
 
 .F[:
@@ -2134,19 +2133,19 @@ function for which the default is not appropriate is the destructor, of course.
 ---
 template: plain
 name: move_ctor_assign
-header: #### Überladung von Move-Konstruktor und -Zuweisung
+header: #### Overloading Move-Constructor and Assignment
 
 [Rule Of Five]: http://en.cppreference.com/w/cpp/language/rule_of_three
 
-In C++11 können die [Rvalue-Referenzen](#rvalue_ref) dazu verwendet werden,
-abhängig davon, ob der dabei als Operand auftretende Ausdruck
+[Rvalue References]: #rvalue_ref
 
-* direkt ein Objekt repräsentiert, das danach unverändert im Speicher weiter
-  existiert, oder
-* temporären Speicherplatz, der ohnehin im Anschluss verworfen wird (z.B. für
-  einen berechneten Ausdruck oder ein Funktionsergebnis),
+C++ [Rvalue References] most often used to provide different implementations
+for object construction and assignment.._[], depending on whether the right hand
+operand denotes
 
-Initialisierung wie auch Zuweisung unterschiedlich zu implementieren.._[]
+* an object instance that will continue to exist after the operation, or
+* temporary memory which will be destroyed afterwards (as is the case for an
+  expression or function call).
 
 ```
 class MyClass {
@@ -2168,19 +2167,18 @@ Turning the classic C++ *Rule of Three* into the [Rule of Five] in C++11.
 ---
 template: plain
 name: move_ctor_assign
-header: #### Implementierung von Move-Konstruktor/Zuweisung
+header: #### Implementing Move Construction and Assignment
 
-Nachdem Move-Versionen deklariert sind, müssen diese natürlich auch
-implementiert werden.
+After declaring move construction and assignment, they need to be implemented.
 
-Wenn der Kopierkonstruktor wie folgt aussieht …
+If copy construction looks as follows …
 ```
 MyClass::MyClass(const MyClass &rhs)
     : …, some_ptr(new T(*rhs.some_ptr)), …    // cloning resource
 { … }
 ```
 
-… könnte dieser Move-Konstruktor angemessen sein:
+… this could be an adequate move construction:
 ```
 MyClass::MyClass(MyClass &&rhs)
     : …, some_ptr(rhs.some_ptr), …    // taking over resource
@@ -2188,7 +2186,7 @@ MyClass::MyClass(MyClass &&rhs)
 ```
 
 .N[
-Die Zuweisungen sind ähnlich, müssen aber zuerst `some_ptr` freigeben.._[]
+Assignment operations are similar but need to free `some_ptr` first..[]
 ]
 
 .F[:
@@ -2199,9 +2197,9 @@ to be properly de-constructed first.
 
 ---
 template: plain
-header: #### Unterscheidung Copy- und Move-Versionen
+header: #### Distinguishing between Copy and Move
 
-Existieren beide Fassungen (Copy und Move), ergibt sich folgendes Verhalten:._[]
+If both exists (copy and move), behaviour is as follows:._[]
 
 ```
 MyClass foo() { return …; }  // … must be an expression of
@@ -2230,20 +2228,21 @@ used instead, though a move could be enforced then: `c = std::move( … );`
 ---
 template: plain
 name: default_arguments
-header: ### Defaultwerte für Argumente
+header: ### Argument Default Values
 
-Argumente können "von rechts nach links" mit Default-Werten versehen werden,
-das heißt:
+Arguments may take default values "from right to left", i.e.:
 
-* Sobald ein Argument einen Default-Wert hat,
-* müssen alle rechts davon stehenden ebenfalls einen haben.
+* As soon as one argument has a default value,
+* all others following on the right must have one too.
 
 .N[
-Der Defaultwert muss beim Funktionsaufruf bekannt sein, ist also Bestandteil des
-Funktions-Prototyps und steht ggf. zusammen mit diesem in einem Header-File.
+The default value needs to be known where the function is called. Therefore it
+is part of the declaration and – for functions shared between `.cpp` files –
+needs to go into the header file.
 ]
 
-Die Namen für die formalen Argumente sind auch in diesem Fall optional:._[]
+As usual for declarations, argument names are optional:._[]
+
 ```
 // the following function can be called with 1..3 arguments:
 double foo(int &count, int minsize = 0, char separator = 'z');
@@ -2938,18 +2937,16 @@ bar(m.to_int());  // ... usual style for explicit conversion
 
 ---
 template: plain
-header: #### Sonderfall: `explicit operator bool()`
+header: #### Special case: `explicit operator bool()`
 
-Eine als `explicit` markierte Typ-Konvertierung in einen Wahrheitswert stellt einen
-Sonderfall dar:
+Type conversions to `bool` marked `explicit` are a special case:
 
-* Sie kommt **nicht** zur Anwendung bei Argumentübergabe, Initialisierung und
-  Zuweisung,
+* They will **not** applied for conversion of general expressions, like argument
+  coercion, initialisation, assignment,
 
-* **jedoch bei bool'schen Operationen und Bedingungstests.**
+* **but will be for boolean operations and in condition testing.**
 
-Die Beispiele auf der nächsten Seite setzen folgendes voraus:
-
+The examples on the following page build on this:
 ```
 class MyClass {
     …
@@ -2966,15 +2963,15 @@ extern void foo(bool);
 
 ---
 template: plain
-header: #### Beispiele: `explicit operator bool()`
+header: #### Example: `explicit operator bool()`
 
-Die folgenden Code-Fragmente setzen das begonnene Beispiel fort:
+The following code fragments extend the example from the previous page:
 
-* `#1` zeigt eine etwas ungewöhnliche aber erlaubte Form des Aufrufs der
-  Typ-Konvertierung in `bool`.
-* `#2a` löst einen Fehler aus, der in einer syntaktische Mehrdeutigkeit
-  begründet ist, die das Paar zusätzlicher Klammern in `#2b` beseitigt.
-* `#3` ist eine zulässige aber überflüssige explizite Typ-Konvertierung.
+* `#1` shows an unusual but permitted form to call the type conversion to
+  `bool`.
+* `#2a` is an error as it is ambiguous, which is solved by some extra
+  parentheses in `#2b`.
+* `#3` is a permitted but unnecessary explicit type conversion.
 
 .pull-left[
 ```
@@ -3013,31 +3010,29 @@ if (obj && !bv) …
 ---
 template: plain
 name: general_typesafety
-header: ### Typ-Sicherheit in C++
+header: ### Type Safety in C++
 
-Die praktische Konsequenz aus den Risiken, welche die Konstrukte zur
-expliziten Typ-Konvertierung – also die vier neuen Cast-Formen von C++
-sowie die von C übernommene Cast-Syntax – mit sich bringen, ist diese:
+A practical consequence of the risks by explicit type conversions – i.e. the
+four C++ style cast operations and the legacy C-style cast – is this:
 
 .W[
-Alle Formen expliziter Typ-Konvertierung (mit Cast) sollten auf das
-unvermeidliche Minimum beschränkt bleiben.
+All explicit type conversions (with casts) should be reduced to the
+unavoidable minimum.
 ]
 
-Ferner werden [klassenspezifische Typ-Konvertierungen](#specified_typeconv)
-manchmal in "unerwarteter Weise" angewendet:._[]
+Furthermore, [class specific type conversions][#specified_typeconv) are
+sometimes applied where not intended:._[]
+
+.I[
+Class specific type conversions should only be defined where a silent change
+between these types is very frequent and considered "natural".
+]
 
 .F[:
 Or to put it slightly different: Experience showed there are scenarios of
 practical importance where a compile error would have been preferred over
 the way the compiler made the code "correct" by applying a (non-explicit)
 constructor or type-cast operator.
-]
-
-.I[
-Eine klassenspezifische Typ-Konvertierung sollte nur dort definiert werden, wo
-der stillschweigende Wechsel zwischen den beteiligten Typen als "natürlich"
-empfunden wird.
 ]
 
 </textarea>

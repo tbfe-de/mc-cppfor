@@ -142,7 +142,7 @@ template: blank
 
 -------------------------------------------------------------------------------
 
-1. [Richtlinien zum Exception-Einsatz		](#exception_guidelines)
+1. [Exception Guidelines			](#exception_guidelines)
 1. [RAII zur Verwaltung von Ressourcen 		](#resource_management)
 1. [Überblick zu Smart-Pointern 		](#smart_pointers)
 1. [Praktikum					](#exercise_thu2)
@@ -157,23 +157,23 @@ Die Besprechung der Musterlösung(en) erfolgt zu Beginn des folgenden Vormittags
 template: linkinfo
 graphic: ExceptionDetails
 name: exception_guidelines
-header: ## Richtlinien für den Exception-Einsatz
+header: ## Some Guidelines for Using Exceptions
 
 -------------------------------------------------------------------------------
 
-* [(Keine) isolierte Klassenhierarchie	](#disconnected_class_hierarchy)
+* [Disconnected Class Hierarchy		](#disconnected_class_hierarchy)
 
 -------------------------------------------------------------------------------
 
-* [(Falsche) Behandlungsblock-Abfolge	](#wrong_catch_order)
+* [Wrong order of `catch`-Blocks	](#wrong_catch_order)
 
 -------------------------------------------------------------------------------
 
-* [Sub-optimale Weiterleitung		](#problematic_rethrow)
+* [Problematic Re-Throwing		](#problematic_rethrow)
 
 -------------------------------------------------------------------------------
 
-* [Exceptions in Destruktoren vermeiden	](#dtor_exception_nogo)
+* [No Exceptions from Destructors	](#dtor_exception_nogo)
 
 -------------------------------------------------------------------------------
 
@@ -182,11 +182,10 @@ template: withinfo
 graphic: ExceptionDetails
 section: (No) Disconnected Class Hierarchy
 name: disconnected_class_hierarchy
-header: ### (Keine) isolierte Klassenhierarchie
+header: ### Disconnected Class Hierarchy
 
-Bilden eigene Exceptions eine isolierte Klassenhierarchie, so kann (sehr
-allgemeiner) Code diese **nicht** über Standard-Exceptions abfangen:
-
+For exceptions classes from a disconnected class hierarchy there is **no**
+possibility for catching these exceptions in generic code:
 ```
 int main() {
     using namespace std;
@@ -214,45 +213,44 @@ section: (Bad) Order of Handlers
 name: wrong_catch_order
 header: ### (Falsche) Behandlungsblock-Abfolge
 
-Werden die `catch`-Blöcke für Exceptions falsch angeordnet, wird
+With a wrong order of `catch`-blocks
 
-* ein weiter oben stehender **allgemeiner** Block
+* an earlier, **more general** block
 
-* einen nachfolgenden **spezifischeren** Block unwirksam machen.
+* **hides a subsequent** (more specific) block.
 
 ---
 template: withinfo
 graphic: ExceptionDetails
 section: Sub-optimal Re-throwing
 name: problematic_rethrow
-header: ### Sub-optimale Weiterleitung
+header: ### Problematic Re-Throwing
 
-Sub-optimal ist grundsätzlich jede Weiterleitung, bei der das Exception-Objekt
-unnötig kopiert wird.
+Rethrowing an exception is sub-optimal if the original thrown object needs to be
+copied.
 
-Durch Kopieren des Exception-Objekts werden geworfene Exceptions einer
-abgeleiteten Klasse per Slicing auf die Basisklasse reduziert.
+Furthermore, in case of a derived exception object, this will cause slicing.
 
 .N.center[
-**Dies ist im Allgemeinen unerwünscht.**
+**In most any case slicing is not what makes sense.**
 ]
 
-Daher sollte ein Kopieren vermieden werden:
+Hence copying should be avoided:
 
-* Argumente von `catch`-Blöcken als Referenz spezifizieren.
+* Exceptions in a `catch`-block should be specified as reference.
 
-* Bei nur teilweiser Auflösung der Fehlersituation das beim Eintritt in den
-  `catch`-Block vorliegende Exception-Objekt mit `throw;` weiter werfen.
+* If a `catch`-block recovers from an exception only partial, it should throw
+  the received object with `throw;`.
 
 ---
 template: withinfo
 graphic: ExceptionDetails
 section: Optimal Re-Throwing
 name: correct_rethrow
-header: #### Optimale Weiterleitung
+header: #### Optimal Re-Throwing
 
-Nur mit in der folgenden Art und Weise wird das ursprünglich vorliegende
-Exception-Objekt **ohne Kopieren** erneut geworfen.
+If the scheme shown below is applied, the originally received exeption object
+will be re-thrown without making any copy (and hence also no slicing):
 ```
 try {
     …
@@ -266,65 +264,68 @@ catch (SomeException &ex) {
 }
 ```
 .N[
-Eine `throw`-Anweisung ohne nachfolgendes Argument kann nicht nur in einem
-`catch`-Block verwendet werden sondern auch in Funktionen, die aus einem
-`catch`-Block direkt oder indirekt aufgerufen werden.._[]
+A `throw`-Statement without argument following may not only be used in a
+`catch`-block but also in a function that is directly or indirectly called
+from such a block.._[]
 ]
 
 .F[:
-Gemeinsamkeiten mehrerer `catch`-Blöcke können damit auch dann problemlos in
-eine Hilfsfunktion ausgelagert werden, wenn diese eine komplexe Ablaufsteuerung
-benötigt und die gefangene Exception nicht nur am Ende weiter geworfen wird.
+That way common code of several `catch`-blocks may be placed in a helper
+function even if this function has a non-trivial flow of control and the
+exception caught is not only re-thrown at the end.
 ]
 
 ---
 template: plain
-header: #### Mögliche Optimierungen durch den Compiler
+header: #### Compiler Optimisations
 
-Beim Eintritt in einen `catch`-Block führt
+[RVO]: http://en.wikipedia.org/wiki/Return_value_optimization
+[NRVO]: http://stupefydeveloper.blogspot.de/2008/10/c-rvo-and-nrvo.html
+
+When entering a `catch`-block
+
 ```
 catch (SomeException ex) …
 ```
-und beim Verlassen
+and when leaving a `catch`-block
 ```
     throw ex;
 ```
-technisch gesehen zum Kopieren des Exception-Objekts:
 
-* Der Compiler darf Optimierungen anwenden – unter Einhaltung der für diese
-  Fälle im C++-Standard spezifizierten Semantik.
+would technically require to copy the exception object.
 
-* Dazu gehört Slicing und die Beachtung des Zugriffsschutzes für den
-  Kopier-Konstruktors, **nicht** aber dessen tatsächliche Ausführung.
+* Within the limits of the semantics specified by the C++ standard there
+  are possible optimisations.
+
+* This implies slicing and not executing private copy constructors …
+
+* … but a copy constructor **need not** be actually executed.
 
 .N[
-Insbesondere ist daher beim Werfen einer Exception [RVO] üblich.._[]
+Especially when am exception is thrown RVO is used as a typical optimisation.._[]
 ]
 
 .F[:
-Auch [NRVO] käme in Betracht, dürfte in der Praxis aber selten von Bedeutung
-sein, da Exception-Objekte meist beim ersten Werfen einer Exception als Argument
-der `throw`-Anweisung direkt erzeugt werden.
+Also [NRVO] might be considered but in practical cases this will be rare, as
+typically exception objects are constructed in the `throw`-statement with a
+constructor call.
 ]
-
-  [RVO]: http://en.wikipedia.org/wiki/Return_value_optimization
-  [NRVO]: http://stupefydeveloper.blogspot.de/2008/10/c-rvo-and-nrvo.html
 
 ---
 template: withinfo
 graphic: ExceptionDetails
 section: (No) Throwing from Destructors
 name: dtor_exception_nogo
-header: ### (Keine) Exceptions aus Destruktoren werfen
+header: ### No Exceptions from Desctructors
 
 .W[
-Exceptions, die von Destruktoren geworfen werden, können ein Programm abbrechen,
-wenn der Destruktor im Rahmen eines Exception-Handlings ausgeführt wird.
+Exceptions thrown from destructors **will cause program termination** if the
+destructor is run during stack-unwinding as part of an ongoing exception
+handling.
 ]
 
-Falls ein Destruktor Operationen benutzen muss, die u.U. eine Exception
-auslösen, sollte der Code sicherheitshalber in einen `try`-Block verpackt
-werden, der alle Exceptions fängt und ignoriert:._[]
+Therefore, if a destructor needs to use operations that might throw, its body
+should be wrapped in a `try`-block, catching all exceptions:._[]
 ```
 class MyClass {
     …
@@ -339,96 +340,91 @@ class MyClass {
 }; 
 ```
 .F[:
-Ob es tatsächlich sinnvoll ist, die Exception wie gezeigt weiter zu werfen,
-falls der Destruktor **nicht** im Rahmen eines Exceptions-Handlings abläuft,
-muss je nach Sachlage individuell entschieden werden.
+The example shows how the caught exception might be re-thrown if the destructor
+is **not** run as part of some exception handling.
 ]
 
 ---
 template: plain
 name: no_more_throwspec
-header: ## c++98 `throw`-Spezifikationen
+header: ## c++98 `throw`-spezifications
 
-Seit vielen Jahre empfehlen von C++-Experten praktisch einhellig, die seinerzeit
-von C++98 eingeführten `throw`-Spezifikationen zu vermeiden.
+Most guidelines from C++ experts recommend **not to use** `throw`-specifications
+as introduced with C++98.
 
 .N.center[
-Mit C++11 wurden `throw`-Spezifikationen zum *Deprecated Feature*.._[]
+C++11 turned `throw`-specifications into a *deprecated language feature*.._[]
 ]
 
 .F[:
-Dies bedeutet zwar, dass sie in einem künftigen C++-Standard ganz entfallen
-könnten, erfahrungsgemäß bieten Compiler aber selbst dann Aufrufoptionen oder
-`#pragma`-s, mit deren Hilfe sich Rückwärtskompatibilität erzielen lässt.
-Andererseits ist es aber auch denkbar, dass ein C++11 Compiler für jede
-Verwendung einer `throw`-Spezifikationen eine Warnung ausgibt.
-
+This means they might be completely removed from the language, though experience
+tells that compilers will still support deprecated features, maybe requiring special
+`#pragmas` or command line options for backward compatibility.
 ]
 
 ---
 template: plain
 name: noexcept
-header: ## C++11 `noexcept`-Spezifikation
+header: ## C++11 `noexcept`-specification
 
-Diese bewirkt folgendes:
+The effect is as follows:
 
-* Wirft eine `noexcept`-Funktion direkt oder indirekt eine Exception, wird das
-  Programm **unwiderruflich beendet** – wenn auch ggf. erst nach Durchlaufen
-  eines frei festlegbaren, zentralen Behandlungsblocks.
+* If some function declared `noexcept` will directly or indirectly throw an
+  exception, the **program will be terminated** – may be after some user defined
+  handler code.
 
-* In anderen Funktionen, welche wiederum `noexcept`-Funktion aufrufen, gelten
-  letztere als **aufrufbar ohne Risiko einer Exception**.._[]
+* Hence in **other** functions that **call** `noexcept` functions the compiler
+  can omit any book-keeping code otherwise necessary for stack-unwinding.._[]
 
 .F[:
-Im Kontext des Aufrufers kann das Auftreten von Exceptions bei
-`noexcept`-Funktionen in der Tat unberücksichigt bleiben … aber nicht, weil
-Exceptions in `noexcept`-Funktionen ausgeschlossen sind, sondern weil es ggf.
-**statt zur Rückkehr** einer solchen Funktion zum Programmabbruch kommt.
+In the callers context exceptions from "`noexcept`" functions may indeed stay
+unconsidered … but **not** as there will be no exceptions but because the callee
+will never return to the caller!
 ]
 
 .N[
-Insgesamt liegen mit der Umsetzung von `noexcept` durch gängige Compiler noch
-zu wenige Erfahrungen vor, um eindeutige Richtlinien und Empfehlungen zur
-Benutzung dieses Features geben zu können.
+Currently there is little experience with respect to `noexcept` and how they
+relate to code generation and overall program quality, so there are not (yet)
+many guidelines when and when not to use `noexceptp`.
 ]
 
 ---
 template: plain
 name: noexcept
-header: ### Bedingte Exception-Freiheit
+header: ### Conditional Freedom from Exceptions
 
-Über das auf der vorhergehenden Seite Dargestellte hinaus ist `noexcept` auch eine
-Compilezeit-Funktion, mit welcher insbesondere Templates auch die **bedingte
-Freiheit von Exceptions** ankündigen können.
+Besides what was explained on the previous page `noexcept` is also a
+compile-time function which especially in templates is useful to
+**conditionally** freedom from exceptions.
 
-* Auf diese Weise kann eine Funktion zum Ausdruck bringen, dass Exceptions nur
-  dann auftreten, wenn bestimmte von ihr aufgerufene Funktionen diese werfen.
+* That way some function may express that exceptions will only occur if some
+  (unknown) called function throws.
 
-* Dadurch kann zur Compilezeit bei der Instanziierung von Templates mit
-  konkreten Typen entschieden werden, ob bei einer bestimmten Operation das
-  Risiko von Exceptions besteht.
+* This allows at compile-time to decide if some piece of code bears the risk
+  to throw.
 
-* Dies eröffnet letztlich die Möglichkeit, dass Bibliotheksfunktionen mittels
-  Techniken der Meta-Programmierung unter verschiedenen Implementierungen
-  wählen.
+* Using techniques from meta-programming this allows library functions to chose
+  a different (probably non-throwing, then) implementation to make itself safely
+  made `nothrow`.
 
 ---
 template: plain
 name: noexcept
-header: ### Beispiele zu `noexcept`
+header: ### Examples for `noexcept`
 
-Eine einfache Berechnung – Exceptions sind völlig ausgeschlossen:
+Some easy calculation – exceptions are completely excluded:
 ```
 float fahrenheit_to_centigrade(float temperature) noexcept {
     return 9.0*temperature/5.0 + 32.0;
 }
 ```
-Wenn es zu einer Exception kommt ist der Programmabbruch jeglichem Versuch einer
-irgendwie gearteten Fortsetzung vorzuziehen:
+
+Some vital functionality – no chance to revover, better crash completely:
 ```
 extern void may_fail_catastrophically(int = 42) noexcept;
 ```
-Eine Exception wird von `bar` nur geworfen, wenn `T::foo` eine wirft:._[]
+
+An exception from `bar` is only thrown it `T::foo` throws:._[]
 ```
 template<class T>
 void bar(const T &arg) noexcept(noexcept(arg.foo())) {
@@ -438,8 +434,7 @@ void bar(const T &arg) noexcept(noexcept(arg.foo())) {
 }
 ```
 .F[:
-The C++11-syntax is that ugly and requires nested `noexcept`-s; for C++14
-some polishing is expected.
+The C++11-syntax is that ugly and requires nested `noexcept`-s.
 ]
 
 ---

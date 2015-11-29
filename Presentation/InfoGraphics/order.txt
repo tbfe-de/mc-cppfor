@@ -11,46 +11,49 @@
 TestBrowserNavigation
 
 :::::::::::::::::::::::::::: Monday 1
+New_in_C++11_C++14
+
+:::::::::::::::::::::::::::: Monday 2 
+TemplateBasics
+ParametrizedTypesAndSizes
+ExceptionBasics
+CodeUnits_vs_CodePoints
 StringBasics
 RegularExpressions
 IOStreamBasics
-ParametrizedTypesAndSizes
 
-:::::::::::::::::::::::::::: Monday 2 
+:::::::::::::::::::::::::::: Tuesday 1
+STL-SequenceContainers
+STL-AssociativeContainers
+STL-ContainerIterators
+
+:::::::::::::::::::::::::::: Tuesday 2
+STL-IteratorDetails
+STL-IteratorCategories
+STL-IteratorUsages
+
+:::::::::::::::::::::::::::: Wednesday 1
+
+UML-ClassesAndRelations 
+MultipleInheritance
+DiamondShapedInheritance
+Example-ClassDesign
+
+:::::::::::::::::::::::::::: Wednesday 2
 ExecutionModel
 ClassToMemoryMapping
 ContainerImplementations
 RuntimeTypeIdentification
 TypeBasedBranching
 
-:::::::::::::::::::::::::::: Tuesday 1
-UML-ClassesAndRelations 
-MultipleInheritance
-DiamondShapedInheritance
-Example-ClassDesign
-
-:::::::::::::::::::::::::::: Tuesday 2
-STL-SequenceContainers
-STL-ContainerIterators
-STL-IteratorDetails
-STL-AssociativeContainers
-
-:::::::::::::::::::::::::::: Wednesday 1
-STL-IteratorCategories
-STL-IteratorUsages
-
-:::::::::::::::::::::::::::: Wednesday 2
-TemplateBasics
+:::::::::::::::::::::::::::: Thursday 1
 ReducingCodeBloat
 
-:::::::::::::::::::::::::::: Thursday 1
-GuidingPrinciples
-Example-OpenClosePrinciple
-
 :::::::::::::::::::::::::::: Thursday 2
-ExceptionBasics
 ExceptionDetails
-
-:::::::::::::::::::::::::::: Friday 1
 ResourceManagement
 SmartPointers
+
+:::::::::::::::::::::::::::: Friday 1
+GuidingPrinciples
+Example-OpenClosePrinciple

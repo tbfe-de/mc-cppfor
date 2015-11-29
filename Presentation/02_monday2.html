@@ -1745,11 +1745,11 @@ header: ## Template Basics
 
 -------------------------------------------------------------------------------
 
-* [Parametrisierte Typen und …			](#parametrized_types)
+* [Parametrized Types and …			](#parametrized_types)
 
-* [… Compilezeit-Konstanten …			](#parametrized_constants)
+* [… Compile-Time Constants …			](#parametrized_constants)
 
-* [… am Beispiel einer `RingBuffer`-Klasse	](#example_ringbuffer)
+* [… Demonstrated with a `RingBuffer` Example	](#example_ringbuffer)
 
 -------------------------------------------------------------------------------
 
@@ -1758,59 +1758,59 @@ template: withinfo
 graphic: ParametrizedTypesAndSizes
 section: Parametrizing Type
 name: parametrized_types
-header: ### Parametrisierte Typen
+header: ### Parametrized Types
 
-Ursprünglich sollte mit den C++-Templates vor allem weitgehend identischer Code
-reduziert werden, wenn es in verschiedenen Varianten einer Klasse oder (Member)
-Funktion nur um andere Datentypen geht.
+C++-Templates were designed with the original intent to reduce mostly identical
+**source code** when different variants of a class or (member) function only
+differ in data types.
 
-* Die Funktion oder Klasse ist hierzu mit einer formalen Typ-Parameterliste in
-  spitzen Klammern zu versehen.
+* The function or class will take a formal type parameter list in angle
+  brackets,
 
-* Darin werden dem Compiler **symbolische Namen** für die parametrisierten Typen
-  angekündigt.._[]
+* introducing **symbolic names** to the compiler that represent types which
+  will later be specified concretely.
+
+.N[
+The symbolic type names may be used anywhere in declarations and in the
+implementation of the class, where a type is syntactically permitted.
+]
+
+When instantiating a **class template** concrete types need to be named at the
+corresponding position in the angle brackets while for a **function template**
+such types are often visible (and deduced) from the types of arguments given by
+the caller.
 
 .F[:
-Each name is preceeded by the keyword `class` or `typename`, which may be used
-interchangeably with same meaning here. (But note that the two keywords have
+Each name is preceded by the keyword `class` or `typename`, which may be used
+interchangeably with the same meaning. (But note that the two keywords have
 different meanings elsewhere.)
 ]
 
-.N[
-Diese Namen können in der nachfolgenden Implementierung der Klasse oder Funktion
-überall dort verwendet werden, wo syntaktisch ein Typ stehen kann bzw. muss.
-]
-
-Bei der Instanziierung der Template sind in den spitzen Klammern an der
-entsprechenden Stelle der Parameterliste konkrete Typen einzutragen.
-  
 ---
 template: withinfo
 graphic: ParametrizedTypesAndSizes
 section: Parametrizing Size
 name: parametrized_constants
-header: ### Parametrisierte Compilezeit-Konstanten
+header: ### Parametrized Compile-Time Constants
 
-Im Rahmen einer Template-Klasse oder -Funktion können nicht nur Typen sondern
-auch Compilezeit-Konstanten parametrisiert werden.
+Besides types a template class or functions may also parametrize compile-time
+constants.
 
-Hierzu ist
+For that purpose
 
-* die Funktion oder Klasse mit einer formalen Wert-Parameterliste in spitzen
-  Klammern zu versehen,
+* the function or class will take a formal value parameter list in angle
+  brackets,
 
-* in welcher dem Compiler **Typen und symbolische Namen** der parametrisierten
-  Compilezeit Konstanten angekündigt werden.
+* introducing **types and symbolic names** to the compiler that represent
+  constants of their given type.
 
 .N[
-Diese Namen können in der nachfolgenden Implementierung der Klasse oder Funktion
-überall dort verwendet werden, wo syntaktisch eine Konstante des betreffenden
-Typs stehen kann.
+The symbolic names may be used anywhere in the class implementation (usually
+following) where syntactically a constant of the given type is permitted.
 ]
 
-Bei der Instanziierung der Template sind in den spitzen Klammern an der
-entsprechenden Stelle der Parameterliste Compilezeit-Konstanten des betreffenden
-Typs einzutragen.._[]
+When instantiating a (class or function) template concrete constants need to be
+named at the corresponding positions in the angle brackets.._[]
 
 .F[
 The usual automatic type converions take place as necessary – e.g. between
@@ -1822,25 +1822,23 @@ template: withinfo
 graphic: ParametrizedTypesAndSizes
 section: Parametrizing Type and Size
 name: example_ringbuffer
-header: ### Beispiel `RingBuffer`
+header: ### Example `RingBuffer`
 
-Die Umwandlung der zunächst für einen bestimmten Datentyp und eine feste Größe
-implementierten `RingBuffer`-Klasse in eine Template kann größtenteils
-durch systematisches "Suchen und Ersetzen" erfolgen:
+Turning `RingBuffer`-class originally implemented with given (fixed) type and
+size into a template is straight forward,as it boils down to some rather
+systematic "find and replace":
 
-* Besonders günstig ist, dass der Datentyp `double` nur dort auftritt, wo
-  in der Template-Variante der parametrisierte Typ stehen muss.
+* This is especially true as `double` occurs in the source only where the (now)
+  parametrized type symbol `T` needs to appear.
 
-* Die Konstante `11` steht im ursprünglichen Code für die Anzahl der im
-  `RingBuffer` maximal ablegbaren Elemente **Plus Eins**.._[]
+* The constant `11` specifies (in the original code) the maximum number of
+  elements in the `RingBuffer` **plus one!**._[]
 
-  * In der Template-Variante erscheint es sinnvoll, die Nettogröße (also die
-    maximale Anzahl der Elemente) anzugeben, die der `RingBuffer` tatsächlich
-    aufnehmen kann.
+  * From the perspective of the `RingBuffer`-s user it makes more sense to
+    supply the net size `N` (number of elements that can actually be held).
 
-  * Dies ist leicht realisierbar, indem bei einem Größen-Parameter `N` die
-    Konstante `11` jeweils durch `N+1` ersetzt wird – in Ausdrücken ggf. in
-    Klammern zur Sicherstellung des Operator-Vorrangs.
+  * This can be easily achieved by replacing each occurence of `11` (in the
+    original code) with `(N+1)` (in the template).
 
 .F[:
 So that the *empty* and *full* state can be easily discerned without an
@@ -1857,22 +1855,22 @@ header: ## Exception Basics
 
 -------------------------------------------------------------------------------
 
-* [Hierarchien von Exception-Klassen		](#exception_hierarchies)
+* [Hierarchical Exception Classes		](#exception_hierarchies)
 
 -------------------------------------------------------------------------------
 
-* [Kontrollfluss mit und ohne Exceptions	](#exception_flowcontrol)
+* [Flow of Control with and without Exceptions	](#exception_flowcontrol)
 
 -------------------------------------------------------------------------------
 
-* [Exception Klassen als Label verstanden	](#exception_as_label)
-* [Gruppieren ähnlicher Exceptions 		](#exception_grouping)
-* [Aktivieren der Behandlungs-Blöcke		](#exception_try_block)
+* [Understandig Exception Classes as Labels	](#exception_as_label)
+* [Grouping Related Exceptions 			](#exception_grouping)
+* [Activating Re-Entry Points			](#exception_try_block)
 
 -------------------------------------------------------------------------------
 
-* [Unvollständig behandelte Exceptions		](#exception_rethrow)
-* [Fangen aller Exceptions			](#exception_catchall)
+* [Re-Throwing Exceptions			](#exception_rethrow)
+* [Catching Any Exception			](#exception_catchall)
 
 ---
 template: withinfo
@@ -1881,89 +1879,92 @@ section: Exception Class Hierarchies
 name: exception_hierarchies
 header: ### Hierarchien von Exception-Klassen
 
-Die im Rahmen von Bibliotheksfunktionen ggf. geworfenen Exceptions bilden eine
-Klassenhierarchie:
+[`std::exception`]: http://en.cppreference.com/w/cpp/error/exception
+[`std::logic_error`]: http://en.cppreference.com/w/cpp/error/logic_error
+[`std::logic_error`]: http://en.cppreference.com/w/cpp/error/runtime_error
 
-* An deren Spitze steht die Klasse `std::exception`.
+Exceptions thrown by library functions build a class hierarchy:
 
-* Davon abgeleitete Klassen sind oft als Basisklassen für eigene
-  Exception-Klassen sinnvoll, etwa
+* The common base is the class [`std::exception`].
 
-  * `std::logic_error` oder
+* Derived from this are the following two which may also be a good choice to
+  extend the hierarchy for specific purposes:
 
-  * `std::runtime_error`.
+  * [`std::logic_error`]
+
+  * [`std::runtime_error`]
 
 ---
 template: withinfo
 graphic: ExceptionBasics
 section: Execution Path taken for Exception
 name: exception_flowcontrol
-header: ### Kontrollfluss mit und ohne Exception
+header: ### Flow of Control with and without Exceptions
 
-Solange keine Exceptions geworfen werden, folgt der Kontrollfluss den
-üblichen Regeln.
+When no exceptions are thrown, flow of control is as usual:
 
 .N[
-Erreicht der Kontrollfluss das Ende eines `try`-Block, ohne dass eine Exception
-geworfen wurde, werden alle nachfolgenden `catch`-Blöcke überspringen.
+If the end of a `try`-block is reached, all subsequent `catch`-blocks are
+skipped over.
 ]
 
-Insoweit kann das Verhalten analog zu einem Block nach `if` sehen, bei dem
-ebenso alle nachfolgenden `else if` und das abschließende `else` übersprungen
-werden, wenn die Auswertung der Bedingung `true` ergab.
+Insofar behaviour is analogous to an `if`-block which skips all subsequent
+`else if` and the final `else, when the condition (of the first `if`) holds
+true.
 
 ---
 template: withinfo
 graphic: ExceptionBasics
-section: Exception Classes Viewn as Labels
+section: Exception Classes Viewed as Labels
 name: exception_as_label
-header: ### Exception Klassen als Label verstanden
+header: ### Understanding Exception Classes as Labels
 
-Sobald jedoch eine `throw`-Anweisung ausgeführt wird, stellen die den aktiven
-`try`-Blöcken nachfolgenden `catch`-Blöcke eine Art Label dar:
+When a `throw`-statement is executed, all the `catch`-blocks after an active
+`try`-block are like labels, i.e.:
 
 .N[
-Verzweigt wird ausgehend vom `throw` grundsätzlich im Kontrollfluss rückwärts,
-d.h. in Richtung auf die `main`-Funktion.
+Control flow always **branches back** (removing stack frames) into the direction
+of the main function.
 ]
 
-* Die Auswahl der `catch`-Blöcke erfolgt dabei
+* A `catch`-block is chosen
 
-  * gemäß der dynamischen Schachtelung der Funktionsaufrufe, und
+  * according to the dynamic nesting of function calls, **and**
 
-  * und innerhalb der einzelnen `catch`-Blöcke nach einem aktiven `try`-Block
-    von oben nach unten.
+  * **top - down** among all `catch`-blocks subsequent to an active `try`-block.
 
-* Es wird der erste `catch`-Block ausgewählt, bei dem der Typ dessen Typ
-  zur geworfenen Exception passt.
+* The selected `catch`-Block is the first one with an exception type compatible
+  to the exception thrown.
 
-* Gibt es keinen solchen, geht zum nächsten, gemäß der dynamischen Schachtelung
-  folgenden `try`-Block.
+* If there is no such `catch`-block, the next active `try`-blocks (closer to the
+  main function) is considered.
 
-* Wird dabei auch die `main`-Funktion verlassen, bricht das Programm ab.
+* If none is found down to the main function program execution stops.
 
 ---
 template: withinfo
 graphic: ExceptionBasics
 section: Grouping Exceptions
 name: exception_grouping
-header: ### Gruppieren ähnlicher Exceptions
+header: ### Grouping Related Exceptions
 
-Bei der Auswahl des `catch`-Blocks werden in Bezug auf die geworfene Exception
-prinzipiell die selben automatischen Typ-Konvertierungen berücksichtigt wie bei
-der Übergabe von Parametern an Funktionen.
+Compatibility of the exception thrown and the exception named in a `catch`-block
+is – with respect to automatic conversions that may be applied – decided in the
+same way as for arguments on function calls:
 
-* Insbesondere gilt das LSP, d.h.  abgeleitete Klassen passen zu ihren
-  jeweiligen Basisklassen.
+* Especially the LSP is effective, i.e. publicly derived classes are compatible
+  with (any of) their base classes.
 
-* Somit lassen sich Klassenhierarchien bilden, um ähnliche Exceptions optional
-  in einem gemeinsamen `catch`-Block fangen zu können.
+* Therefore class hierarchies make sense for exceptions too, as related
+  exceptions then may (optionally) be caught in a common `catch`-block.
 
 .N[
-Auch wenn die Klammern nach `catch` dem Konstrukt insgesamt das Aussehen einer
-Argumentliste geben, stellt die Verzweigung des Kontrollflusses in einen
-`catch`-Block **keinen Funktionsaufruf** dar.._[]
+Even in the parentheses following `catch` make the construct look like a
+function argument list, having the control flow branch back to a `catch`-block
+is different from a function calls
 ]
+
+Rather `catch`-blocks are points for re-entry into a still active function.._[]
 
 .F[:
 It is rather some kind of special return into the control flow of the (still)
@@ -1981,27 +1982,27 @@ template: withinfo
 graphic: ExceptionBasics
 section: Enabling Handler Blocks
 name: exception_try_block
-header: ### Aktivieren der Behandlungs-Blöcke
+header: ### Activating Re-Entry Points
 
-Ein `try`-Block wird aktiv, sobald der Kontrollfluss die erste enthaltene
-Anweisung erreicht und deren Ausführung beginnt.
+A `try`-Block becomes active as soon as the control flow reaches the first contained
+statement.
 
 .N[
-Als Sprungziel in Betracht gezogen werden stets nur diejenigen `catch`-Blöcke,
-deren vorangehender `try`-Block aktiv ist.
+Targets for branching-back in case of an exception throw are only `catch`-blocks
+following active `try`-blocks.
 ]
 
-Ein `try`-Block ist nicht mehr aktiv, wenn er explizit verlassen wird durch
+A `try`-Block is not any longer active after it is left by
 
 * `return`._[]
 * `break`
 * `continue`
 
-bzw. wenn die letzte enthaltene Anweisung vollständig ausgeführt wurde.
+or when last contained statement has completed execution.
 
 .N[
-Anschließend werden die nachfolgenden `catch`-Blöcke nicht mehr als mögliche
-Behandlungs-Blöcke nach einem `throw` in Betracht gezogen.
+The `catch`-blocks following this `try`-block are not any longer considered as
+targets for thrown exceptions.
 ]
 
 .F[:
@@ -2018,10 +2019,11 @@ template: withinfo
 graphic: ExceptionBasics
 section: Re-throw Exceptions
 name: exception_rethrow
-header: ### Unvollständig behandelte Exceptions
+header: ### Re-Throwing Exceptions
 
-Catch-Blöcke, welche nur eine teilweise Auflösung der Fehlersituation leisten,
-können die gefangene Exception erneut werfen:
+It is not unusual that a `catch`-blocks may only partially resolve the problem
+indicated by an exception thrown. Then the exception must be re-thrown from that
+`catch`-block.
 ```
     try {
         …
@@ -2038,26 +2040,35 @@ können die gefangene Exception erneut werfen:
 }
 ```
 
+.N[
+The use of `throw;` is not limited to `catch`-blocks. Instead it may also be
+part of a function called.._[]
+]
+
+.F[
+This may make sense if several `catch`-blocks end with a large common part which
+is delegated to a single function.
+]
+
 ---
 template: withinfo
 graphic: ExceptionBasics
 section: Catch Any Exception
 name: exception_catchall
-header: ### Fangen aller Exceptions
+header: ### Catching Any Exception
 
-Es besteht die Möglichkeit, einen `catch`-Block für alle erdenklichen
-Exception "passend" zu machen:
+It is possible to specify a `catch`-block to match any exception:
 
-* Hierzu sind in den runden Klammern drei Punkte (analog zu variadischen
-  Funktionen) anzugeben.
+* In the parentheses (analogous to variadic functions) three dots need to be
+  specified.
 
-* Ein solcher Block muss ggf. immer am Ende aller `catch`-Blöcke eines
-  `try`-Block stehen.._[]
+* If present, such a block must be the last of all `catch`-blocks following some
+  `try`-block.._[]
 
 .F[:
-This is not syntactically enforced but as "`...`" catches any exception
-and the `catch`-blocks are considered top down, it would otherwise catch
-anything for which a specific `catch`-block is following.
+This is not syntactically enforced but as "`...`" catches any exception and the
+`catch`-blocks are considered as label-like targets top down, it will otherwise
+catch thing for which a specific `catch`-block follows.
 ]
 
 ```
@@ -2099,11 +2110,11 @@ template: withinfo
 graphic: StringBasics
 section: Classes
 name: stdstring_classes
-header: ### Klassen (Übersicht)
+header: ### Classes (Overview)
 
-Die aus C++98 bekannten `std::string` und `std::wstring` sowie die von C++11
-hinzugefügten Klassen `std::u16string` und `std::u32string` sind lediglich
-Typ-Definitionen ähnlich den folgenden:._[]
+The classes for character strings `std::string` and `std::wstring` from C++98
+were augmented in C++11 with `std::u16string` und `std::u32string`. These are
+just type definitions like the following:._[]
 ```
 namespace std {
     typedef basic_string<char> string;      // since C++98
@@ -2113,10 +2124,10 @@ namespace std {
 }
 ```
 
-Weitere Details sind nachzuschlagen in:
-
-* http://en.cppreference.com/w/string/
-* http://www.cplusplus.com/string/
+.I[
+For more details refer to
+http://en.cppreference.com/w/string/
+]
 
 .F[:
 The type definitions show only half of the truth: other template arguments are a
@@ -2129,31 +2140,35 @@ template: withinfo
 graphic: StringBasics
 section: C-Compatibility
 name: stdstring_c_compatibility
-header: ### Kompatibilität zu C
+header: ### Compatibility with C
 
-Die Klasse `std::string` speichert die Zeichen eines Strings in einem
-zusammenhängenden._[] Speicherbereich, der zumindest in der erforderlichen
-Größe, oft aber auch mit etwas Reserve auf dem Heap angelegt wird.
+[Small Buffer Optimisation (SBO)]: https://akrzemi1.wordpress.com/2014/04/14/common-optimizations/
 
-Ein Objekt der `std::string`-Klasse enthält **direkt** typischerweise drei
-Zeiger auf bzw. in ein Stück [Heap-Speicher](06_wednesday2.html#heapdata).
+The class `std::_basic_string` stores characters of a string in contiguous._[]
+memory, which has at least the required size, but often is allocated with some
+extra space.
 
-* Die Adresse des ersten enthaltenen Zeichens.
+The internal representation frequently is via three pointers:
 
-* Die Adresse des letzten (gültigen) Zeichens.
+* The address of the first contained character.
 
-* Die Adresse, bis zu der Speicher alloziert ist.
+* The address of the last (valid) character.
+
+* The address to mark the end of allocated memory (usually one character beyond)
+
+Also on 64-bit architectures (and for strings of 8-bit wide characters)
+[Small Buffer Optimisation (SBO)] is common.
 
 .N[
-Insbesondere sind die als `std::string` Inhalt möglichen Zeichen nicht (wie in C)
-dahingehend eingeschränkt, dass ein Zeichen mit der ganzzahligen Wertigkeit 0
-(ein "NUL-Byte") die Zeichenkette beendet.
+From the viewpoint of a C++ application dealing with the character strings based
+on the standard string classes there is no restriction to which characters can
+be contained (like it is in C where `'\0'` ends the string).
 ]
 
 .F[:
 The C++98 standard left it to the library implementors whether to chose
-contiguous or non-contiguous storage though that freedom might be removed
-in a future version of the standard.
+contiguous or non-contiguous storage, though that freedom is – at least in
+effect – removed in C++11.
 ]
 
 ---
@@ -2161,10 +2176,12 @@ template: withinfo
 graphic: StringBasics
 section: C-Compatibility
 name: stdstring_cstr_use
-header: #### `std::string` als `const char *` verwenden
+header: #### Using `std::string` as `const char *`
 
-Wenn ein C-API `const char *` erwartet, muss ein `std::string`, der den
-Dateinamen enthält, entsprechend dieser Konvention übergeben werden:._[]
+A C-API expecting a C-style string – for example as name of a file – needs
+an address (of the first character) and `'\0'` termination (to mark the end).
+
+The necessary adaption is done by the `c_str()` member function:
 ```
 std::string filename;
 …
@@ -2174,14 +2191,14 @@ std::string filename;
 FILE *fp = std::fopen(filename.c_str(), "r");
 ```
 
-Der obige Code ist **korrekt und risikolos**, da auf den von `c_str()`
-zurückgegebenen Zeiger (bzw. den darüber erreichbare String-Inhalt)
+The above code is **correct and bears no risk**, as the pointer returned by
+`c_str()` (or the memory reachable via it)
 
-* nur innerhalb von `std::fopen` zugegriffen werden kann,
+* is accessed only **inside** `std::fopen`, this
 
-* die Variable `filename` dabei nicht verändert wird, und
+* does not modify the variable `filename`, and
 
-* somit auch **der zugehörige Heap-Speicher derselbe bleibt**.
+* therefore any possible heap allocation will not change.
 
 .F[:
 If the mode to open the file came from an `std::string` too, of course it needs
@@ -2194,16 +2211,16 @@ template: withinfo
 graphic: StringBasics
 section: C-Compatibility
 name: stdstring_cstr_risk
-header: #### Risiken von `c_str()`
+header: #### Risks of Using `c_str()`
 
-Bei Verwendung von `c_str()` oder dem seit C++11 gleichwertigen `data()` sollte
-klar sein, dass darüber Zugang zu dem für den `std::string`-Inhalt auf dem Heap
-angelegten Speicherplatz gegeben wird.
+It should be understood that using `c_str()`._[] that the memory area 
+accessible via the returned pointer will have a valid content **only** up to the
+the next modifying operation of the underlying string object.
 
 .W[
-Code wie der nachfolgende ist somit hochgradig riskant: der Zugriff auf `p`
-zeigt nach jeder Veränderung des Inhalts von `s` auf möglicherweise nicht mehr
-gültigen oder mittlerweile für andere Zwecke allozierten Speicherplatz.._[]
+Therefore the following code has a **high potential risk** to access invalid
+memory, allocated for quite a different purpose than to store the characters of
+the string it once held.
 ]
 
 .pull-left[
@@ -2239,24 +2256,22 @@ template: withinfo
 graphic: StringBasics
 section: C-Compatibility
 name: stdstring_cstr
-header: #### `const char *` als `std::string` verwenden
+header: #### Using `const char *` as `std::string`
 
-Die Umwandlung eines klassischen C-Strings in ein `std::string`-Objekt erfolgt
-stets automatisch durch einen als
-[Typ-Konvertierung wirksamen Konstruktor](01_monday1.html#constructor_conversion).
+Turning a classic C-string into an `std::string` object is always automatic,
+as it happens as type conversion by a (non-`explicit`) constructor.
 
-.I[
-Sollen Funktionen sowohl mit (unveränderbaren) `std::string`-Argumenten als auch
-mit klassischen String-Literalen im C-Stil aufrufbar sein, besteht die sparsamste
-Lösung in der Verwendung des Argument-Typs `const std::string &`.
+.N[
+The easiest way to make functions callable with both, `std::string` objects
+**and** classic C strings is to use an argument of type `const std::string&`.
 ]
 
-Eine – gemessen am zu schreibenden Code – deutlich aufwändigere Lösung ist es,
-Überladungen für
+In terms of the code to be written it will be much more work to provide a number
+of overloads._[], e.g. for
 
 * `const char *`,
-* `const std::string &` und
-* (evtl.) `std::string &&`
+* `const std::string &`, and
+* (maybe) `std::string &&`.
 
 bereitzustellen.._[]
 .F[:
@@ -2268,19 +2283,18 @@ template: withinfo
 graphic: StringBasics
 section: Efficiency
 name: stdstring_efficiency
-header: ### Effizienz-Betrachtungen
+header: ### Efficiency Considerations
 
 [Small String Optimisation]: http://john-ahlgren.blogspot.de/2012/03/small-string-optimization-and-move.html
 
-Typische Implementierungen der `std::string`-Klasse nutzen die folgenden
-Maßnahmen zur Effizienzsteigerung:
+Typical measures to improve efficiency of `std::string`-s are:
 
-* Allozierung von Überschuss-Speicherplatz am Ende.
+* Allocating some excess memory at the end.
 
-* Wenn nötig proportionale Vergrößerung._[] der Allozierung (nicht mit
-  konstanten Zuschlag).
+* Proportionally enlarging the allocation (not a constant number of extra
+  characters).
 
-* Insbesondere auf 64-Bit Hardware lohnend: [Small String Optimisation]
+* Especially on 64-Bit hardware: [Small String Optimisation]
 
 .F[:
 Proportional here means that when the current allocation doesn't suffice any
@@ -2295,33 +2309,31 @@ template: withinfo
 graphic: StringBasics
 section: May or May not Have COW-Implementation
 name: stdstring_cow
-header: ### Optionales "Copy On Write"
+header: ### Optional "Copy On Write"
 
 [Copy On Write (COW)]: http://www.gotw.ca/publications/optimizations.htm
 
-Durch diese Optimierung lässt sich insbesondere Code ohne weiteren Eingriff
-"nachbessern", welcher häufig `std::string`-s als Wertargument übergibt, wo eine
-konstante Referenz angemessen wäre.
+This optimisation will especially improve code that hands over `std::string`
+objects by value (instead of `const std::string&`).
 
-* Das Kopieren des eigentlichen Inhalts wird dabei verzögert:._[]
+* Copying the string content will not happen right away:._[]
 
-  * Stattdessen wird ein "Merker" gesetzt, und
-  * das Kopieren beim ggf. beim ersten schreibenden Zugriff nachgeholt.
+  * Instead a flag is set to mark the string content as shared, and
+  * actually copying the content only if a modification takes place.
 
-* So lange nur lesend zugegriffen wird, teilen sich mehrere formale Kopien
-  den Inhalt.
+* As long as in the shared state only there is only non-modifying access
+  to the string content, nothing more needs to happen.
 
 .N[
-Endet die Lebenszeit einer formalen Kopie, ohne dass es jemals zu einem
-schreibenden Zugriff kam, wurde das Kopieren gänzlich eingespart.
+If a (shared) instance ends its life-time without any modification to the
+string content, no copying ever needs to take place.
 ]
 
 .F[:
-[Copy On Write (COW)] Implementierungen finden sich mittlerweile weniger häufig,
-insbesondere in multi-threaded Ablaufumgebungen, da ihre möglichen
-Performance-Vorteile (durch gelegentlich ersparte Kopien) dort oftmals geringer
-zu Buche schlagen als ihr Nachteil, alle Zugriffe auf den String-Inhalt durch
-geeignete Mechanismen (z.B. Semaphoren) aufwändig koordinieren zu müssen.
+[Copy On Write (COW)] "optimisations" have shown substantial disadvantages in
+multi-threaded environments: the expected performance improvement often is more
+then outweighed by necessary locking mechanisms to guarantee exclusive access of
+only one single thread.
 ]
 
 ---
@@ -2330,25 +2342,23 @@ graphic: StringBasics
 section: Basic Operations
 name: stdstring_basicops
 
-header: ### Grundlegende Operationen
+header: ### Basic Operations
 
-Soweit diese nicht ohnehin intuitiv verständlich sind, wie
+Most of these are intuitive, like
 
-* Zuweisung mit `=`,
+* Assignment with `=`,
 
-* Vergleich mit `==`, `!=` usw.
+* Comparision with `==`, `!=` etc.
 
-* Verkettung mit `+` sowie
+* Concatenation with `+` and
 
-* Elementzugriff mit `[…]`
+* Element Access with `[…]`.
 
-stellen sie üblicherweise keine hohe Hürde dar.
+and hence cause never problems
 
 .N[
-Eine Überlegung zum Programmierstil beim Element-Zugriff könnte sein, diesen
-in nicht für die Performance relevantem Code konsequent mit der Member-Funktion
-`at()` vorzunehmen und damit undefiniertes Verhalten bei
-Bereichsüberschreitungen zuverlässig zu vermeiden.
+Code not extremely performance relevant should consider to use `at()` instead of
+`operator[]` to avoid undefined behavior in case of out-of-bounds access.
 ]
 
 ---
@@ -2356,21 +2366,21 @@ template: withinfo
 graphic: StringBasics
 section: Advanced Operations
 name: stdstring_moreops
-header: ### Weitere Operationen im Überblick
+header: ### Overview of More Operations
 
-An dieser Stelle sei auf die Ähnlichkeit zwischen `std::string` und
-`std::vector<char>` verwiesen, insbesondere gilt:
+It is fully intended to model `std::string` with a close resemblance to
+`std::vector<char>`. Especially:
 
-* Auch ein `std::string` bietet die übliche Iterator-Schnittstelle,
-* womit neben speziellen `std::string` Member-Funktionen auch alle
-  STL-Algorithmen anwendbar sind.
+* Also `std::string` has the usual iterator interface, 
+* making it compatible with all STL algorithms of interest (besides member and
+  free functions dealing with the class itself).
 
-Was jeweils als besser verständlicher Code empfunden wird, ist mitunter auch
-Ansichtssache.
+It may be a matter of experience – and to slight degree a matter of taste –
+what kind of coding style is more comprehensible:
 
-Das folgende Fragment liest einen `std::string s` von Standard-Eingabe und
-testet vor der weiteren Verarbeitung, ob ausschließlich "White-Space" enthalten
-ist:
+The following fragment reads an `std::string s` from standard input and checks
+if it contains nothing else but white-space before further processing.
+
 ```
 // with std::string member function
 if (std::getline(std::cin, s)
@@ -2382,21 +2392,17 @@ if (std::getline(std::cin, s)
                  [](char c) { return (c == ' ' || c == '\t'); })) …
 ```
 
-  [C++11 lambda]: http://en.cppreference.com/w/cpp/language/lambda
-
 ---
 template: withinfo
 graphic: StringBasics
 section: Numeric Conversions
 name: stdstring_numconv
-header: ### Umwandlung von/in arithmetische Werte
+header: ### Converting between `std::string` and Arithmetic Types
 
-Die Umwandlung zwischen Zeichenketten und arithmetischen Werte in interner
-Darstellung (`int`, `unsigned`, `long`, … `double`) gehört zu den häufig
-zu lösenden Aufgaben.
+Conversions between character sequences and native arithmetic types (`int`,
+`unsigned`, `long`, … `double`) is a frequent necessity.
 
-Vielfach findet man hier noch sehr umständlichen, unzureichenden oder teils
-sogar gefährlichen Code:._[]
+Often unnecessary complicated, cumbersome, and hence error prone code is used:
 ```
 std::string tmpfilename; // fixed part, followed by sequence number
 …
@@ -2421,14 +2427,14 @@ space is available for storing `num` incremented.
 ---
 template: plain
 name: stdstring_str2num
-header: #### `std::string` in numerischen Wert umwandeln
+header: #### Convert `std::string` into Arithmetic Type
 
-C++11 hat zu diesem Zweck eine Reihe neuer Funktionen eingeführt.
+C++11 has introduced a new set of functions:
 
-* Das Namensschema ist `std::stoXX` für ``s``tring ``to`` mit einem
-* Buchstaben-Code `XX` gemäß der nachfolgenden Tabelle:
+* The naming scheme is `std::stoXX` for `s`tring `to` with a letter code
+* `XX` according to the following table:
 
-| Buchstaben-Code | Umwandlung nach      | basierend auf   |
+| Letter Code     | Conversion to        | (based on)      |
 |:---------------:|:---------------------|:----------------|
 | `i`             | `int`                | `std::strtol`   |
 | `l`             | `long`               | `std::strtol`   |
@@ -2439,22 +2445,23 @@ C++11 hat zu diesem Zweck eine Reihe neuer Funktionen eingeführt.
 | `d`             | `double`             | `std::strtod`   |
 | `ld`            | `long double`        | `std::strtold`  |
 
-Siehe auch:
-
-* http://en.cppreference.com/w/cpp/string/basic_string/stol
-* http://en.cppreference.com/w/cpp/string/basic_string/stoul
-* http://en.cppreference.com/w/cpp/string/basic_string/stof
+.I[
+For more information see:
+http://en.cppreference.com/w/cpp/string/basic_string/stol,
+http://en.cppreference.com/w/cpp/string/basic_string/stoul, and
+http://en.cppreference.com/w/cpp/string/basic_string/stof.
+]
 
 ---
 template: plain
 name: stdstring_num2str
-header: #### Numerischen Wert in `std::string` umwandeln
+header: #### Create `std::string` from Arithmetic Type
 
-Für die Umwandlung von numerischen Werten in `std::string` führte C++11 die
-Funktion `std::to_string` mit einer Reihe von Überladungen ein.
+To convert arithmetic types into `std::string` C++11 introduced a number of
+overloads for the (free) function `std::to_string`:
 
-Ihre Anwendung ist trivial und zusammen mit der auf der vorherigen Seite
-eingeführten Funktion `std::stoull` aus folgendem Beispiel ersichtlich:
+Use is trivial and probably obvious together with the functoin `std::stoull`
+introduced on the previous page:
 ```
 std::string tmpfilename; // fixed part followed by sequence number
 …
@@ -2474,15 +2481,20 @@ template: withinfo
 graphic: StringBasics
 section: Input and Output
 name: stdstring_io
-header: ### Ein- und Ausgabe
+header: ### Input and Output
 
-Die Ausgabe von Zeichenketten erfolgt üblicherweise mit dem überladenen
-Ausgabe-Operator:._[]
+Output of character strings is usually done with an overload of `operator<<`,
+sometime even called "output operator":._[]
 ```
 std::string greet{"hello, world"};
 …
 std::cout << greet;
 ```
+
+.N[
+Note that the result for strings containing embedded `'\0'` characters might not
+be what is expected (depending on the expectation :-)).
+]
 
 .F[:
 Of course, this is not a specific operator for output but an overload to the
@@ -2496,27 +2508,26 @@ template: withinfo
 graphic: StringBasics
 section: Input and Output
 name: stdstring_in_word
-header: #### Lesen mit `operator>>`
+header: #### Reading with `operator>>`
 
 [White Space]: http://de.wikipedia.org/wiki/Leerraum
 
-Der für `std::string` überladene `operator>>` liest wortweise:
+The overloaded `operator>>` for `std::string`-s reads words by word:
 ```
 std::string word;
 while (std::cin >> word) …
 ```
 
-Als Trennung zwischen den Worten gelten hier beliebig lange Leerraum-Folgen
-([White Space]), üblicherweise (mindestens) die Zeichen:
+Words are separated by arbitrary [White Space], usually (at least) the
+characters for:
 
-* Zeilenvorschub (`'\n'`)
-* Leerzeichen (`' '`) sowie
-* horizontale und vertikale Tabulatoren (`'\t'` und `'\v'`).
+* Line Feed (`'\n'`)
+* Space (`' '`), and
+* horizontal / vertical Tabulators (`'\t'` and `'\v'`).
 
 .N[
-Beim Lesen von `std::string`-s mit `operator>>` können in der Regel keine
-Leerzeilen erkannt (und speziell verarbeitet) werden, da alle Zeilenvorschübe
-im Rahmen des Überspringens von [White Space] stillschweigend verworfen werden.
+When reading `std::string`-s with `operator>>` usually no empty lines can be
+recognized, as any line feed characters are silently skipped as white space.
 ]
 
 ---
@@ -2524,27 +2535,27 @@ template: withinfo
 graphic: StringBasics
 section: Input and Output
 name: stdstring_in_word
-header: #### Lesen mit `std::getline`
+header: #### Reading with `std::getline`
 
-Eingaben können auch zeilenweise in einen `std::string` gelesen werden
+Input into `std::string` can also be read by line …
 ```
 std::string line;
 … std::getline(std::cin, line) …
 ```
 
-oder bis zu einem beliebigen Begrenzer:
+… or upto an arbitrary delimiter character:
 ```
 std::string field;
 … std::getline(std::cin, field, ':') …
 ```
 
 .N[
-Sehr flexibel ist das obige Verfahren jedoch nicht, da nur **genau ein**
-Begrenzerzeichen vorgegeben werden kann.
+Flexibility of the above is limited as **exactly one** delimiter character may
+be specified.
 ]
 
-Eine Zeichenmenge – z.B. Punkt, Komma oder Semikolon – wäre oft wünschenswert,
-ist aber nicht möglich.._[]
+It is not possible to specify a set of alternative delimiters – e.g. full
+stop, comma, and semicolon.._[]
 
 .F[:
 While a small helper function accepting a set of delimiters shouldn't be that
@@ -2554,23 +2565,23 @@ is possible with [Regular Expressions]. After having been available through
 standard library (see http://en.cppreference.com/w/cpp/regex/basic_regex).
 ]
 
-  [Boost.Regex]: http://www.boost.org/doc/libs/release/libs/regex/doc/html/index.html
-  [Regular Expressions]: http://en.wikipedia.org/wiki/Regular_expression
+[Boost.Regex]: http://www.boost.org/doc/libs/release/libs/regex/doc/html/index.html
+[Regular Expressions]: http://en.wikipedia.org/wiki/Regular_expression
 
 ---
 template: linkinfo
 graphic: IOStreamBasics
 name: iostream_basics
-header: ## Library-Basics – IO-Streams
+header: ## Library-Basics – I/O-Streams
 
 -------------------------------------------------------------------------------
 
-* [Front-End und … 	](#iostream_frontend)
+* [Front-End and … 	](#iostream_frontend)
 * [… Back-End 		](#iostream_backend)
 
 -------------------------------------------------------------------------------
 
-* [Zustands-Bits 	](#iostream_statebits)
+* [I/O-State (Bits) 	](#iostream_statebits)
 
 -------------------------------------------------------------------------------
 
@@ -2579,20 +2590,19 @@ template: withinfo
 graphic: IOStreamBasics
 section: I/O-System Front-End
 name: iostream_frontend
-header: ### Front-End der I/O-Streams
+header: ### I/O-Stream Front-End
 
-Das Front-End der I/O-Streams besteht aus
+The I/O-Stream Front-End consists of
 
-* der Basisklasse `std::ios`._[] mit einigen allgemeinen Definitionen,
+* the base class `std::ios`._[] with some common defintions
 
-* davon abgeleitet die Klassen `std::istream` und `std::ostream`, welche vor
-  allem in Form von Referenzargumenten zur Parametrisierung von I/O-Strömen
-  als Funktionsargumente verwendet werden,
+* derived from it classes `std::istream` und `std::ostream` which are typically
+  used as reference arguments to parametrise I/O-streams for functions called,
 
-* sowie als Klassen, von denen auch Objekte angelegt werden
+* and the following classes meant to be instantiated:
 
-  * `std::ifstream`, `std::ofstream` und `std::fstream` (File-Streams) und
-  * `std::istringstream`, `std::ostringstream` und `std::stringstream`
+  * `std::ifstream`, `std::ofstream`, and `std::fstream` (File-Streams)
+  * `std::istringstream`, `std::ostringstream`, and `std::stringstream`
      (String-Streams).
 
 .F[:
@@ -2609,99 +2619,108 @@ template: withinfo
 graphic: IOStreamBasics
 section: I/O-System Front-End
 name: io_streams
-header: #### Gemeinsame Schnittstelle
+header: #### Common Interface
 
-Die von einer Applikation verwendbaren Operationen zur Ein- und Ausgabe liegen
-teils als Member der Klassen `std::istream` und `std::ostream` vor, teils sind
-es globale Funktionen.
+Operations for stream input and output are partially implemented as member
+functions of classes `std::istream` and `std::ostream`, partially as free
+standing functions.
 
 .N[
-Zur Unterstützung benutzerdefinierter Datentypen können auch weitere globale
-Überladungen von `operator>>` und `operator<<` existieren.
+More overloads of `operator>>` and `operator<<` may be added to support user
+defined data types.
 ]
 
-Für alles weitere wird auf die Standarddokumentation verwiesen, z.B.:
+Such overloads can only have the form of free functions (as otherwise new
+member functions would have to be added to `std::istream` and `std::ostream`).
 
-* http://en.cppreference.com/w/cpp/io/basic_ios
-* http://en.cppreference.com/w/cpp/io/basic_istream
-* http://en.cppreference.com/w/cpp/io/basic_ostream
+.I[
+For more information see:
+http://en.cppreference.com/w/cpp/io/basic_ios
+http://en.cppreference.com/w/cpp/io/basic_istream
+http://en.cppreference.com/w/cpp/io/basic_ostream
+]
 
 ---
 template: withinfo
 graphic: IOStreamBasics
 section: I/O-System Front-End
 name: io_filestreams
-header: #### Filestreams
+header: #### File Streams
 
-Die Verwendung erfolgt typischerweise abhängig von der gewünschten Richtung des
-Datenstroms:
+The various file stream classes are used depending on the I/O direction:
 
-* `std::ifstream` zum Lesen
-* `std::ofstream` zum Schreiben
+* `std::ifstream` for reading
+* `std::ofstream` for writing
+* `std::fstream` for reading and writing._[]
 
-Darüberhinaus gibt es auch bidirektional verwendbare Filestreams:
+.I[
+For more information see:
+http://en.cppreference.com/w/cpp/io/basic_fstream
+http://en.cppreference.com/w/cpp/io/basic_ifstream
+http://en.cppreference.com/w/cpp/io/basic_ofstream
+]
 
-* `std::fstream`
-
-Für alles weitere wird auf die Standarddokumentation verwiesen, z.B.:
-
-* http://en.cppreference.com/w/cpp/io/basic_fstream
-* http://en.cppreference.com/w/cpp/io/basic_ifstream
-* http://en.cppreference.com/w/cpp/io/basic_ofstream
-
+.F[:
+Note that in this case read and write positions in the stream are independent of
+each other and – depending on the task at hand – may or may not need explicit
+synchronisation.
+]
 
 ---
 template: withinfo
 graphic: IOStreamBasics
 section: I/O-System Front-End
 name: io_stringstreams
-header: #### Stringstreams
+header: #### String Streams
 
-Die Verwendung erfolgt typischerweise abhängig von der gewünschten Richtung des
-Datenstroms:
+The various file stream classes are used depending on the I/O direction:
 
-* `std::istringstream` zum Lesen
-* `std::ostringstream` zum Schreiben
+* `std::istringstream` for reading
+* `std::ostringstream` for writing
+* `std::stringstream` for reading and writing._[]
 
-Darüberhinaus gibt es auch bidirektional verwendbare String-Streams:
+.I[
+For more information see:
+http://en.cppreference.com/w/cpp/io/basic_stringstream
+http://en.cppreference.com/w/cpp/io/basic_istringstream
+http://en.cppreference.com/w/cpp/io/basic_ostringstream
+]
 
-* `std::stringstream`
-
-Für alles weitere wird auf die Standarddokumentation verwiesen, z.B.:
-
-* http://en.cppreference.com/w/cpp/io/basic_stringstream
-* http://en.cppreference.com/w/cpp/io/basic_istringstream
-* http://en.cppreference.com/w/cpp/io/basic_ostringstream
+.F[:
+Note that in this case read and write positions in the stream are independent of
+each other and – depending on the task at hand – may or may not need explicit
+synchronisation.
+]
 
 ---
 template: withinfo
 graphic: IOStreamBasics
 section: I/O-Streams Back-End
 name: iostream_backend
-header: ### Back-End der I/O-Streams
+header: ### I/O-Stream Back-End
 
-Das Backend der I/O-Streams implementiert vor allem einen Mechanismus zur
-Datenpufferung.
+The main responsibility of the I/O-Stream back-end is abstraction and buffering
+(in case file streams).
 
-.N[
-Damit kann insbesondere
+Buffering allows to
 
-* die Übertragung von Daten in Richtung von oder zu einem permanenten Speicher
-  in optimierten Blockgrößen erfolgen,
-* welche die lesende bzw. schreibende Applikation weder kennen noch in irgend
-  einer anderen Weise berücksichtigen muss.
+* transmit data between internal memory and external storage in optimised block
+  sizes,
+* while the application has any freedom in which portions data is consumed or
+  produced.
 ]
 
-Für alles weitere wird auf die Standarddokumentation verwiesen, z.B.:
-
-* http://en.cppreference.com/w/cpp/io/basic_streambuf
-* http://en.cppreference.com/w/cpp/io/basic_filebuf
-* http://en.cppreference.com/w/cpp/io/basic_stringbuf
+.I[
+For more information see:
+http://en.cppreference.com/w/cpp/io/basic_streambuf
+http://en.cppreference.com/w/cpp/io/basic_filebuf
+http://en.cppreference.com/w/cpp/io/basic_stringbuf
+]
 
 ---
 template: withinfo
 graphic: IOStreamBasics
-section: I/O-Streams State-Bits
+section: I/O-Stream State-Bits
 name: iostream_statebits
 header: ### Zustands-Bits der I/O-Streams
 
@@ -2729,48 +2748,51 @@ template: withinfo
 graphic: IOStreamBasics
 section: I/O-Streams State-Bits
 name: iostream_statebits
-header: #### Verhalten der I/O-Streams abhängig vom Zustand
+header: #### State-Dependent I/O-Stream Behaviour
 
-Solange eines der genannten Bits gesetzt ist, werden vom betreffenden Stream
-alle Operationen ignoriert, **ausgenommen `clear()` und `close()`**, was
-insbesondere bei der Verarbeitung fehlerhafter Eingaben wichtig ist:
+As soon as an I/O-stream leaves the *good*-state (i.e. if any of its state bits
+gets set), further operations with that stream are ignored **except for `clear()`
+and `close()`**.
 
-* Beim Wechsel des Zustands bleibt die aktuelle Position im Stream – also
-  welches Zeichen als nächstes beim Lesen einer Eingabe verarbeitet wird – 
-  wo sie beim **Auslösen** des Zustandswechsels war.
+This has especially to be considered for a more detailed analysis of
+(unexpected) input:
 
-* Bei einem Fehler im Eingabeformat, z.B. wenn ein Buchstabe erscheint, wo eine
-  Ziffer erwartet wird, ist somit das nächste Zeichen immer noch das störende,
-  z.B. der unerwartete Buchstabe.
+* Any state change leaves the current position in the stream **prior to** the
+  character causing the problem.
 
-* Soll (mindestens) dieses Zeichen übersprungen werden, so muss
+* Input not adhering to the expected format (usually determined by the data type
+  to be read with `operator>>`) – e.g. if a letter occurs where a digit is
+  expected – input is processed **up to but not including** the unexpected
+  character.
 
-  * der Stream **zuerst** in den *good*-Zustand versetzt werden, denn
-  * **erst dann** kann eine Operation wie z.B. `ignore` zum Überspringen
-    von Zeichen ihre Wirkung entfalten.
+* To skip over (at least) this character,
 
-Siehe auch:
+  * **first** the stream must be put in the *good*-state, only
+  * **then** an operation like `ignore` will work.
 
-* http://en.cppreference.com/w/cpp/io/basic_ios/clear
-* http://en.cppreference.com/w/cpp/io/basic_istream/ignore
+.I[
+For more information see:
+http://en.cppreference.com/w/cpp/io/basic_ios/clear
+http://en.cppreference.com/w/cpp/io/basic_istream/ignore
+]
 
 ---
 template: withinfo
 graphic: IOStreamBasics
 section: I/O-Streams State-Bits
 name: iostream_statebits
-header: #### Exceptions bei Zustandswechsel
+header: #### Exceptions on State Change
 
-Wahlweise kann das Verhalten eines Streams so eingestellt werden, dass
+Individually for each stream and state it can be chosen that an exception is
+thrown for any
 
-* bei jedem Zustandswechsel und
-* allen (versuchten) Operationen außerhalb des *good*-Zustands
+* **change to** that state (i.e. setting the corresponding state bit) and
+* attempted operation **while in** that state.
 
-eine Exception geworfen wird:
 ```
 // Excerpt from a hypothetical "forever running" TCP-Client
 std::ifstream from_server;
-… // somehow establish connection through TCP/IP-Socket
+… // establish connection through TCP/IP-Socket
 from_server.exceptions(std::ios::badbit
                      | std::ios::eofbit
                      | std::ios::failbit);
