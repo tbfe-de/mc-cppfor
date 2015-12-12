@@ -151,10 +151,6 @@ template: blank
 
 -------------------------------------------------------------------------------
 
-Kürzere Pausen werden jeweils nach Bedarf eingelegt.
-
-Die Besprechung der Musterlösung(en) erfolgt zu Beginn des folgenden Vormittags.
-
 ---
 template: plain
 name: cpp11_14_extensions
@@ -2217,12 +2213,6 @@ It should be understood that using `c_str()`._[] that the memory area
 accessible via the returned pointer will have a valid content **only** up to the
 the next modifying operation of the underlying string object.
 
-.W[
-Therefore the following code has a **high potential risk** to access invalid
-memory, allocated for quite a different purpose than to store the characters of
-the string it once held.
-]
-
 .pull-left[
 ```
 std::string s("see me, ");
@@ -2244,6 +2234,10 @@ const char *mammamia() {
 }
 ```
 ]
+
+The above code has a **high potential risk** to access invalid
+memory, allocated for quite a different purpose than to store the characters of
+the string it once held.
 
 .F[:
 In the example on the right hand side, dereferencing the pointer returned from
@@ -2759,16 +2753,15 @@ This has especially to be considered for a more detailed analysis of
 
 * Any state change leaves the current position in the stream **prior to** the
   character causing the problem.
-
 * Input not adhering to the expected format (usually determined by the data type
   to be read with `operator>>`) – e.g. if a letter occurs where a digit is
   expected – input is processed **up to but not including** the unexpected
   character.
 
-* To skip over (at least) this character,
+To skip over (at least) this character,
 
-  * **first** the stream must be put in the *good*-state, only
-  * **then** an operation like `ignore` will work.
+* **first** the stream must be put in the *good*-state, only
+* **then** an operation like `ignore` will work.
 
 .I[
 For more information see:

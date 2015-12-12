@@ -147,8 +147,8 @@ template: blank
 1. [Pointers and references			](#ptr_and_ref_types)
 1. [Variable and Object Initialisation		](#var_and_object_init)
 1. [Constructors and Destructors		](#ctors_and_dtors)
-1. [Statischer Polymorphismus			](#static_polymorphism)
-1. [Typ-Kompatibilität und -Konvertierung	](#type_conversions)
+1. [Static Polymorphism				](#static_polymorphism)
+1. [Type Compatibility and Conversions		](#type_conversions)
 
 ---------------------------------------------------------------------------
 
@@ -166,7 +166,7 @@ header: ## Refreshing some C++ Basics
 
 --------------------------------------------------------------------------
 
-* [Separate Compilation		](#separate_compilation)
+* [Separate Compilation			](#separate_compilation)
 * [Definition/Reference Model		](#definition_reference)
 * [Compile Time Write Protection	](#const_protection)
 
@@ -182,9 +182,9 @@ following pages a cursory look and examine features introduced with C++11.
 ---
 template: plain
 name: separate_compilation
-header: ### Getrennte Kompilierung
+header: ### Separate Compilation
 
-#### Grundlagen der getrennten Kompilierung
+#### Basics of Separate Compilation
 
 [Build-System]: http://en.wikipedia.org/wiki/Build_automation
 [Unix `make`]:  http://en.wikipedia.org/wiki/Make_(software)
@@ -192,46 +192,41 @@ header: ### Getrennte Kompilierung
 [GNU make]:     http://en.wikipedia.org/wiki/GNU_build_system
 [CMake]:        http://en.wikipedia.org/wiki/CMake
 
-[Übersetzungseinheiten]: http://en.cppreference.com/w/cpp/language/translation_phases
+[Translation Unit]: http://en.cppreference.com/w/cpp/language/translation_phases
 [Header-Files]: http://www.cplusplus.com/forum/articles/10627/
 
-Ein C++-Programm wird üblicherweise in eine mehr oder weniger große Zahl von
-[Übersetzungseinheiten] aufgeteilt.
+Any C++-Program consists of one or more [Compilation Unit]s.
 
-* Diese stehen in Implementierungsdateien, deren Dateinamens-Suffix meist `.cpp`
-  ist.
+* Typically such are stored in an implementation file with the suffix `.cpp`.
 
-* Sind ein und dieselben Informationen in mehr als einer Übersetzungseinheit
-  notwendig, gehören diese in [Header-Files], deren Dateinamens-Suffix meist
-  `.h` ist (seltener: `.hpp`).
+* Information that needs to be available in more than one *Implementation File*
+  usually goes in a *Header File* with the suffix `.h` (or sometimes `.hpp`).
 
 .I[
-Bereits bei einer kleinen Zahl von Übersetzungseinheiten sind die Abhängigkeiten
-zwischen diesen inklusive ihrer Header-Files oft nur noch schwer zu überblicken,
-so dass sich die Verwendung eines [Build-System]s empfiehlt.._[]
+Even if the number of translation units is small, the dependencies between
+implementation files and header files is hard to resolve. Therefore using a
+[Build System] is state of the art.._[]
 ]
 
 .F[:
-Unter den heute verwendeten Build-Systemen hat das 1976 an den [Bell Labs] von
-Stuart Feldman entwickelte [Unix `make`] weitaus mehr als eine nur historische
-Bedeutung, in der Kernsyntax sind auch moderne Derivate wie [GNU make] und
-[CMake] immer noch identisch zu ihrem Vorbild.
+Build systems like the ones use today still often have their roots in the build
+system developed 1976 at [Bell Labs] by Stuart Feldman, at least with respect to
+their core syntax in which dependencies are specified in a `Makefile` (like is
+done in [Gnu make] or [CMake].
 ]
 
 ---
 template: plain
-header: #### Abhängigkeiten zwischen Header-Files
+header: #### Dependencies between Header Files
 
-Nicht selten kommt es auch zu Abhängigkeiten von Header-Files untereinander,
-z.B. wenn
+Frequently also a header files depends on some included header file, e.g.
 
-* in einem Header-File ein Datentyp oder eine Klasse **verwendet** wird,
+* if a header file **makes use** of a data type (class) or function,
 
-* die in einem anderen Header-File **definiert** ist.
+* which is **declared** (with or without its definition) in a different header.
 
 .N[
-In solchen Fällen ist es meist üblich, im abhängigen Header-File den als
-Voraussetzung erforderlichen zweiten Header-File direkt zu inkludieren.
+If this is the case the dependent header usually includes the other header.
 ]
 .pull-left[
 ```
@@ -253,14 +248,14 @@ class Derived : public Base {
 
 ---
 template: plain
-header: #### Include-Guards
+header: #### Include Guards
 
 [Include-Guard]: http://gcc.gnu.org/onlinedocs/cppinternals/Guard-Macros.html
 [One Definition Rule (ODR)]: http://en.cppreference.com/w/cpp/language/definition
 
-Da ein und derselbe Header-File oft auf verschiedenen Wegen inkludiert wird,
-muss die **mehrfache Verarbeitung**._[] ausgeschlossen werden. Dies geschieht
-mit sogenannten [Include-Guard]s:
+That way a single header might be included several times into the same
+translation unit and because **multiple processing**._[] needs to be avoided
+[Include Guards] are used.
 
 .pull-left[
 ```
@@ -287,16 +282,18 @@ class Derived : public Base {
 ]
 
 .F[:
-Der Grund hierfür liegt vor allem in der [One Definition Rule (ODR)], welche
-die wiederholte Einführung von Bezeichnern stark einschränkt.
+The main reason why Include Guards are necessary is the
+[One Definition Rule (ODR)] which limits the repeated introduction
+of identifiers to some special cases (like completely identical
+`typedefs` or function declarations with identical prototypes).
 ]
 
 ---
 template: plain
 header: #### Namespaces
 
-Wie das folgende Beispiel deutlich macht, ist der Klassenname für sich allein
-als Include-Guard u.U. problematisch:
+As the next example shows, the name of a class alone as include guard (maybe
+translated to uppercase) might create a problem:
 
 .pull-left[
 ```
@@ -324,28 +321,26 @@ namespace Other {
 ```
 ]
 
-Wenn jetzt beide Files inkludiert werden, macht der erste den Inhalt des zweiten
-quasi "unsichtbar" … was aber vermutlich erst nach einer überaus langwierigen
-Fehlersuche offenbar wird.
+If now both files are includes, the first shadows the content of the second …
+though it may cause the developer a hard time to detect that.
 
 .W[
-Somit sollte der Include-Guard auch den Namen des `namespace` enthalten, also
-z.B. `MINE_SOMECLASS_H` und `OTHER_SOMECLASS_H`.._[]
+Include Guards names after classes should – somehow – also carry the namespace
+name in their own name, e.g. `MINE_SOMECLASS_H` und `OTHER_SOMECLASS_H`.._[]
 ]
 
 .F[:
-Auch stellt sich die Frage, ob man im Include-Guard tatsächlich alle Buchstaben
-groß schreiben sollte …
+It may also be questioned if the include guard is translated to upper case. To
+avoid macro collisions some other convention like "only macros used for include
+guards may end in `_H` is sufficient.
 ]
-
-
 
 ---
 template: plain
-header: #### Zyklische Abhängigkeiten
+header: #### Cyclic Dependencies
 
-Einiges Kopfzerbrechen dürfte die Fehlermeldung bereiten, welche trotz (oder wegen?) des
-Include Guard aus der folgenden Situation resultiert:._[]
+Another hard problem might be the error message which is created despite of (or
+because of?) include guards used in this example:
 
 .pull-left[
 ```
@@ -378,63 +373,51 @@ class OtherClass {
 ]
 
 .F[:
-In kompilierbarer Form finden Sie die Dateien zu diesem Beispiel unter
-[Examples/Cyclic/Broken](../Examples/Cyclic/Broken) und
-[Examples/Cyclic/Fixed](../Examples/Cyclic/Fixed) (fehlerbereinigt).
+This examples exist as compilable code in:
+[Examples/Cyclic/Broken](../Examples/Cyclic/Broken) and
+[Examples/Cyclic/Fixed](../Examples/Cyclic/Fixed) (corrected).
 ]
 
 ---
 template: plain
 name: definition_reference
-header: ### Definition/Reference-Modell
+header: ### Definition Reference Model
 
-Zu jeder in einem Progamm verwendeten Variablen muss es **genau eine**
-Definition geben (mit möglicherweise vielen Bezugnahmen).
+For each variable used in a program there must be **exactly one** definition
+(with – potentially many – declarations associated with the definition by the
+linker).
 
-* Bei der Bezugnahme aus einer anderen Übersetzungseinheit muss diese eine
-  `extern`-Deklaration vornehmen.
-* Die tatsächliche Definition **darf** das Wort `extern` enthalten, auch
-  wenn sie mit einer Initialisierung verbunden ist.
-* Sie **muss** dies eventuell._[] sogar, wenn eine `const`-Qualifizierung
-  verwendet wird und keine `extern`-Deklaration vorausgeht.
+* When referred from a different translation unit an `extern`-declaration
+  must be visible.
+* The actual definition **may** include the word `extern`, even if it is
+  combined with an initialisation.
+* It even **needs to**._[] if there is also a `const` qualifier and no other
+  `extern` declaration of that variable visible.
 
 .W[
-Die Verwendung von `const` auf globaler Ebene **ohne** `extern` impliziert
-den Sichtbarkeitsschutz gegenüber dem Linker.
-]
-
-.F[:
-"Eventuell" bedeutet hier, dass die Definition in einer Implementierungsdatei
-(`*.cpp`) vorgenommen wurde, aber **für andere Übersetzungseinheiten sichtbar**
-sein soll. Zum Hintergrund: Einstmals wurde von Bjarne Stroustrup damit das Ziel
-verfolgt, in Header-Files(!) eine möglichst unproblematische Umstellung von
-`#define`-s auf `const` zu unterstützen. Das Risiko von Name Clashes in der
-Link-Phase wurde mit der Regel ausgeschlossen, dass "`const` quasi `static`
-impliziert … mit dem Nachteil, dass globale Konstanten evtl. mehrfach im
-Speicher gehalten werden. (Bei einfachen Datentypen können optimierende
-Compiler dies wiederum vermeiden, indem sie für solche Konstanten – solange
-deren Adresse nicht verwendet wird – überhaupt keinen Speicherplatz anlegen.)
+Using `const` for globals **reduces** visibility to the current translation
+unit.
 ]
 
 ---
 template: plain
 name: const_protection
-header: ### Schreibschutz durch den Compiler (`const`)
+header: ### Write Protection by the Compiler (`const`)
 
-Mittels `const`-Qualifizierung wird die Zuweisung eines (neuen) Werts an eine
-Variable verboten. Es ist nur noch die Initialisierung bei der Definition
-möglich bzw. ohne `extern` auch erforderlich.
+A `const`-qualified identifier may not change its value throughout its life
+time. Initialisation is mandatory if `external` is not also present.
 
 ```
-const int x = 42;              // Initialisierung notwendig
-extern const unsigned VERSION; // nur Bezugnahme
+const int x = 42;              // initialisation present
+extern const unsigned VERSION; // reference only
 ```
 
-Folgendes führt nun zu einem Compile-Fehler:._[]
+The following will not compile:
+
 ```
 ++x;
 ```
-Oder auch:
+Or also:
 ```
 if (VERSION = 3014u) {
     // special case for version 3.14
@@ -443,15 +426,14 @@ if (VERSION = 3014u) {
 ```
 
 .F[:
-Abhängig von der Art der Variablen und den Möglichkeiten der Hardware ist für
-`const`-qualifizierte Variablen eventuell auch ein physikalischer Schreibschutz
-möglich.
+Depending on the type and storage class of the variable and the hardware a
+`const`-qualified variable may also be stored physically write-protected.
 ]
 
 ---
 template: plain
 name: standard_types
-header: ## Builtin and Standard Types
+header: ## Built-in and Standard Types
 
 --------------------------------------------------------------------------
 
@@ -482,7 +464,7 @@ Each of the above type names constitutes a type on its own.
 ]
 
 Overloading may be based on these types – i.e. they are distinguishable – even
-if one has identical properties (signedness, limits, …) as another one.
+if one has identical properties (signed-ness, limits, …) as another one.
 
 .I[
 For more information on basic integral types (incl. character types) see
@@ -852,7 +834,7 @@ different safety checks could be generated for pointers and references.
 ---
 template: plain
 name: reference_initialisation
-header: #### Initialisierung von Referenzen
+header: #### Initialising References
 
 By concept references always denote existing memory locations,._[] therefore
 they need to be initialised.
@@ -869,8 +851,9 @@ be modified themselves, though referenced memory can be read **and** written.
 int v1, v2;  // some variables ...
 int &r = v1; // rerefence is intialized
 ```
-Das folgende führt **nicht** zu einem Fehler bei der Kompilierung, es führt aber
-auch nicht dazu, dass `r` nun die Variable `v2` referenziert:
+
+The following is **not** a compile-time error – only `r` now is an alias for
+`v2` and writing to `r` actually modifies `v2`.
 ```
 r = v2;  // copies current content of v2 to v1 (referenced by r)
 ```
@@ -1033,8 +1016,8 @@ header: ### Rvalue Referenes
 
 [Rvalue References]: http://en.cppreference.com/w/cpp/language/reference
 
-[Copy Constructor and Assignment](#copy_ctor_assign)
-[Move Constructor and Assignment](#move_ctor_assign)
+[Copy Constructor and Assignment]: #copy_ctor_assign
+[Move Constructor and Assignment]: #move_ctor_assign
 
 C++11 introduced [Rvalue References]. They may only be initialised by
 expressions, i.e. memory locations introduced to hold temporaries with no other
@@ -2064,7 +2047,7 @@ More exactly, the expression after `return` must
 * or be convertible to that type.._[]
 
 .F[:
-See also [here](#brace_init_shorthand) for an interresting short-hand notation
+See also [here](#brace_init_shorthand) for an interesting short-hand notation
 possible with C++11 brace initialisers.
 ]
 
@@ -2206,7 +2189,7 @@ MyClass foo() { return …; }  // … must be an expression of
                              // type MyClass (or something
                              // convertible to MyClass)
 // constructor use:
-MyClass a;        // (expects c'tor with no argumens)
+MyClass a;        // (expects c'tor with no arguments)
 MyClass b(a);     // copy c'tor (does not modify a)
 MyClass c(foo()); // move c'tor (may modify temporary)
 
@@ -2368,130 +2351,120 @@ themselves in ambiguities and cause the compilation to fail.
 ---
 template: plain
 name: type_conversions
-header: ## Typ-Kompatibilität und -Konvertierungen
+header: ## Type Compatibility and Conversions
 
 --------------------------------------------------------------------------
 
-* [Typ-Kompatibilität bei grundlegenden Typen	](#basictype_typeconv)
-* [Typ-Kompatibilität und Vererbung 		](#public_base_typeconv)
-* [Explizite Typ-Konvertierung mittels *Cast*	](#explicit_typeconv)
-* [Klassenspezifische Typ-Konvertierung		](#specified_typeconv)
-* [Typ-Sicherheit generell			](#general_typesafety)
+* [Type Compatibility for Native Types		](#native_type_typeconv)
+* [Type Compatibility and Inheritance 		](#public_base_typeconv)
+* [Explicit Type Conversion by *Cast*		](#explicit_typeconv)
+* [Class-Specific Type Conversions		](#specified_typeconv)
+* [Achieving General Type Safety		](#general_typesafety)
 
 --------------------------------------------------------------------------
 
 ---
 template: plain
-name: basictype_typeconv
-header: ### Typ-Kompatibilität bei grundlegenden Typen
+name: native_type_typeconv
+header: ### Type Compatibility for Native Types
 
-Die wichtigsten Regeln für Typ-Kompatibilität und ggf. automatisch angewendete
-Typ-Konvertierungen sind hier:
+[Integer Types] http://de.cppreference.com/w/cpp/language/types#Integer_types
+[Floating Point Types] http://de.cppreference.com/w/cpp/language/types#Floating_point_types
 
-* Alle *arithmetischen Typen* sind miteinander kompatibel bzw. werden bei Bedarf
-  entsprechend umgewandelt.._[]
+The most important rules for type compatibility among native types are:
 
-* Ansonsten finden bei Bedarf folgende Umwandlungen statt:
+* All *Arithmetic Types* – subsuming [Integer Types], [Floating Point Types],
+  and `bool` – are compatible among each other and participate in automatic
+  conversions as necessary, striving to preserve the value.._[]
 
-  * Aufzählungstypen (`enum`) **→** arithmetische Typen;
-  * Zeiger **→** Wahrheitswerte (alles außer `nullptr` ist `true`);
-  * typisierter Zeiger **→** allgemeine Zeiger (`void *`).
-
-.I[
-Innerhalb der arithmetischen Typen erfolgt die Umwandlung soweit möglich
-**wert-erhaltend** und wird eventuell mit auszuführenden Maschinenbefehlen
-verbunden sein.
+.W[
+Conversions between arithmetic types often require some code (machine
+instructions) to be executed and hence are not completely "free".
 ]
 
-Inwieweit dies auch für die anderen, oben aufgezählten Fälle gilt, hängt von
-Hardware-Details ab, insbesondere der Repräsentation von Aufzählungstypen und
-Zeigern.
-
 .F[:
-Dies schließt auch `char` (mitunter verwendet für kleine Ganzzahlen) und `bool`
-(Wahrheitswerte) ein.
+Of course, preserving the value has its limits like for conversions to types
+with a smaller range of values (usually truncated) and especially when
+converting to `bool` the result is `true` for non-zero values while – vice versa
+`true` is converted to the value `1` (unambiguously).
 ]
 
 ---
 template: plain
-header: #### Typ-Kompatibilität bei grundlegenden Typen (2)
+header: #### Type Compatibility for Native Types (2)
 
-* Außerhalb der Umwandlungen zwischen arithmetischen Typen handelt es sich um
-  **einseitig gerichtete** Umwandlungen.
+* The following conversions are **automatically** applied in one direction only:
 
-* D.h. es gibt **keine automatische Umwandlung** in den folgenden Fällen:
+  * Enumerations (`enum`) **→** Arithmetic Type;
+  * Pointers **→** `bool` (all but `nullptr` is `true`);
+  * Typed Pointer **→** Generic Pointers (`void *`).
 
-  * von arithmetischen Typen in Aufzählungstypen (`enum`);
-  * von Wahrheitswerten in Zeiger;
-  * **von allgemeinen Zeigern in typisierte Zeiger**.
+* I.e. there are **no automatic conversions** reversing the above.
 
-Mit dem letzten Punkt wurde die [Typ-Sicherheit von C++](#general_typesafety)
-gegenüber C an einer kritischen Stelle verbessert.._[]
+The last rule improves [General Type Safety of C++(#general_typesafety)
+in a critical case._[]
 
 .I[
-Anders als in C kann in C++ auf dem Umweg über allgemeine Zeiger (`void *`)
-keine "stille" Typ-Konvertierung typisierter Zeiger erfolgen.
+Differently from C in C++ there can be no "silent" type conversion going from
+a typed pointer to a generic pointer and back.
 ]
 
 .F[:
-Der Grund für das andere Verhalten in C liegt bei der `malloc`-Funktionsfamilie
-in der C-Bibliothek, die gemäß dem C89-Standard den Ergebnistyp `void *` hat.
-In C wollte man so die die Notwendigkeit von Cast-Operationen für `malloc`
-etc. vermeiden. Da in C++ `new` ein Operator ist, entfällt diese Problematik.
+The reason for that change is that according to C89 the `malloc` library
+function (including its cousins `calloc` and `realloc`) return generic pointers,
+the compiler is not aware of their special nature.
 ]
 
 ---
 template: plain
 name: public_base_typeconv
-header: ### Typ-Kompatibilität und Vererbung
+header: ### Type Compatibility and Inheritance
 
 [Slicing]: http://www.geeksforgeeks.org/object-slicing-in-c/
 
-* Ein **Zeiger** auf eine öffentlich abgeleitete Klasse ist kompatibel mit einem
-  **Zeiger** auf eine ihrer direkten oder indirekten._[] Basisklassen.
+* Pointers to publicly derived classes are automatically converted to pointers
+  to direct or indirect._[] base classes, wherever necessary.
 
-* Ein **Referenz** auf eine öffentlich abgeleitete Klasse ist kompatibel mit
-  einer **Referenz** auf eine ihrer direkten oder indirekten._[] Basisklassen.
+* References to publicly derived classes are automatically converted to
+  references to direct or indirect._[] base classes, wherever necessary.
 
-* Basierend auf **Objekten** einer öffentlich abgeleiteten Klasse werden ggf.
-  automatisch – per [Slicing] – **Objekte** direkter oder indirekter._[]
-  Basisklassen initialisiert.
+* **Objects** of a publicly derived class may be used to automatically
+  initialise the members of their base class, called [Slicing].
 
 .I[
-Außer bei Mehrfachvererbung sind die ersten beiden Fällen in der Regel **nicht**
-mit auszuführenden Maschinenbefehlen verbunden.
+Except for multiple inheritance the first two cases usually do **not** involve
+execution of any machine instructions, hence are effectively "free".
 ]
 
 .F[:
-Für indirekte nicht-virtuelle Basisklassen im Fall von Mehrfachvererbung mit
-rautenförmigen Klassenbeziehungen (in der UML als "«disjoint»" annotiert) gilt
-dies nicht, da in diesem Fall die automatische Konvertierung mehrdeutig wäre.
+For indirect, non-virtual base classes in case of multiple inheritance with
+diamond-shaped relation to a common base (annotated as "«disjoint»" in UML)
+an automatic conversion would be ambiguous.
 ]
 
 ---
 template: plain
 name: public_base_lsp
-header: #### Öffentliche Basisklassen und LSP
+header: #### Public Base Classes and the LSP
 
 [Principle of Substitutibility]: http://dictionary.reference.com/browse/liskov+substitution+principle
 
-Die auf der vorhergehenden Seite zusammengestellten Regeln sind Ausdruck dessen,
-was Barbara Liskov seinerzeit als
+The rules on the previous pages are the practical result of Barbara Liskov's
 
 * "*[Principle of Substitutibility]*"
 
-für die Objekt-Orientierte Programmierung als forderte und was seitdem oft als
-LSP abgekürzt wird.
+formulated once for "good object oriented software" and often abbreviated as
+LSP since it was first expressed.
 
 .N.center[
-Das LSP gilt in C++ nur im Fall öffentlicher Basisklassen.
+The LSP in C++ is only valid for public base classes!
 
-**Nur nur hier liegt Vererbung im Sinne der OOP vor.**
+**Only in this case it makes sense to talk about "Inheritance"** (in its common
+meaning in OOP).
 ]
 
-Vererbung._[] wird auch *Generalisierung-Spezialisierung* genannt und in der
-UML-Darstellung durch eine Verbindungslinie mit nicht ausgefülltem Dreieck am
-auf die Basisklasse weisenden Ende spezifiziert.
+Inheritance._[] is also called *Generalisation-Specialisation* and in UML
+denoted as solid line with a hollow triangle at the base class end.
 
 .F[:
 To be clear once more: what is discussed here is a class relation that implies
@@ -2503,22 +2476,21 @@ later ([see Wednesday Part 1 Inheritance](05_wednesday1.html#inheritance)).
 ---
 template: plain
 name: private_base_no_lsp
-header: #### Private Basisklassen (kein LSP)
+header: #### Private Base Classes (no LSP)
 
-Öffentliche und private Basisklassen in C++
+Public and  private base classes in C++
 
-* verwenden zwar ein und dasselbe Speicher-Layout,
+* use the same memory layout, but
 
-* **bei privaten Basisklassen gilt das LSP jedoch nicht**.
+* **for private base classes there is no LSP**.
 
 .N[
-Im Sine der OOP handelt es sich bei letzteren somit nicht um Vererbung sondern
-um Komposition.
+In the common meaning in OOP a private base class is not inheritance but
+composition.
 ]
 
-Komposition ist ein Sonderfall der Aggregation._[] und wird in der
-UML-Darstellung durch eine Verbindungslinie mit ausgefüllter Raute am auf die
-Klasse des Aggregats weisenden Ende spezifiziert.
+Composition is a special case of aggregation._[] and will be denoted in the UML
+with a small black diamond at the aggregate side.
 
 .F[:
 The special case is that the lifetime of the *part* is coupled to that of the

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>C++-For - Allgemeines</title>
+    <title>C++-For - General</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <!-- when changing the stylesheet file please see also remark below -->
     <link rel="stylesheet" type="text/css" href="CSS/styling.css" />
@@ -167,7 +167,7 @@ header: ## Agenda._[]
 -----------------------------------------------------------------
 
 * [Monday(1): General C++-Basics (and some C++11 extensions)	](01_monday1.html)
-* [Monday(2): More C++-Basics (Templates, Execeptions, Library)	](02_monday2.html)
+* [Monday(2): More C++-Basics (Templates, Exceptions, Library)	](02_monday2.html)
 
 -----------------------------------------------------------------
 
@@ -181,8 +181,8 @@ header: ## Agenda._[]
 
 -----------------------------------------------------------------
 
-* [Thursday(1): From Parametrized Types to Metaprogramming	](07_thursday1.html)
-* [Thursday(2): More on Exceptions and Ressource-Management	](08_thursday2.html)
+* [Thursday(1): From Parametrized Types to Meta-Programming	](07_thursday1.html)
+* [Thursday(2): More on Exceptions and Resource-Management	](08_thursday2.html)
 
 -----------------------------------------------------------------
 
@@ -190,7 +190,7 @@ header: ## Agenda._[]
 
 -----------------------------------------------------------------
 
-Setting of priorities is negotiatable and including additional topics may be
+Setting of priorities is negotiable and including additional topics may be
 considered if there is a common demand.
 
 .F[:
@@ -200,209 +200,201 @@ Last day usually ends with lunch.
 ---
 template: plain
 name: online_reference
-header: ## Zur Kursunterlage
+header: ## On this Training
 
-Nachfolgend einige allgemeine Informationen zu dieser Schulung:._[]
+Following some general informations in this training:._[]
 
-* [Aktuelle C++-Implementierungen	](#actual_implementations)
-* [Struktur der Schulungsunterlagen	](#training_document)
+* [Prevailing C++-Implementations	](#prevailing_implementations)
+* [Structure of the Training Document	](#training_document)
 * [Online-Version			](#online_version)
-* [Info-Grafiken			](#info_graphics)
-* [Kursdurchführung in Englisch		](#english_language)
-* [Ergänzende private Notizen		](#private_annotations)
+* [Info-Graphics			](#info_graphics)
+* [Training in English Language		](#english_language)
+* [Private Annotations			](#private_annotations)
 
 .F[:
-In der Online-Version enthält die obige Liste anklickbare Links. Diese sind –
-auch in allen folgenden Verwendungen – nur dezent hervorgehoben, um nicht vom
-Lesefluss abzulenken. Beim Überstreichen mit dem Mauszeiger geben sie sich
-deutlicher zu erkennen.
+The Online Version contains many "clickable" Links. These are distinguished only
+unobtrusively so that they not disturb the flow of reading. When viewing this
+document in a browser, the links reveal themselves more explicitly when hovering
+with the mouse cursor.
 ]
 
 ---
 template: plain
-name: actual_implementations
-header: ### Aktuelle C++-Implementierungen
+name: prevailing_implementations
+header: ### Prevailing C++-Implementations
 
-In den meisten aktuellen Compilern ist mittlerweile C++11._[] nahezu vollständig
-umgesetzt.
+Most recent compilers implement C++11._[] to a moderate or even complete degree.
 
 .N.center[
-Der C++11-Standard wird als Richtwert für die Auswahl der Inhalte dieser
-Schulung betrachtet.
+Therefore the C++11 Standard has been the guideline for what is contained and
+how is it represented in that Training.
 ]
 
-Daher werden gelegentlich
+Occasionally
 
-* Teile von C++98 und C++03, die nicht mehr benutzt werden sollten, als
-  **veraltet** bezeichnet und
+* Parts of C++98 and C++03, that are out-of-date and deprecated are accordingly
+  marked, and
 
-* wichtige, mit C++14 zu erwartende Veränderungen werden als **künftige**
-  Erweiterung erwähnt.
+* important additions of C++14 or C++1y are mentioned as **future** extensions.
 
 .F[:
-Der exakte Name dieser ISO-Norm ist: ISO/ICE-14882:2011(E). Das offizielle
-Dokument kann beim ISO-Institut käuflich erworben werden; dessen Copyright
-verbietet es jedoch, das Dokument den Kursteilnehmern als Kopie verfügbar
-zu machen.
+Exactly spelled that standard is: ISO/ICE-14882:2011(E). The official document
+may be bought from the ISO Institute, but the copyright for personal copy makes
+it illegal to distribute it, so it cannot be contained here.
 ]
 
 ---
+
 template: plain
 name: training_document
-header: ### Struktur der Schulungsunterlagen
+header: ### Training Documents
 
-Aufgrund des Umfangs des aktuellen ISO-Standards für C++._[] kann diese
-Präsentation – selbst bei erheblicher thematischer Begrenzung – nicht als
-erschöpfende Behandlungen der Thematik angelegt werden.
+In consideration of the extent of the ISO-Standard(s) for C++._[] this
+presentation by far cannot cover that topic exhaustively – even at a strongly
+reduced scope.
 
 .F[:
-Das offizielle Dokument zu C++11 (ISO/IEC 14882:2011(E)) umfasst mehr als
-1300 Seiten!
+The official document for the C++11 standard (ISO/IEC 14882:2011(E)) has more
+that 1300 pages!
 ]
 
-Die verschiedenen Elemente dieser Unterlage, also
+The documentation for this training consists of
 
-* [Präsentations-Seiten](#presentation_pages)
-  (inkl. [Fußnoten](#presentation_footnotes)),
-* [Beispiel-Code](#code_examples) (in verschiedenen Formen) und
-* Hinweise auf [externe ergänzende Informationen](#external_links)
+* [Presentation Pages](#presentation_pages)
+  (including [Footnotes](#presentation_footnotes)),
+* [Example Code](#code_examples) (in various forms) and
+* external Links to [Extended Information](#external_links).
 
-erfüllen unterschiedliche Aufgaben.
+These elements have a different purpose.
 
 .N.center[
-Insbesondere zu Funktionen und Klassen der Standard-Bibliothek sollten Sie
-ergänzend [Online-Referenzen](#online_references) nutzen.
-
-Die Schulungsunterlagen können in dieser Hinsicht keine Vollständigkeit
-bieten und streben dies auch nicht an.
+Especially with respect to Standard Library Classes and Functions you have to
+use additional [Online References](#online_references).
 ]
+
+A presentation alone can never be sufficient in this respect and does not strive
+to.
 
 ---
 template: plain
 name: online_references
-header: #### Online-Referenzen
+header: #### Online References
 
 [C++98]: http://en.wikipedia.org/wiki/C++98#Standardization
 [C++03]: http://en.wikipedia.org/wiki/C%2B%2B03
 [C++11]: https://isocpp.org/wiki/faq/cpp11
 [C++14]: https://isocpp.org/wiki/faq/cpp14
+[C++1z]: https://isocpp.org/std/status
+
+If you use an IDE with an integrated help feature showing reference information
+for standard classes and functions, go and use it!
+
+But also be aware that integrated help feature for a specific environment might
+not make a clean separation between
   
-Sofern Ihre Programmierumgebung eine Hilfe-Funktion bietet oder mit einer
-Online-Referenz verlinkt ist, können Sie diese natürlich nutzen.
+* Language and Library Features according to some C++ standard, and
 
-Bitte bedenken Sie aber, dass in den Hilfe-Seiten einer spezifischen
-C++-Implementierung mitunter nicht sauber getrennt wird zwischen
+* Extensions specific for some Implementation.
 
-* dem Sprach- und Bibliotheksumfang von C++ gemäß ISO-Standard
-
-* und spezifischen implementierungsspezifischen Erweiterungen.
-
-Gute Online-Referenzen im Internet haben dieses Problem nicht, z.B.:
+Independent Online References as now available in the Internet do not have that
+problem, e.g.
 
 * http://www.cplusplus.com/reference/
 * http://en.cppreference.com/w/cpp/
 
 .I[
-Das dort verfügbare Material dokumentiert C++ gemäß dem ISO/ANSI-Standard von
-1998 ([C++98]), den 2003 und 2011 vorgenommenen Ergänzungen ([C++03] und
-[C++11]) sowie dem neuesten ISO-Standard [C++14].
+Information presented there documents C++ according to ths ISO/ANSI Standard,
+clearly marking changes of the 2011 ([C++11]), 2014 ([C++14]) and (expected for)
+2017 ([C++1z]) releases.
 ]
 
 ---
 template: plain
 name: presentation_pages
-header: #### Präsentations-Seiten
+header: #### Presentation Pages
 
-Das Augenmerk bei Erstellung der Präsentations-Seiten lag darauf,
+The main purpose of the presentation is
 
-* den roten Faden durch den behandelten Stoff zu liefern,
+* to serve as a guiding thread through the topics covered,
 
-* dabei typische Anwendungsbeispiele zu zeigen,
+* demonstrating typical use with code fragments,
 
-* oder auch vor häufigen Fehlern und Fallgruben zu warnen,
+* warn about errors, misuse, and pitfalls,
 
-* sowie gedankliche Modelle und tiefere Zusammenhänge zu verdeutlichen.
+* if necessary or useful adding "behind the scenes" information.
 
 .N.center[
-Dabei sind Fragen jeglicher Art willkommen - **zu jeder Zeit**.._[]
+**At any time**, your questions are welcome!._[]
 
-Das gilt auch und gerade dann, wenn Ihre Fragen über den Inhalt der
-jeweiligen Präsentations-Seite hinausgehen.
+Also, if you are about to pose a question, please do not feel limited by the
+content of the current presentation page.
 ]
 
 .F[:
-Die Möglichkeit, bei Unklarheiten Rückfragen zu stellen, ist ein ganz wesentlicher
-Vorteil der Teilnahme an einer Schulung … im Vergleich dazu, denselben Stoff
-lediglich in schriftlicher Form vor sich zu haben.
+The option to ask question is one of the major advantanges to visit a training
+compared to reading a book – so use it!
 ]
 
 ---
 template: plain
 name: presentation_footnotes
-header: #### Fußnoten
+header: #### Footnotes
 
-Oft gab es bei der Erstellung der Präsentations-Seiten untergeordnete
-Aspekte, die
+While writing the presentation pages there were often minor aspects
 
-* einerseits nicht ganz verloren gehen sollten,
+* that should not get completely lost,
 
-* andererseits für das erste Verständnis weniger wichtig erschienen.
+* but were not necessary for a first, basic understanding.
 
 .N.center[
-Solche Aspekte werden von Fußnoten am unteren Rand der jeweiligen Seite
-wiedergegeben.
+Such aspects went into the footnotes at the bottom of the presentation pages.
 ]
 
-In der Beamer-Projektion werden die Fußnoten nur optional angezeigt,._[] in der
-gedruckten und der [Online-Version](#online_version) sind sie in jedem Fall
-sichtbar.
+In the "live presentation" (running on the beamer in front of you) footnotes are
+only shown optionally._[] (by hovering the mouse cursor), the printed version
+shows footnotes printed as the other text.
 
 .F[:
-Ein  Grund hierfür ist, dass neu projizierte Seiten nicht mit Informationen
-überfrachtet erscheinen sollen, ein anderer, dass – abhängig vom Zeitrahmen – in
-der Präsentation nicht unbedingt alle in Fußnoten verpackte Aspekte besprochen
-werden … ausgenommen auf explizite Nachfrage.
+The reason is that footnotes should not distract your attention from the main
+part of the presentation.
 ]
 
 ---
 template: plain
 name: code_examples
-header: #### Beispiel-Code
+header: #### Example Code
 
-Konkreten C++-Code gibt es
+Concrete C++ Examples are presented as
 
-* zum einen als [Code-Fragmente](#code_fragments) in den Seiten dieser
-  Präsentation,
+* [Code Fragments](#code_fragments) within the pages of this presentation,
 
-* zum anderen als [kompilierbare Quelltext-Dateien](#compilable_code),
-  thematisch sortiert in entsprechenden Unterverzeichnissen.
+* and also as complete, [Compilable Source Code](#compilable_code), sorted
+  by topic in sub-directories linked to by this presentation.
 
-Bitte sehen Sie die zweite Form ebenso als Bestandteil dieser Unterlagen an,
-auch wenn sie nicht als Ausdruck auf Papier zur Verfügung steht.
+Please consider the latter as part of the training documents, though it is not
+printed to reduce the amount of pages.
 
 .I[
-Sie erhalten private Kopien dieser Quelltexte und können diese auf einem
-externen Speichermedium mitnehmen.
+You receive private copies of the example source code on an external medium,
+to which you also may add your private annotations in a text-editor..[]
 ]
 
-Somit können Sie ggf.  individuelle Anmerkungen direkt in die
-Quelltext-Dateien eintragen.._[]
+That way you can also add your private annotations directly into the source
+files.
 
 .F[:
-Möchten Sie – auf Einzelfälle bezogen, wie etwa Code-Reviews im Rahmen einer
-Übungsaufgabe – lieber handschriftliche Anmerkungen in Papier-Ausdrucken
-vornehmen, erläutert Ihnen der Dozent gerne, wie Sie Quelltext-Dateien an den
-Drucker im Kursraum senden. Für einen **Gesamtausdruck aller kompilierbaren
-Quelltexte** wenden Sie sich bitte ebenfalls an den Dozenten, der dies für
-Sie veranlassen wird.
+There is usually a printer in the class room you may use to make a printout
+if you prefer to add annotations on paper.
 ]
 
 ---
 template: plain
 name: code_fragments
-header: ##### Code-Fragmente
+header: ##### Code Fragments
 
-Diese Art von Beispielen beschränkt sich naturgemäß auf wenige Zeilen:._[]
+By there very nature such are limited to a few lines, often omitting details
+irrelevant to make the point.._[]
+
 ```
 #include <cstdlib>
 …
@@ -424,115 +416,8 @@ int main(int argc, char *argv[]) {
 ```
 
 .F[:
-Leider sind dabei kleinere Tipp- und Flüchtigkeitsfehler niemals ganz
-ausgeschlossen.  
-(Können Sie oben einen solchen Fehler entdecken?)
-]
-
----
-template: plain
-name: code_fragments
-header: ##### Code-Fragmente (2)
-
-Außer in Kommentaren._[] gilt in Code-Fragmenten, wie dem gerade gezeigten,
-der folgende wichtige Unterschied:
-
-* `...` (dreimal das Zeichen Punkt) steht für genau drei Punkte, die
-   syntaktisch an dieser Stelle erforderlich sind;
-
-* `…` (die Ellipsis) wird verwendet, um eine Auslassung anzuzeigen, evtl.
-   gefolgt von einem erläuternden Kommentar.
-
-.F[:
-In Kommentaren verwendet der Autor gewohnheitsmäßig "`...`" und nicht "`…`"
-(und auch keine Umlaute und sonstige Zeichen außerhalb des ursprünglichen 7-Bit
-ASCII-Zeichensatzes), da letzteres nicht zum von C++ minimal zu unterstützenden
-Zeichensatz gehört. Obgleich dies keinen bekannten Compiler entscheidend stören
-sollte, könnte es Anlass zu einer Warnung geben.
-]
-
----
-template: plain
-name: compilable_code
-header: ##### Kompilierbarer Code
-
-Da die Code-Fragmente nicht kompiliert werden (können), schleichen sich trotz
-sorgfältigen Korrekturlesens leicht kleine Fehler ein.._[] Daher werden häufig
-auch kompilierbare Beispiele in getrennten Dateien verwendet.
-
-.F[:
-Bitte üben Sie hier die notwendige Toleranz: auch und gerade als
-Software-Entwickler/in wird Ihnen bewusst sein, dass in zehn oder zwanzig
-neu eingetippten Quelltext-Zeilen oftmals kleine "Vertipper" enthalten,
-die vor erst beim Kompilieren auffallen. **Hinweise auf Flüchtigkeitsfehler in
-Code-Fragmenten werden natürlich gerne entgegengenommen und möglichst zeitnah
-korrigiert.**
-]
-
-Damit diese wirklich 100%ig korrekt sind, stehen sie nicht direkt in der
-Präsentation sondern sind nur mit dieser verlinkt.
-
-.N.center[
-Betrachten Sie die vollständigen Beispiele bitte auch als Bestandteil der
-Schulungsunterlagen – insbesondere im Hinblick auf deren Bewertung in den
-Feedback-Bögen am Ende des Kurses.
-]
-
-Um die Durchführung dieses Kurses nicht an die Verwendung einer bestimmten
-Entwicklungsumgebung zu koppeln, gibt es zu den verlinkten Beispielen jedoch
-keine vorbereiteten [Projekte](#ide_projects).
-
----
-template: plain
-name: ide_projects
-header: ##### Projekt-Dateien für IDEs
-
-Wenn Sie mit einer integrierten Entwicklungsumgebung wie *Eclipse* oder
-*Visual-Studio* vertraut sind, werden Sie selbst am besten wissen, wie man
-bei Bedarf vorhandene Quelltexte in ein Projekt importiert.
-
-* Um dies zu vereinfachen, bestehen Beispiele und Übungsvorgaben oft aus
-  nur einer einzigen Quelltext-Datei – auch wenn man in der Praxis eher eine
-  klassenweise Aufteilung in Header- und Implementierungs-Dateien vornehmen
-  würde.
-
-* Sind an der Kompilierung zu einem ausführbaren Programm mehrere
-  Quelltext-Dateien beteiligt, gibt es meist einen kleinen – bewusst einfach
-  gehaltenen – `Makefile`, mit dem die Kompilierung an der Kommandozeile
-  möglich ist.
-
-* Darüber hinaus schien es in einigen Fällen angebracht, gemeinsamen Code für
-  mehrere Beispiele als zentralen Header-File bereitzustellen.
-
-.N[
-Bei kompilierbaren Beispielen aus mehreren Quelltext-Dateien müssen einem
-IDE-Projekt auf jeweils geeignete Art und Weise natürlich **alle** beteiligten
-Dateien bekannt gemacht werden.
-]
-
----
-template: plain
-name: external_links
-header: #### Externe Ergänzungen
-
-Insoweit diese Schulungsunterlagen durch Internet-Links ergänzt wird, sind diese
-zur Vereinfachung der Nachverfolgung in der Online-Version anklickbar gemacht.
-
-.I[
-Alle Teilnehmerinnen und Teilnehmer erhalten zu Beginn des Kurses Zugriff auf
-die Online-Version. Nutzen Sie diese ggf. begleitend zum Vortrag oder zur
-Rekapitulation im Anschluss, wenn es Ihnen vorteilhaft erscheint.
-]
-
-Sie können die elektronische Form der Unterlagen auch gerne
-
-* auf ein externes Speichermedium kopieren sowie
-
-* künftig aktualisierte Versionen aus dem Internet beziehen.
-
-.N.center[
-Bitte beachten Sie dabei die [Weitergabe-Lizenz](#online_version) auf der
-folgenden Seite.
+As such fragments are not run through a compiler, occasionally slight careless
+mistakes might have slipped in. (Can you spot such a mistake in the code above?)
 ]
 
 ---
@@ -540,245 +425,85 @@ template: plain
 name: online_version
 header: ### Online-Version
 
-Sie haben die Möglichkeit zum Download unter: http://tbfe.de/archiv
+You may download this presentation and future versions from the Internet.
 
 .W[
-Das verfügbar gemachte Material wurde mit angemessener Sorgfalt erstellt und
-geprüft. Haftungsansprüche bei noch enthaltenen Fehlern sind ausgeschlossen.
+The content has been composed with reasonable attention but any liability
+for potentially contained errors or inaccuracies is declined.
 ]
 
-Hinweise auf Fehler, Unvollständigkeiten oder generelle Anregungen und
-Verbesserungsvorschläge werden natürlich gerne entgegengenommen.
+The author still appreciates hints and suggestions for improvements.
 
 ------------------------------------------------------------------------------
 
-[Creative Commons]: http://de.creativecommons.org/was-ist-cc
+[Creative Commons]: http://creativecommons.org
 
-**Für alle Verbreitungsformen gilt eine [Creative Commons]-Lizenz.**
+**This work is distributed under a [Creative Commons]-License.**
 
-.I[[
-**(CC) BY-SA**:  
-Namensnennung und Weitergabe unter gleichen Bedingungen
-](http://creativecommons.org/licenses/by-sa/3.0/de/)]
+.I[
+[**(CC) BY-SA 4.0**:  
+Attribution-ShareAlike 4.0 International
+](http://creativecommons.org/licenses/by-sa/4.0/de/)
+]
 
 ---
 template: plain
 name: html_presentation
-header: #### HTML-Präsentation
+header: #### HTML Presentation
 
-  [`remark`]: http://remarkjs.com
+[`remark`]: http://remarkjs.com
 
-Für diese Unterlagen wurde das frei verfügbare *HTML4-Präsentations-Tool*
-[`remark`] verwendet.
+This presentation is based on the *HTML4-Präsentations-Tool* [`remark`].
 
-#### Ansicht
+#### Viewing
 
 [JavaScript]:        http://de.wikipedia.org/wiki/JavaScript
-[Modernes CSS]:      http://www.w3.org/Style/CSS
-[CSS-Kenntnisse]:    http://www.w3schools.com/css
+[Modern CSS]:        http://www.w3.org/Style/CSS
+[CSS-Knowledge]:     http://www.w3schools.com/css
 
-Benutzen Sie einen hinlänglich aktuellen Browser Ihrer Wahl.
+For viewing it you may use any modern browser that
 
-* [JavaScript] muss eingeschaltet sein.
-* [Modernes CSS] sollte unterstützt werden.._[]
-* Cookies werden nicht verwendet.
+* has [JavaScript] enabled and
+* is aware of [Modern CSS].._[]
+* Cookies need not be enabled.
 
 .F[:
-Das Erscheinungsbild wird wesentlich durch ein Style-Sheet gesteuert. Falls Sie
-über die notwendigen [CSS-Kenntnisse] verfügen, können Sie die Datei
-[styling.css](http:CSS/styling.css) gemäß Ihrem Geschmack anpassen.
+Visual presentation is controlled by a style sheet. Given you have some
+[CSS-Knowledge] the "look" may be altered without touching the content via
+[styling.css](http:CSS/styling.css).
 ]
 
 ---
 template: plain
-header: #### Ausdruck
+header: #### Creating A PDF
 
-Gelegentlich werden PDF-Versionen dieser Unterlagen verfügbar gemacht, die sich
-zum direkten Ausdrucken eignen.
+[Google Chrome Browser]: https://www.google.de/intl/de/chrome/browser/
 
-.N[
-Die jeweils aktuellste Version dieser Präsentation ist aber immer diejenige,
-welche zum Download in HTML-Form zur Verfügung steht.
-]
+A printable version is most easily created with the [Google Chrome Browser].
 
-Verfügbar gemachte PDF-Dateien haben den selben Namensstamm wie die HTML-Datei
-aber einen anderen Suffix:
+* Just use *Print To File* and maybe
 
-* zu der Datei `00_content.html`, die Sie gerade lesen (falls Sie dies im
-  Browser tun)
-
-* gehört z.B. druckbare Version [`00_content.pdf`](00_content.pdf). 
-
----
-template: plain
-header: #### PDF-Erstellung
-
-  [Google Chrome Browser]: https://www.google.de/intl/de/chrome/browser/
-
-Mit einer aktuellen Version des [Google Chrome Browser]s können Sie eine
-druckbare PDF-Datei ggf. selbst erstellen:
-
-* Verwenden Sie dazu *Print To File* und wenn gewünscht eine
-
-* Nachverarbeitung mit einem PDF-Tool Ihrer Wahl (etwa um Seiten zu verkleinern
-  und mehrere Präsentations-Seiten auf einer Druckseite zusammenzufassen).
+* some post-processing with a PDF-Tool of your choice (e.g. to combine several
+  presentation pages on a single printed page)
 
 .N.center[
-Zurzeit funktioniert die PDF-Erstellung nur in der Normalansicht einwandfrei,
-**nicht** im [Präsentations-Modus](#electronic_annotations).
+Currently PDFs may only produced from the normal view, it does not work correctly from
+[Presentation Mode](#electronic_annotations).
 ]
-
----
-template: linkinfo
-name: info_graphics
-graphic: TestBrowserNavigation
-header: ### Info-Grafiken
-
---------------------------------------
-
-* [Ansicht	](#view_infographics)
-
---------------------------------------
-
-* [Druck	](#print_infographics)
-
---------------------------------------
-
-* [PDF-s	](#print_infographics)
-
---------------------------------------
-
-Nebenstehend ein Beispiel für die Info-Grafiken in den Schulungsunterlagen –
-im Browser erhalten Sie durch Anklicken eine Großansicht.._[]
-
-.F[:
-Die hier gezeigte Info-Grafik hat keine fachliche Bedeutung sondern ist nur
-dafür gedacht, damit die "Navigation" im Browser zu üben. (Bei ausreichend
-starkem Zoom sollten Sie in der zentralen Sprechblase ein Zitat erkennen
-können, das den Älteren unter Ihnen noch aus einer [Fernseh-Show] der späten
-1960er bekannt sein könnte, in deren Rahmen gelegentlich aus dem Wohnzimmer
-vorab ausgewählter Zuschauer heraus – mittels von einer "Joystick"-Box
-erzeugter und per Akustikkoppler und Telefon weitergeleiteter Signale –
-in der Show eine Armbrust ferngesteuert und schließlich abgeschossen werden
-konnte … für die damalige Zeit futuristisches "high-tech" Show-Element.)
-]
-
-[Fernseh-Show]: http://de.wikipedia.org/wiki/Der_goldene_Schu%C3%9F
-
----
-template:plain
-name: view_infographics
-header: #### Betrachten von Info-Grafiken
-
-[Mozilla Firefox]: http://www.mozilla.org/de/
-[Google Chromium]: http://www.google.com/intl/de/chrome/browser/
-
-Verwenden Sie einen hinlänglich modernen Browser.
-
-Getestet wurden:
-
-* [Mozilla Firefox] (Version 26 getestet)
-* [Google Chromium] (Version 32 getestet)
-
-Bislang noch nicht getestet wurden:._[]
-
-* Microsoft IE
-* Opera
-* Eclipse (integrierter Browser)
-
-.F[:
-Ihre Praxis-Erfahrungen mit den noch nicht getesteten sowie weiteren, hier nicht
-genannten Browsern und anderen Dateibetrachtern für Grafiken sind dabei für den
-Autor von Interesse.
-]
-
----
-template: plain
-graphic: TestBrowserNavigation
-name: print_infographics
-header: #### Ausdruck von Info-Grafiken
-
-[OO/LO-Draw]: http://www.libreoffice.org/discover/draw/ (OpenOffice/LibreOffice Drawing Component)
-[abgeleitete Werke]: http://www.ifross.org/category/tags/abgeleitetes-werk
-
-Zum Ausdruck der Info-Grafiken können Sie
-
-* entweder die auch zur Ansicht verlinkte PNG-Datei verwenden,
-
-* oder die gleichnamige PDF-Datei,
-
-je nachdem, womit Sie die besseren Ergebnisse erzielen.
-
-#### Sonstige Verwendung der Info-Grafiken
-
-Sofern Sie eine oder mehrere der Info-Grafiken gerne als Basis für eigene
-[abgeleitete Werke] verwenden würden, wenden Sie sich bitte an den in der
-Fußzeile der jeweiligen Grafik genannten Verfasser.
-
-* Sie können ggf. eine mittels [OO/LO-Draw] bearbeitbare Version erhalten.
-
-* Für diese wird in der Regel wiederum das [(CC) BY-SA](#onlinde_version)
-  Copyright gefordert werden.
-
----
-template: plain
-name: english_language
-header: ### Kursdurchführung in Englisch
-
-Auf Wunsch ist die Kursdurchführung in englischer Sprache möglich, wenn dies
-entweder vorab so abgestimmt wurde oder alle Teilnehmerinnen und Teilnehmer dem
-nachträglich zustimmen.
-
-.I[
-Though, if you are not a native speaker of German, feel free to ask questions
-in English language.
-]
-
-#### Unterlagen in Englisch
-
-Die Schulungsunterlagen werden nach und nach ins Englische übersetzt und
-anschließend nicht mehr in deutscher Sprache verfügbar sein.._[]
-
-.F[:
-Englischsprachige Unterlagen werden immer häufiger bei Inhouse-Kursen gefordert.
-Da die parallele Aktualisierung von mehrsprachigen Unterlagen sehr aufwändig
-ist, wird längerfristig auf die deutschsprachige Version verzichtet.
-]
-
-Die Übersetzung erfolgt i.d.R. auf Basis einzelner Kapitel oder Abschnitte eines
-Kapitels. Die Vermischung der beiden Sprachen auf ein und derselben Seite – wie
-gerade hier – bleibt die Ausnahme (abgesehen von Beispiel-Code und nachträglich
-ergänzten Fußnoten, welche stets in englischer Sprache verfasst werden).
 
 ---
 template: plain
 name: automatic_translation
-header: #### Automatische Übersetzung
+header: #### Automatic Translation
 
-Moderne Browser bieten mittlerweile die Möglichkeit zur Online-Übersetzung in
-andere Sprachen "auf Knopfdruck".._[]
+Modern Browsers now offer the option to automatically translate page content.
 
 .N.center[
-Deren Qualität schwankt zwar zwischen "brauchbar" und  
-"lustig bis seltsam", es ist aber vielleicht einen Versuch wert.
-
 Though the quality varies between "usable" and  
 "funny to strange", you might want to give it a try.
 ]
 
-.F[:
-Halbwegs brauchbare Übersetzungen ergeben sich innerhalb der dem Deutschen bzw.
-Englischen verwandten Sprachfamilien. Die Qualität der automatischen Übersetzung
-in slavische, arabische und fernöstliche Sprachen oder Esperanto kann der Autor
-mangels entsprechender eigener Kenntnisse leider nicht beurteilen.
-]
-
-Wenn Sie möchten, können Sie den Online-Übersetzungsservice gleich
-ausprobieren, z.B.
-
-* mit dieser Seite *Deutsch → Englisch* oder
-
-* mit der nächsten Seite *Englisch → Deutsch*.
+You may want to give it a try by choosing to translate this page ...
 
 ---
 template: plain

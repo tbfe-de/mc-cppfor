@@ -148,14 +148,8 @@ template: blank
 1. [Templates as Compile Time Functions		](#compiletime_functions)
 1. [Variadic Templates (Parameter Packs)	](#variadic_templates)
 1. [Advanced Use of the Preprocessor		](#advanced_preprocessor)
-1. [Praktikum					](#exercise_thu1)
 
 -------------------------------------------------------------------------------
-
-Kürzere Pausen werden jeweils nach Bedarf eingelegt.
-
-Die Besprechung der Musterlösung(en) erfolgt im direkten Anschluss an die
-Mittagspause.
 
 ---
 template: linkinfo
@@ -579,12 +573,14 @@ base and derived class:
 template<typename T1, typename T2>
 typename std::enable_if<
     std::is_base_of<T1, T2>::value
->::type foo(T1 arg1, T2 arg2) { … } // called for T1 is base class of T2
+>::type foo(T1 arg1, T2 arg2) { … } // called for
+                                    // T1 is base class of T2
 
 template<typename T1, typename T2>
 typename std::enable_if<
     !std::is_base_of<T1, T2>::value
->::type foo(T1 arg1, T2 arg2) { … } // called for T1 is NOT base class of T2
+>::type foo(T1 arg1, T2 arg2) { … } // called for
+                                    // T1 is NOT base class of T2
 ```
 
 ---
@@ -608,11 +604,11 @@ typename std::enable_if_t<
 .F[:
 Note that the support for this simplifications is close to trivial In `namespace std { … }`:
 ```
-template<bool C, typename T = void> using enable_if_t = typename std::enable_if<C, T>::type;
+  template<bool C, typename T = void> using enable_if_t = typename std::enable_if<C, T>::type;
 ```
 And:
 ```
-typename<T1, T2>
+  typename<T1, T2>
 struct is_base_of {
    /* as in C++11, set according to result */ static constexpr bool value = …;
    /* added in C++14 */ constexpr explicit operator bool() const { return value; }
@@ -1272,11 +1268,6 @@ std::string colour2string(Colour c) {
     }
 }
 ```
-
----
-template: plain
-name: exercise_thu1
-header: ## Praktikum
 
 </textarea>
 <!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
